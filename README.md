@@ -38,7 +38,7 @@ After installing the compiler, go back to step 3 and reinstall the project depen
 
 5. Make a new production build: `npm run build`. This command will generate the required files into the /dist directory.
 
-6. Start a static HTTP server having the files from the /dist directory in the root. In order to have working URLs, the URL rewriting should be enabled. There are some examples for configuring the HTTP server here: https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations
+6. Start a static HTTP server with the files from the /dist directory in the root. In order to have working URLs, the URL rewriting should be enabled. There are some examples for configuring the HTTP server here: https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations
 
 7. After the server is started, you can verify if the latest version was deployed by checking the first few console messages in the development console of your browser. It should show the build date there.
 
