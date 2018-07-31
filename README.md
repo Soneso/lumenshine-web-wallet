@@ -14,7 +14,7 @@ Currently the project is alpha. You can run the project on your local machine or
 
 2. Clone the project from this repository
 
-3. Open project project root directory in a terminal
+3. Open project root directory in a terminal
 
 4. Install project dependencies with `npm install` command.
 This command might fail at rebuilding the ed25519 library, but it should not cause problems. 
