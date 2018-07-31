@@ -29,11 +29,17 @@ After installing the compiler, go back to step 3 and reinstall the project depen
 (we are constantly deploying to demo.lumenshine.com)
 
 1. Install Node.js version 8.x or version 10.x
+
 2. Clone the project from this repository on your test server
+
 3. Checkout the latest version from the repository: `git pull`
+
 4. Install project dependencies: `npm install`
+
 5. Make a new production build: `npm run build`. This command will generate the required files into the /dist directory.
+
 6. Start a static HTTP server having the files from the /dist directory in the root. In order to have working URLs, the URL rewriting should be enabled. There are some examples for configuring the HTTP server here: https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations
+
 7. After the server is started, you can verify if the latest version was deployed by checking the first few console messages in the development console of your browser. It should show the build date there.
 
 
