@@ -1,0 +1,22 @@
+$menu-width: 230px;
+
+$breakpoint-mobile: 500px;
+$breakpoint-laptop: 1000px;
+
+@mixin breakpoint($class) { 
+  @if $class == mobile {
+    @media (max-width: $breakpoint-mobile) { @content; }
+  }
+
+  @else if $class == tablet {
+    @media (max-width: $breakpoint-laptop) { @content; }
+  }
+ 
+  @else if $class == desktop {
+    @media (min-width: $breakpoint-laptop) { @content; }
+  }
+ 
+  @else {
+    @warn "Breakpoint mixin supports: mobile, tablet, desktop";
+  }
+}
