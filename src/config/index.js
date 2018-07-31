@@ -26,7 +26,7 @@ export default {
   // do not forget authToken on page reload (for development)
   KEEP_LOGGED_IN: process.env.NODE_ENV === 'development',
 
-  API_BASE: 'http://api.stellargate.net',
+  API_BASE: 'http://demoapi.lumenshine.com',
   // API_BASE: 'http://192.168.1.56:9001',
   // API_BASE: 'http://localhost:9000',
 
