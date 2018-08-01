@@ -7,12 +7,17 @@
       :loading="saveWalletLoading"
       :update-error="decryptError"
       :wallet-name="data.wallet_name"
-      :on-homescreen="data.show_on_homescreen"
       @submit="onSaveWalletName"/>
+
+    <p class="card__checkbox">
+      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
+      <label for="homeScreenCheckbox">Show wallet on home screen</label>
+    </p>
 
     <wallet-address-form
       :loading="saveWalletLoading"
       :update-error="decryptError"
+      :errors="editWalletStatus.err"
       :wallet-address="data.federation_address"
       @remove="onRemoveWalletAddress"
       @submit="onSaveWalletAddress"/>
@@ -155,24 +160,35 @@ export default {
       setInflationLoading: false,
       inflationDest: null,
 
+      homescreen: this.data.show_on_homescreen,
+
       errors: [],
       config
     };
   },
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus']),
+    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus']),
+  },
+  watch: {
+    async homescreen (val) {
+      this.saveWalletLoading = true;
+      await this.editWallet({
+        id: this.data.id,
+        onHomescreen: val,
+      });
+      this.saveWalletLoading = false;
+    }
   },
   methods: {
     ...mapActions(['editWallet', 'removeWalletAddress']),
     onCopy () {
       this.accountIDCopied = true;
     },
-    async onSaveWalletName ({ name, onHomescreen }) {
+    async onSaveWalletName ({ name }) {
       this.saveWalletLoading = true;
       await this.editWallet({
         id: this.data.id,
         wallet_name: name,
-        onHomescreen
       });
       this.saveWalletLoading = false;
     },
@@ -203,6 +219,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "assets/scss/variables";
 .centered {
   text-align: center;
 }
@@ -211,5 +228,14 @@ export default {
 }
 p {
   word-wrap: break-word;
+}
+.card {
+  &__checkbox {
+    @include breakpoint(desktop) {
+      position: absolute;
+      right: 0;
+      top: 63px;
+    }
+  }
 }
 </style>

@@ -13,8 +13,6 @@
         <div v-if="$v.name.$error" class="field__errors">
           <div v-if="!$v.name.required">Wallet name is required</div>
         </div>
-        <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
-        <label for="homeScreenCheckbox">Show wallet on home screen</label>
         <input :class="{ error: $v.name.$error }" v-model="name" type="name" placeholder="Wallet name" @blur="$v.name.$touch()">
       </div>
       <div class="form-buttons">
@@ -49,16 +47,11 @@ export default {
       type: String,
       required: true,
     },
-    onHomescreen: {
-      type: Boolean,
-      required: true,
-    }
   },
   data () {
     return {
       fieldOpen: false,
       name: this.walletName,
-      homescreen: this.onHomescreen,
     };
   },
   methods: {
@@ -73,7 +66,7 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
-      this.backendQuery = { name: this.name, onHomescreen: this.homescreen };
+      this.backendQuery = { name: this.name };
       this.$emit('submit', this.backendQuery);
     }
   },

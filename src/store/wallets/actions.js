@@ -51,6 +51,7 @@ export default {
         await WalletService.addWalletToHomescreen({ id: params.id, visible: params.onHomescreen });
       }
       await dispatch('getWallets');
+      commit('EDIT_WALLET_ERROR', []);
     } catch (err) {
       commit('EDIT_WALLET_ERROR', err.data);
     }
@@ -62,6 +63,7 @@ export default {
     try {
       await WalletService.removeFederationAddressFromWallet(id);
       await dispatch('getWallets');
+      commit('EDIT_WALLET_ERROR', []);
     } catch (err) {
       commit('EDIT_WALLET_ERROR', err.data);
     }
@@ -86,6 +88,7 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('getWallets');
+      commit('SET_INFLATION_DEST_ERROR', []);
     } catch (err) {
       console.error(err);
       commit('SET_INFLATION_DEST_ERROR', [{ error_message: 'Cannot update data, try again later.' }]);
@@ -111,6 +114,7 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('getWallets');
+      commit('ADD_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
       if (err.message === 'Issuer is invalid') {
@@ -141,6 +145,7 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('getWallets');
+      commit('REMOVE_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
       if (err.message === 'Issuer is invalid') {
@@ -184,6 +189,7 @@ export default {
     try {
       await WalletService.fundAccountWithFriendbot(account);
       await dispatch('getWallets');
+      commit('SET_FUND_WITH_FRIENDBOT_ERROR', []);
     } catch (err) {
       commit('SET_FUND_WITH_FRIENDBOT_ERROR', err.data);
     }
