@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div v-if="wallets.loading">Loading...</div>
-    <div class="card-container">
+    <div v-else class="card-container">
       <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
     </div>
     <modal v-if="addWalletModalShown" @close="onModalClose">

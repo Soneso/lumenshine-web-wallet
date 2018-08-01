@@ -17,6 +17,7 @@
     <wallet-address-form
       :loading="saveWalletLoading"
       :update-error="decryptError"
+      :errors="editWalletStatus.err"
       :wallet-address="data.federation_address"
       @remove="onRemoveWalletAddress"
       @submit="onSaveWalletAddress"/>
@@ -166,7 +167,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus']),
+    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus']),
   },
   watch: {
     async homescreen (val) {

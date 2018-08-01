@@ -11,12 +11,13 @@
           <span class="left error">none</span>
           <span class="right info">Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</span>
         </span>
-        <span v-else>{{ address }}{{ config.FEDERATION_DOMAIN }}</span>
+        <span v-else-if="!fieldOpen">{{ address }}{{ config.FEDERATION_DOMAIN }}</span>
       </p>
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
       <div v-if="fieldOpen && !loading" class="field">
         <div v-if="$v.address.$error" class="field__errors">
           <div v-if="!$v.address.required">Wallet address is required</div>
+          <div v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</div>
         </div>
         <input :class="{ error: $v.address.$error }" v-model="address" placeholder="Wallet address" @blur="$v.address.$touch()">
         <span class="warning">*lumenshine.com</span>
@@ -87,6 +88,7 @@ export default {
     return {
       address: {
         required,
+        uniqueAddress: value => this.backendQuery.address !== value || !this.errors.find(err => err.error_code === 1017),
       }
     };
   }
