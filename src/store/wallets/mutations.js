@@ -66,16 +66,16 @@ export default {
     state.currencyPairsResult = null;
   },
 
-  SET_CURRENCY_DATA (state, msg) {
-    state.currencyDataResult = msg;
-    state.currencyDataErrors = [];
+  SET_CURRENCY_RATES (state, msg) {
+    state.currencyRatesResult = msg;
+    state.currencyRatesErrors = [];
   },
-  SET_CURRENCY_DATA_LOADING (state, msg) {
-    state.currencyDataLoading = msg;
+  SET_CURRENCY_RATES_LOADING (state, msg) {
+    state.currencyRatesLoading = msg;
   },
-  SET_CURRENCY_DATA_ERROR (state, msg) {
-    state.currencyDataErrors = msg;
-    state.currencyDataResult = null;
+  SET_CURRENCY_RATES_ERROR (state, msg) {
+    state.currencyRatesErrors = msg;
+    state.currencyRatesResult = null;
   },
 
   SET_FUND_WITH_FRIENDBOT_LOADING (state, msg) {

@@ -45,8 +45,20 @@ class Amount {
     return this;
   }
 
-  format () {
-    return this.val.toFormat(7);
+  multiply (newVal) {
+    if (!(newVal instanceof Amount || typeof newVal === 'string')) {
+      throw new Error('Amount should be string');
+    }
+    if (newVal instanceof Amount) {
+      this.val = this.val.times(newVal.val);
+    } else {
+      this.val = this.val.times(newVal);
+    }
+    return this;
+  }
+
+  format (decimalPlaces = 7) {
+    return this.val.toFormat(decimalPlaces);
   }
 
   toNumber () {

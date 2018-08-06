@@ -3,6 +3,10 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import VueClipboard from 'vue-clipboard2';
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+
+// require styles
+import 'swiper/dist/css/swiper.css';
 
 import store from '@/store/store';
 import router from '@/router';
@@ -13,6 +17,8 @@ Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
 Vue.use(VueClipboard);
+
+Vue.use(VueAwesomeSwiper);
 
 async function logBuildDates () {
   /* global __BUILD_DATE__ */

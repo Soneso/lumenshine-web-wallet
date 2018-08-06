@@ -173,15 +173,15 @@ export default {
     commit('SET_CURRENCY_PAIRS_LOADING', false);
   },
 
-  async getCurrencyData ({ commit }) {
-    commit('SET_CURRENCY_DATA_LOADING', true);
+  async getCurrencyRates ({ commit }, params) {
+    commit('SET_CURRENCY_RATES_LOADING', true);
     try {
-      const data = await WalletService.getCurrencyData();
-      commit('SET_CURRENCY_DATA', data);
+      const data = await WalletService.getCurrencyRates(params);
+      commit('SET_CURRENCY_RATES', data);
     } catch (err) {
-      commit('SET_CURRENCY_DATA_ERROR', err.data);
+      commit('SET_CURRENCY_RATES_ERROR', err.data);
     }
-    commit('SET_CURRENCY_DATA_LOADING', false);
+    commit('SET_CURRENCY_RATES_LOADING', false);
   },
 
   async fundAccountWithFriendbot ({ commit, dispatch }, account) {

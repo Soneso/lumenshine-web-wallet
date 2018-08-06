@@ -1,7 +1,10 @@
 <template>
   <div class="currency-ticker">
-    <div>
-      <p class="div__amounts">{{ totalXLMAmount.toFixed(2) }} XLM ~ {{ totalUSDAmount }} USD</p>
+    <div v-if="pairs.length > 0">
+      <swiper :options="{ loop: true, autoplay: { delay: 8000 }, direction: 'vertical' }">
+        <swiper-slide v-for="pair in pairs" :key="pair.type + pair.issuer" class="div__amounts">{{ pair.amount.format() }} {{ pair.source }} ≈ {{ pair.value.format(2) }} {{ pair.destination }}</swiper-slide>
+        <swiper-slide class="div__amounts">Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD</swiper-slide>
+      </swiper>
     </div>
   </div>
 </template>
@@ -20,41 +23,87 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['wallets', 'currencyPairs', 'currencyData']),
+    ...mapGetters(['wallets', 'currencyPairs', 'currencyRates']),
+    totalBalances () {
+      if (!this.wallets.res) return [];
+      const totalBalances = {};
+      this.wallets.res.forEach(wallet => {
+        if (!wallet.stellar_data) return null;
+        const balances = wallet.stellar_data.balances;
+        if (!totalBalances.XLM) totalBalances.XLM = [];
+        totalBalances.XLM.push({ balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' });
 
-    totalXLMAmount () {
-      const wallets = this.wallets.res;
-      if (!wallets) return new Amount('0');
-      let sum = new Amount('0');
-      for (const wallet of wallets) {
-        if (wallet.stellar_data) {
-          const xlmBalance = wallet.stellar_data.balances.find(b => b.asset_type === 'native');
-          if (xlmBalance) {
-            sum = sum.plus(xlmBalance.balance);
-          }
-        }
+        const otherBalances = balances
+          .filter(b => b.asset_type !== 'native')
+          .map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }));
+        otherBalances.forEach(bal => {
+          if (!totalBalances[bal.type]) totalBalances[bal.type] = [];
+          totalBalances[bal.type].push(bal);
+        });
+      });
+
+      for (const type in totalBalances) {
+        const amount = totalBalances[type].map(b => b.balance).reduce((acc, val) => new Amount(acc).plus(val));
+        totalBalances[type] = { balance: amount, type, issuer: totalBalances[type][0].issuer };
       }
-      return sum;
+
+      return [totalBalances.XLM, ...Object.keys(totalBalances).filter(b => b !== 'XLM').map(b => totalBalances[b])];
     },
     totalUSDAmount () {
-      if (!this.currencyData.res) {
-        return '';
+      return this.pairs.map(p => p.value).reduce((acc, cur) => new Amount(acc).sum(cur));
+    },
+    flatCurrencyPairs () {
+      if (!this.currencyRates.res) {
+        return [];
       }
-      const rate = this.currencyData.res.rates.find(rate => rate.asset_code === 'XLM').rate;
-      return (this.totalXLMAmount.toNumber() * rate).toFixed(2);
+      return this.currencyRates.res.rates.map(rate => ({
+        source: rate.source_currency.asset_code,
+        rate: rate.rate,
+        issuer: rate.source_currency.issuer_public_key || undefined,
+        destination: 'USD'
+      }));
+    },
+    pairs () {
+      return this.totalBalances
+        .map(b => {
+          const rate = this.flatCurrencyPairs.find(p => p.source === b.type && p.issuer === b.issuer);
+          if (!rate) return null;
+          return {...rate, amount: b.balance, value: new Amount(`${rate.rate}`).multiply(b.balance)};
+        }).filter(x => x);
+    },
+  },
+  watch: {
+    wallets () {
+      this.refreshRates();
+    },
+    currencyPairs () {
+      this.refreshRates();
     }
   },
   async created () {
     await this.getCurrencyPairs();
-    await this.getCurrencyData();
   },
   methods: {
-    ...mapActions(['getCurrencyPairs', 'getCurrencyData']),
+    ...mapActions(['getCurrencyPairs', 'getCurrencyRates']),
+    async refreshRates () {
+      if (!this.currencyPairs.res || !this.wallets.res) return;
+      const currencies = this.currencyPairs.res.map(cp => ({ type: cp.source_currency.asset_code, issuer: cp.source_currency.issuer_public_key || undefined }));
+
+      const fetchableCurrencies = this.totalBalances.filter(tb => currencies.find(c => c.type === tb.type && c.issuer === tb.issuer));
+
+      await this.getCurrencyRates({
+        destination_currency: 'USD',
+        source_currencies: fetchableCurrencies.map(c => ({ asset_code: c.type, issuer_public_key: c.issuer || '' }))
+      });
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "assets/scss/variables";
-
+.currency-ticker {
+  height: 30px;
+  overflow: hidden;
+}
 </style>

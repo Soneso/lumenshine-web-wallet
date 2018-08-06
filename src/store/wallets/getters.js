@@ -7,5 +7,5 @@ export default {
   fundWithFriendbotStatus: state => ({ err: state.fundWithFriendbotErrors, loading: state.fundWithFriendbotLoading }),
   publicKeys: state => state.publicKeys,
   currencyPairs: state => ({ err: state.currencyPairsErrors, loading: state.currencyPairsLoading, res: state.currencyPairsResult }),
-  currencyData: state => ({ err: state.currencyDataErrors, loading: state.currencyDataLoading, res: state.currencyDataResult }),
+  currencyRates: state => ({ err: state.currencyRatesErrors, loading: state.currencyRatesLoading, res: state.currencyRatesResult }),
 };

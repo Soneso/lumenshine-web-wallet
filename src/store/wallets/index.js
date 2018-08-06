@@ -40,9 +40,9 @@ function getInitialState (clearAuthToken = false) {
     currencyPairsLoading: false,
     currencyPairsResult: null,
 
-    currencyDataErrors: [],
-    currencyDataLoading: false,
-    currencyDataResult: null,
+    currencyRatesErrors: [],
+    currencyRatesLoading: false,
+    currencyRatesResult: null,
 
     fundWithFriendbotLoading: false,
     fundWithFriendbotError: [],
