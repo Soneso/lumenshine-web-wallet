@@ -213,7 +213,7 @@ export default {
       const xlmAvailble = { balance: new Amount(xlmBalance.balance).minus(baseReserve).format(), type: 'XLM' };
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [xlmAvailble, ...otherBalances.map(bal => ({ balance: bal.balance, type: bal.asset_code }))];
+      return [xlmAvailble, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code }))];
     }
   },
   methods: {
