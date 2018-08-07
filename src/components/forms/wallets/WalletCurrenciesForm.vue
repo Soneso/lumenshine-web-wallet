@@ -5,7 +5,7 @@
         <strong>Currencies</strong>
         <a v-if="!addCurrency" href="#" class="only-desktop" @click.prevent="openAddCurrency">add currency</a>
       </p>
-      <p v-for="balance in balances" :key="balance.type" class="balance">
+      <p v-for="balance in balances" :key="balance.type + balance.issuer" class="balance">
         <span>
           {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
         </span>

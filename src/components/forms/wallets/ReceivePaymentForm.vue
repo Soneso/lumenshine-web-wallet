@@ -25,9 +25,17 @@
         <tr>
           <td>Currency</td>
           <td>
-            <span v-if="data.stellar_data.balances.length < 2">Stellar Lumens (XLM)</span>
+            <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
             <select v-else v-model="assetCode">
-              <option v-for="balance in data.stellar_data.balances" :key="balance.asset_code" :value="balance.asset_code || 'XLM'">{{ balance.asset_code || 'Stellar Lumens (XLM)' }}</option>
+              <option v-for="assetCode in uniqueCurrencies" :key="assetCode" :value="assetCode">{{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode }}</option>
+            </select>
+          </td>
+        </tr>
+        <tr v-if="currentAssetCodeBalances.length > 1">
+          <td>Issuer</td>
+          <td>
+            <select v-model="issuer">
+              <option v-for="bal in currentAssetCodeBalances" :key="bal.asset_issuer" :value="bal.asset_issuer">{{ bal.asset_issuer }}</option>
             </select>
           </td>
         </tr>
@@ -63,12 +71,36 @@ export default {
       showCopiedText: false,
       amount: '',
       assetCode: 'XLM',
+      issuer: '',
       config,
     };
   },
   computed: {
     emailBody () {
-      return `QR code\nPublic key: ${this.data.public_key_0}\nCurrency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\nAmount: ${this.amount}`;
+      return `QR code\n
+      Public key: ${this.data.public_key_0}\n
+      Currency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\n
+      Issuer: ${this.issuer}\n
+      Amount: ${this.amount}`;
+    },
+    uniqueCurrencies () {
+      if (!this.data.stellar_data) return [];
+      const obj = {};
+      this.data.stellar_data.balances.forEach(bal => {
+        obj[bal.asset_code || 'XLM'] = true;
+      });
+      return Object.keys(obj);
+    },
+    currentAssetCodeBalances () {
+      if (!this.data.stellar_data) return [];
+      return this.data.stellar_data.balances.filter(b => b.asset_code === this.assetCode);
+    }
+  },
+  watch: {
+    assetCode (val) {
+      if (!this.data.stellar_data) return;
+      const balance = this.data.stellar_data.balances.find(b => b.asset_code === val);
+      this.issuer = balance ? balance.asset_issuer : '';
     }
   },
   methods: {

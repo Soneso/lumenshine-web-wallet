@@ -46,7 +46,7 @@
         </tr>
       </table>
       <table v-else>
-        <tr v-for="balance in balances" :key="balance.type">
+        <tr v-for="balance in balances" :key="balance.type + balance.issuer">
           <td>{{ balance.balance }}</td>
           <td>{{ balance.type }}</td>
         </tr>
@@ -57,7 +57,7 @@
       <strong>Available</strong>
       <br>
       <table>
-        <tr v-for="balance in avalaibleBalances" :key="balance.type">
+        <tr v-for="balance in avalaibleBalances" :key="balance.type + balance.issuer">
           <td>{{ balance.balance }}</td>
           <td>{{ balance.type }}</td>
         </tr>

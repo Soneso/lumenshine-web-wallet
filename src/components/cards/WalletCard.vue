@@ -17,7 +17,7 @@
         </tr>
       </table>
       <table v-else>
-        <tr v-for="balance in balances" :key="balance.type">
+        <tr v-for="balance in balances" :key="balance.type + balance.issuer">
           <td>{{ balance.balance }}</td>
           <td>{{ balance.type }}</td>
         </tr>
@@ -26,7 +26,7 @@
     <section v-if="data.stellar_data">
       <h4>Available</h4>
       <table>
-        <tr v-for="balance in avalaibleBalances" :key="balance.type">
+        <tr v-for="balance in avalaibleBalances" :key="balance.type + balance.issuer">
           <td>{{ balance.balance }}</td>
           <td>{{ balance.type }}</td>
         </tr>
@@ -220,7 +220,7 @@ export default {
       const xlmAvailble = { balance: new Amount(xlmBalance.balance).minus(this.minBalance).format(), type: 'XLM' };
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [xlmAvailble, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code }))];
+      return [xlmAvailble, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code, issuer: bal.asset_issuer }))];
     }
   },
   methods: {
@@ -345,8 +345,7 @@ export default {
           } else if (data.assetCode === 'XLM') {
             asset = StellarSdk.Asset.native();
           } else {
-            const balance = this.balances.find(b => b.type === data.assetCode);
-            asset = new StellarSdk.Asset(data.assetCode, balance.issuer);
+            asset = new StellarSdk.Asset(data.assetCode, data.issuer);
           }
 
           transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)

@@ -6,7 +6,7 @@
         <td>
           <!-- <span v-if="data.stellar_data.balances.length < 2">Stellar Lumens (XLM)</span> -->
           <select v-model="assetCode">
-            <option v-for="balance in data.stellar_data.balances" :key="balance.asset_code" :value="balance.asset_code || 'XLM'">{{ balance.asset_code || 'Stellar Lumens (XLM)' }}</option>
+            <option v-for="assetCode in uniqueCurrencies" :key="assetCode" :value="assetCode">{{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode }}</option>
             <option value="_other">Other</option>
           </select>
         </td>
@@ -19,6 +19,14 @@
             <div v-if="!$v.customAssetCode.validAssetCode">Not valid asset code!</div>
           </div>
           <input :class="{ error: $v.customAssetCode.$error }" v-model="customAssetCode" style="width:100%" placeholder="Asset code" @blur="$v.customAssetCode.$touch()">
+        </td>
+      </tr>
+      <tr v-if="currentAssetCodeBalances.length > 1">
+        <td>Issuer</td>
+        <td>
+          <select v-model="issuer">
+            <option v-for="bal in currentAssetCodeBalances" :key="bal.asset_issuer" :value="bal.asset_issuer">{{ bal.asset_issuer }}</option>
+          </select>
         </td>
       </tr>
       <tr>
@@ -113,6 +121,7 @@ export default {
       memo: '',
       memoType: 'MEMO_TEXT',
       amount: '',
+      issuer: '',
       password: '',
     };
   },
@@ -131,6 +140,25 @@ export default {
     },
     currentAssetCode () {
       return this.assetCode === '_other' ? this.customAssetCode : this.assetCode;
+    },
+    uniqueCurrencies () {
+      if (!this.data.stellar_data) return [];
+      const obj = {};
+      this.data.stellar_data.balances.forEach(bal => {
+        obj[bal.asset_code || 'XLM'] = true;
+      });
+      return Object.keys(obj);
+    },
+    currentAssetCodeBalances () {
+      if (!this.data.stellar_data) return [];
+      return this.data.stellar_data.balances.filter(b => b.asset_code === this.assetCode);
+    }
+  },
+  watch: {
+    assetCode (val) {
+      if (!this.data.stellar_data) return;
+      const balance = this.data.stellar_data.balances.find(b => b.asset_code === val);
+      this.issuer = balance ? balance.asset_issuer : '';
     }
   },
   methods: {
@@ -143,6 +171,7 @@ export default {
         recipient: this.recipient,
         assetCode: this.assetCode,
         customAssetCode: this.customAssetCode,
+        issuer: this.issuer,
         memo: this.memo,
         memoType: this.memoType,
         amount: this.amount,
