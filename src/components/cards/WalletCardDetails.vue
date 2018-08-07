@@ -189,6 +189,7 @@ export default {
       await this.editWallet({
         id: this.data.id,
         wallet_name: name,
+        onHomescreen: this.homescreen,
       });
       this.saveWalletLoading = false;
     },
