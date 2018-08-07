@@ -205,12 +205,19 @@ export default {
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code, issuer: bal.asset_issuer }))];
     },
+    minBalance () {
+      if (!this.data.stellar_data) return new Amount('0');
+      const entryCount = this.data.stellar_data.subentry_count;
+      const baseReserve = 0.5;
+      const minBalance = new Amount(`${(2 + entryCount) * baseReserve}`);
+      return minBalance;
+    },
     avalaibleBalances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
       const xlmBalance = { balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' };
-      const baseReserve = new Amount(`${(2 + 0) * 0.5}`);
-      const xlmAvailble = { balance: new Amount(xlmBalance.balance).minus(baseReserve).format(), type: 'XLM' };
+
+      const xlmAvailble = { balance: new Amount(xlmBalance.balance).minus(this.minBalance).format(), type: 'XLM' };
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmAvailble, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code }))];
