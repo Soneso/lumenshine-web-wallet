@@ -2,6 +2,27 @@ import Vue from 'vue';
 import config from '@/config';
 
 export default {
+  RESET_DECRYPTED_WALLET (state) {
+    state.decryptedPublicKey = null;
+    state.decryptedSecret = null;
+    state.decryptionError = false;
+    state.decryptionLoading = false;
+  },
+  SET_DECRYPTED_WALLET (state, msg) {
+    state.decryptedPublicKey = msg.publicKey;
+    state.decryptedSecret = msg.secretSeed;
+    state.decryptionError = false;
+    state.decryptionLoading = false;
+  },
+  SET_DECRYPTION_ERROR (state) {
+    state.decryptionError = true;
+    state.decryptionLoading = false;
+  },
+  SET_DECRYPTION_LOADING (state) {
+    state.decryptionError = false;
+    state.decryptionLoading = true;
+  },
+
   SET_WALLETS (state, msg) {
     state.walletsResult = msg;
     state.walletsErrors = [];
@@ -83,6 +104,18 @@ export default {
   },
   SET_FUND_WITH_FRIENDBOT_ERROR (state, msg) {
     state.fundWithFriendbotErrors = msg;
+  },
+
+  SET_SEND_PAYMENT_RESULT (state, msg) {
+    state.sendPaymentResult = msg;
+    state.sendPaymentErrors = [];
+  },
+  SET_SEND_PAYMENT_LOADING (state, msg) {
+    state.sendPaymentLoading = msg;
+  },
+  SET_SEND_PAYMENT_ERROR (state, msg) {
+    state.sendPaymentErrors = msg;
+    state.sendPaymentResult = null;
   },
 
   // used for storing the available wallet public keys on login

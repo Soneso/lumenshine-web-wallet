@@ -1,6 +1,7 @@
 import StellarSdk from 'stellar-sdk';
 
 import config from '@/config';
+import workerCaller from '@/util/workerCaller';
 
 import WalletService from '@/services/wallet';
 
@@ -21,6 +22,24 @@ export default {
         const stellarData = stellarRes.find(acc => acc.id === account.public_key_0);
         return { ...account, stellar_data: stellarData };
       });
+      // extended.forEach(async acc => {
+      //   if (acc.stellar_data) {
+      //     console.log('stream', acc.public_key_0);
+      //     const lastTransaction = await StellarAPI.transactions()
+      //       .forAccount(acc.public_key_0)
+      //       .order('desc')
+      //       .limit(1)
+      //       .call();
+      //     StellarAPI.transactions()
+      //       .forAccount(acc.public_key_0)
+      //       .cursor(lastTransaction.records[0].paging_token)
+      //       .stream({
+      //         onmessage: (msg) => {
+      //           console.log('onmessage', acc.public_key_0, msg);
+      //         }
+      //       });
+      //   }
+      // });
       commit('SET_WALLETS', extended);
     } catch (err) {
       commit('SET_WALLETS_ERROR', err.data);
@@ -194,6 +213,169 @@ export default {
       commit('SET_FUND_WITH_FRIENDBOT_ERROR', err.data);
     }
     commit('SET_FUND_WITH_FRIENDBOT_LOADING', false);
+  },
+
+  async decryptWallet ({ commit, getters, dispatch }, { publicKey, password }) {
+    if (getters.decryptedWallet.publicKey === publicKey) {
+      return;
+    }
+    commit('SET_DECRYPTION_LOADING');
+
+    await dispatch('getUserAuthData');
+
+    const authData = getters.userAuthData.res;
+
+    const kdfPass = await workerCaller('derivePassword', password, authData.kdf_password_salt);
+    const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
+      workerCaller('decryptMasterKey', kdfPass, authData.mnemonic_master_key_encryption_iv, authData.encrypted_mnemonic_master_key),
+      workerCaller('decryptMasterKey', kdfPass, authData.wordlist_master_key_encryption_iv, authData.encrypted_wordlist_master_key)
+    ]);
+
+    const [ mnemonicIndices, wordlist ] = await Promise.all([
+      workerCaller('decryptMnemonic', mnemonicMasterKey, authData.mnemonic_encryption_iv, authData.encrypted_mnemonic),
+      workerCaller('decryptWordlist', wordlistMasterKey, authData.wordlist_encryption_iv, authData.encrypted_wordlist)
+    ]);
+
+    const isValidWordlist = !!(wordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
+    if (!isValidWordlist) {
+      commit('SET_DECRYPTION_ERROR');
+      return;
+    }
+
+    const mnemonic = await workerCaller('indicesToMnemonic', mnemonicIndices, wordlist);
+    if (!getters.publicKeys) {
+      commit('SET_DECRYPTION_ERROR');
+      return;
+    }
+    const keyIndex = getters.publicKeys.indexOf(publicKey);
+    if (keyIndex === -1) {
+      commit('SET_DECRYPTION_ERROR');
+      return;
+    }
+
+    const secretSeed = await workerCaller('getSecretSeed', mnemonic, keyIndex);
+    commit('SET_DECRYPTED_WALLET', { publicKey: publicKey, secretSeed });
+  },
+
+  async resetDecryptedWallet ({ commit }) {
+    commit('RESET_DECRYPTED_WALLET');
+  },
+
+  async resetSendPayment ({ commit }) {
+    commit('SET_SEND_PAYMENT_LOADING', false);
+    commit('SET_SEND_PAYMENT_RESULT', null);
+  },
+
+  async sendPayment ({ commit, dispatch, getters }, data) {
+    commit('SET_SEND_PAYMENT_LOADING', true);
+    console.log('data', data);
+    await dispatch('decryptWallet', { publicKey: data.publicKey, password: data.password });
+    console.log('data', data);
+    if (getters.decryptedWallet.err) {
+      commit('SET_SEND_PAYMENT_LOADING', false);
+      return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'WRONG_PASSWORD' }]);
+    }
+    const sourceKeypair = StellarSdk.Keypair.fromSecret(getters.decryptedWallet.secretSeed);
+    commit('RESET_DECRYPTED_WALLET');
+    const sourcePublicKey = sourceKeypair.publicKey();
+
+    let memo;
+    if (data.memo !== '') {
+      switch (data.memoType) {
+        case 'MEMO_TEXT':
+          memo = { memo: StellarSdk.Memo.text(data.memo) };
+          break;
+        case 'MEMO_ID':
+          memo = { memo: StellarSdk.Memo.id(data.memo) };
+          break;
+        case 'MEMO_HASH':
+          memo = { memo: StellarSdk.Memo.hash(data.memo) };
+          break;
+        case 'MEMO_RETURN':
+          memo = { memo: StellarSdk.Memo.returnHash(data.memo) };
+          break;
+      }
+    }
+    const [ currentAccount, destinationAccount ] =
+      await Promise.all([
+        StellarAPI.loadAccount(sourcePublicKey),
+        StellarAPI.loadAccount(data.recipient).catch(e => e)
+      ]);
+
+    if (!data.shouldFund && (currentAccount instanceof Error || destinationAccount instanceof Error)) {
+      commit('SET_SEND_PAYMENT_LOADING', false);
+      if (data.assetCode !== 'XLM') {
+        commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'CANNOT_FUND' }]);
+      } else {
+        commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'SHOULD_FUND' }]);
+      }
+      return;
+    }
+
+    try {
+      let transaction;
+
+      if (data.shouldFund) {
+        transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
+          .addOperation(StellarSdk.Operation.createAccount({
+            destination: data.recipient,
+            startingBalance: data.amount
+          }))
+          .build();
+      } else { // wallet already funded
+        let asset;
+        if (data.assetCode === '_other') {
+          asset = new StellarSdk.Asset(data.customAssetCode, sourcePublicKey);
+        } else if (data.assetCode === 'XLM') {
+          asset = StellarSdk.Asset.native();
+        } else {
+          asset = new StellarSdk.Asset(data.assetCode, data.issuer);
+        }
+
+        transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
+          .addOperation(StellarSdk.Operation.payment({
+            destination: data.recipient,
+            asset,
+            amount: data.amount
+          }))
+          .build();
+      }
+
+      transaction.sign(sourceKeypair);
+
+      const res = await StellarAPI.submitTransaction(transaction);
+      const transactionIdMatch = res._links.transaction.href.match(/transactions\/([0-9a-f]+)/);
+      console.log('match', transactionIdMatch);
+      if (!transactionIdMatch || !transactionIdMatch[1]) {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN' }]);
+      }
+      const transactionId = transactionIdMatch[1];
+      const transactionDetails = await StellarAPI.transactions().transaction(transactionId).call();
+      console.log('transaction', transactionDetails);
+      const operations = await transactionDetails.operations();
+      console.log('operations', operations);
+      res.operation = operations.records[0];
+      res.transaction = transactionDetails;
+
+      commit('SET_SEND_PAYMENT_RESULT', res);
+    } catch (err) {
+      commit('SET_SEND_PAYMENT_LOADING', false);
+      if (err.response && err.response.data && err.response.data.extras) {
+        const extras = err.response.data.extras;
+        if (extras.result_codes && extras.result_codes.operations && extras.result_codes.operations[0]) {
+          const op = extras.result_codes.operations[0];
+          if (op === 'op_no_trust') {
+            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NOT_TRUSTED', err }]);
+          } else if (op === 'op_underfunded') {
+            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNDERFUNDED', err }]);
+          } else if (op === 'op_no_destination') {
+            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION', err }]);
+          }
+        }
+      } else {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
+      }
+    }
   }
 
 };

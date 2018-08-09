@@ -1,4 +1,5 @@
 export default {
+  decryptedWallet: state => ({ err: state.decryptionError, publicKey: state.decryptedPublicKey, secretSeed: state.decryptedSecret, loading: state.decryptionLoading }),
   wallets: state => ({ err: state.walletsErrors, loading: state.walletsLoading, res: state.walletsResult }),
   addWalletStatus: state => ({ err: state.addWalletErrors, loading: state.addWalletLoading, res: state.addWalletResult }),
   editWalletStatus: state => ({ err: state.editWalletErrors, loading: state.editWalletLoading }),
@@ -8,4 +9,5 @@ export default {
   publicKeys: state => state.publicKeys,
   currencyPairs: state => ({ err: state.currencyPairsErrors, loading: state.currencyPairsLoading, res: state.currencyPairsResult }),
   currencyRates: state => ({ err: state.currencyRatesErrors, loading: state.currencyRatesLoading, res: state.currencyRatesResult }),
+  sendPaymentStatus: state => ({ err: state.sendPaymentErrors, loading: state.sendPaymentLoading, res: state.sendPaymentResult }),
 };

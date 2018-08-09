@@ -57,6 +57,18 @@ class Amount {
     return this;
   }
 
+  divide (newVal) {
+    if (!(newVal instanceof Amount || typeof newVal === 'string')) {
+      throw new Error('Amount should be string');
+    }
+    if (newVal instanceof Amount) {
+      this.val = this.val.div(newVal.val);
+    } else {
+      this.val = this.val.div(newVal);
+    }
+    return this;
+  }
+
   format (decimalPlaces = 7) {
     return this.val.toFormat(decimalPlaces);
   }

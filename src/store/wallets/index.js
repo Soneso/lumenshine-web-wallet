@@ -16,6 +16,11 @@ function parsePublicKeys (pk) {
 
 function getInitialState (clearAuthToken = false) {
   return {
+    decryptionError: false,
+    decryptedPublicKey: null,
+    decryptedSecret: null,
+    decryptionLoading: false,
+
     walletsErrors: [],
     walletsLoading: false,
     walletsResult: null,
@@ -46,6 +51,10 @@ function getInitialState (clearAuthToken = false) {
 
     fundWithFriendbotLoading: false,
     fundWithFriendbotError: [],
+
+    sendPaymentErrors: [],
+    sendPaymentLoading: false,
+    sendPaymentResult: null,
 
     publicKeys: config.KEEP_LOGGED_IN && !clearAuthToken
       ? parsePublicKeys(replaceNull(Vue.localStorage.get('publicKeys', null)))
