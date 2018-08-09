@@ -31,6 +31,7 @@ module.exports = {
         'max': 1,
         'allowFirstLine': false
       }
-    }]
+    }],
+    'vue/require-default-prop': 0
   }
 }
