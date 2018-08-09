@@ -57,11 +57,13 @@
       <h3>Send <i data-v-221f4c5c="" class="fa fa-question-circle-o"/></h3>
       <a href="#" class="card__close" @click.prevent="openedDetails = null"><i data-v-221f4c5c="" class="fa fa-close"/></a>
       <send-payment-form
-        :loading="sendingPaymentLoading"
+        :result="sendPaymentStatus.res"
+        :loading="sendPaymentStatus.loading || decryptedWallet.loading"
         :data="data"
-        :errors="paymentErrors"
-        @cancel="openedDetails = null"
-        @submit="sendPayment"/>
+        :errors="sendPaymentStatus.err"
+        @reset="resetSendPayment"
+        @close="openedDetails = null"
+        @submit="onSendPaymentClick"/>
     </div>
     <wallet-card-details
       v-if="openedDetails === 'details'"
@@ -69,8 +71,8 @@
       :balances="balances"
       :avalaible-balances="avalaibleBalances"
       :secret-seed="secretSeed"
-      :decrypt-error="decryptError"
-      :decrypt-wallet-loading="decryptWalletLoading"
+      :decrypt-error="decryptedWallet.err"
+      :decrypt-wallet-loading="decryptedWallet.loading"
       :inflation-destination-loading="setInflationDestLoading"
       :wallet-details-loading="walletDetailsLoading"
       @setInflationDestination="onSetInflationDestination"
@@ -136,12 +138,9 @@
 </template>
 
 <script>
-import StellarSdk from 'stellar-sdk';
 import { mapActions, mapGetters } from 'vuex';
 
 import config from '@/config';
-
-import workerCaller from '@/util/workerCaller';
 
 import Amount from '@/util/Amount';
 import Modal from '@/components/Modal';
@@ -150,9 +149,6 @@ import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
 
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
-
-const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
-StellarSdk.Network.useTestNetwork();
 
 export default {
   components: {
@@ -181,22 +177,16 @@ export default {
 
       secretSeed: null,
 
-      decryptWalletLoading: false,
-      sendingPaymentLoading: false,
       saveWalletLoading: false,
       setInflationDestLoading: false,
       walletDetailsLoading: false,
       fundWalletLoading: false,
 
-      decryptError: false,
-      errors: [],
-      paymentErrors: [],
-
       config
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'publicKeys']),
+    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet']),
     balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
@@ -224,7 +214,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserAuthData', 'setInflationDestination', 'getWallets', 'addCurrency', 'removeCurrency', 'fundAccountWithFriendbot']),
+    ...mapActions([
+      'getUserAuthData',
+      'setInflationDestination',
+      'getWallets',
+      'addCurrency',
+      'removeCurrency',
+      'fundAccountWithFriendbot',
+      'sendPayment',
+      'decryptWallet',
+      'resetSendPayment'
+    ]),
     onFundWallet (e) {
       this.fundWalletModalShown = true;
     },
@@ -238,162 +238,23 @@ export default {
     onCopy () {
       this.accountIDCopied = true;
     },
-    async decryptWallet (password) {
-      if (this.secretSeed) {
-        return this.secretSeed;
-      }
-      this.decryptError = false;
-      await this.getUserAuthData();
-
-      const authData = this.userAuthData.res;
-
-      const kdfPass = await workerCaller('derivePassword', password, authData.kdf_password_salt);
-      const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
-        workerCaller('decryptMasterKey', kdfPass, authData.mnemonic_master_key_encryption_iv, authData.encrypted_mnemonic_master_key),
-        workerCaller('decryptMasterKey', kdfPass, authData.wordlist_master_key_encryption_iv, authData.encrypted_wordlist_master_key)
-      ]);
-
-      const [ mnemonicIndices, wordlist ] = await Promise.all([
-        workerCaller('decryptMnemonic', mnemonicMasterKey, authData.mnemonic_encryption_iv, authData.encrypted_mnemonic),
-        workerCaller('decryptWordlist', wordlistMasterKey, authData.wordlist_encryption_iv, authData.encrypted_wordlist)
-      ]);
-
-      const isValidWordlist = !!(wordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
-      if (!isValidWordlist) {
-        this.decryptError = true;
-        return;
-      }
-
-      const mnemonic = await workerCaller('indicesToMnemonic', mnemonicIndices, wordlist);
-      if (!this.publicKeys) {
-        this.decryptError = true;
-        return;
-      }
-      const keyIndex = this.publicKeys.indexOf(this.data.public_key_0);
-      if (keyIndex === -1) {
-        this.decryptError = true;
-        return;
-      }
-
-      const secretSeed = await workerCaller('getSecretSeed', mnemonic, keyIndex);
-      return secretSeed;
-    },
     async onDecryptWallet (password) {
-      this.decryptWalletLoading = true;
-      this.secretSeed = await this.decryptWallet(password);
-      this.decryptWalletLoading = false;
+      await this.decryptWallet({ publicKey: this.data.public_key_0, password });
     },
-    async sendPayment (data) {
-      this.sendingPaymentLoading = true;
-      this.paymentErrors = [];
-      const secretSeed = await this.decryptWallet(data.password);
-      if (this.decryptError || !secretSeed) {
-        this.sendingPaymentLoading = false;
-        this.paymentErrors = [{ error_code: 'WRONG_PASSWORD' }];
-        return;
-      }
-      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
-      const sourcePublicKey = sourceKeypair.publicKey();
-
-      let memo;
-      if (data.memo !== '') {
-        switch (data.memoType) {
-          case 'MEMO_TEXT':
-            memo = { memo: StellarSdk.Memo.text(data.memo) };
-            break;
-          case 'MEMO_ID':
-            memo = { memo: StellarSdk.Memo.id(data.memo) };
-            break;
-          case 'MEMO_HASH':
-            memo = { memo: StellarSdk.Memo.hash(data.memo) };
-            break;
-          case 'MEMO_RETURN':
-            memo = { memo: StellarSdk.Memo.returnHash(data.memo) };
-            break;
-        }
-      }
-      const [ currentAccount, destinationAccount ] =
-        await Promise.all([
-          StellarAPI.loadAccount(sourcePublicKey),
-          StellarAPI.loadAccount(data.recipient).catch(e => e)
-        ]);
-
-      if (!data.shouldFund && (currentAccount instanceof Error || destinationAccount instanceof Error)) {
-        this.sendingPaymentLoading = false;
-        if (data.assetCode !== 'XLM') {
-          this.paymentErrors = [{ error_code: 'CANNOT_FUND' }];
-        } else {
-          this.paymentErrors = [{ error_code: 'SHOULD_FUND' }];
-        }
-        return;
-      }
-
-      try {
-        let transaction;
-
-        if (data.shouldFund) {
-          transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
-            .addOperation(StellarSdk.Operation.createAccount({
-              destination: data.recipient,
-              startingBalance: data.amount
-            }))
-            .build();
-        } else {
-          let asset;
-          if (data.assetCode === '_other') {
-            asset = new StellarSdk.Asset(data.customAssetCode, sourcePublicKey);
-          } else if (data.assetCode === 'XLM') {
-            asset = StellarSdk.Asset.native();
-          } else {
-            asset = new StellarSdk.Asset(data.assetCode, data.issuer);
-          }
-
-          transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
-            .addOperation(StellarSdk.Operation.payment({
-              destination: data.recipient,
-              asset,
-              amount: data.amount
-            }))
-            .build();
-        }
-
-        transaction.sign(sourceKeypair);
-
-        await StellarAPI.submitTransaction(transaction);
-      } catch (err) {
-        this.sendingPaymentLoading = false;
-        if (err.response && err.response.data && err.response.data.extras) {
-          const extras = err.response.data.extras;
-          if (extras.result_codes && extras.result_codes.operations && extras.result_codes.operations[0]) {
-            const op = extras.result_codes.operations[0];
-            if (op === 'op_no_trust') {
-              this.paymentErrors = [{ error_code: 'NOT_TRUSTED', err }];
-              return;
-            } else if (op === 'op_underfunded') {
-              this.paymentErrors = [{ error_code: 'UNDERFUNDED', err }];
-              return;
-            } else if (op === 'op_no_destination') {
-              this.paymentErrors = [{ error_code: 'NO_DESTINATION', err }];
-              return;
-            }
-          }
-        } else {
-          this.paymentErrors = [{ error_code: 'UNKNOWN_ERROR', err }];
-          return;
-        }
-      }
+    async onSendPaymentClick (data) {
+      await this.sendPayment({ ...data, publicKey: this.data.public_key_0, password: data.password });
       await this.getWallets();
-      this.sendingPaymentLoading = false;
     },
     async onSetInflationDestination (data) {
       this.setInflationDestLoading = true;
-      const secretSeed = await this.decryptWallet(data.password);
-      if (this.decryptError) {
+      await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+
+      if (this.decryptedWallet.err) {
         this.setInflationDestLoading = false;
         return;
       }
       await this.setInflationDestination({
-        secretSeed: secretSeed,
+        secretSeed: this.decryptedWallet.secretSeed,
         destination: this.inflationDest,
       });
       await this.getWallets();
@@ -401,13 +262,14 @@ export default {
     },
     async onAddCurrency (data) {
       this.walletDetailsLoading = true;
-      const secretSeed = await this.decryptWallet(data.password);
-      if (this.decryptError) {
+      await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+
+      if (this.decryptedWallet.err) {
         this.walletDetailsLoading = false;
         return;
       }
       await this.addCurrency({
-        secretSeed: secretSeed,
+        secretSeed: this.decryptedWallet.secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
       });
@@ -415,13 +277,14 @@ export default {
     },
     async onRemoveCurrency (data) {
       this.walletDetailsLoading = true;
-      const secretSeed = await this.decryptWallet(data.password);
-      if (this.decryptError) {
+      await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+
+      if (this.decryptedWallet.err) {
         this.walletDetailsLoading = false;
         return;
       }
       await this.removeCurrency({
-        secretSeed: secretSeed,
+        secretSeed: this.decryptedWallet.secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
       });
