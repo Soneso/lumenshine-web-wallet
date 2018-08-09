@@ -1,8 +1,7 @@
 <template>
   <div class="page">
-    <h1>Dashboard</h1>
     <div v-if="wallets.loading">Loading...</div>
-    <div v-else class="card-container">
+    <div class="card-container">
       <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
     </div>
   </div>
@@ -18,6 +17,7 @@ export default {
   computed: {
     ...mapGetters(['wallets']),
     homescreenWallets () {
+      if (!this.wallets.res) return [];
       return this.wallets.res.filter(w => w.show_on_homescreen);
     }
   },
