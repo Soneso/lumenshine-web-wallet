@@ -9,7 +9,7 @@ const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 StellarSdk.Network.useTestNetwork();
 
 export default {
-  async getWallets ({ commit, getters }) {
+  async getWallets ({ commit, getters, dispatch }) {
     commit('SET_WALLETS_LOADING', true);
     try {
       const backendRes = await WalletService.getWallets();
@@ -22,24 +22,23 @@ export default {
         const stellarData = stellarRes.find(acc => acc.id === account.public_key_0);
         return { ...account, stellar_data: stellarData };
       });
-      // extended.forEach(async acc => {
-      //   if (acc.stellar_data) {
-      //     console.log('stream', acc.public_key_0);
-      //     const lastTransaction = await StellarAPI.transactions()
-      //       .forAccount(acc.public_key_0)
-      //       .order('desc')
-      //       .limit(1)
-      //       .call();
-      //     StellarAPI.transactions()
-      //       .forAccount(acc.public_key_0)
-      //       .cursor(lastTransaction.records[0].paging_token)
-      //       .stream({
-      //         onmessage: (msg) => {
-      //           console.log('onmessage', acc.public_key_0, msg);
-      //         }
-      //       });
-      //   }
-      // });
+      extended.forEach(async acc => {
+        if (acc.stellar_data) {
+          const lastTransaction = await StellarAPI.transactions()
+            .forAccount(acc.public_key_0)
+            .order('desc')
+            .limit(1)
+            .call();
+          StellarAPI.transactions()
+            .forAccount(acc.public_key_0)
+            .cursor(lastTransaction.records[0].paging_token)
+            .stream({
+              onmessage: (msg) => {
+                dispatch('updateWallets', [acc.public_key_0]);
+              }
+            });
+        }
+      });
       commit('SET_WALLETS', extended);
     } catch (err) {
       commit('SET_WALLETS_ERROR', err.data);
