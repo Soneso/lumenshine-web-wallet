@@ -47,6 +47,36 @@ export default {
     commit('SET_WALLETS_LOADING', false);
   },
 
+  async updateWallets ({ commit, getters }, keywords) {
+    commit('UPDATE_WALLETS_LOADING', true);
+    try {
+      // TODO: add backend interface for querying one wallet
+
+      // transform public keys to wallet ids
+      const ids = keywords.map(k => {
+        if (Number.isInteger(k)) {
+          return k;
+        }
+        const wallet = getters.wallets.res.find(w => w.public_key_0 === k);
+        return wallet ? wallet.id : null;
+      }).filter(k => k);
+      const backendRes = (await WalletService.getWallets()).filter(wallet => ids.includes(wallet.id));
+      const stellarRes = await Promise.all(
+        backendRes.map(account =>
+          StellarAPI.loadAccount(account.public_key_0).catch(err => err)
+        )
+      );
+      const extended = backendRes.map(account => {
+        const stellarData = stellarRes.find(acc => acc.id === account.public_key_0);
+        return { ...account, stellar_data: stellarData };
+      });
+      commit('UPDATE_WALLETS', extended);
+    } catch (err) {
+      commit('UPDATE_WALLETS_ERROR', err.data);
+    }
+    commit('UPDATE_WALLETS_LOADING', false);
+  },
+
   async addWallet ({ commit, dispatch }, params) {
     commit('ADD_WALLET_LOADING', true);
     try {
@@ -69,7 +99,7 @@ export default {
       if (!oldWallet || oldWallet.show_on_homescreen !== params.onHomescreen) {
         await WalletService.addWalletToHomescreen({ id: params.id, visible: params.onHomescreen });
       }
-      await dispatch('getWallets');
+      await dispatch('updateWallets', [params.id]);
       commit('EDIT_WALLET_ERROR', []);
     } catch (err) {
       commit('EDIT_WALLET_ERROR', err.data);
@@ -89,7 +119,7 @@ export default {
     commit('EDIT_WALLET_LOADING', false);
   },
 
-  async setInflationDestination ({ commit, dispatch }, { secretSeed, destination }) {
+  async setInflationDestination ({ commit, dispatch }, { publicKey, secretSeed, destination }) {
     commit('SET_INFLATION_DEST_LOADING', true);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
@@ -106,7 +136,7 @@ export default {
       transaction.sign(sourceKeypair);
 
       await StellarAPI.submitTransaction(transaction);
-      await dispatch('getWallets');
+      await dispatch('updateWallets', [ publicKey ]);
       commit('SET_INFLATION_DEST_ERROR', []);
     } catch (err) {
       console.error(err);
@@ -115,7 +145,7 @@ export default {
     commit('SET_INFLATION_DEST_LOADING', false);
   },
 
-  async addCurrency ({ commit, dispatch }, { secretSeed, assetCode, issuer }) {
+  async addCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
     commit('ADD_CURRENCY_LOADING', true);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
@@ -132,7 +162,7 @@ export default {
       transaction.sign(sourceKeypair);
 
       await StellarAPI.submitTransaction(transaction);
-      await dispatch('getWallets');
+      await dispatch('updateWallets', [ publicKey ]);
       commit('ADD_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
@@ -145,7 +175,7 @@ export default {
     commit('ADD_CURRENCY_LOADING', false);
   },
 
-  async removeCurrency ({ commit, dispatch }, { secretSeed, assetCode, issuer }) {
+  async removeCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
     commit('REMOVE_CURRENCY_LOADING', true);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
@@ -163,7 +193,7 @@ export default {
       transaction.sign(sourceKeypair);
 
       await StellarAPI.submitTransaction(transaction);
-      await dispatch('getWallets');
+      await dispatch('updateWallets', [ publicKey ]);
       commit('REMOVE_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
@@ -203,11 +233,11 @@ export default {
     commit('SET_CURRENCY_RATES_LOADING', false);
   },
 
-  async fundAccountWithFriendbot ({ commit, dispatch }, account) {
+  async fundAccountWithFriendbot ({ commit, dispatch }, publicKey) {
     commit('SET_FUND_WITH_FRIENDBOT_LOADING', true);
     try {
-      await WalletService.fundAccountWithFriendbot(account);
-      await dispatch('getWallets');
+      await WalletService.fundAccountWithFriendbot(publicKey);
+      await dispatch('updateWallets', [ publicKey ]);
       commit('SET_FUND_WITH_FRIENDBOT_ERROR', []);
     } catch (err) {
       commit('SET_FUND_WITH_FRIENDBOT_ERROR', err.data);
@@ -268,9 +298,7 @@ export default {
 
   async sendPayment ({ commit, dispatch, getters }, data) {
     commit('SET_SEND_PAYMENT_LOADING', true);
-    console.log('data', data);
     await dispatch('decryptWallet', { publicKey: data.publicKey, password: data.password });
-    console.log('data', data);
     if (getters.decryptedWallet.err) {
       commit('SET_SEND_PAYMENT_LOADING', false);
       return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'WRONG_PASSWORD' }]);
@@ -345,19 +373,17 @@ export default {
 
       const res = await StellarAPI.submitTransaction(transaction);
       const transactionIdMatch = res._links.transaction.href.match(/transactions\/([0-9a-f]+)/);
-      console.log('match', transactionIdMatch);
       if (!transactionIdMatch || !transactionIdMatch[1]) {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN' }]);
       }
       const transactionId = transactionIdMatch[1];
       const transactionDetails = await StellarAPI.transactions().transaction(transactionId).call();
-      console.log('transaction', transactionDetails);
       const operations = await transactionDetails.operations();
-      console.log('operations', operations);
       res.operation = operations.records[0];
       res.transaction = transactionDetails;
 
       commit('SET_SEND_PAYMENT_RESULT', res);
+      await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
       commit('SET_SEND_PAYMENT_LOADING', false);
       if (err.response && err.response.data && err.response.data.extras) {

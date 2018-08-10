@@ -70,16 +70,13 @@
       :data="data"
       :balances="balances"
       :avalaible-balances="avalaibleBalances"
-      :secret-seed="secretSeed"
-      :decrypt-error="decryptedWallet.err"
       :decrypt-wallet-loading="decryptedWallet.loading"
       :inflation-destination-loading="setInflationDestLoading"
       :wallet-details-loading="walletDetailsLoading"
       @setInflationDestination="onSetInflationDestination"
       @addCurrency="onAddCurrency"
       @removeCurrency="onRemoveCurrency"
-      @close="(next) => openedDetails = next || null"
-      @decrypt="onDecryptWallet"/>
+      @close="(next) => openedDetails = next || null"/>
 
     <modal v-if="fundWalletModalShown" @close="onModalClose">
       <template slot="title">
@@ -175,8 +172,6 @@ export default {
       accountIDCopied: false,
       openedDetails: null,
 
-      secretSeed: null,
-
       saveWalletLoading: false,
       setInflationDestLoading: false,
       walletDetailsLoading: false,
@@ -223,7 +218,9 @@ export default {
       'fundAccountWithFriendbot',
       'sendPayment',
       'decryptWallet',
-      'resetSendPayment'
+      'resetSendPayment',
+      'updateWallets',
+      'resetDecryptedWallet'
     ]),
     onFundWallet (e) {
       this.fundWalletModalShown = true;
@@ -238,12 +235,8 @@ export default {
     onCopy () {
       this.accountIDCopied = true;
     },
-    async onDecryptWallet (password) {
-      await this.decryptWallet({ publicKey: this.data.public_key_0, password });
-    },
     async onSendPaymentClick (data) {
       await this.sendPayment({ ...data, publicKey: this.data.public_key_0, password: data.password });
-      await this.getWallets();
     },
     async onSetInflationDestination (data) {
       this.setInflationDestLoading = true;
@@ -253,11 +246,13 @@ export default {
         this.setInflationDestLoading = false;
         return;
       }
+      const secretSeed = this.decryptedWallet.secretSeed;
+      await this.resetDecryptedWallet();
       await this.setInflationDestination({
-        secretSeed: this.decryptedWallet.secretSeed,
+        publicKey: this.data.public_key_0,
+        secretSeed,
         destination: this.inflationDest,
       });
-      await this.getWallets();
       this.setInflationDestLoading = false;
     },
     async onAddCurrency (data) {
@@ -268,8 +263,11 @@ export default {
         this.walletDetailsLoading = false;
         return;
       }
+      const secretSeed = this.decryptedWallet.secretSeed;
+      await this.resetDecryptedWallet();
       await this.addCurrency({
-        secretSeed: this.decryptedWallet.secretSeed,
+        publicKey: this.data.public_key_0,
+        secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
       });
@@ -283,8 +281,12 @@ export default {
         this.walletDetailsLoading = false;
         return;
       }
+
+      const secretSeed = this.decryptedWallet.secretSeed;
+      await this.resetDecryptedWallet();
       await this.removeCurrency({
-        secretSeed: this.decryptedWallet.secretSeed,
+        publicKey: this.data.public_key_0,
+        secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
       });

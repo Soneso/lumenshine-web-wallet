@@ -12,8 +12,9 @@
           <span class="right info">Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</span>
         </span>
         <span v-else-if="!fieldOpen">{{ address }}{{ config.FEDERATION_DOMAIN }}</span>
+        <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
       </p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+      <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
       <div v-if="fieldOpen && !loading" class="field">
         <div v-if="$v.address.$error" class="field__errors">
           <div v-if="!$v.address.required">Wallet address is required</div>
@@ -49,10 +50,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    updateError: {
-      type: Boolean,
-      required: true,
-    },
     walletAddress: {
       type: String,
       default: () => null,
@@ -62,8 +59,24 @@ export default {
     return {
       fieldOpen: false,
       address: this.walletAddress,
+      removingWallet: false,
       config
     };
+  },
+  watch: {
+    loading (loading) {
+      if (!loading) {
+        if (this.walletAddress === this.address) { // reset form and close
+          this.fieldOpen = false;
+        }
+        if (this.removingWallet) {
+          this.removingWallet = false;
+          if (this.errors.length === 0) {
+            this.address = this.walletAddress;
+          }
+        }
+      }
+    }
   },
   methods: {
     onCancelClick () {
@@ -74,6 +87,7 @@ export default {
     },
     onRemoveAddressClick () {
       this.$emit('remove');
+      this.removingWallet = true;
     },
     onSubmitClick () {
       this.$v.$touch();

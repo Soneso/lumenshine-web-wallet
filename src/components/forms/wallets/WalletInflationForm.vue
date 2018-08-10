@@ -20,6 +20,7 @@
         <input :class="{ error: $v.destination.$error }" v-model="destination" placeholder="Public key of destination account" @blur="$v.destination.$touch()">
         <div v-if="$v.password.$error" class="field__errors">
           <div v-if="!$v.password.required">Password is required</div>
+          <div v-if="!$v.password.decryptValid">Invalid password</div>
         </div>
         <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
       </div>
@@ -47,7 +48,7 @@ export default {
       type: Boolean,
       required: true,
     },
-    updateError: {
+    decryptionError: {
       type: Boolean,
       required: true,
     },
@@ -62,6 +63,13 @@ export default {
       destination: this.inflationDestination,
       password: '',
     };
+  },
+  watch: {
+    loading (loading) {
+      if (!loading && this.errors.length === 0) {
+        this.fieldOpen = false;
+      }
+    }
   },
   methods: {
     onCancelClick () {
@@ -86,6 +94,7 @@ export default {
       },
       password: {
         required,
+        decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
       }
     };
   }

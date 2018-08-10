@@ -65,7 +65,7 @@
 
         <div v-if="$v.password.$error" class="field__errors">
           <div v-if="!$v.password.required">Password required</div>
-          <div v-if="!$v.password.decryptValid">Invalid password</div>
+          <div v-if="!$v.password.validPassword">Invalid password</div>
         </div>
         <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
         <br>
@@ -103,7 +103,7 @@ export default {
       type: Object,
       required: true,
     },
-    decryptError: {
+    decryptionError: {
       type: Boolean,
       required: true,
     }
@@ -126,6 +126,22 @@ export default {
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }))];
     },
+  },
+  watch: {
+    loading (loading) {
+      if (!loading && !this.decryptionError && this.errors.length === 0) {
+        this.password = '';
+        this.assetCode = '';
+        this.issuer = '';
+        this.$v.$reset();
+        if (this.addCurrency) {
+          this.addCurrency = false;
+        }
+        if (this.removeFieldBalance) {
+          this.removeFieldBalance = null;
+        }
+      }
+    }
   },
   methods: {
     openAddCurrency () {
@@ -175,7 +191,7 @@ export default {
       },
       password: {
         required,
-        decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
+        validPassword: value => this.backendQuery.password !== value || !this.decryptionError,
       }
     };
   }

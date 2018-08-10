@@ -35,6 +35,25 @@ export default {
     state.walletsResult = null;
   },
 
+  UPDATE_WALLETS (state, newWallets) {
+    const newResult = [...state.walletsResult];
+    for (const index in newResult) {
+      const res = newWallets.find(w => w.id === newResult[index].id);
+      if (res) {
+        newResult[index] = res;
+      }
+    }
+    state.walletsResult = newResult;
+    state.walletsErrors = [];
+  },
+  UPDATE_WALLETS_LOADING (state, msg) {
+    state.walletsLoading = msg;
+  },
+  UPDATE_WALLETS_ERROR (state, msg) {
+    state.walletsErrors = msg;
+    state.walletsResult = null;
+  },
+
   ADD_WALLET_LOADING (state, msg) {
     state.addWalletLoading = msg;
   },

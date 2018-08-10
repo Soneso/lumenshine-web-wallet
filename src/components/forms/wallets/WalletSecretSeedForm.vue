@@ -43,7 +43,7 @@ export default {
       type: Boolean,
       required: true,
     },
-    decryptError: {
+    decryptionError: {
       type: Boolean,
       required: true,
     },
@@ -82,7 +82,7 @@ export default {
     return {
       password: {
         required,
-        decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
+        decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
       }
     };
   }

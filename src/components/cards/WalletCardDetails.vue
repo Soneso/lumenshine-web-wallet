@@ -5,7 +5,7 @@
 
     <wallet-name-form
       :loading="saveWalletLoading"
-      :update-error="decryptError"
+      :errors="editWalletStatus.err"
       :wallet-name="data.wallet_name"
       @submit="onSaveWalletName"/>
 
@@ -16,7 +16,6 @@
 
     <wallet-address-form
       :loading="saveWalletLoading"
-      :update-error="decryptError"
       :errors="editWalletStatus.err"
       :wallet-address="data.federation_address"
       @remove="onRemoveWalletAddress"
@@ -24,14 +23,14 @@
 
     <wallet-inflation-form
       :loading="inflationDestinationLoading"
-      :update-error="decryptError"
+      :decryption-error="decryptedWallet.err"
       :data="data"
       @submit="onSetInflationDestination"/>
 
     <wallet-currencies-form
       :loading="walletDetailsLoading"
       :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
-      :decrypt-error="decryptError"
+      :decryption-error="decryptedWallet.err"
       :data="data"
       @remove="onRemoveCurrency"
       @add="onAddCurrency"/>
@@ -84,11 +83,11 @@
 
     <wallet-secret-seed-form
       :data="data"
-      :secret-seed="secretSeed"
-      :loading="decryptWalletLoading"
-      :decrypt-error="decryptError"
-      @hide="secretSeed = null"
-      @reveal="pw => $emit('decrypt', pw)"/>
+      :secret-seed="decryptedWallet.secretSeed"
+      :loading="decryptedWallet.loading"
+      :decryption-error="decryptedWallet.err"
+      @hide="resetDecryptedWallet"
+      @reveal="onDecryptWallet"/>
 
     <strong>Transactions</strong>
     <wallet-card-transactions :data="data"/>
@@ -129,19 +128,7 @@ export default {
       type: Array,
       required: true,
     },
-    secretSeed: {
-      type: String,
-      default: null,
-    },
     inflationDestinationLoading: {
-      type: Boolean,
-      required: true,
-    },
-    decryptError: {
-      type: Boolean,
-      required: true,
-    },
-    decryptWalletLoading: {
       type: Boolean,
       required: true,
     },
@@ -167,7 +154,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus']),
+    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet']),
   },
   watch: {
     async homescreen (val) {
@@ -180,9 +167,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['editWallet', 'removeWalletAddress']),
+    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet']),
     onCopy () {
       this.accountIDCopied = true;
+    },
+    async onDecryptWallet (password) {
+      await this.decryptWallet({ publicKey: this.data.public_key_0, password });
+      // setTimeout(() => {
+      //   this.resetDecryptedWallet();
+      // }, 5000);
     },
     async onSaveWalletName ({ name }) {
       this.saveWalletLoading = true;
@@ -197,7 +190,8 @@ export default {
       this.saveWalletLoading = true;
       await this.editWallet({
         id: this.data.id,
-        federation_address: address
+        federation_address: address,
+        onHomescreen: this.homescreen,
       });
       this.saveWalletLoading = false;
     },

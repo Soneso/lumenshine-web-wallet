@@ -8,10 +8,10 @@
         <br>
         {{ walletName }}
       </p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
       <div v-if="fieldOpen && !loading" class="field">
         <div v-if="$v.name.$error" class="field__errors">
           <div v-if="!$v.name.required">Wallet name is required</div>
+          <div v-if="!$v.name.uniqueName">Wallet name is already used</div>
         </div>
         <input :class="{ error: $v.name.$error }" v-model="name" type="name" placeholder="Wallet name" @blur="$v.name.$touch()">
       </div>
@@ -39,10 +39,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    updateError: {
-      type: Boolean,
-      required: true,
-    },
     walletName: {
       type: String,
       required: true,
@@ -53,6 +49,15 @@ export default {
       fieldOpen: false,
       name: this.walletName,
     };
+  },
+  watch: {
+    loading (loading) {
+      if (!loading) {
+        if (this.walletName === this.name) { // reset form and close
+          this.fieldOpen = false;
+        }
+      }
+    }
   },
   methods: {
     onCancelClick () {
@@ -74,6 +79,7 @@ export default {
     return {
       name: {
         required,
+        uniqueName: value => this.backendQuery.name !== value || !this.errors.find(err => err.error_code === 1000),
       }
     };
   }

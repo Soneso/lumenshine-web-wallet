@@ -12,6 +12,11 @@ export default {
     try {
       var response = await axios.get(`${config.API_BASE}${path}`, { params });
     } catch (err) {
+      if (store.getters.authToken && err.response.status === 401) { // log out user
+        store.dispatch('clearAuthToken');
+        const newError = new Error('Logged out');
+        throw newError;
+      }
       const errorData = err.response.data;
       if (!errorData || err.response.status === 404) {
         const backendError = new Error('Unknown backend error');
@@ -33,6 +38,11 @@ export default {
     try {
       var response = await axios.post(`${config.API_BASE}${path}`, params);
     } catch (err) {
+      if (store.getters.authToken && err.response.status === 401) { // log out user
+        store.dispatch('clearAuthToken');
+        const newError = new Error('Logged out');
+        throw newError;
+      }
       const errorData = err.response.data;
       if (!errorData || err.response.status === 404) {
         const backendError = new Error('Unknown backend error');
