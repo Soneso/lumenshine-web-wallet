@@ -5,13 +5,15 @@
         <strong>Currencies</strong>
         <a v-if="!addCurrency" href="#" class="only-desktop" @click.prevent="openAddCurrency">add currency</a>
       </p>
-      <p v-for="balance in balances" :key="balance.type + balance.issuer" class="balance">
-        <span>
-          {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
-        </span>
-        <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="error only-desktop" @click.prevent="openRemoveCurrency(balance)">remove</a>
-        <span v-if="balance.issuer && !removeFieldBalance" class="balance__details">Issuer public key: {{ balance.issuer }}</span>
-      </p>
+      <div v-if="!removeFieldBalance && !addCurrency" class="currencies">
+        <p v-for="balance in balances" :key="balance.type + balance.issuer" class="balance">
+          <span>
+            {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
+          </span>
+          <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="error only-desktop" @click.prevent="openRemoveCurrency(balance)">remove</a>
+          <span v-if="balance.issuer && !removeFieldBalance" class="balance__details">Issuer public key: {{ balance.issuer }}</span>
+        </p>
+      </div>
 
       <div v-if="removeFieldBalance" class="field balance balance--sub">
         <strong>Remove currency</strong>
@@ -48,36 +50,73 @@
         <a href="#" class="error only-desktop" @click.prevent="addCurrency = false">cancel</a>
         <br>
 
-        <div v-if="$v.assetCode.$error" class="field__errors">
-          <div v-if="!$v.assetCode.required">Asset code is required</div>
-          <div v-if="!$v.assetCode.validAssetCode">Invalid asset code</div>
-        </div>
-        <input :class="{ error: $v.assetCode.$error }" v-model="assetCode" type="text" placeholder="Currency/asset code, e.g. MOBI" @blur="$v.assetCode.$touch()">
-        <br>
+        <ul class="button-group">
+          <li :class="['button-group__button', {'button-group__button--active': addCurrencyFormType === 'known'}]"><button @click="onTabChange('known')">Known Currencies</button></li>
+          <li :class="['button-group__button', {'button-group__button--active': addCurrencyFormType === 'fields'}]"><button @click="onTabChange('fields')">Provide Currency Data</button></li>
+        </ul>
 
-        <div v-if="$v.issuer.$error" class="field__errors">
-          <div v-if="!$v.issuer.required">Issuer is required</div>
-          <div v-if="!$v.issuer.publicKey">Invalid issuer</div>
-          <div v-if="!$v.issuer.validIssuer">Issuer does not exists</div>
-        </div>
-        <input :class="{ error: $v.issuer.$error }" v-model="issuer" type="text" placeholder="Public key of currency issuer" @blur="$v.issuer.$touch()">
-        <br>
+        <div v-if="addCurrencyFormType === 'fields'" class="tab-page">
+          <div>
+            <div v-if="$v.assetCode.$error" class="field__errors">
+              <div v-if="!$v.assetCode.required">Asset code is required</div>
+              <div v-if="!$v.assetCode.validAssetCode">Invalid asset code</div>
+            </div>
+            <input :class="{ error: $v.assetCode.$error }" v-model="assetCode" type="text" placeholder="Currency/asset code, e.g. MOBI" @blur="$v.assetCode.$touch()">
+            <br>
 
-        <div v-if="$v.password.$error" class="field__errors">
-          <div v-if="!$v.password.required">Password required</div>
-          <div v-if="!$v.password.validPassword">Invalid password</div>
+            <div v-if="$v.issuer.$error" class="field__errors">
+              <div v-if="!$v.issuer.required">Issuer is required</div>
+              <div v-if="!$v.issuer.publicKey">Invalid issuer</div>
+              <div v-if="!$v.issuer.validIssuer">Issuer does not exists</div>
+            </div>
+            <input :class="{ error: $v.issuer.$error }" v-model="issuer" type="text" placeholder="Public key of currency issuer" @blur="$v.issuer.$touch()">
+            <br>
+            <div v-if="$v.password.$error" class="field__errors">
+              <div v-if="!$v.password.required">Password required</div>
+              <div v-if="!$v.password.validPassword">Invalid password</div>
+            </div>
+            <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+
+            <br>
+            <span>Password required to add currency</span>
+            <div class="form-buttons">
+              <a href="#" @click.prevent="onAddClick">
+                <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+                <span v-else>add</span>
+              </a>
+            </div>
+          </div>
         </div>
-        <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
-        <br>
-        <span>Password required to add currency</span>
-        <div class="form-buttons">
-          <a href="#" @click.prevent="onAddClick">
-            <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-            <span v-else>add</span>
-          </a>
+        <div v-else> <!-- Known currencies -->
+          <ul class="known-currencies">
+            <li v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer">
+              <h4>{{ currency.name }} ({{ currency.asset_code }})</h4>
+              <span v-if="currency.needsAuth" class="error">needs issuer athorization</span>
+              <p>Issuer public key: {{ currency.issuer.slice(0, 10) }}...</p>
+              <div v-if="openedKnownCurrency === null" class="form-buttons">
+                <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
+              </div>
+              <div v-else-if="openedKnownCurrency === currency">
+                <div v-if="$v.password.$error" class="field__errors">
+                  <div v-if="!$v.password.required">Password required</div>
+                  <div v-if="!$v.password.validPassword">Invalid password</div>
+                </div>
+                <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+
+                <br>
+                <span>Password required to add currency</span>
+                <div class="form-buttons">
+                  <a href="#" @click.prevent="onAddClick">
+                    <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+                    <span v-if="!loading" @click.prevent="onOpenKnownCurrency(null)">cancel</span>
+                    <span v-if="!loading">add</span>
+                  </a>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-
     </div>
   </form>
 </template>
@@ -115,6 +154,8 @@ export default {
       assetCode: '',
       issuer: '',
       addCurrency: false,
+      addCurrencyFormType: 'known',
+      openedKnownCurrency: null,
     };
   },
   computed: {
@@ -126,6 +167,13 @@ export default {
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }))];
     },
+    knownCurrencies () {
+      return [
+        { name: 'Oranges Coin', asset_code: 'ORANGE', issuer: 'ABCD12313ABCD643563546345783456' },
+        { name: 'Mobi Coin', asset_code: 'MOBI', issuer: 'AFFF12313ABCD643563546345783451' },
+        { name: 'Smartlands', asset_code: 'SMRT', issuer: 'ACCC12313ABCD643563546345783456', needsAuth: true },
+      ];
+    }
   },
   watch: {
     loading (loading) {
@@ -144,6 +192,21 @@ export default {
     }
   },
   methods: {
+    onTabChange (val) {
+      this.addCurrencyFormType = val;
+      this.openedKnownCurrency = null;
+      this.resetForms();
+    },
+    onOpenKnownCurrency (val) {
+      this.openedKnownCurrency = val;
+      this.resetForms();
+    },
+    resetForms () {
+      this.$v.$reset();
+      this.password = '';
+      this.assetCode = '';
+      this.issuer = '';
+    },
     openAddCurrency () {
       this.addCurrency = true;
       this.removeFieldBalance = null;
@@ -212,6 +275,32 @@ p {
   }
   input {
     width: auto;
+  }
+}
+
+.known-currencies {
+  display: block;
+  padding: 0;
+  margin: 0 auto;
+  list-style: none;
+  min-width: 300px;
+  width: 50%;
+  li {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #666;
+  }
+  .error {
+    margin: -12px 0;
+    display: block;
+  }
+}
+
+.tab-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > div {
+    text-align: left;
   }
 }
 </style>
