@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     onSaveClick () {
+      this.mnemonic = [ ...this.mnemonic.map(m => ({ word: m.word.trim() })) ];
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
