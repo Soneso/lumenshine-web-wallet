@@ -10,10 +10,11 @@
     <table>
       <tr v-for="(word, key) in mnemonicRandomWords" :key="word">
         <td>{{ word }}</td>
-        <td><input :class="{ error: fieldErrors[key] }" :value="fields[key]" type="text" placeholder="Position" @input="e => onChangeInput(e, key)"></td>
+        <td><input :class="{ error: hasErrors }" :value="fields[key]" type="text" placeholder="Position" @input="e => onChangeInput(e, key)"></td>
       </tr>
     </table>
     <hr>
+    <span v-if="hasErrors" class="error">Invalid input!<br></span>
     <button @click="onVerify">Finish setup</button>
     <button @click="onBack">Go back and show mnemonic</button>
   </div>
@@ -30,7 +31,7 @@ export default {
   data () {
     return {
       fields: new Array(4).fill(''),
-      fieldErrors: new Array(4).fill(false),
+      hasErrors: false,
     };
   },
   computed: {
@@ -73,17 +74,15 @@ export default {
     },
     async onVerify () {
       const values = this.fields.map(f => f !== '' ? f : null);
-      const newErrors = new Array(4).fill(false);
-      let hasErrors = false;
+      this.hasErrors = false;
       const mnemonic = this.mnemonic.split(' ');
       values.forEach((v, k) => {
         if (v === null || v > 24 || v < 1 || mnemonic[v - 1] !== this.mnemonicRandomWords[k]) {
-          newErrors[k] = true;
-          hasErrors = true;
+          this.hasErrors = true;
         }
       });
-      this.fieldErrors = newErrors;
-      if (hasErrors) {
+      console.log('verify', this.hasErrors);
+      if (this.hasErrors) {
         return;
       }
 
@@ -99,7 +98,8 @@ export default {
 
 <style lang="scss" scoped>
 input {
-  width: 140px;
+  min-width: auto !important;
+  width: 90px !important;
   display: inline-block;
   border: 1px solid #666;
   padding: 5px;
@@ -113,6 +113,8 @@ button {
   padding: 10px 20px;
 }
 table {
-  width: 100%;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
 }
 </style>
