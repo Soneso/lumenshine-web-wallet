@@ -75,10 +75,6 @@
           <td>
             <div v-if="$v.password.$error" class="field__errors">
               <div v-if="!$v.password.required">Password is required!</div>
-              <div v-if="!$v.password.minLength">Password should be longer than 9 characters!</div>
-              <div v-if="!$v.password.hasUpperCaseLetter">Password should contain at least one uppercase character!</div>
-              <div v-if="!$v.password.hasLowerCaseLetter">Password should contain at least one lowercase character!</div>
-              <div v-if="!$v.password.hasNumber">Password should contain at least one number!</div>
               <div v-if="!$v.password.decryptValid">Wrong password!</div>
             </div>
             <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Your password" @blur="$v.password.$touch()">
@@ -278,7 +274,6 @@ export default {
       },
       password: {
         required,
-        ...validators.password.call(this),
         decryptValid: value => this.backendQuery.password !== value || !this.errors.find(err => err.error_code === 'WRONG_PASSWORD'),
       },
       amount: {

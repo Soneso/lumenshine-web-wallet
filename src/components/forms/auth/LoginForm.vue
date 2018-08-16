@@ -23,10 +23,6 @@
       <div class="field">
         <div v-if="$v.password.$error" class="field__errors">
           <div v-if="!$v.password.required">Password is required!</div>
-          <div v-if="!$v.password.minLength">Password should be longer than 9 characters!</div>
-          <div v-if="!$v.password.hasUpperCaseLetter">Password should contain at least one uppercase character!</div>
-          <div v-if="!$v.password.hasLowerCaseLetter">Password should contain at least one lowercase character!</div>
-          <div v-if="!$v.password.hasNumber">Password should contain at least one number!</div>
           <div v-if="!$v.password.decryptValid">Wrong password!</div>
         </div>
         <input
@@ -63,10 +59,10 @@
 </template>
 
 <script>
+import { required } from 'vuelidate/lib/validators';
 import formMixin from '@/mixins/form';
 
 import emailValidator from '@/validators/email';
-import passwordValidator from '@/validators/password';
 import tfaValidator from '@/validators/twoFactorCode';
 
 export default {
@@ -109,7 +105,7 @@ export default {
         backendHasUser: value => this.backendQuery.email !== value || !this.errors.find(err => err.error_code === 1)
       },
       password: {
-        ...passwordValidator.call(this),
+        required,
         decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
       },
       twoFactorCode: {
