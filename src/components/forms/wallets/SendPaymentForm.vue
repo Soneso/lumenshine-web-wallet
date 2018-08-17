@@ -64,8 +64,9 @@
               <option value="MEMO_RETURN">MEMO_RETURN</option>
             </select>
             <div v-if="$v.memo.$error" class="field__errors">
+              <div v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</div>
               <div v-if="!$v.memo.maxLength">Max length is 28 characters!</div>
-              <div v-if="!$v.memo.validLength">Memo should have length of 64 characters.</div>
+              <div v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</div>
             </div>
             <input :class="{ error: $v.memo.$error }" v-model="memo" :placeholder="memoPlaceholder" @blur="$v.memo.$touch()">
           </td>
@@ -150,6 +151,10 @@ export default {
     loading: {
       type: Boolean,
       required: true,
+    },
+    exchanges: {
+      type: Object,
+      required: true,
     }
   },
   data () {
@@ -196,13 +201,25 @@ export default {
     currentAssetCodeBalances () {
       if (!this.data.stellar_data) return [];
       return this.data.stellar_data.balances.filter(b => b.asset_code === this.assetCode);
-    }
+    },
   },
   watch: {
     assetCode (val) {
       if (!this.data.stellar_data) return;
       const balance = this.data.stellar_data.balances.find(b => b.asset_code === val);
       this.issuer = balance ? balance.asset_issuer : '';
+    },
+    recipient (recipient) {
+      if (!this.exchanges[recipient] || !this.exchanges[recipient].memo) {
+        return;
+      }
+      const memo = this.exchanges[recipient].memo;
+      this.memoType = memo;
+    },
+    memo (val) {
+      if (this.memoType === 'MEMO_ID' && val.match(/[a-z]/ig)) {
+        this.memoType = 'MEMO_TEXT';
+      }
     }
   },
   methods: {
@@ -244,17 +261,19 @@ export default {
     }
   },
   validations () {
-    let memoValidators;
+    const isExchange = !!this.exchanges[this.recipient];
+    let memoValidators = isExchange ? { required } : {};
     switch (this.memoType) {
       case 'MEMO_TEXT':
-        memoValidators = { maxLength: maxLength(28) };
+        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
         break;
       case 'MEMO_ID':
-        memoValidators = { maxLength: maxLength(28) };
+        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
         break;
       case 'MEMO_HASH':
       case 'MEMO_RETURN':
-        memoValidators = { validLength: val => val.length === 64 };
+        memoValidators = { ...memoValidators, validLength: val => val.length === 64 };
+        break;
     }
 
     const customAssetCodeValidators = this.assetCode === '_other' ? { required, ...validators.assetCode.call(this) } : {};

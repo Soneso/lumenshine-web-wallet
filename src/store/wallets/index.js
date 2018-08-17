@@ -6,6 +6,8 @@ import mutations from './mutations';
 import actions from './actions';
 import getters from './getters';
 
+import exchanges from '@/config/exchanges.json';
+
 function replaceNull (value) {
   return value === 'null' ? null : value;
 }
@@ -59,6 +61,8 @@ function getInitialState (clearAuthToken = false) {
     publicKeys: config.KEEP_LOGGED_IN && !clearAuthToken
       ? parsePublicKeys(replaceNull(Vue.localStorage.get('publicKeys', null)))
       : null,
+
+    exchanges,
   };
 }
 

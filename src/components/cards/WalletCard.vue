@@ -61,6 +61,7 @@
         :loading="sendPaymentStatus.loading || decryptedWallet.loading"
         :data="data"
         :errors="sendPaymentStatus.err"
+        :exchanges="exchanges"
         @reset="resetSendPayment"
         @close="openedDetails = null"
         @submit="onSendPaymentClick"/>
@@ -181,7 +182,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet']),
+    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
     balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;

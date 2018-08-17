@@ -10,4 +10,5 @@ export default {
   currencyPairs: state => ({ err: state.currencyPairsErrors, loading: state.currencyPairsLoading, res: state.currencyPairsResult }),
   currencyRates: state => ({ err: state.currencyRatesErrors, loading: state.currencyRatesLoading, res: state.currencyRatesResult }),
   sendPaymentStatus: state => ({ err: state.sendPaymentErrors, loading: state.sendPaymentLoading, res: state.sendPaymentResult }),
+  exchanges: state => state.exchanges,
 };
