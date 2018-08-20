@@ -196,7 +196,7 @@ export default {
       const entryCount = this.data.stellar_data.subentry_count;
       const baseReserve = 0.5;
       const minBalance = new Amount(`${(2 + entryCount) * baseReserve}`);
-      return minBalance;
+      return minBalance.plus('0.00001'); // transaction cost
     },
     avalaibleBalances () {
       if (!this.data.stellar_data) return [];
