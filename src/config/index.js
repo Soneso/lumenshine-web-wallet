@@ -5,6 +5,8 @@ export default {
   APP_TITLE: 'Lumenshine',
   APP_SUBTITLE: 'A Wallet for the Stellar Network by Soneso',
 
+  APP_VERSION: '0.1.0',
+
   REGISTRATION_OPTIONAL_FIELDS: [
     // 'forename',
     // 'lastname',

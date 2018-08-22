@@ -105,10 +105,11 @@ exports.createNotifierCallback = () => {
 };
 
 exports.buildDate = () => {
-  const month = `0${new Date().getMonth() + 1}`.slice(-2);
-  const day = `0${new Date().getDate()}`.slice(-2);
-  const hours = `0${new Date().getHours()}`.slice(-2);
-  const minutes = `0${new Date().getMinutes()}`.slice(-2);
-  const seconds = `0${new Date().getSeconds()}`.slice(-2);
-  return JSON.stringify(`${new Date().getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`);
+  const now = new Date();
+  const month = `0${now.getMonth() + 1}`.slice(-2);
+  const day = `0${now.getDate()}`.slice(-2);
+  const hours = `0${now.getHours()}`.slice(-2);
+  const minutes = `0${now.getMinutes()}`.slice(-2);
+  const seconds = `0${now.getSeconds()}`.slice(-2);
+  return JSON.stringify(`${now.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`);
 };

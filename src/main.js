@@ -12,6 +12,7 @@ import store from '@/store/store';
 import router from '@/router';
 import GeneralService from '@/services/general';
 import App from '@/App';
+import config from './config';
 
 Vue.config.productionTip = false;
 
@@ -23,7 +24,7 @@ Vue.use(VueAwesomeSwiper);
 async function logBuildDates () {
   /* global __BUILD_DATE__ */
   const backendVersion = await GeneralService.getServerInfo();
-  console.log(`Web client v0.1.0 - Build date: ${__BUILD_DATE__}`);
+  console.log(`Web client v${config.APP_VERSION} - Build date: ${__BUILD_DATE__}`);
   console.log(`Backend v${backendVersion.Version} - Build date: ${backendVersion.BuildDate}`);
 }
 
