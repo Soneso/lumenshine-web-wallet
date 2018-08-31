@@ -24,7 +24,7 @@ export default {
   ],
 
   SUPPORT_MAIL: 'support@lumenshine.com',
-  FEDERATION_DOMAIN: '*lumenshine.com',
+  FEDERATION_DOMAIN: 'lumenshine.com',
 
   // do not forget authToken on page reload (for development)
   KEEP_LOGGED_IN: process.env.NODE_ENV === 'development',

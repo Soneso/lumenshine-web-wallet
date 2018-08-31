@@ -11,7 +11,7 @@
           <span class="left error">none</span>
           <span class="right info">Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</span>
         </span>
-        <span v-else-if="!fieldOpen">{{ address }}{{ config.FEDERATION_DOMAIN }}</span>
+        <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
         <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
       </p>
       <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
@@ -95,7 +95,7 @@ export default {
         return;
       }
       this.backendQuery = { address: this.address };
-      this.$emit('submit', this.address);
+      this.$emit('submit', this.address + '*' + config.FEDERATION_DOMAIN);
     }
   },
   validations () {
