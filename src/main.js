@@ -6,6 +6,7 @@ import VueClipboard from 'vue-clipboard2';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 
 // require styles
+import 'bootstrap/dist/css/bootstrap.css';
 import 'swiper/dist/css/swiper.css';
 
 import store from '@/store/store';
@@ -14,12 +15,18 @@ import GeneralService from '@/services/general';
 import App from '@/App';
 import config from './config';
 
+import BootstrapVue from 'bootstrap-vue';
+import i18n from './plugins/i18n/i18n';
+import Meta from 'vue-meta';
+
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
 Vue.use(VueClipboard);
 
 Vue.use(VueAwesomeSwiper);
+Vue.use(BootstrapVue);
+Vue.use(Meta);
 
 async function logBuildDates () {
   /* global __BUILD_DATE__ */
@@ -30,11 +37,8 @@ async function logBuildDates () {
 
 logBuildDates();
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  components: { App },
-  store,
-  router,
-  template: '<App/>'
-});
+// extend a Vue instance with important classes like i18n, router and store
+// eslint-disable no-new
+const root = new Vue(Vue.util.extend({router, store, i18n}, App));
+// mount the app in the appropriate target element when the DOM content has loaded
+root.$mount('#app');

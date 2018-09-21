@@ -11,7 +11,10 @@
       <a href="#" class="user-info__logout" @click="onLogoutClick">Sign out</a>
     </div>
     <div v-if="$route.name === 'Wallets'" class="header__buttons">
-      <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })"><i class="fa fa-plus"/><span class="header__button-description">Add Wallet</span></a>
+      <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
+        <i class="fa fa-plus"/>
+        <span class="header__button-description">Add Wallet</span>
+      </a>
     </div>
   </header>
 </template>
