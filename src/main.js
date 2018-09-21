@@ -14,7 +14,57 @@ import GeneralService from '@/services/general';
 import App from '@/App';
 import config from './config';
 
+// individual bootstrap components and directives
+import {
+  Alert,
+  Badge,
+  Breadcrumb,
+  Button,
+  ButtonToolbar,
+  ButtonGroup,
+  Card,
+  Carousel,
+  Collapse,
+  Dropdown,
+  Embed,
+  Form,
+  FormGroup,
+  FormInput,
+  FormTextarea,
+  FormFile,
+  FormCheckbox,
+  FormRadio,
+  FormSelect,
+  Image,
+  InputGroup,
+  Jumbotron,
+  Layout,
+  Link,
+  ListGroup,
+  Media,
+  Modal,
+  Nav,
+  Navbar,
+  Pagination,
+  PaginationNav,
+  Popover,
+  Progress,
+  Table,
+  Tabs,
+  Tooltip
+} from 'bootstrap-vue/es/components';
+
+// import {
+//   ToggleDirective,
+//   ModalDirective,
+//   ScrollspyDirective,
+//   TooltipDirective,
+//   PopoverDirective
+// } from 'bootstrap-vue/es/directives';
+
+// bundled version is also available
 import BootstrapVue from 'bootstrap-vue';
+
 import i18n from './plugins/i18n/i18n';
 import Meta from 'vue-meta';
 
@@ -24,7 +74,53 @@ Vue.use(Vuelidate);
 Vue.use(VueClipboard);
 
 Vue.use(VueAwesomeSwiper);
+
+// Bootstrap bundle
 Vue.use(BootstrapVue);
+
+// Bootstrap components + directives
+Vue.use(Alert);
+Vue.use(Badge);
+Vue.use(Breadcrumb);
+Vue.use(Button);
+Vue.use(ButtonToolbar);
+Vue.use(ButtonGroup);
+Vue.use(Card);
+Vue.use(Carousel);
+Vue.use(Collapse);
+Vue.use(Dropdown);
+Vue.use(Embed);
+Vue.use(Form);
+Vue.use(FormGroup);
+Vue.use(FormInput);
+Vue.use(FormTextarea);
+Vue.use(FormFile);
+Vue.use(FormCheckbox);
+Vue.use(FormRadio);
+Vue.use(FormSelect);
+Vue.use(Image);
+Vue.use(InputGroup);
+Vue.use(Jumbotron);
+Vue.use(Layout);
+Vue.use(Link);
+Vue.use(ListGroup);
+Vue.use(Media);
+Vue.use(Modal);
+Vue.use(Nav);
+Vue.use(Navbar);
+Vue.use(Pagination);
+Vue.use(PaginationNav);
+Vue.use(Popover);
+Vue.use(Progress);
+Vue.use(Table);
+Vue.use(Tabs);
+Vue.use(Tooltip);
+// Vue.use(ToggleDirective);
+// Vue.use(ModalDirective);
+// Vue.use(ScrollspyDirective);
+// Vue.use(TooltipDirective);
+// Vue.use(PopoverDirective);
+
 Vue.use(Meta);
 
 async function logBuildDates () {
