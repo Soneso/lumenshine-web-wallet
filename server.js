@@ -28,7 +28,7 @@ http.createServer(function (req, res) {
     '.ttf': 'aplication/font-sfnt'
   };
   fs.exists(pathname, function (exist) {
-    if(!exist) {
+    if (!exist) {
       // if the file is not found, return 404
       res.statusCode = 404;
       res.end(`File ${pathname} not found!`);
@@ -39,18 +39,19 @@ http.createServer(function (req, res) {
       pathname += '/index.html';
     }
     // read file from file system
-    fs.readFile(pathname, function(err, data){
-      if(err){
+    fs.readFile(pathname, function (err, data) {
+      if (err) {
         res.statusCode = 500;
         res.end(`Error getting the file: ${err}.`);
       } else {
         // based on the URL path, extract the file extention. e.g. .js, .doc, ...
         const ext = path.parse(pathname).ext;
         // if the file is found, set Content-type and send data
-        res.setHeader('Content-type', mimeType[ext] || 'text/plain' );
+        res.setHeader('Content-type', mimeType[ext] || 'text/plain');
         res.end(data);
       }
     });
   });
 }).listen(parseInt(port));
+
 console.log(`Server listening on port ${port}`);

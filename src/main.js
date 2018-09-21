@@ -6,8 +6,7 @@ import VueClipboard from 'vue-clipboard2';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 
 // require styles
-import 'bootstrap/dist/css/bootstrap.css';
-import 'swiper/dist/css/swiper.css';
+import './assets/scss/main.scss';
 
 import store from '@/store/store';
 import router from '@/router';
