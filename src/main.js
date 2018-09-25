@@ -18,15 +18,15 @@ import config from './config';
 import {
   Alert,
   Badge,
-  Breadcrumb,
+  // Breadcrumb,
   Button,
   ButtonToolbar,
   ButtonGroup,
   Card,
-  Carousel,
-  Collapse,
+  // Carousel,
+  // Collapse,
   Dropdown,
-  Embed,
+  // Embed,
   Form,
   FormGroup,
   FormInput,
@@ -37,30 +37,30 @@ import {
   FormSelect,
   Image,
   InputGroup,
-  Jumbotron,
+  // Jumbotron,
   Layout,
   Link,
-  ListGroup,
-  Media,
+  // ListGroup,
+  // Media,
   Modal,
-  Nav,
-  Navbar,
-  Pagination,
-  PaginationNav,
-  Popover,
+  // Nav,
+  // Navbar,
+  // Pagination,
+  // PaginationNav,
+  // Popover,
   Progress,
-  Table,
-  Tabs,
-  Tooltip
+  // Table,
+  // Tabs,
+  // Tooltip
 } from 'bootstrap-vue/es/components';
 
-// import {
+import {
 //   ToggleDirective,
 //   ModalDirective,
 //   ScrollspyDirective,
-//   TooltipDirective,
+  Tooltip
 //   PopoverDirective
-// } from 'bootstrap-vue/es/directives';
+} from 'bootstrap-vue/es/directives';
 
 // bundled version is also available
 // import BootstrapVue from 'bootstrap-vue';
@@ -81,15 +81,15 @@ Vue.use(VueAwesomeSwiper);
 // Bootstrap components + directives
 Vue.use(Alert);
 Vue.use(Badge);
-Vue.use(Breadcrumb);
+// Vue.use(Breadcrumb);
 Vue.use(Button);
 Vue.use(ButtonToolbar);
 Vue.use(ButtonGroup);
 Vue.use(Card);
-Vue.use(Carousel);
-Vue.use(Collapse);
+// Vue.use(Carousel);
+// Vue.use(Collapse);
 Vue.use(Dropdown);
-Vue.use(Embed);
+// Vue.use(Embed);
 Vue.use(Form);
 Vue.use(FormGroup);
 Vue.use(FormInput);
@@ -100,25 +100,26 @@ Vue.use(FormRadio);
 Vue.use(FormSelect);
 Vue.use(Image);
 Vue.use(InputGroup);
-Vue.use(Jumbotron);
+// Vue.use(Jumbotron);
 Vue.use(Layout);
 Vue.use(Link);
-Vue.use(ListGroup);
-Vue.use(Media);
+// Vue.use(ListGroup);
+// Vue.use(Media);
 Vue.use(Modal);
-Vue.use(Nav);
-Vue.use(Navbar);
-Vue.use(Pagination);
-Vue.use(PaginationNav);
-Vue.use(Popover);
+// Vue.use(Nav);
+// Vue.use(Navbar);
+// Vue.use(Pagination);
+// Vue.use(PaginationNav);
+// Vue.use(Popover);
 Vue.use(Progress);
-Vue.use(Table);
-Vue.use(Tabs);
+// Vue.use(Table);
+// Vue.use(Tabs);
 Vue.use(Tooltip);
+
 // Vue.use(ToggleDirective);
 // Vue.use(ModalDirective);
 // Vue.use(ScrollspyDirective);
-// Vue.use(TooltipDirective);
+// Vue.use(Tooltip);
 // Vue.use(PopoverDirective);
 
 Vue.use(Meta);
