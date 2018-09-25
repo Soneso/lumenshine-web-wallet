@@ -63,7 +63,7 @@ import {
 // } from 'bootstrap-vue/es/directives';
 
 // bundled version is also available
-import BootstrapVue from 'bootstrap-vue';
+// import BootstrapVue from 'bootstrap-vue';
 
 import i18n from './plugins/i18n/i18n';
 import Meta from 'vue-meta';
@@ -76,7 +76,7 @@ Vue.use(VueClipboard);
 Vue.use(VueAwesomeSwiper);
 
 // Bootstrap bundle
-Vue.use(BootstrapVue);
+// Vue.use(BootstrapVue);
 
 // Bootstrap components + directives
 Vue.use(Alert);
