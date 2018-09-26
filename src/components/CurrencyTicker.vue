@@ -26,7 +26,6 @@ export default {
     ...mapGetters(['wallets', 'currencyPairs', 'currencyRates']),
     totalBalances () {
       if (!this.wallets.res) return [];
-      console.log('this.wallets', this.wallets.res);
       const totalBalances = {};
       this.wallets.res.forEach(wallet => {
         if (!wallet.stellar_data) return;
@@ -93,10 +92,8 @@ export default {
     async refreshRates () {
       if (!this.currencyPairs.res || !this.wallets.res) return;
       const currencies = this.currencyPairs.res.map(cp => ({ type: cp.source_currency.asset_code, issuer: cp.source_currency.issuer_public_key || undefined }));
-      console.log('fetchableCurrencies', currencies, this.totalBalances);
 
       const fetchableCurrencies = this.totalBalances.filter(tb => currencies.find(c => c.type === tb.type && c.issuer === tb.issuer));
-
 
       await this.getCurrencyRates({
         destination_currency: 'USD',
