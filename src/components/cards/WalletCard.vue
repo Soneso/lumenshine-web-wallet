@@ -61,6 +61,7 @@
         :loading="sendPaymentStatus.loading || decryptedWallet.loading"
         :data="data"
         :errors="sendPaymentStatus.err"
+        :exchanges="exchanges"
         @reset="resetSendPayment"
         @close="openedDetails = null"
         @submit="onSendPaymentClick"/>
@@ -181,7 +182,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet']),
+    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
     balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
@@ -195,7 +196,7 @@ export default {
       const entryCount = this.data.stellar_data.subentry_count;
       const baseReserve = 0.5;
       const minBalance = new Amount(`${(2 + entryCount) * baseReserve}`);
-      return minBalance;
+      return minBalance.plus('0.00001'); // transaction cost
     },
     avalaibleBalances () {
       if (!this.data.stellar_data) return [];

@@ -30,10 +30,6 @@
       <div class="field">
         <div v-if="$v.passwordConfirm.$error" class="field__errors">
           <div v-if="!$v.passwordConfirm.required">Password is required!</div>
-          <div v-if="!$v.passwordConfirm.minLength">Password should be longer than 9 characters!</div>
-          <div v-if="!$v.passwordConfirm.hasUpperCaseLetter">Password should contain at least one uppercase character!</div>
-          <div v-if="!$v.passwordConfirm.hasLowerCaseLetter">Password should contain at least one lowercase character!</div>
-          <div v-if="!$v.passwordConfirm.hasNumber">Password should contain at least one number!</div>
           <div v-if="!$v.passwordConfirm.sameAsPass">The two passwords don't match!</div>
         </div>
         <input :class="{ error: $v.passwordConfirm.$error }" v-model="passwordConfirm" type="password" placeholder="Repeat password" @blur="$v.passwordConfirm.$touch()">
@@ -142,7 +138,7 @@
 </template>
 
 <script>
-import { sameAs } from 'vuelidate/lib/validators';
+import { sameAs, required } from 'vuelidate/lib/validators';
 import Datepicker from 'vuejs-datepicker';
 
 import formMixin from '@/mixins/form';
@@ -251,7 +247,7 @@ export default {
       },
       password: validators.password.call(this),
       passwordConfirm: {
-        ...validators.password.call(this),
+        required,
         sameAsPass: sameAs('password'),
       },
       forename: validators.forename.call(this),

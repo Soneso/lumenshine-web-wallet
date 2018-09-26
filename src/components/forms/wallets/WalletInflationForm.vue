@@ -21,6 +21,7 @@
         <div v-if="formType === 'fields'" class="tab-page">
           <div v-if="$v.destination.$error" class="field__errors">
             <div v-if="!$v.destination.required">Wallet destination is required</div>
+            <div v-if="!$v.destination.publicKey">Not valid public key!</div>
           </div>
           <input :class="{ error: $v.destination.$error }" v-model="destination" placeholder="Public key of destination account" @blur="$v.destination.$touch()">
           <div v-if="$v.password.$error" class="field__errors">
@@ -76,6 +77,7 @@
 import { required } from 'vuelidate/lib/validators';
 
 import formMixin from '@/mixins/form';
+import validators from '@/validators';
 
 export default {
   mixins: [ formMixin ],
@@ -147,6 +149,7 @@ export default {
     return {
       destination: {
         required,
+        ...validators.publicKey.call(this),
       },
       password: {
         required,

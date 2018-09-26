@@ -33,7 +33,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': env,
+      __NODE_SCRIPT__: `'${process.env.npm_lifecycle_event}'`
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -57,8 +58,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
+        ? { map: { inline: false } }
+        : { }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html

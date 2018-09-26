@@ -23,6 +23,8 @@ This command might fail at rebuilding the ed25519 library, but it should not cau
 > * If you cannot start the development server, then a Node.js compatible C++ compiler should be installed. For Windows, there is a guide here: https://www.npmjs.com/package/windows-build-tools
 After installing the compiler, go back to step 3 and reinstall the project dependencies.
 
+> * By default `npm run dev` uses our pre-deployed test backend. If you have a [backend](https://github.com/Soneso/lumenshine-backend) running on your computer, then you can use the `npm run dev-local` command.
+
 6. After the server is started, it should be accessible from this URL: http://localhost:8001. Every modification you make on the code should be automatically reflected.
 
 ## Deploying to a test server 
@@ -49,8 +51,11 @@ After installing the compiler, go back to step 3 and reinstall the project depen
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8001
+# serve with hot reload at localhost:8001 (with our pre-deployed backend)
 npm run dev
+
+# serve with hot reload at localhost:8001 (with backend on localhost)
+npm run dev-local
 
 # build for production with minification
 npm run build

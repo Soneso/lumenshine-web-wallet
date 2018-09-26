@@ -28,7 +28,7 @@ export default {
       if (!this.wallets.res) return [];
       const totalBalances = {};
       this.wallets.res.forEach(wallet => {
-        if (!wallet.stellar_data) return null;
+        if (!wallet.stellar_data) return;
         const balances = wallet.stellar_data.balances;
         if (!totalBalances.XLM) totalBalances.XLM = [];
         totalBalances.XLM.push({ balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' });
@@ -45,6 +45,10 @@ export default {
       for (const type in totalBalances) {
         const amount = totalBalances[type].map(b => b.balance).reduce((acc, val) => new Amount(acc).plus(val));
         totalBalances[type] = { balance: amount, type, issuer: totalBalances[type][0].issuer };
+      }
+
+      if (!totalBalances.XLM) { // in case the user has no funded wallets
+        return [];
       }
 
       return [totalBalances.XLM, ...Object.keys(totalBalances).filter(b => b !== 'XLM').map(b => totalBalances[b])];

@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: 'Modal',
   methods: {
     onCloseClick (e) {
       e.preventDefault();
@@ -27,6 +28,7 @@ export default {
 <style lang="scss" scoped>
 @import "assets/scss/variables";
 .modal {
+  display: block;
   &__bg {
     position: fixed;
     top: 0;

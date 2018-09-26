@@ -16,6 +16,11 @@ const router = new Router({
       name: 'Home',
       component: require('@/pages/Home').default
     },
+    {
+      path: '/kitchen-sink',
+      name: 'KitchenSink',
+      component: require('@/pages/KitchenSink').default
+    },
     ...authRoutes,
     ...dashboardRoutes,
     {

@@ -82,10 +82,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "assets/scss/main";
-</style>
-
 <style lang="scss" scoped>
 @import "assets/scss/variables";
 .content {

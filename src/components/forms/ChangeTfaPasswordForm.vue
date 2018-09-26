@@ -6,10 +6,6 @@
       <div class="field">
         <div v-if="$v.password.$error" class="field__errors">
           <div v-if="!$v.password.required">Password is required!</div>
-          <div v-if="!$v.password.minLength">Password should be longer than 9 characters!</div>
-          <div v-if="!$v.password.hasUpperCaseLetter">Password should contain at least one uppercase character!</div>
-          <div v-if="!$v.password.hasLowerCaseLetter">Password should contain at least one lowercase character!</div>
-          <div v-if="!$v.password.hasNumber">Password should contain at least one number!</div>
           <div v-if="!$v.password.decryptValid">Invalid password!</div>
         </div>
         <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
@@ -20,9 +16,8 @@
 </template>
 
 <script>
+import { required } from 'vuelidate/lib/validators';
 import formMixin from '@/mixins/form';
-
-import passwordValidator from '@/validators/password';
 
 export default {
   mixins: [ formMixin ],
@@ -50,7 +45,7 @@ export default {
   validations () {
     return {
       password: {
-        ...passwordValidator.call(this),
+        required,
         decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
       }
     };

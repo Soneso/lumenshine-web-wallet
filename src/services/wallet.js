@@ -37,5 +37,5 @@ export default {
   async fundAccountWithFriendbot (account) {
     const response = await axios.get('https://friendbot.stellar.org', { params: { addr: account } });
     return response;
-  }
+  },
 };
