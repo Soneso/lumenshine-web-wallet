@@ -1,6 +1,5 @@
 <template>
   <div class="modal">
-    fsdfsd
     <div class="modal__bg" @click="onCloseClick"/>
     <div class="modal__content">
       <div class="modal__header">
