@@ -26,9 +26,10 @@ export default {
     ...mapGetters(['wallets', 'currencyPairs', 'currencyRates']),
     totalBalances () {
       if (!this.wallets.res) return [];
+      console.log('this.wallets', this.wallets.res);
       const totalBalances = {};
       this.wallets.res.forEach(wallet => {
-        if (!wallet.stellar_data) return null;
+        if (!wallet.stellar_data) return;
         const balances = wallet.stellar_data.balances;
         if (!totalBalances.XLM) totalBalances.XLM = [];
         totalBalances.XLM.push({ balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' });
@@ -45,6 +46,10 @@ export default {
       for (const type in totalBalances) {
         const amount = totalBalances[type].map(b => b.balance).reduce((acc, val) => new Amount(acc).plus(val));
         totalBalances[type] = { balance: amount, type, issuer: totalBalances[type][0].issuer };
+      }
+
+      if (!totalBalances.XLM) { // in case the user has no funded wallets
+        return [];
       }
 
       return [totalBalances.XLM, ...Object.keys(totalBalances).filter(b => b !== 'XLM').map(b => totalBalances[b])];
@@ -88,8 +93,10 @@ export default {
     async refreshRates () {
       if (!this.currencyPairs.res || !this.wallets.res) return;
       const currencies = this.currencyPairs.res.map(cp => ({ type: cp.source_currency.asset_code, issuer: cp.source_currency.issuer_public_key || undefined }));
+      console.log('fetchableCurrencies', currencies, this.totalBalances);
 
       const fetchableCurrencies = this.totalBalances.filter(tb => currencies.find(c => c.type === tb.type && c.issuer === tb.issuer));
+
 
       await this.getCurrencyRates({
         destination_currency: 'USD',
