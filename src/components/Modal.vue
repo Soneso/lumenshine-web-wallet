@@ -1,5 +1,6 @@
 <template>
   <div class="modal">
+    fsdfsd
     <div class="modal__bg" @click="onCloseClick"/>
     <div class="modal__content">
       <div class="modal__header">
@@ -15,6 +16,7 @@
 
 <script>
 export default {
+  name: 'Modal',
   methods: {
     onCloseClick (e) {
       e.preventDefault();
@@ -27,6 +29,7 @@ export default {
 <style lang="scss" scoped>
 @import "assets/scss/variables";
 .modal {
+  display: block;
   &__bg {
     position: fixed;
     top: 0;
