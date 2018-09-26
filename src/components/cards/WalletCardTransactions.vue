@@ -91,16 +91,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "assets/scss/variables";
-.transaction {
-  p {
-    @include breakpoint(desktop) {
-      width: 49%;
-      display: inline-block;
-      vertical-align: top;
-    }
-  }
-}
-</style>

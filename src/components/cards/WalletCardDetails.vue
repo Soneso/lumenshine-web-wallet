@@ -212,25 +212,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import "assets/scss/variables";
-.centered {
-  text-align: center;
-}
-.wallet-link {
-  color: #222;
-}
-p {
-  word-wrap: break-word;
-}
-.card {
-  &__checkbox {
-    @include breakpoint(desktop) {
-      position: absolute;
-      right: 0;
-      top: 63px;
-    }
-  }
-}
-</style>

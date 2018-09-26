@@ -1,7 +1,7 @@
 <template>
   <div v-if="userStatus.res || userStatus.err" id="app">
-    <page-header :class="[{ 'header--open': menuOpen }]"/>
     <div :class="['content', {'content--open': menuOpen}]">
+      <page-header :class="[{ 'header--open': menuOpen }]"/>
       <dashboard-menu v-if="registrationComplete && authTokenType !== 'partial'" :menu-open="menuOpen" @toggleMenu="toggleMenu"/>
       <router-view/>
     </div>
@@ -81,30 +81,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import "assets/scss/variables";
-.content {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  width: 100%;
-  margin-left: 0;
-  transition: margin 0.4s;
-  &--open {
-    @include breakpoint(tablet) {
-      margin-left: $menu-width;
-    }
-  }
-}
-.header {
-  margin-left: 0;
-  transition: margin 0.4s;
-  width: 100%;
-  &--open {
-    @include breakpoint(tablet) {
-      margin-left: $menu-width;
-    }
-  }
-}
-</style>

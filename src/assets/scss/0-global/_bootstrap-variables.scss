@@ -711,13 +711,13 @@ $jumbotron-bg:                      $gray-200 !default;
 
 // Cards
 
-$card-spacer-y:                     .75rem !default;
-$card-spacer-x:                     1.25rem !default;
-$card-border-width:                 $border-width !default;
+$card-spacer-y:                     1rem !default;
+$card-spacer-x:                     1rem !default;
+$card-border-width:                 0 !default;
 $card-border-radius:                $border-radius !default;
-$card-border-color:                 rgba($black, .125) !default;
+$card-border-color:                 black !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width}) !default;
-$card-cap-bg:                       rgba($black, .03) !default;
+$card-cap-bg:                       transparent !default;
 $card-bg:                           $white !default;
 
 $card-img-overlay-padding:          1.25rem !default;

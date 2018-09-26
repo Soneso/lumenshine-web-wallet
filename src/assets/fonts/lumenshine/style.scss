@@ -1,3 +1,4 @@
+@import "path";
 @import "variables";
 
 @font-face {
@@ -27,289 +28,289 @@ i {
 
 .icon-fa {
   &:before {
-    content: $icon-fa;     
+    content: $icon-fa;
     color: #ccc;
   }
 }
 .icon-arrow-left {
   &:before {
-    content: $icon-arrow-left;     
+    content: $icon-arrow-left;
     color: #ccc;
   }
 }
 .icon-arrow-right {
   &:before {
-    content: $icon-arrow-right;     
+    content: $icon-arrow-right;
     color: #ccc;
   }
 }
 .icon-bag {
   &:before {
-    content: $icon-bag;     
+    content: $icon-bag;
     color: #ccc;
   }
 }
 .icon-card {
   &:before {
-    content: $icon-card;     
+    content: $icon-card;
     color: #ccc;
   }
 }
 .icon-close-invert {
   &:before {
-    content: $icon-close-invert;     
+    content: $icon-close-invert;
     color: #ccc;
   }
 }
 .icon-close {
   &:before {
-    content: $icon-close;     
+    content: $icon-close;
     color: #ccc;
   }
 }
 .icon-copy {
   &:before {
-    content: $icon-copy;     
+    content: $icon-copy;
     color: #ccc;
   }
 }
 .icon-document {
   &:before {
-    content: $icon-document;     
+    content: $icon-document;
     color: #ccc;
   }
 }
 .icon-facial-recognition {
   &:before {
-    content: $icon-facial-recognition;     
+    content: $icon-facial-recognition;
     color: #ccc;
   }
 }
 .icon-fingerprint {
   &:before {
-    content: $icon-fingerprint;     
+    content: $icon-fingerprint;
     color: #ccc;
   }
 }
 .icon-flags {
   &:before {
-    content: $icon-flags;     
+    content: $icon-flags;
     color: #ccc;
   }
 }
 .icon-forgot-password {
   &:before {
-    content: $icon-forgot-password;     
+    content: $icon-forgot-password;
     color: #ccc;
   }
 }
 .icon-hamburger-menu {
   &:before {
-    content: $icon-hamburger-menu;     
+    content: $icon-hamburger-menu;
     color: #ccc;
   }
 }
 .icon-help {
   &:before {
-    content: $icon-help;     
+    content: $icon-help;
     color: #ccc;
   }
 }
 .icon-hide {
   &:before {
-    content: $icon-hide;     
+    content: $icon-hide;
     color: #ccc;
   }
 }
 .icon-home {
   &:before {
-    content: $icon-home;     
+    content: $icon-home;
     color: #ccc;
   }
 }
 .icon-icos {
   &:before {
-    content: $icon-icos;     
+    content: $icon-icos;
     color: #ccc;
   }
 }
 .icon-learn-ico {
   &:before {
-    content: $icon-learn-ico;     
+    content: $icon-learn-ico;
     color: #ccc;
   }
 }
 .icon-link {
   &:before {
-    content: $icon-link;     
+    content: $icon-link;
     color: #ccc;
   }
 }
 .icon-lock-help {
   &:before {
-    content: $icon-lock-help;     
+    content: $icon-lock-help;
     color: #ccc;
   }
 }
 .icon-lock {
   &:before {
-    content: $icon-lock;     
+    content: $icon-lock;
     color: #ccc;
   }
 }
 .icon-login {
   &:before {
-    content: $icon-login;     
+    content: $icon-login;
     color: #ccc;
   }
 }
 .icon-logout {
   &:before {
-    content: $icon-logout;     
+    content: $icon-logout;
     color: #ccc;
   }
 }
 .icon-mail {
   &:before {
-    content: $icon-mail;     
+    content: $icon-mail;
     color: #ccc;
   }
 }
 .icon-more {
   &:before {
-    content: $icon-more;     
+    content: $icon-more;
     color: #ccc;
   }
 }
 .icon-my-orders {
   &:before {
-    content: $icon-my-orders;     
+    content: $icon-my-orders;
     color: #ccc;
   }
 }
 .icon-oprions-down {
   &:before {
-    content: $icon-oprions-down;     
+    content: $icon-oprions-down;
     color: #ccc;
   }
 }
 .icon-oprions-right {
   &:before {
-    content: $icon-oprions-right;     
+    content: $icon-oprions-right;
     color: #ccc;
   }
 }
 .icon-password {
   &:before {
-    content: $icon-password;     
+    content: $icon-password;
     color: #ccc;
   }
 }
 .icon-pencil {
   &:before {
-    content: $icon-pencil;     
+    content: $icon-pencil;
     color: #ccc;
   }
 }
 .icon-plus {
   &:before {
-    content: $icon-plus;     
+    content: $icon-plus;
     color: #ccc;
   }
 }
 .icon-qr-code {
   &:before {
-    content: $icon-qr-code;     
+    content: $icon-qr-code;
     color: #ccc;
   }
 }
 .icon-receive {
   &:before {
-    content: $icon-receive;     
+    content: $icon-receive;
     color: #ccc;
   }
 }
 .icon-rocket-o {
   &:before {
-    content: $icon-rocket-o;     
+    content: $icon-rocket-o;
     color: #ccc;
   }
 }
 .icon-rocket {
   &:before {
-    content: $icon-rocket;     
+    content: $icon-rocket;
     color: #ccc;
   }
 }
 .icon-search {
   &:before {
-    content: $icon-search;     
+    content: $icon-search;
     color: #ccc;
   }
 }
 .icon-security {
   &:before {
-    content: $icon-security;     
+    content: $icon-security;
     color: #ccc;
   }
 }
 .icon-send {
   &:before {
-    content: $icon-send;     
+    content: $icon-send;
     color: #ccc;
   }
 }
 .icon-settings {
   &:before {
-    content: $icon-settings;     
+    content: $icon-settings;
     color: #ccc;
   }
 }
 .icon-show {
   &:before {
-    content: $icon-show;     
+    content: $icon-show;
     color: #ccc;
   }
 }
 .icon-star {
   &:before {
-    content: $icon-star;     
+    content: $icon-star;
     color: #ccc;
   }
 }
 .icon-support {
   &:before {
-    content: $icon-support;     
+    content: $icon-support;
     color: #ccc;
   }
 }
 .icon-transaction {
   &:before {
-    content: $icon-transaction;     
+    content: $icon-transaction;
     color: #ccc;
   }
 }
 .icon-unlink {
   &:before {
-    content: $icon-unlink;     
+    content: $icon-unlink;
     color: #ccc;
   }
 }
 .icon-user {
   &:before {
-    content: $icon-user;     
+    content: $icon-user;
     color: #ccc;
   }
 }
 .icon-verified {
   &:before {
-    content: $icon-verified;     
+    content: $icon-verified;
     color: #ccc;
   }
 }
 .icon-wallet {
   &:before {
-    content: $icon-wallet;     
+    content: $icon-wallet;
     color: #ccc;
   }
 }

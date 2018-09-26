@@ -2,7 +2,7 @@
 
 // bootstrap functions and config
 @import "../../../node_modules/bootstrap/scss/functions";
-@import "bootstrap-variables";
+@import "0-global/bootstrap-variables";
 
 // bootstrap components
 @import "../../../node_modules/bootstrap/scss/mixins";
@@ -42,8 +42,22 @@
 // also..
 @import "../../../node_modules/swiper/dist/css/swiper.css";
 
+@import '../fonts/lumenshine/style';
 
-// components
-@import "variables";
-@import "general";
-@import "switch";
+
+// global
+@import "0-global/switch";
+
+// atoms
+
+
+// molecules
+
+
+// clusters
+
+
+// pages
+
+
+// responsiveness

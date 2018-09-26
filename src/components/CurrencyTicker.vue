@@ -103,11 +103,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import "assets/scss/variables";
-.currency-ticker {
-  height: 30px;
-  overflow: hidden;
-}
-</style>

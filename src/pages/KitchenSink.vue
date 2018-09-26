@@ -1,8 +1,58 @@
 <template>
   <b-container class="bv-example-row">
+
     <b-row>
       <b-col>
         <h1 class="pt-5">Kitchen Sink UI</h1>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col>
+        <hr>
+        <h4 class="py-3">Cards</h4>
+
+        <div>
+          <b-card-group deck class="mb-3">
+            <b-card bg-variant="primary" text-variant="white" header="Primary" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card bg-variant="secondary" text-variant="white" header="Secondary" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+          </b-card-group>
+          <b-card-group deck class="mb-3">
+            <b-card bg-variant="info" text-variant="white" header="Info" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card bg-variant="warning" text-variant="white" header="Warning" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card bg-variant="danger" text-variant="white" header="Danger" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+          </b-card-group>
+          <b-card-group deck class="mb-3">
+            <b-card bg-variant="light" header="Light" class="text-center"><p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card bg-variant="dark" header="Dark" text-variant="white" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+            <b-card header="Default" class="text-center">
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </b-card>
+          </b-card-group>
+        </div>
+
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col>
         <hr>
         <h4 class="py-3">Alerts</h4>
         <div>
@@ -90,45 +140,6 @@
               <b-button>Bottom</b-button>
             </b-button-group>
           </div>
-        </div>
-
-        <hr>
-        <h4 class="py-3">Cards</h4>
-
-        <div>
-          <b-card-group deck class="mb-3">
-            <b-card bg-variant="primary" text-variant="white" header="Primary" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card bg-variant="secondary" text-variant="white" header="Secondary" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-          </b-card-group>
-          <b-card-group deck class="mb-3">
-            <b-card bg-variant="info" text-variant="white" header="Info" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card bg-variant="warning" text-variant="white" header="Warning" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card bg-variant="danger" text-variant="white" header="Danger" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-          </b-card-group>
-          <b-card-group deck class="mb-3">
-            <b-card bg-variant="light" header="Light" class="text-center"><p class="card-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card bg-variant="dark" header="Dark" text-variant="white" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-            <b-card header="Default" class="text-center">
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </b-card>
-          </b-card-group>
         </div>
 
         <hr>
