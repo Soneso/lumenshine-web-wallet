@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
+  <form class="form" @submit.prevent>
     <div>
       <p>
         <strong>Currencies</strong>
@@ -89,10 +89,10 @@
         </div>
         <div v-else> <!-- Known currencies -->
           <ul class="known-currencies">
-            <li v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer">
+            <li v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer_public_key">
               <h4>{{ currency.name }} ({{ currency.asset_code }})</h4>
               <span v-if="currency.needsAuth" class="error">needs issuer athorization</span>
-              <p>Issuer public key: {{ currency.issuer.slice(0, 10) }}...</p>
+              <p>Issuer public key: {{ currency.issuer_public_key.slice(0, 10) }}...</p>
               <div v-if="openedKnownCurrency === null" class="form-buttons">
                 <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
               </div>
@@ -106,11 +106,11 @@
                 <br>
                 <span>Password required to add currency</span>
                 <div class="form-buttons">
-                  <a href="#" @click.prevent="onAddClick">
-                    <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-                    <span v-if="!loading" @click.prevent="onOpenKnownCurrency(null)">cancel</span>
-                    <span v-if="!loading">add</span>
-                  </a>
+                  <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+                  <div v-else>
+                    <a href="#" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
+                    <a href="#" @click.prevent="onAddClick">add</a>
+                  </div>
                 </div>
               </div>
             </li>
@@ -145,7 +145,11 @@ export default {
     decryptionError: {
       type: Boolean,
       required: true,
-    }
+    },
+    knownCurrencies: {
+      type: Array,
+      required: true,
+    },
   },
   data () {
     return {
@@ -167,13 +171,6 @@ export default {
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }))];
     },
-    knownCurrencies () {
-      return [
-        { name: 'Oranges Coin', asset_code: 'ORANGE', issuer: 'ABCD12313ABCD643563546345783456' },
-        { name: 'Mobi Coin', asset_code: 'MOBI', issuer: 'AFFF12313ABCD643563546345783451' },
-        { name: 'Smartlands', asset_code: 'SMRT', issuer: 'ACCC12313ABCD643563546345783456', needsAuth: true },
-      ];
-    }
   },
   watch: {
     loading (loading) {
@@ -188,6 +185,7 @@ export default {
         if (this.removeFieldBalance) {
           this.removeFieldBalance = null;
         }
+        this.openedKnownCurrency = null;
       }
     }
   },
@@ -215,19 +213,24 @@ export default {
       this.addCurrency = false;
       this.removeFieldBalance = balance;
     },
-    async onAddClick () {
+    onAddClick () {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      this.backendQuery = { assetCode: this.assetCode, issuer: this.issuer, password: this.password };
+
+      this.backendQuery = this.openedKnownCurrency
+        ? { assetCode: this.openedKnownCurrency.asset_code, issuer: this.openedKnownCurrency.issuer_public_key, password: this.password }
+        : { assetCode: this.assetCode, issuer: this.issuer, password: this.password };
+
       this.$emit('add', this.backendQuery);
     },
-    async onRemoveClick (balance) {
+    onRemoveClick (balance) {
       this.$v.password.$touch();
       if (this.$v.password.$invalid) {
         return;
       }
+
       this.backendQuery = { assetCode: balance.type, issuer: balance.issuer, password: this.password };
       this.$emit('remove', this.backendQuery);
     },
@@ -243,15 +246,17 @@ export default {
   },
   validations () {
     return {
-      assetCode: {
-        required,
-        ...assetCodeValidator.call(this),
-      },
-      issuer: {
-        required,
-        ...publicKeyValidator.call(this),
-        validIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_ISSUER'),
-      },
+      ...(this.openedKnownCurrency ? {} : {
+        assetCode: {
+          required,
+          ...assetCodeValidator.call(this),
+        },
+        issuer: {
+          required,
+          ...publicKeyValidator.call(this),
+          validIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_ISSUER'),
+        },
+      }),
       password: {
         required,
         validPassword: value => this.backendQuery.password !== value || !this.decryptionError,
@@ -289,8 +294,8 @@ p {
     padding-bottom: 8px;
     border-bottom: 1px solid #666;
   }
-  .error {
-    margin: -12px 0;
+  input.error {
+    margin-bottom: -12px;
     display: block;
   }
 }

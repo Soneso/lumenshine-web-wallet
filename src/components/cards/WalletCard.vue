@@ -252,7 +252,7 @@ export default {
       await this.setInflationDestination({
         publicKey: this.data.public_key_0,
         secretSeed,
-        destination: this.inflationDest,
+        destination: data.destination,
       });
       this.setInflationDestLoading = false;
     },

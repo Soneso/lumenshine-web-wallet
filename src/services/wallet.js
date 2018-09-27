@@ -38,4 +38,12 @@ export default {
     const response = await axios.get('https://friendbot.stellar.org', { params: { addr: account } });
     return response;
   },
+  async getKnownCurrencies (params) {
+    const response = await apiBase.post('/portal/user/dashboard/get_known_currencies', params);
+    return response.data;
+  },
+  async getKnownInflationDestinations (params) {
+    const response = await apiBase.post('/portal/user/dashboard/get_known_inflation_destinations', params);
+    return response.data;
+  },
 };

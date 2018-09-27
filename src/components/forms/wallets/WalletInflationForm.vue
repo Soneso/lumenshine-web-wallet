@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
+  <form class="form" @submit.prevent>
     <div>
       <p>
         <strong>Inflation destination</strong>
@@ -29,18 +29,27 @@
             <div v-if="!$v.password.decryptValid">Invalid password</div>
           </div>
           <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+          <div class="form-buttons">
+            <a v-if="!fieldOpen" href="#" class="only-mobile" @click.prevent="onSetDestinationClick">set inflation destination</a>
+            <a v-else href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
+            <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
+              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+              <span v-else>submit</span>
+            </a>
+          </div>
         </div>
-        <div v-else> <!-- Known currencies -->
-          <ul class="known-currencies">
-            <li v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer">
+        <div v-else> <!-- Known destinations -->
+          <ul class="known-destinations">
+            <li v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
               <p class="checkbox">
-                <input :id="`currencyCheckbox${currency.public_key}`" :checked="openedKnownCurrency === currency" type="checkbox" class="switch" @input="e => openedKnownCurrency = e.target.checked ? currency : null">
-                <label :for="`currencyCheckbox${currency.public_key}`"></label>
+                <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
+                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
               </p>
-              <h4>{{ currency.name }}</h4>
-              <p>{{ currency.details }}</p>
-              <p>Public key: {{ currency.public_key.slice(0, 10) }}...</p>
-              <div v-if="openedKnownCurrency === currency">
+              <h4>{{ destination.name }}</h4>
+              <p>{{ destination.short_description }}</p>
+              <p>Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</p>
+              <a href="#" @click.prevent>details</a>
+              <div v-if="openedKnownDestination === destination">
                 <div v-if="$v.password.$error" class="field__errors">
                   <div v-if="!$v.password.required">Password is required</div>
                   <div v-if="!$v.password.decryptValid">Invalid password</div>
@@ -48,27 +57,20 @@
                 <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
 
                 <br>
-                <span>Password required to add currency</span>
+                <span>Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</span>
                 <div class="form-buttons">
-                  <a href="#" @click.prevent="onAddClick">
-                    <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-                    <span v-if="!loading" @click.prevent="onOpenKnownCurrency(null)">cancel</span>
-                    <span v-if="!loading">add</span>
-                  </a>
+                  <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+                  <div v-else>
+                    <a href="#" @click.prevent="openKnownDestination(null)">cancel</a>
+                    <a href="#" @click.prevent="onSubmitClick">add</a>
+                  </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
       </div>
-      <div class="form-buttons">
-        <a v-if="!fieldOpen" href="#" class="only-mobile" @click.prevent="onSetDestinationClick">set inflation destination</a>
-        <a v-else href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
-        <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-          <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-          <span v-else>submit</span>
-        </a>
-      </div>
+      <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
     </div>
   </form>
 </template>
@@ -90,6 +92,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    knownDestinations: {
+      type: Array,
+      required: true,
+    },
     data: {
       type: Object,
       required: true,
@@ -101,22 +107,14 @@ export default {
       destination: this.inflationDestination,
       password: '',
       formType: 'known',
-      openedKnownCurrency: null,
+      openedKnownDestination: null,
     };
-  },
-  computed: {
-    knownCurrencies () {
-      return [
-        { name: 'Lumenauts', details: '100 % return from inflation pool', public_key: 'ABCD12313ABCD643563546345783456' },
-        { name: 'Greenpeace', details: 'vote for the environment', public_key: 'AFFF12313ABCD643563546345783451' },
-        { name: 'Naomi foundation', details: 'vote for children', public_key: 'ACCC12313ABCD643563546345783456' },
-      ];
-    }
   },
   watch: {
     loading (loading) {
-      if (!loading && this.errors.length === 0) {
+      if (!loading && !this.decryptionError && this.errors.length === 0) {
         this.fieldOpen = false;
+        this.openedKnownDestination = null;
       }
     }
   },
@@ -136,21 +134,31 @@ export default {
     onSetDestinationClick () {
       this.fieldOpen = true;
     },
+    openKnownDestination (val) {
+      this.openedKnownDestination = val;
+      this.resetForms();
+    },
     async onSubmitClick () {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      this.backendQuery = { destination: this.destination, password: this.password };
+
+      this.backendQuery = this.openedKnownDestination
+        ? { destination: this.openedKnownDestination.issuer_public_key, password: this.password }
+        : { destination: this.destination, password: this.password };
+
       this.$emit('submit', this.backendQuery);
     }
   },
   validations () {
     return {
-      destination: {
-        required,
-        ...validators.publicKey.call(this),
-      },
+      ...(this.formType === 'known' ? {} : {
+        destination: {
+          required,
+          ...validators.publicKey.call(this),
+        },
+      }),
       password: {
         required,
         decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
@@ -165,7 +173,7 @@ p {
   word-wrap: break-word;
 }
 
-.known-currencies {
+.known-destinations {
   display: block;
   padding: 0;
   margin: 0 auto;
@@ -176,8 +184,8 @@ p {
     padding-bottom: 8px;
     border-bottom: 1px solid #666;
   }
-  .error {
-    margin: -12px 0;
+  input.error {
+    margin-bottom: -12px;
     display: block;
   }
   .checkbox {

@@ -120,6 +120,7 @@ export default {
 
   async setInflationDestination ({ commit, dispatch }, { publicKey, secretSeed, destination }) {
     commit('SET_INFLATION_DEST_LOADING', true);
+    commit('SET_INFLATION_DEST_ERROR', []);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
       const sourcePublicKey = sourceKeypair.publicKey();
@@ -136,7 +137,6 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('updateWallets', [ publicKey ]);
-      commit('SET_INFLATION_DEST_ERROR', []);
     } catch (err) {
       console.error(err);
       commit('SET_INFLATION_DEST_ERROR', [{ error_message: 'Cannot update data, try again later.' }]);
@@ -146,6 +146,7 @@ export default {
 
   async addCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
     commit('ADD_CURRENCY_LOADING', true);
+    commit('ADD_CURRENCY_ERROR', []);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
       const sourcePublicKey = sourceKeypair.publicKey();
@@ -162,7 +163,6 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('updateWallets', [ publicKey ]);
-      commit('ADD_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
       if (err.message === 'Issuer is invalid') {
@@ -176,6 +176,7 @@ export default {
 
   async removeCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
     commit('REMOVE_CURRENCY_LOADING', true);
+    commit('REMOVE_CURRENCY_ERROR', []);
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
       const sourcePublicKey = sourceKeypair.publicKey();
@@ -193,7 +194,6 @@ export default {
 
       await StellarAPI.submitTransaction(transaction);
       await dispatch('updateWallets', [ publicKey ]);
-      commit('REMOVE_CURRENCY_ERROR', []);
     } catch (err) {
       console.error(err);
       if (err.message === 'Issuer is invalid') {
@@ -230,6 +230,28 @@ export default {
       commit('SET_CURRENCY_RATES_ERROR', err.data);
     }
     commit('SET_CURRENCY_RATES_LOADING', false);
+  },
+
+  async getKnownDestinations ({ commit }, params) {
+    commit('SET_KNOWN_DESTINATIONS_LOADING', true);
+    try {
+      const data = await WalletService.getKnownInflationDestinations(params);
+      commit('SET_KNOWN_DESTINATIONS', data);
+    } catch (err) {
+      commit('SET_KNOWN_DESTINATIONS_ERROR', err.data);
+    }
+    commit('SET_KNOWN_DESTINATIONS_LOADING', false);
+  },
+
+  async getKnownCurrencies ({ commit }, params) {
+    commit('SET_KNOWN_CURRENCIES_LOADING', true);
+    try {
+      const data = await WalletService.getKnownCurrencies(params);
+      commit('SET_KNOWN_CURRENCIES', data);
+    } catch (err) {
+      commit('SET_KNOWN_CURRENCIES_ERROR', err.data);
+    }
+    commit('SET_KNOWN_CURRENCIES_LOADING', false);
   },
 
   async fundAccountWithFriendbot ({ commit, dispatch }, publicKey) {
