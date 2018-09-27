@@ -6,7 +6,7 @@
     </header>
     <header v-else>
       <h3>{{ data.wallet_name }}</h3>
-      <span v-if="data.federation_address" class="warning card__federation-address">{{ data.federation_address }}{{ config.FEDERATION_DOMAIN }}</span>
+      <span v-if="data.federation_address" class="warning card__federation-address">{{ data.federation_address }}</span>
     </header>
     <section>
       <h4>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h4>

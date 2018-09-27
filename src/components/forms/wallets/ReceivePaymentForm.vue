@@ -19,7 +19,7 @@
       <p v-if="data.federation_address">
         <strong>Stellar address</strong>
         <br>
-        <span class="warning">{{ data.federation_address }}{{ config.FEDERATION_DOMAIN }}</span>
+        <span class="warning">{{ data.federation_address }}</span>
       </p>
       <table>
         <tr>
