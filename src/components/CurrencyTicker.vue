@@ -54,7 +54,7 @@ export default {
       return [totalBalances.XLM, ...Object.keys(totalBalances).filter(b => b !== 'XLM').map(b => totalBalances[b])];
     },
     totalUSDAmount () {
-      return this.pairs.map(p => p.value).reduce((acc, cur) => new Amount(acc).sum(cur));
+      return this.pairs.map(p => p.value).reduce((acc, cur) => new Amount(acc).plus(cur));
     },
     flatCurrencyPairs () {
       if (!this.currencyRates.res) {
