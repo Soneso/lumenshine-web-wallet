@@ -9,7 +9,7 @@
 //
 
 $white:    #ffffff !default;
-$gray-100: #eeeeee !default;
+$gray-100: #ebebeb !default;
 $gray-200: #dddddd !default;
 $gray-300: #cccccc !default;
 $gray-400: #bbbbbb !default;
@@ -582,14 +582,14 @@ $form-feedback-invalid-color:       theme-color("danger") !default;
 // Dropdown menu container and contents.
 
 $dropdown-min-width:                10rem !default;
-$dropdown-padding-y:                .5rem !default;
-$dropdown-spacer:                   .125rem !default;
+$dropdown-padding-y:                0 !default;
+$dropdown-spacer:                   0 !default;
 $dropdown-bg:                       $white !default;
 $dropdown-border-color:             $gray-300 !default;
 $dropdown-border-radius:            $border-radius !default;
 $dropdown-border-width:             $border-width !default;
-$dropdown-divider-bg:               $gray-200 !default;
-$dropdown-box-shadow:               0 .5rem 1rem $gray-500 !default;
+$dropdown-divider-bg:               $gray-100 !default;
+$dropdown-box-shadow:               .125rem .125rem .5rem rgba($black, .15) !default;
 
 $dropdown-link-color:               $gray-800 !default;
 $dropdown-link-hover-color:         $black !default;
@@ -600,7 +600,7 @@ $dropdown-link-active-bg:           $component-active-bg !default;
 
 $dropdown-link-disabled-color:      $gray-400 !default;
 
-$dropdown-item-padding-y:           .25rem !default;
+$dropdown-item-padding-y:           .5rem !default;
 $dropdown-item-padding-x:           1rem !default;
 
 $dropdown-header-color:             $gray-600 !default;

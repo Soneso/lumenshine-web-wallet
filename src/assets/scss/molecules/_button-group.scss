@@ -1,0 +1,38 @@
+// first and last children of the group with rounded corners - default
+.btn-group {
+  .btn {
+    &:first-child {
+      border-top-left-radius: $rounded;
+      border-bottom-left-radius: $rounded;
+    }
+
+    &:last-child {
+      border-top-right-radius: $rounded;
+      border-bottom-right-radius: $rounded;
+    }
+
+    &:only-of-type {
+      border-top-right-radius: $rounded;
+      border-bottom-right-radius: $rounded;
+    }
+  }
+
+  &.rounded-0 {
+    .btn {
+      &:first-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      &:last-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:only-of-type {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+}

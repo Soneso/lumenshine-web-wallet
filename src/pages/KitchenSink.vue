@@ -49,7 +49,7 @@
             </b-form-group>
 
             <b-button type="submit" variant="primary" class="btn-rounded">Submit</b-button>
-            <b-button type="reset" variant="danger" class="btn-rounded">Reset</b-button>
+            <b-button type="reset" variant="outline-danger" class="btn-rounded">Reset</b-button>
             <a href="">kkddkdk</a>
           </b-form>
         </div>
@@ -58,7 +58,7 @@
         <h4 class="py-3">Buttons</h4>
 
         <div class="row">
-          <template v-for="variant in ['primary','secondary','success','outline-success','info','outline-warning','warning','danger','link']">
+          <template v-for="variant in ['primary','outline-primary','secondary','outline-secondary','success','outline-success','info','outline-info','warning','outline-warning','danger','outline-danger','link','outline-link']">
             <div v-for="size in ['sm','','lg']" :key="`${variant}_${size}`" class="col-md-4 pb-2">
               <b-button :size="size" :variant="variant" class="btn-rounded">
                 {{ variant }} {{ size }}
@@ -75,8 +75,8 @@
             <b-button variant="info">Info</b-button>
             <b-button variant="warning">Warning</b-button>
             <b-button variant="primary">Primary</b-button>
-            <b-button variant="danger">Danger</b-button>
             <b-button variant="link">Link</b-button>
+            <b-button variant="danger">Danger</b-button>
           </b-button-group>
 
           <br><br>
@@ -97,6 +97,7 @@
                 <b-dropdown-divider/>
                 <b-dropdown-item>Item 3</b-dropdown-item>
               </b-dropdown>
+              <b-button>Button 4</b-button>
             </b-button-group>
           </div>
           <br><br>
@@ -113,7 +114,7 @@
         <h4 class="py-3">Dropdowns</h4>
 
         <div>
-          <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
+          <b-dropdown text="Dropdown Button" class="m-md-2">
             <b-dropdown-item>First Action</b-dropdown-item>
             <b-dropdown-item>Second Action</b-dropdown-item>
             <b-dropdown-item>Third Action</b-dropdown-item>
