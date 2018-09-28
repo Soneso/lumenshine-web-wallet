@@ -11,6 +11,23 @@
       <b-col>
 
         <hr>
+        <h4 class="py-3">Made some progress</h4>
+        <div>
+          <h5>No label</h5>
+          <b-progress :value="value" :max="max" variant="primary" height="6px" class="mb-3"/>
+          <h5>Value label</h5>
+          <b-progress :value="value" :max="max" variant="secondary" show-value class="mb-3"/>
+          <h5>Progress label</h5>
+          <b-progress :value="value" :max="max" variant="info" show-progress class="mb-3"/>
+          <h5>Value label with precision</h5>
+          <b-progress :value="value" :precision="1" :max="max" variant="success" show-value class="mb-3"/>
+          <h5>Progress label with precision</h5>
+          <b-progress :value="value" :precision="1" :max="max" variant="warning" show-progress class="mb-3"/>
+          <h5>Progress label with danger</h5>
+          <b-progress :value="value" :precision="1" :max="max" variant="danger" height="2rem" show-progress class="mb-3"/>
+        </div>
+
+        <hr>
         <h4 class="py-3">Form</h4>
 
         <div>
@@ -82,30 +99,30 @@
           <br><br>
           <div>
             <b-button-group>
-              <b-button>Button 1</b-button>
-              <b-button>Button 2</b-button>
-              <b-dropdown right text="Menu">
+              <b-button variant="info">Button 1</b-button>
+              <b-button variant="info">Button 2</b-button>
+              <b-dropdown right text="Menu" variant="info">
                 <b-dropdown-item>Item 1</b-dropdown-item>
                 <b-dropdown-item>Item 2</b-dropdown-item>
                 <b-dropdown-divider/>
                 <b-dropdown-item>Item 3</b-dropdown-item>
               </b-dropdown>
-              <b-button>Button 3</b-button>
-              <b-dropdown right split text="Split Menu">
+              <b-button variant="info">Button 3</b-button>
+              <b-dropdown right split text="Split Menu" variant="info">
                 <b-dropdown-item>Item 1</b-dropdown-item>
                 <b-dropdown-item>Item 2</b-dropdown-item>
                 <b-dropdown-divider/>
                 <b-dropdown-item>Item 3</b-dropdown-item>
               </b-dropdown>
-              <b-button>Button 4</b-button>
+              <b-button variant="info">Button 4</b-button>
             </b-button-group>
           </div>
           <br><br>
           <div>
             <b-button-group vertical>
-              <b-button>Top</b-button>
-              <b-button>Middle</b-button>
-              <b-button>Bottom</b-button>
+              <b-button variant="secondary">Top</b-button>
+              <b-button variant="secondary">Middle</b-button>
+              <b-button variant="secondary">Bottom</b-button>
             </b-button-group>
           </div>
         </div>
@@ -239,6 +256,8 @@
 export default {
   data () {
     return {
+      max: 100,
+      value: 30.333333333,
       form: {
         email: '',
         name: '',
