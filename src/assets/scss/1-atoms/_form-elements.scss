@@ -1,0 +1,114 @@
+// Local vars & reusables
+
+%input-border-color {
+  border-bottom-color: $gray-300
+}
+
+%input-border-color-focused {
+  border-bottom-color: $info
+}
+
+
+
+// Form
+
+
+// Form group
+
+
+// Labels
+.col-form-label {
+  cursor: pointer;
+  padding-left: .5rem;
+}
+
+.form-text,
+.col-form-label,
+.invalid-feedback {
+  font-size: 12px;
+}
+
+
+// Validations
+// invalid: normal state
+.was-validated .form-control:invalid,
+.form-control.is-invalid,
+.was-validated .custom-select:invalid,
+.custom-select.is-invalid,
+// invalid: focused state
+.was-validated .form-control:invalid:focus,
+.form-control.is-invalid:focus,
+.was-validated .custom-select:invalid:focus,
+.custom-select.is-invalid:focus {
+  border-color: transparent transparent $danger transparent;
+}
+
+// valid: normal state
+.was-validated .form-control:valid,
+.form-control.is-valid,
+.was-validated .custom-select:valid,
+.custom-select.is-valid,
+// valid: focused state
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus,
+.was-validated .custom-select:valid:focus,
+.custom-select.is-valid:focus {
+  border-color: transparent transparent $success transparent;
+}
+
+// Form inputs
+// type="text"
+// type="search"
+// type="email"
+// type="url"
+// type="tel"
+// type="number"
+// type="range"
+// type="date"
+// type="month"
+// type="week"
+// type="time"
+// type="datetime"
+// type="datetime-local"
+// type="color"
+
+input {
+  &[type="text"],
+  &[type="search"],
+  &[type="email"],
+  &[type="url"],
+  &[type="tel"],
+  &[type="number"] {
+    @extend %input-border-color;
+
+    &:focus {
+      @extend %input-border-color-focused
+    }
+  }
+}
+
+
+// Form checkbox
+
+
+
+// Form radio
+
+
+
+// form select
+.custom-select,
+.custom-select:focus {
+  @extend %input-border-color;
+
+  &:focus {
+    @extend %input-border-color-focused
+  }
+}
+
+
+// Form textarea
+
+
+// Form file
+

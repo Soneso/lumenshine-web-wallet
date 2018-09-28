@@ -9,6 +9,124 @@
 
     <b-row>
       <b-col>
+
+        <hr>
+        <h4 class="py-3">Form</h4>
+
+        <div>
+          <b-form v-if="show" @submit="onSubmit" @reset="onReset">
+            <b-form-group id="exampleInputGroup1" label="Email address:" label-for="exampleInput1" description="We'll never share your email with anyone else.">
+              <b-form-input id="exampleInput1" v-model="form.email" type="email" required placeholder="Enter email"/>
+            </b-form-group>
+
+            <b-form-group id="exampleInputGroup2" label="Your Name:" label-for="exampleInput2">
+              <b-form-input
+                id="exampleInput2"
+                v-model="form.name"
+                :state="nameState"
+                type="text"
+                aria-describedby="inputLiveHelp inputLiveFeedback"
+                required
+                placeholder="Enter name"
+              />
+              <b-form-invalid-feedback id="inputLiveFeedback">
+                Enter at least 3 letters
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveHelp">
+                Your full name.
+              </b-form-text>
+            </b-form-group>
+
+            <b-form-group id="exampleInputGroup3" label="Food:" label-for="exampleInput3">
+              <b-form-select id="exampleInput3" v-model="form.food" :options="foods" required/>
+            </b-form-group>
+
+            <b-form-group id="exampleGroup4">
+              <b-form-checkbox-group id="exampleChecks" v-model="form.checked">
+                <b-form-checkbox value="me">Check me out</b-form-checkbox>
+                <b-form-checkbox value="that">Check that out</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary">Submit</b-button>
+            <b-button type="reset" variant="danger">Reset</b-button>
+          </b-form>
+        </div>
+
+        <hr>
+        <h4 class="py-3">Buttons</h4>
+
+        <div class="row">
+          <template v-for="variant in ['primary','secondary','success','outline-success','warning','danger','link']">
+            <div v-for="size in ['sm','','lg']" :key="`${variant}_${size}`" class="col-md-4 pb-2">
+              <b-button :size="size" :variant="variant">
+                {{ variant }} {{ size }}
+              </b-button>
+            </div>
+          </template>
+        </div>
+
+        <hr>
+        <h4 class="py-3">Button group</h4>
+        <div>
+          <b-button-group>
+            <b-button variant="success">Success</b-button>
+            <b-button variant="info">Info</b-button>
+            <b-button variant="warning">Warning</b-button>
+            <b-button variant="primary">Primary</b-button>
+            <b-button variant="danger">Danger</b-button>
+            <b-button variant="link">Link</b-button>
+          </b-button-group>
+
+          <br><br>
+          <div>
+            <b-button-group>
+              <b-button>Button 1</b-button>
+              <b-button>Button 2</b-button>
+              <b-dropdown right text="Menu">
+                <b-dropdown-item>Item 1</b-dropdown-item>
+                <b-dropdown-item>Item 2</b-dropdown-item>
+                <b-dropdown-divider/>
+                <b-dropdown-item>Item 3</b-dropdown-item>
+              </b-dropdown>
+              <b-button>Button 3</b-button>
+              <b-dropdown right split text="Split Menu">
+                <b-dropdown-item>Item 1</b-dropdown-item>
+                <b-dropdown-item>Item 2</b-dropdown-item>
+                <b-dropdown-divider/>
+                <b-dropdown-item>Item 3</b-dropdown-item>
+              </b-dropdown>
+            </b-button-group>
+          </div>
+          <br><br>
+          <div>
+            <b-button-group vertical>
+              <b-button>Top</b-button>
+              <b-button>Middle</b-button>
+              <b-button>Bottom</b-button>
+            </b-button-group>
+          </div>
+        </div>
+
+        <hr>
+        <h4 class="py-3">Dropdowns</h4>
+
+        <div>
+          <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
+            <b-dropdown-item>First Action</b-dropdown-item>
+            <b-dropdown-item>Second Action</b-dropdown-item>
+            <b-dropdown-item>Third Action</b-dropdown-item>
+            <b-dropdown-divider/>
+            <b-dropdown-item>Something else here...</b-dropdown-item>
+            <b-dropdown-item disabled>Disabled action</b-dropdown-item>
+          </b-dropdown>
+        </div>
+
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col>
         <hr>
         <h4 class="py-3">Cards</h4>
 
@@ -88,100 +206,6 @@
         </div>
 
         <hr>
-        <h4 class="py-3">Buttons</h4>
-
-        <div class="row">
-          <template v-for="variant in ['primary','secondary','success','outline-success','warning','danger','link']">
-            <div v-for="size in ['sm','','lg']" :key="`${variant}_${size}`" class="col-md-4 pb-2">
-              <b-button :size="size" :variant="variant">
-                {{ variant }} {{ size }}
-              </b-button>
-            </div>
-          </template>
-        </div>
-
-        <hr>
-        <h4 class="py-3">Button group</h4>
-        <div>
-          <b-button-group>
-            <b-button variant="success">Success</b-button>
-            <b-button variant="info">Info</b-button>
-            <b-button variant="warning">Warning</b-button>
-            <b-button variant="primary">Primary</b-button>
-            <b-button variant="danger">Danger</b-button>
-            <b-button variant="link">Link</b-button>
-          </b-button-group>
-
-          <br><br>
-          <div>
-            <b-button-group>
-              <b-button>Button 1</b-button>
-              <b-button>Button 2</b-button>
-              <b-dropdown right text="Menu">
-                <b-dropdown-item>Item 1</b-dropdown-item>
-                <b-dropdown-item>Item 2</b-dropdown-item>
-                <b-dropdown-divider/>
-                <b-dropdown-item>Item 3</b-dropdown-item>
-              </b-dropdown>
-              <b-button>Button 3</b-button>
-              <b-dropdown right split text="Split Menu">
-                <b-dropdown-item>Item 1</b-dropdown-item>
-                <b-dropdown-item>Item 2</b-dropdown-item>
-                <b-dropdown-divider/>
-                <b-dropdown-item>Item 3</b-dropdown-item>
-              </b-dropdown>
-            </b-button-group>
-          </div>
-          <br><br>
-          <div>
-            <b-button-group vertical>
-              <b-button>Top</b-button>
-              <b-button>Middle</b-button>
-              <b-button>Bottom</b-button>
-            </b-button-group>
-          </div>
-        </div>
-
-        <hr>
-        <h4 class="py-3">Dropdowns</h4>
-
-        <div>
-          <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
-            <b-dropdown-item>First Action</b-dropdown-item>
-            <b-dropdown-item>Second Action</b-dropdown-item>
-            <b-dropdown-item>Third Action</b-dropdown-item>
-            <b-dropdown-divider/>
-            <b-dropdown-item>Something else here...</b-dropdown-item>
-            <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-          </b-dropdown>
-        </div>
-
-        <hr>
-        <h4 class="py-3">Form</h4>
-
-        <div>
-          <b-form v-if="show" @submit="onSubmit" @reset="onReset">
-            <b-form-group id="exampleInputGroup1" label="Email address:" label-for="exampleInput1" description="We'll never share your email with anyone else.">
-              <b-form-input id="exampleInput1" v-model="form.email" type="email" required placeholder="Enter email"/>
-            </b-form-group>
-            <b-form-group id="exampleInputGroup2" label="Your Name:" label-for="exampleInput2">
-              <b-form-input id="exampleInput2" v-model="form.name" type="text" required placeholder="Enter name"/>
-            </b-form-group>
-            <b-form-group id="exampleInputGroup3" label="Food:" label-for="exampleInput3">
-              <b-form-select id="exampleInput3" v-model="form.food" :options="foods" required/>
-            </b-form-group>
-            <b-form-group id="exampleGroup4">
-              <b-form-checkbox-group id="exampleChecks" v-model="form.checked">
-                <b-form-checkbox value="me">Check me out</b-form-checkbox>
-                <b-form-checkbox value="that">Check that out</b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
-            <b-button type="submit" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
-          </b-form>
-        </div>
-
-        <hr>
         <h4 class="py-3">Modals</h4>
 
         <div>
@@ -226,6 +250,11 @@ export default {
       show: true
     };
   },
+  computed: {
+    nameState () {
+      return this.form.name.length > 2;
+    }
+  },
   methods: {
     onSubmit (evt) {
       evt.preventDefault();
@@ -233,12 +262,10 @@ export default {
     },
     onReset (evt) {
       evt.preventDefault();
-      /* Reset our form values */
       this.form.email = '';
       this.form.name = '';
       this.form.food = null;
       this.form.checked = [];
-      /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true; });
     }
