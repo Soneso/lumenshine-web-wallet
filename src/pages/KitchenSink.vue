@@ -58,7 +58,7 @@
         <h4 class="py-3">Buttons</h4>
 
         <div class="row">
-          <template v-for="variant in ['primary','secondary','success','outline-success','warning','danger','link']">
+          <template v-for="variant in ['primary','secondary','success','outline-success','info','outline-warning','warning','danger','link']">
             <div v-for="size in ['sm','','lg']" :key="`${variant}_${size}`" class="col-md-4 pb-2">
               <b-button :size="size" :variant="variant" class="btn-rounded">
                 {{ variant }} {{ size }}
