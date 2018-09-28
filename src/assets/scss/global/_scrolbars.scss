@@ -1,0 +1,66 @@
+$scrollbar-width: 8px;
+
+%scrollbars {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-base-color: $gray-300;
+  scrollbar-3dlight-color: $gray-400;
+  scrollbar-highlight-color: $gray-400;
+  scrollbar-face-color: $gray-300;
+  scrollbar-track-color: $gray-400;
+  scrollbar-arrow-color: $gray-300;
+  scrollbar-shadow-color: $gray-300;
+  scrollbar-darkshadow-color: $gray-300;
+
+  &::-webkit-scrollbar {
+    width: $scrollbar-width
+  }
+
+  &::-webkit-scrollbar-button {
+    background-color: $gray-400
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $gray-400
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    background-color: $gray-400
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-700;
+    border-radius: $scrollbar-width / 2
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: $gray-400
+  }
+
+  &::-webkit-resizer {
+    background-color: $gray-400
+  }
+
+  @-moz-document url-prefix(http://), url-prefix(https://) {
+    scrollbar {
+      -moz-appearance: none;
+      background: $gray-400;
+
+      &[orient="vertical"] {
+        min-width: $scrollbar-width
+      }
+    }
+
+    scrollbarbutton {
+      display: none
+    }
+
+    thumb, scrollbarbutton {
+      -moz-appearance: none;
+      background-color: $gray-700
+    }
+
+    &:hover {
+      background-color: lighten($gray-700, 5%)
+    }
+  }
+}

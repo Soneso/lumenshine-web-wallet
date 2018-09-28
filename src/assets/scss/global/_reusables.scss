@@ -1,0 +1,35 @@
+%link-hoverings {
+  transition: all .7s ease;
+
+  &:hover {
+    transition: all .35s ease
+  }
+}
+
+%slow-transitions {
+  transition: all 2s ease
+}
+
+%fast-transitions {
+  transition: all .5s ease
+}
+
+%v-scroll {
+  overflow-y: scroll;
+  overflow-x: hidden
+}
+
+%h-scroll {
+  overflow-y: hidden;
+  overflow-x: scroll
+}
+
+%hidden-scroll {
+  overflow: hidden
+}
+
+%text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}

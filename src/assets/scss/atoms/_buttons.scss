@@ -1,0 +1,36 @@
+.btn {
+  &.btn-warning,
+  &.btn-success,
+  &.btn-outline-warning:hover,
+  &.btn-outline-success:hover {
+    color: $white
+  }
+}
+
+.btn-rounded {
+  border-top-right-radius: $rounded;
+  border-bottom-right-radius: $rounded;
+  border-top-left-radius: $rounded;
+  border-bottom-left-radius: $rounded;
+}
+
+.btn-rounded-sm {
+  border-top-right-radius: $rounded-sm;
+  border-bottom-right-radius: $rounded-sm;
+  border-top-left-radius: $rounded-sm;
+  border-bottom-left-radius: $rounded-sm;
+}
+
+.btn-rounded-md {
+  border-top-right-radius: $rounded-md;
+  border-bottom-right-radius: $rounded-md;
+  border-top-left-radius: $rounded-md;
+  border-bottom-left-radius: $rounded-md;
+}
+
+.btn-rounded-lg {
+  border-top-right-radius: $rounded-lg;
+  border-bottom-right-radius: $rounded-lg;
+  border-top-left-radius: $rounded-lg;
+  border-bottom-left-radius: $rounded-lg;
+}

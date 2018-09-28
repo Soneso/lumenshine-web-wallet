@@ -19,13 +19,13 @@
 // Labels
 .col-form-label {
   cursor: pointer;
-  padding-left: .5rem;
+  padding-left: .5rem
 }
 
 .form-text,
 .col-form-label,
 .invalid-feedback {
-  font-size: 12px;
+  font-size: 12px
 }
 
 
@@ -40,7 +40,7 @@
 .form-control.is-invalid:focus,
 .was-validated .custom-select:invalid:focus,
 .custom-select.is-invalid:focus {
-  border-color: transparent transparent $danger transparent;
+  border-color: transparent transparent $danger transparent
 }
 
 // valid: normal state
@@ -53,7 +53,7 @@
 .form-control.is-valid:focus,
 .was-validated .custom-select:valid:focus,
 .custom-select.is-valid:focus {
-  border-color: transparent transparent $success transparent;
+  border-color: transparent transparent $success transparent
 }
 
 // Form inputs

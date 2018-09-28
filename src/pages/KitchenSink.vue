@@ -48,8 +48,9 @@
               </b-form-checkbox-group>
             </b-form-group>
 
-            <b-button type="submit" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
+            <b-button type="submit" variant="primary" class="btn-rounded">Submit</b-button>
+            <b-button type="reset" variant="danger" class="btn-rounded">Reset</b-button>
+            <a href="">kkddkdk</a>
           </b-form>
         </div>
 
@@ -59,7 +60,7 @@
         <div class="row">
           <template v-for="variant in ['primary','secondary','success','outline-success','warning','danger','link']">
             <div v-for="size in ['sm','','lg']" :key="`${variant}_${size}`" class="col-md-4 pb-2">
-              <b-button :size="size" :variant="variant">
+              <b-button :size="size" :variant="variant" class="btn-rounded">
                 {{ variant }} {{ size }}
               </b-button>
             </div>
