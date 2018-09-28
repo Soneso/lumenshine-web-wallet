@@ -1,6 +1,8 @@
 .btn {
+  &.btn-secondary,
   &.btn-warning,
   &.btn-success,
+  &.btn-outline-secondary:hover,
   &.btn-outline-warning:hover,
   &.btn-outline-success:hover {
     color: $white
