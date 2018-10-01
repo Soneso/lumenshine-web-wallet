@@ -43,7 +43,9 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
-      __BUILD_DATE__: utils.buildDate()
+      __BUILD_DATE__: utils.buildDate(),
+      __NODE_SCRIPT__: `'${process.env.npm_lifecycle_event}'`,
+      __BUILD_CONFIG__: process.env.BUILD_CONFIG ? `'${process.env.BUILD_CONFIG}'` : "'demo'",
     })
   ],
   module: {
