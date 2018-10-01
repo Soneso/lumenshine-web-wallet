@@ -24,7 +24,7 @@ export default {
   ],
 
   SUPPORT_MAIL: 'support@lumenshine.com',
-  FEDERATION_DOMAIN: 'lumenshine.com',
+  FEDERATION_DOMAIN: 'alpha.lumenshine.com',
 
   API_BASE: nodeScript === 'dev-local' ? 'http://localhost:9001' : 'https://alphaapi.lumenshine.com',
 
