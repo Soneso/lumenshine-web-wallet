@@ -6,7 +6,11 @@ import workerCaller from '@/util/workerCaller';
 import WalletService from '@/services/wallet';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
-StellarSdk.Network.useTestNetwork();
+if (config.IS_TEST_NETWORK) {
+  StellarSdk.Network.useTestNetwork();
+} else {
+  StellarSdk.Network.usePublicNetwork();
+}
 
 export default {
   async getWallets ({ commit, getters, dispatch }) {
