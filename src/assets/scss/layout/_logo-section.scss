@@ -1,12 +1,3 @@
-body {
-  background-image: url('../images/ui/background.svg');
-  background-repeat: no-repeat;
-  background-size: 90%;
-  background-position: -20rem 10rem;
-  width: 100%;
-  height: 100%;
-}
-
 #logo-group {
   @include clearfix;
   @extend .py-4;
@@ -45,3 +36,4 @@ body {
 #logo {
   width: 100%
 }
+

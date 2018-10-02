@@ -18,8 +18,14 @@
 @import "global/mixins";
 @import "global/reusables";
 @import "global/scrolbars";
-@import "global/layout";
+@import "layout/logo-section";
 @import "global/z-layout";
+
+
+// layout
+@import "layout/body";
+@import "layout/logo-section";
+@import "layout/footer-section";
 
 
 // atoms

@@ -1,0 +1,31 @@
+footer {
+  .language-button {
+    font-size: 2.5rem;
+
+    i:before {
+      color: $gray-500;
+    }
+  }
+
+  .footer-menu {
+    @extend .py-4;
+
+    a {
+      @extend .px-2
+    }
+  }
+
+  .soneso-logo {
+    @extend .py-4;
+
+    p {
+      @extend .m-0;
+      font-size: .75rem;
+      color: $gray-400
+    }
+
+    img {
+      width: 6rem;
+    }
+  }
+}
