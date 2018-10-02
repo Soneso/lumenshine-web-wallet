@@ -1,61 +1,42 @@
 <template>
-  <form class="form" @submit.prevent="onLoginClick">
+
+  <b-form v-if="!loading" @submit.prevent="onLoginClick">
     <div v-if="!loading">
-      <!-- <div v-if="errors.length > 0" class="error">
-        Backend errors: <br>
-        <div v-for="error in errors" :key="error.error_code">{{error}}</div>
-      </div> -->
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div class="field">
-        <div v-if="$v.email.$error" class="field__errors">
-          <div v-if="!$v.email.required">Email is required!</div>
-          <div v-if="!$v.email.email">Not valid email!</div>
-          <div v-if="!$v.email.backendHasUser">No user is registered with this email address!</div>
-        </div>
-        <input
+      <b-form-group id="login-form" label="Email" label-for="login-email">
+        <b-form-input
+          id="login-email"
           :class="{ error: $v.email.$error }"
           v-model="email"
+          :state="nameState"
           type="text"
           placeholder="Email"
           tabindex="1"
-          @blur="$v.email.$touch()">
-      </div>
-      <div class="field">
-        <div v-if="$v.password.$error" class="field__errors">
-          <div v-if="!$v.password.required">Password is required!</div>
-          <div v-if="!$v.password.decryptValid">Wrong password!</div>
-        </div>
-        <input
-          :class="{ error: $v.password.$error }"
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          tabindex="2"
-          @blur="$v.password.$touch()">
-        <br>
-        <a href="#" class="field__link" @click="onLostPasswordClick">Lost password?</a>
-      </div>
-      <div class="field">
-        <div v-if="$v.twoFactorCode.$error" class="field__errors">
-          <div v-if="!$v.twoFactorCode.numeric">2FA code should be numeric!</div>
-          <div v-if="!$v.twoFactorCode.length">2FA code should have length of 6 characters!</div>
-          <div v-if="!$v.twoFactorCode.validTfa">2FA code is invalid</div>
-          <div v-if="!$v.twoFactorCode.requiredTfa">2FA code is required</div>
-        </div>
-        <input
-          :class="{ error: $v.twoFactorCode.$error }"
-          v-model="twoFactorCode"
-          type="text"
-          placeholder="2FA Code"
-          tabindex="3"
-          @blur="$v.twoFactorCode.$touch()">
-        <br>
-        <a href="#" class="field__link" @click="onLostTfaClick">Lost 2FA Secret?</a>
-      </div>
+          aria-describedby="inputLiveHelp inputLiveFeedback"
+          required
+          @blur="$v.email.$touch()"
+        />
+        <b-form-invalid-feedback id="inputLiveFeedback">
+          <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
+          <template v-if="$v.email.$error" class="field__errors">
+            <template v-if="!$v.email.required">Email is required!</template>
+            <template v-if="!$v.email.email">Not valid email!</template>
+            <template v-if="!$v.email.backendHasUser">No user is registered with this email address!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveHelp">
+          Your full name.
+        </b-form-text>
+      </b-form-group>
+
     </div>
-    <button tabindex="4" @click.prevent="onLoginClick">Login</button><br>
-    <span>Don't have an account? Sign up <router-link to="/register">here</router-link></span>
-  </form>
+
+    <div class="text-center">
+      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">Login</b-button>
+      <br>
+      <span>Don't have an account? Sign up <router-link to="/register">here</router-link></span>
+    </div>
+  </b-form>
+
 </template>
 
 <script>
@@ -117,7 +98,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

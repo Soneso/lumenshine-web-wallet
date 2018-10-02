@@ -1,9 +1,12 @@
 <template>
-  <div class="page-box">
-    <h1>Login</h1>
-    <div v-if="inProgress">Loading...</div>
-    <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col xs="11" sm="9" md="8" lg="6">
+      <b-card header="Login" class="p-4">
+        <div v-if="inProgress">Loading...</div>
+        <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

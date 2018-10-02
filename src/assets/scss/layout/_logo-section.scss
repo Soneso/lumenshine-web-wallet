@@ -1,7 +1,7 @@
 #logo-group {
   @include clearfix;
   @extend .py-4;
-  margin: auto;
+  margin-left: calc(50% - 2.5rem);
   width: 24rem;
 
   h1 {

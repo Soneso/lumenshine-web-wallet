@@ -18,20 +18,19 @@
 @import "global/mixins";
 @import "global/reusables";
 @import "global/scrolbars";
-@import "layout/logo-section";
 @import "global/z-layout";
 
 
 // layout
-@import "layout/body";
 @import "layout/logo-section";
 @import "layout/footer-section";
 
 
 // atoms
-@import "atoms/form-elements";
+@import "atoms/body";
 @import "atoms/button";
 @import "atoms/card";
+@import "atoms/form-elements";
 @import "atoms/hovering";
 
 
