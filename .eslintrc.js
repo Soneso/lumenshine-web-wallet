@@ -9,14 +9,12 @@ module.exports = {
     browser: true,
   },
   extends: [
-    'plugin:vue/recommended', 
+    'plugin:vue/recommended',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard'
   ],
   // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
+  plugins: ['vue'],
   // add your custom rules here
   rules: {
     // allow async-await
@@ -25,13 +23,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'semi': ['error', 'always'],
     'comma-dangle': ['error', 'only-multiline'],
-    'vue/max-attributes-per-line': [2, {
-      'singleline': 5,
-      'multiline': {
-        'max': 1,
-        'allowFirstLine': false
-      }
-    }],
+    'vue/max-attributes-per-line': 'off',
     'vue/require-default-prop': 0
   }
 }
