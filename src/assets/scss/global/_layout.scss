@@ -1,0 +1,47 @@
+body {
+  background-image: url('../images/ui/background.svg');
+  background-repeat: no-repeat;
+  background-size: 90%;
+  background-position: -20rem 10rem;
+  width: 100%;
+  height: 100%;
+}
+
+#logo-group {
+  @include clearfix;
+  @extend .py-4;
+  margin: auto;
+  width: 24rem;
+
+  h1 {
+    @extend .text-uppercase;
+    @extend .pt-2;
+    @extend .my-0;
+    font-size: 18px;
+    color: $blue
+  }
+
+  h2 {
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  .logo, .text {
+    float: left;
+  }
+
+  .logo {
+    @extend .p-1;
+    width: 5rem;
+  }
+
+  .text {
+    @extend .pl-2;
+    @extend .pt-3;
+    width: 19rem
+  }
+}
+
+#logo {
+  width: 100%
+}

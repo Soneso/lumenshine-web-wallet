@@ -1,15 +1,25 @@
 <template>
   <header :class="[ 'header', { 'header--full': $route.meta.fullHeader } ]">
-    <h2>{{ config.APP_TITLE }}</h2>
-    <h3>{{ config.APP_SUBTITLE }}</h3>
+    <div id="logo-group">
+      <div class="logo">
+        <img id="logo" src="../assets/images/ui/logo.svg">
+      </div>
+      <div class="text">
+        <h1>{{ config.APP_TITLE }}</h1>
+        <h2>{{ config.APP_SUBTITLE }}</h2>
+      </div>
+    </div>
+
     <div v-if="registrationComplete">
       <currency-ticker/>
       <p>{{ $route.meta ? $route.meta.pageName : '' }}</p>
     </div>
+
     <div v-if="authToken && !registrationComplete" class="user-info">
       <div class="user-info__email">{{ userStatus.email }}</div>
       <a href="#" class="user-info__logout" @click="onLogoutClick">Sign out</a>
     </div>
+
     <div v-if="$route.name === 'Wallets'" class="header__buttons">
       <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
         <i class="fa fa-plus"/>

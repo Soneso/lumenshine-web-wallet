@@ -2,8 +2,12 @@
   <div class="currency-ticker">
     <div v-if="pairs.length > 0">
       <swiper :options="{ loop: true, autoplay: { delay: 8000 }, direction: 'vertical' }">
-        <swiper-slide v-for="pair in pairs" :key="pair.type + pair.issuer" class="div__amounts">{{ pair.amount.format() }} {{ pair.source }} ≈ {{ pair.value.format(2) }} {{ pair.destination }}</swiper-slide>
-        <swiper-slide class="div__amounts">Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD</swiper-slide>
+        <swiper-slide v-for="pair in pairs" :key="pair.type + pair.issuer" class="div__amounts">
+          {{ pair.amount.format() }} {{ pair.source }} ≈ {{ pair.value.format(2) }} {{ pair.destination }}
+        </swiper-slide>
+        <swiper-slide class="div__amounts">
+          Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD
+        </swiper-slide>
       </swiper>
     </div>
   </div>
@@ -11,9 +15,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
 import config from '@/config';
-
 import Amount from '@/util/Amount';
 
 export default {
