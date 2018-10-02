@@ -21,7 +21,7 @@
           <div v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</div>
         </div>
         <input :class="{ error: $v.address.$error }" v-model="address" placeholder="Wallet address" @blur="$v.address.$touch()">
-        <span class="warning">*lumenshine.com</span>
+        <span class="warning">*{{ config.FEDERATION_DOMAIN }}</span>
       </div>
       <div class="form-buttons">
         <a v-if="!fieldOpen && address" href="#" class="error only-mobile" @click.prevent="onRemoveAddressClick">remove address</a>
