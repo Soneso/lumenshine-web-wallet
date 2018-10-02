@@ -1,31 +1,38 @@
-footer {
-  .language-button {
-    font-size: 2.5rem;
+.language-button {
+  font-size: 2.5rem;
 
+  &:hover {
     i:before {
-      color: $gray-500;
+      color: $info;
     }
   }
 
-  .footer-menu {
-    @extend .py-4;
+  i:before {
+    @extend %link-hoverings;
+    color: $gray-500;
+  }
+}
 
-    a {
-      @extend .px-2
-    }
+.footer-menu {
+  @extend .py-4;
+
+  a {
+    @extend .p-2;
+    background: rgba($body-bg, .75);
+    border-radius: $border-radius-lg;
+  }
+}
+
+.soneso-logo {
+  @extend .py-4;
+
+  p {
+    @extend .m-0;
+    font-size: .75rem;
+    color: $gray-400
   }
 
-  .soneso-logo {
-    @extend .py-4;
-
-    p {
-      @extend .m-0;
-      font-size: .75rem;
-      color: $gray-400
-    }
-
-    img {
-      width: 6rem;
-    }
+  img {
+    width: 6rem;
   }
 }

@@ -11,7 +11,12 @@
 
 
 // Form
-
+.form-headline {
+  @extend .m-0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: $primary
+}
 
 // Form group
 
@@ -19,7 +24,9 @@
 // Labels
 .col-form-label {
   cursor: pointer;
-  padding-left: .5rem
+  padding-left: .5rem;
+  font-weight: 500;
+  color: $gray-500;
 }
 
 .form-text,
@@ -28,6 +35,10 @@
   font-size: 12px
 }
 
+
+[id^="inputLive"] {
+  @extend .pl-2
+}
 
 // Validations
 // invalid: normal state
@@ -77,6 +88,7 @@ input {
   &[type="text"],
   &[type="search"],
   &[type="email"],
+  &[type="password"],
   &[type="url"],
   &[type="tel"],
   &[type="number"] {
@@ -85,8 +97,25 @@ input {
     &:focus {
       @extend %input-border-color-focused
     }
+
+    &::placeholder {
+      text-transform: uppercase;
+    }
+
+    &:-ms-input-placeholder {
+      text-transform: uppercase;
+    }
+
+    &:-ms-input-placeholder {
+      text-transform: uppercase;
+    }
   }
 }
+
+
+// placeholders
+
+
 
 
 // Form checkbox

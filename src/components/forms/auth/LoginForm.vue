@@ -1,39 +1,87 @@
 <template>
 
-  <b-form v-if="!loading" @submit.prevent="onLoginClick">
-    <div v-if="!loading">
-      <b-form-group id="login-form" label="Email" label-for="login-email">
-        <b-form-input
-          id="login-email"
-          :class="{ error: $v.email.$error }"
-          v-model="email"
-          :state="nameState"
-          type="text"
-          placeholder="Email"
-          tabindex="1"
-          aria-describedby="inputLiveHelp inputLiveFeedback"
-          required
-          @blur="$v.email.$touch()"
-        />
-        <b-form-invalid-feedback id="inputLiveFeedback">
-          <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
-          <template v-if="$v.email.$error" class="field__errors">
-            <template v-if="!$v.email.required">Email is required!</template>
-            <template v-if="!$v.email.email">Not valid email!</template>
-            <template v-if="!$v.email.backendHasUser">No user is registered with this email address!</template>
-          </template>
-        </b-form-invalid-feedback>
-        <b-form-text id="inputLiveHelp">
-          Your full name.
-        </b-form-text>
-      </b-form-group>
+  <b-form v-if="!loading" id="login-form" @submit.prevent="onLoginClick">
+    <!--Email field-->
+    <b-form-group>
+      <b-form-input
+        id="login-email"
+        :class="{ error: $v.email.$error }"
+        v-model="email"
+        :state="!hasUnknownError && !$v.email.$error"
+        type="text"
+        placeholder="email"
+        tabindex="1"
+        aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
+        required
+        @blur="$v.email.$touch()"/>
+      <b-form-invalid-feedback id="inputLiveEmailFeedback">
+        <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
+        <template v-if="$v.email.$error" class="field__errors">
+          <template v-if="!$v.email.required">Email is required!</template>
+          <template v-if="!$v.email.email">Not valid email!</template>
+          <template v-if="!$v.email.backendHasUser">No user is registered with this email address!</template>
+        </template>
+      </b-form-invalid-feedback>
+      <b-form-text id="inputLiveEmailHelp">
+        Your full name.
+      </b-form-text>
+    </b-form-group>
 
-    </div>
+    <!-- Password field -->
+    <b-form-group>
+      <b-form-input
+        id="login-password"
+        :class="{ error: $v.password.$error }"
+        v-model="password"
+        :state="!$v.password.$error"
+        type="password"
+        placeholder="password"
+        tabindex="2"
+        aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+        required
+        @blur="$v.password.$touch()"/>
+      <b-form-invalid-feedback id="inputLivePasswordFeedback">
+        <template v-if="$v.password.$error" class="field__errors">
+          <template v-if="!$v.password.required">Password is required!</template>
+          <template v-if="!$v.password.decryptValid">Wrong password!</template>
+        </template>
+      </b-form-invalid-feedback>
+      <b-form-text id="inputLivePasswordHelp">
+        <a href="#" @click="onLostPasswordClick">Lost password?</a>
+      </b-form-text>
+    </b-form-group>
 
+    <!-- 2FA field -->
+    <b-form-group>
+      <b-form-input
+        id="login-2fa"
+        :class="{ error: $v.twoFactorCode.$error }"
+        v-model="twoFactorCode"
+        :state="!$v.twoFactorCode.$error"
+        type="text"
+        placeholder="2FA CODE"
+        tabindex="3"
+        aria-describedby="inputLive2faHelp inputLive2faFeedback"
+        required
+        @blur="$v.twoFactorCode.$touch()"/>
+      <b-form-invalid-feedback id="inputLive2faFeedback">
+        <template v-if="$v.twoFactorCode.$error" class="field__errors">
+          <template v-if="!$v.twoFactorCode.numeric">2FA code should be numeric!</template>
+          <template v-if="!$v.twoFactorCode.length">2FA code should have length of 6 characters!</template>
+          <template v-if="!$v.twoFactorCode.validTfa">2FA code is invalid</template>
+          <template v-if="!$v.twoFactorCode.requiredTfa">2FA code is required</template>
+        </template>
+      </b-form-invalid-feedback>
+      <b-form-text id="inputLive2faHelp">
+        <a href="#" @click="onLostTfaClick">Lost 2FA Secret?</a>
+      </b-form-text>
+    </b-form-group>
+
+    <!-- submit action -->
     <div class="text-center">
       <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">Login</b-button>
       <br>
-      <span>Don't have an account? Sign up <router-link to="/register">here</router-link></span>
+      <small>Don't have an account? Sign up <router-link to="/register">here</router-link></small>
     </div>
   </b-form>
 
@@ -60,6 +108,11 @@ export default {
       password: '',
       twoFactorCode: '',
     };
+  },
+  computed: {
+    nameState () {
+      return this.email.length > 2;
+    }
   },
   methods: {
     onLoginClick () {

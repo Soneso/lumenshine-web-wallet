@@ -360,7 +360,7 @@ $input-btn-padding-y-sm:      .25rem !default;
 $input-btn-padding-x-sm:      .5rem !default;
 $input-btn-line-height-sm:    $line-height-sm !default;
 
-$input-btn-padding-y-lg:      1rem !default;
+$input-btn-padding-y-lg:      .75rem !default;
 $input-btn-padding-x-lg:      2rem !default;
 $input-btn-line-height-lg:    $line-height-lg !default;
 
@@ -401,7 +401,7 @@ $btn-border-radius:           $border-radius !default;
 $btn-border-radius-lg:        $border-radius-lg !default;
 $btn-border-radius-sm:        $border-radius-sm !default;
 
-$btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
+$btn-transition:              all .5s ease-in-out !default;
 
 
 // Forms
