@@ -2,9 +2,9 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
       <b-card class="p-4">
-        <h4 class="form-headline text-uppercase">Login</h4>
-        <div class="pb-5"><small>Please fill in the form below</small></div>
-        <div v-if="inProgress">Loading...</div>
+        <h4 class="form-headline text-uppercase pl-2">Login</h4>
+        <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
+        <div v-if="inProgress" class="py-4 px-2">Loading...</div>
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
     </b-col>

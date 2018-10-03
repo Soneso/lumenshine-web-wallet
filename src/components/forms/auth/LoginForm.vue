@@ -23,7 +23,7 @@
         </template>
       </b-form-invalid-feedback>
       <b-form-text id="inputLiveEmailHelp">
-        Your full name.
+        Your email address.
       </b-form-text>
     </b-form-group>
 
@@ -34,12 +34,20 @@
         :class="{ error: $v.password.$error }"
         v-model="password"
         :state="!$v.password.$error"
-        type="password"
+        :type="passwordIsHidden ? 'password' : 'text'"
         placeholder="password"
         tabindex="2"
         aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
         required
         @blur="$v.password.$touch()"/>
+
+      <!-- a special row that flows over the input field providing contextual actions -->
+      <b-row class="floating-icons align-right one-item">
+        <b-col>
+          <i :class="{'icon-show': passwordIsHidden, 'icon-hide': !passwordIsHidden}" @click="passwordIsHidden = !passwordIsHidden" />
+        </b-col>
+      </b-row>
+
       <b-form-invalid-feedback id="inputLivePasswordFeedback">
         <template v-if="$v.password.$error" class="field__errors">
           <template v-if="!$v.password.required">Password is required!</template>
@@ -106,6 +114,7 @@ export default {
     return {
       email: '',
       password: '',
+      passwordIsHidden: true,
       twoFactorCode: '',
     };
   },
