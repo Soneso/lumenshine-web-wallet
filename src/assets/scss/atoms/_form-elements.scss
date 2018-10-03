@@ -91,7 +91,8 @@ input {
   &[type="password"],
   &[type="url"],
   &[type="tel"],
-  &[type="number"] {
+  &[type="number"],
+  .vdp-datepicker & {
     @extend %input-border-color;
 
     &:focus {
