@@ -135,6 +135,6 @@ logBuildDates();
 
 // extend a Vue instance with important classes like i18n, router and store
 // eslint-disable no-new
-const root = new Vue(Vue.util.extend({router, store, i18n}, App));
+const root = new Vue(Vue.util.extend({ router, store, i18n }, App));
 // mount the app in the appropriate target element when the DOM content has loaded
 root.$mount('#app');

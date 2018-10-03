@@ -20,7 +20,7 @@ export default {
       const errorData = err.response.data;
       if (!errorData || err.response.status === 404) {
         const backendError = new Error('Unknown backend error');
-        backendError.data = [{error_code: -1}];
+        backendError.data = [{ error_code: -1 }];
         throw backendError;
       }
       const newError = new Error(errorData.error_message);
@@ -46,7 +46,7 @@ export default {
       const errorData = err.response.data;
       if (!errorData || err.response.status === 404) {
         const backendError = new Error('Unknown backend error');
-        backendError.data = [{error_code: -1}];
+        backendError.data = [{ error_code: -1 }];
         throw backendError;
       }
       const newError = new Error(errorData.error_message);

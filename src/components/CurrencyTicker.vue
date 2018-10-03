@@ -72,7 +72,7 @@ export default {
         .map(b => {
           const rate = this.flatCurrencyPairs.find(p => p.source === b.type && p.issuer === b.issuer);
           if (!rate) return null;
-          return {...rate, amount: b.balance, value: new Amount(`${rate.rate}`).multiply(b.balance)};
+          return { ...rate, amount: b.balance, value: new Amount(`${rate.rate}`).multiply(b.balance) };
         }).filter(x => x);
     },
   },

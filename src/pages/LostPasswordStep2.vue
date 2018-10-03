@@ -183,7 +183,7 @@ export default {
       this.setMnemonic(newMnemonic);
       const params = await this.generateSecurityData(password, newMnemonic);
 
-      await this.updateSecurityData({...params, tfa_code: this.lastTfaCode});
+      await this.updateSecurityData({ ...params, tfa_code: this.lastTfaCode });
 
       // generate new tfa secret, needed by next screen (setup screen)
       await this.resetTfa(params.public_key_188);
