@@ -1,0 +1,25 @@
+.b-form-group {
+  position: relative;
+
+  .floating-icons {
+    position: absolute;
+    top: 1rem;
+
+    .col {
+      @extend .px-1
+    }
+
+    i {
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    &.align-right {
+      right: 1rem
+    }
+
+    &.align-left {
+      left: 1rem
+    }
+  }
+}
