@@ -58,8 +58,8 @@ import {
 //   ToggleDirective,
 //   ModalDirective,
 //   ScrollspyDirective,
-  Tooltip
-//   PopoverDirective
+  Tooltip,
+  Popover
 } from 'bootstrap-vue/es/directives';
 
 // bundled version is also available
@@ -110,17 +110,17 @@ Vue.use(Modal);
 // Vue.use(Navbar);
 // Vue.use(Pagination);
 // Vue.use(PaginationNav);
-// Vue.use(Popover);
+Vue.use(Popover);
 Vue.use(Progress);
 // Vue.use(Table);
 // Vue.use(Tabs);
 Vue.use(Tooltip);
 
-// Vue.use(ToggleDirective);
-// Vue.use(ModalDirective);
-// Vue.use(ScrollspyDirective);
+// Vue.use(Toggle);
+// Vue.use(Modal);
+// Vue.use(Scrollspy);
 // Vue.use(Tooltip);
-// Vue.use(PopoverDirective);
+// Vue.use(Popover);
 
 Vue.use(Meta);
 
