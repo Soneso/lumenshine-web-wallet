@@ -1,9 +1,14 @@
 <template>
-  <div class="page-box">
-    <h1>Sign up</h1>
-    <div v-if="loading">Loading...</div>
-    <registration-form v-show="!loading && !registrationStatus.res" :loading="loading" :errors="registrationStatus.err" @submit="onRegisterSubmit"/>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4">
+        <h4 class="form-headline text-uppercase pl-2">Sign up</h4>
+        <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
+        <div v-if="loading" class="py-4 px-2">Loading...</div>
+        <registration-form v-show="!loading && !registrationStatus.res" :loading="loading" :errors="registrationStatus.err" @submit="onRegisterSubmit"/>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
