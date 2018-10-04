@@ -11,7 +11,7 @@
           <span class="left error">none</span>
           <span class="right info">Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</span>
         </span>
-        <span v-else-if="!fieldOpen">{{ address }}{{ config.FEDERATION_DOMAIN }}</span>
+        <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
         <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
       </p>
       <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
@@ -21,7 +21,7 @@
           <div v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</div>
         </div>
         <input :class="{ error: $v.address.$error }" v-model="address" placeholder="Wallet address" @blur="$v.address.$touch()">
-        <span class="warning">*lumenshine.com</span>
+        <span class="warning">*{{ config.FEDERATION_DOMAIN }}</span>
       </div>
       <div class="form-buttons">
         <a v-if="!fieldOpen && address" href="#" class="error only-mobile" @click.prevent="onRemoveAddressClick">remove address</a>
@@ -95,7 +95,7 @@ export default {
         return;
       }
       this.backendQuery = { address: this.address };
-      this.$emit('submit', this.address);
+      this.$emit('submit', this.address + '*' + config.FEDERATION_DOMAIN);
     }
   },
   validations () {

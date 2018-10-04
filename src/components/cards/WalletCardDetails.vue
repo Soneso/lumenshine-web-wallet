@@ -22,15 +22,19 @@
       @submit="onSaveWalletAddress"/>
 
     <wallet-inflation-form
+      v-if="knownDestinations"
       :loading="inflationDestinationLoading"
       :decryption-error="decryptedWallet.err"
+      :known-destinations="knownDestinations"
       :data="data"
       @submit="onSetInflationDestination"/>
 
     <wallet-currencies-form
+      v-if="knownCurrencies"
       :loading="walletDetailsLoading"
       :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
       :decryption-error="decryptedWallet.err"
+      :known-currencies="knownCurrencies"
       :data="data"
       @remove="onRemoveCurrency"
       @add="onAddCurrency"/>
@@ -154,7 +158,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet']),
+    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet', 'knownDestinationsStatus', 'knownCurrenciesStatus', 'knownDestinations', 'knownCurrencies']),
   },
   watch: {
     async homescreen (val) {
@@ -166,8 +170,16 @@ export default {
       this.saveWalletLoading = false;
     }
   },
+  created () {
+    if (this.knownDestinationsStatus.shouldLoad) {
+      this.getKnownDestinations();
+    }
+    if (this.knownCurrenciesStatus.shouldLoad) {
+      this.getKnownCurrencies();
+    }
+  },
   methods: {
-    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet']),
+    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies']),
     onCopy () {
       this.accountIDCopied = true;
     },

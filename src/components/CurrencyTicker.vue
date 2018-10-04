@@ -56,7 +56,7 @@ export default {
       return [totalBalances.XLM, ...Object.keys(totalBalances).filter(b => b !== 'XLM').map(b => totalBalances[b])];
     },
     totalUSDAmount () {
-      return this.pairs.map(p => p.value).reduce((acc, cur) => new Amount(acc).sum(cur));
+      return this.pairs.map(p => p.value).reduce((acc, cur) => new Amount(acc).plus(cur));
     },
     flatCurrencyPairs () {
       if (!this.currencyRates.res) {
@@ -74,7 +74,7 @@ export default {
         .map(b => {
           const rate = this.flatCurrencyPairs.find(p => p.source === b.type && p.issuer === b.issuer);
           if (!rate) return null;
-          return {...rate, amount: b.balance, value: new Amount(`${rate.rate}`).multiply(b.balance)};
+          return { ...rate, amount: b.balance, value: new Amount(`${rate.rate}`).multiply(b.balance) };
         }).filter(x => x);
     },
   },

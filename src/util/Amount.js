@@ -7,7 +7,7 @@ BigNumber.config({ FORMAT: {
   secondaryGroupSize: 0,
   fractionGroupSeparator: ' ',
   fractionGroupSize: 0
-}});
+} });
 
 class Amount {
   constructor (val) {

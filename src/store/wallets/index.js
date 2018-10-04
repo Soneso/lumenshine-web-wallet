@@ -58,6 +58,14 @@ function getInitialState (clearAuthToken = false) {
     sendPaymentLoading: false,
     sendPaymentResult: null,
 
+    knownDestinationsErrors: [],
+    knownDestinationsLoading: false,
+    knownDestinationsResult: null,
+
+    knownCurrenciesErrors: [],
+    knownCurrenciesLoading: false,
+    knownCurrenciesResult: null,
+
     publicKeys: config.KEEP_LOGGED_IN && !clearAuthToken
       ? parsePublicKeys(replaceNull(Vue.localStorage.get('publicKeys', null)))
       : null,

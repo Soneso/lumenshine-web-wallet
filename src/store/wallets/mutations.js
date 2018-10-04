@@ -118,6 +118,36 @@ export default {
     state.currencyRatesResult = null;
   },
 
+  SET_KNOWN_DESTINATIONS (state, msg) {
+    if (Array.isArray(msg)) {
+      msg.sort((a, b) => a.order_index - b.order_index);
+    }
+    state.knownDestinationsResult = msg;
+    state.knownDestinationsErrors = [];
+  },
+  SET_KNOWN_DESTINATIONS_LOADING (state, msg) {
+    state.knownDestinationsLoading = msg;
+  },
+  SET_KNOWN_DESTINATIONS_ERROR (state, msg) {
+    state.knownDestinationsErrors = msg;
+    state.knownDestinationsResult = null;
+  },
+
+  SET_KNOWN_CURRENCIES (state, msg) {
+    if (Array.isArray(msg)) {
+      msg.sort((a, b) => a.order_index - b.order_index);
+    }
+    state.knownCurrenciesResult = msg;
+    state.knownCurrenciesErrors = [];
+  },
+  SET_KNOWN_CURRENCIES_LOADING (state, msg) {
+    state.knownCurrenciesLoading = msg;
+  },
+  SET_KNOWN_CURRENCIES_ERROR (state, msg) {
+    state.knownCurrenciesErrors = msg;
+    state.knownCurrenciesResult = null;
+  },
+
   SET_FUND_WITH_FRIENDBOT_LOADING (state, msg) {
     state.fundWithFriendbotLoading = msg;
   },

@@ -11,4 +11,16 @@ export default {
   currencyRates: state => ({ err: state.currencyRatesErrors, loading: state.currencyRatesLoading, res: state.currencyRatesResult }),
   sendPaymentStatus: state => ({ err: state.sendPaymentErrors, loading: state.sendPaymentLoading, res: state.sendPaymentResult }),
   exchanges: state => state.exchanges,
+  knownCurrencies: state => state.knownCurrenciesResult,
+  knownCurrenciesStatus: state => ({
+    err: state.knownCurrenciesErrors,
+    loading: state.knownCurrenciesLoading,
+    shouldLoad: state.knownCurrenciesErrors.length === 0 && !state.knownCurrenciesLoading && !state.knownCurrenciesResult
+  }),
+  knownDestinations: state => state.knownDestinationsResult,
+  knownDestinationsStatus: state => ({
+    err: state.knownDestinationsErrors,
+    loading: state.knownDestinationsLoading,
+    shouldLoad: state.knownDestinationsErrors.length === 0 && !state.knownDestinationsLoading && !state.knownDestinationsResult
+  }),
 };

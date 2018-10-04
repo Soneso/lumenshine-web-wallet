@@ -6,7 +6,7 @@
     </header>
     <header v-else>
       <h3>{{ data.wallet_name }}</h3>
-      <span v-if="data.federation_address" class="warning card__federation-address">{{ data.federation_address }}{{ config.FEDERATION_DOMAIN }}</span>
+      <span v-if="data.federation_address" class="warning card__federation-address">{{ data.federation_address }}</span>
     </header>
     <section>
       <h4>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h4>
@@ -252,7 +252,7 @@ export default {
       await this.setInflationDestination({
         publicKey: this.data.public_key_0,
         secretSeed,
-        destination: this.inflationDest,
+        destination: data.destination,
       });
       this.setInflationDestLoading = false;
     },
