@@ -35,9 +35,10 @@
           <td>
             <div v-if="$v.recipient.$error" class="field__errors">
               <div v-if="!$v.recipient.required">Recipient is required!</div>
-              <div v-if="!$v.recipient.publicKey">Not valid recipient!</div>
+              <div v-if="!$v.recipient.validRecipient">Not valid recipient!</div>
               <div v-if="!$v.recipient.isTrusted">Not trusted asset!</div>
               <div v-if="!$v.recipient.canFund">Cannot fund user with other asset than XLM!</div>
+              <div v-if="!$v.recipient.noDestination">Invalid destination!</div>
             </div>
             <input :class="{ error: $v.recipient.$error }" v-model="recipient" style="width:100%" placeholder="Recepient's public key or address" @blur="$v.recipient.$touch()">
             <i class="fa fa-question-circle-o"/>
@@ -281,9 +282,10 @@ export default {
     return {
       recipient: {
         required,
-        ...validators.publicKey.call(this),
+        validRecipient: value => validators.publicKey.call(this).publicKey(value) || validators.federationAddress.call(this).federationAddress(value),
         isTrusted: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'NOT_TRUSTED'),
         canFund: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'CANNOT_FUND'),
+        noDestination: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'NO_DESTINATION'),
       },
       customAssetCode: {
         ...customAssetCodeValidators,

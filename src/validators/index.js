@@ -8,6 +8,7 @@ export default {
   email: require('./email').default,
   forename: require('./forename').default,
   lastname: require('./lastname').default,
+  federationAddress: require('./federationAddress').default,
   mnemonic: require('./mnemonic').default,
   mobilePhone: require('./mobilePhone').default,
   password: require('./password').default,

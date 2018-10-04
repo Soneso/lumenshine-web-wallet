@@ -3,6 +3,8 @@ import StellarSdk from 'stellar-sdk';
 import config from '@/config';
 import workerCaller from '@/util/workerCaller';
 
+import validators from '@/validators';
+
 import WalletService from '@/services/wallet';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
@@ -323,6 +325,18 @@ export default {
 
   async sendPayment ({ commit, dispatch, getters }, data) {
     commit('SET_SEND_PAYMENT_LOADING', true);
+
+    const hasFederationAddress = validators.federationAddress().federationAddress(data.recipient);
+    if (hasFederationAddress) {
+      try {
+        const federationRecord = await StellarSdk.FederationServer.resolve(data.recipient);
+        data.recipient = federationRecord.account_id;
+      } catch (err) {
+        commit('SET_SEND_PAYMENT_LOADING', false);
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION' }]);
+      }
+    }
+
     await dispatch('decryptWallet', { publicKey: data.publicKey, password: data.password });
     if (getters.decryptedWallet.err) {
       commit('SET_SEND_PAYMENT_LOADING', false);
