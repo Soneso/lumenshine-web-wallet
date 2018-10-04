@@ -1,10 +1,12 @@
 <template>
-  <div class="page">
-    <div v-if="wallets.loading">Loading...</div>
-    <div class="card-container">
-      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
-    </div>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4">
+        <div v-if="wallets.loading" class="py-4 px-2">Loading...</div>
+        <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -29,6 +31,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
