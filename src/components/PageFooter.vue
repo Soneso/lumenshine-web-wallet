@@ -1,5 +1,5 @@
 <template>
-  <footer class="py-5 text-center">
+  <footer class="py-4 text-center">
     <b-row class="py-2">
       <b-col>
         <router-link to="/" class="language-button">
