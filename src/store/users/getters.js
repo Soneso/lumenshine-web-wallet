@@ -17,4 +17,5 @@ export default {
   tfaData: state => state.tfaData,
   encryptedServerData: state => state.encryptedServerData,
   registrationComplete: state => state.userStatusResult && state.userStatusResult.mail_confirmed && state.userStatusResult.mnemonic_confirmed && state.userStatusResult.tfa_confirmed,
+  checkPasswordNeeded: state => state.checkPasswordNeeded,
 };

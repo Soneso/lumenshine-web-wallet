@@ -58,6 +58,10 @@ function getInitialState (clearAuthToken = false) {
     changePasswordLoading: false,
     changePasswordErrors: [],
 
+    checkPasswordLoading: false,
+    checkPasswordErrors: [],
+    checkPasswordNeeded: undefined,
+
     userStatusErrors: [],
     userStatusLoading: false,
     userStatusResult: null,

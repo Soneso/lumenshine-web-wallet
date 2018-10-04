@@ -252,4 +252,16 @@ export default {
     }
     commit('SET_CHANGE_PASSWORD_LOADING', false);
   },
+
+  async checkResetPasswordNeeded ({ commit }) {
+    commit('SET_CHECK_PASSWORD_LOADING', true);
+    commit('SET_CHECK_PASSWORD_ERROR', []);
+    try {
+      const res = await UserService.isResetPasswordNeeded();
+      commit('SET_CHECK_PASSWORD_NEEDED', res.data);
+    } catch (err) {
+      commit('SET_CHECK_PASSWORD_ERROR', err.data);
+    }
+    commit('SET_CHECK_PASSWORD_LOADING', false);
+  },
 };

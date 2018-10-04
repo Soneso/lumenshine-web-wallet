@@ -101,4 +101,8 @@ export default {
     const response = await apiBase.post('/portal/user/dashboard/confirm_new_2fa_secret', { tfa_code: tfaCode });
     return response;
   },
+  async isResetPasswordNeeded () {
+    const response = await apiBase.get('/portal/user/auth/need_2fa_reset_pwd');
+    return response;
+  },
 };

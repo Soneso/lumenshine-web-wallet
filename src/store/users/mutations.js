@@ -127,5 +127,18 @@ export default {
   },
   SET_CHANGE_PASSWORD_ERROR (state, msg) {
     state.changePasswordErrors = msg;
+    state.changePasswordLoading = false;
   },
+
+  SET_CHECK_PASSWORD_LOADING (state, msg) {
+    state.checkPasswordLoading = msg;
+  },
+  SET_CHECK_PASSWORD_ERROR (state, msg) {
+    state.checkPasswordErrors = msg;
+    state.checkPasswordLoading = false;
+  },
+  SET_CHECK_PASSWORD_NEEDED (state, msg) {
+    state.checkPasswordNeeded = msg.need2fa_reset_pwd;
+    state.checkPasswordLoading = false;
+  }
 };

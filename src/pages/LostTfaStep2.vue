@@ -59,7 +59,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['lostTfaStatus', 'confirmEmailStatus', 'userAuthData', 'resetTfaStatus', 'tfaData', 'registration2FAStatus', 'userStatus']),
+    ...mapGetters(['lostTfaStatus', 'confirmEmailStatus', 'userAuthData', 'resetTfaStatus', 'tfaData', 'registration2FAStatus', 'userStatus', 'checkPasswordNeeded']),
     loading () {
       return this.inProgress || this.lostTfaStatus.loading;
     },
@@ -86,11 +86,16 @@ export default {
         await this.getUserAuthData();
       }
       await this.getUserStatus();
+      await this.checkResetPasswordNeeded();
+      if (!this.checkPasswordNeeded) {
+        await this.resetTfa();
+        this.step = 'tfa';
+      }
       this.inProgress = false;
     }
   },
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2']),
+    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded']),
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
       if (!this.userAuthData) {
