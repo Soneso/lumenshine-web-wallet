@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" style="display: block">
     <div class="modal__bg" @click="onCloseClick"/>
     <div class="modal__content">
       <div class="modal__header">

@@ -20,14 +20,14 @@
                 :value="fields[index]"
                 type="text"
                 placeholder="Position"
-                @input="e => onChangeInput(e, index)"/>
+                @input="value => onChangeInput(value, index)"/>
             </b-form-group>
           </b-col>
         </b-row>
         <hr>
-        <button type="submit" variant="secondary" class="btn-rounded text-uppercase" @click="onBack">Go back and show mnemonic</button>
-        <button type="submit" variant="success" class="btn-rounded text-uppercase" @click="onVerify">Finish setup</button>
-        <span v-if="hasErrors" class="text-danger">Invalid input!<br></span>
+        <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onVerify">Finish</b-button>
+        <b-button type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onBack">Go back and show mnemonic</b-button>
+        <div v-if="hasErrors" class="text-danger py-2">Invalid input!<br></div>
       </b-card>
     </b-col>
   </b-row>
@@ -35,6 +35,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
+// import config from '@/config';
 
 function getWeakRandomInt (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -65,20 +67,22 @@ export default {
     }
   },
   created () {
-    // TODO: Just for test
-    const mnemonic = this.mnemonic.split(' ');
-    this.fields = this.mnemonicRandomWords.map(w => mnemonic.indexOf(w) + 1);
+    // if (config.IS_TEST_NETWORK) {
+    //   const mnemonic = this.mnemonic.split(' ');
+    //   this.fields = this.mnemonicRandomWords.map(w => mnemonic.indexOf(w) + 1);
+    // }
   },
   methods: {
     ...mapActions(['confirmMnemonic']),
-    onChangeInput (e, k) {
+    onChangeInput (value, k) {
+      this.hasErrors = false;
       const nFields = this.fields.slice();
-      if (e.target.value === '') {
+      if (value === '') {
         nFields[k] = '';
         this.fields = nFields;
         return;
       }
-      nFields[k] = parseInt(e.target.value, 10);
+      nFields[k] = parseInt(value, 10);
       if (isNaN(nFields[k])) {
         this.fields = this.fields.slice(); // force update
         return;
@@ -94,7 +98,6 @@ export default {
           this.hasErrors = true;
         }
       });
-      console.log('verify', this.hasErrors);
       if (this.hasErrors) {
         return;
       }

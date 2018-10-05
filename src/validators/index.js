@@ -13,6 +13,7 @@ export default {
   mobilePhone: require('./mobilePhone').default,
   password: require('./password').default,
   publicKey: require('./publicKey').default,
+  secretSeed: require('./secretSeed').default,
   state: require('./state').default,
   streetAddress: require('./streetAddress').default,
   streetNumber: require('./streetNumber').default,
