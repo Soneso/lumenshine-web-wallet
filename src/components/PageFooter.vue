@@ -9,31 +9,22 @@
     </b-row>
     <b-row class="py-2 footer-menu">
       <b-col>
-        <!-- No user was logged in -->
-        <div v-if="!authToken" class="menu">
-          <router-link to="/about">About</router-link>
-          <router-link to="/help">Help</router-link>
-          <router-link to="/login">Login</router-link>
-          <router-link to="/register">Sign up</router-link>
-          <router-link to="/impressum">Impressum</router-link>
-          <a href="https://soneso.com" target="_blank">Soneso</a>
-        </div>
-
-        <!-- Partial user was logged in (without all registration steps completed) -->
-        <div v-if="authToken && authTokenType === 'partial'" class="menu">
-          <router-link to="/about">About</router-link>
-          <router-link to="/help">Help</router-link>
-          <router-link to="/">&nbsp;</router-link>
-          <a href="/login" @click="onLogoutClick">Sign out</a>
-          <router-link to="/impressum">Impressum</router-link>
-          <a href="https://soneso.com" target="_blank">Soneso</a>
-        </div>
-
-        <!-- Logged in user -->
-        <div v-if="authToken && authTokenType !== 'partial'" class="menu menu--short">
-          <a href="https://soneso.com" target="_blank">Developed by Soneso</a>
-          <router-link to="/impressum">Impressum</router-link>
-          <a href="#"><i class="fa fa-flag"/></a>
+        <div class="menu">
+          <!-- No user was logged in OR partial user was logged in (without all registration steps completed) -->
+          <template v-if="!authToken || authToken && authTokenType === 'partial'">
+            <router-link to="/about">About</router-link>
+            <router-link to="/help">Help</router-link>
+          </template>
+          <!-- No user logged in -->
+          <template v-else-if="!authToken">
+            <router-link to="/login">Login</router-link>
+            <router-link to="/register">Sign up</router-link>
+          </template>
+          <!-- Partial OR Logged in user -->
+          <template v-else>
+            <a href="#" @click.prevent="onLogoutClick">Sign out</a>
+            <router-link to="/impressum">Impressum</router-link>
+          </template>
         </div>
       </b-col>
     </b-row>
@@ -41,7 +32,9 @@
     <b-row class="py-2 soneso-logo">
       <b-col class="text-uppercase">
         <p>Powered by</p>
-        <img class="not-stretching" src="../assets/images/ui/soneso-logo.svg">
+        <a href="https://soneso.com" target="_blank">
+          <img class="not-stretching" src="../assets/images/ui/soneso-logo.svg">
+        </a>
       </b-col>
     </b-row>
 
@@ -70,8 +63,7 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    async onLogoutClick (e) {
-      e.preventDefault();
+    async onLogoutClick () {
       await this.logout();
       this.$router.push({ name: 'Home' });
     }

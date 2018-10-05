@@ -302,12 +302,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.centered {
-  text-align: center;
-}
-.wallet-link {
-  color: #222;
-}
-</style>

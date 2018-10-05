@@ -90,7 +90,7 @@ export default {
         this.$router.push(redirectRes);
       }
     },
-    async onLoginClick () {
+    onLoginClick () {
       this.$router.push({ name: 'Login' });
     }
   }
