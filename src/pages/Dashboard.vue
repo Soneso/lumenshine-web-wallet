@@ -1,10 +1,8 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
-      <b-card class="p-4">
-        <div v-if="wallets.loading" class="py-4 px-2">Loading...</div>
-        <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
-      </b-card>
+      <div v-if="wallets.loading" class="py-4 px-2">Loading...</div>
+      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
     </b-col>
   </b-row>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['card', {'card--wide': balances && balances.length > 1}]">
+  <b-card :class="['p-4 my-4', 'card', {'card--wide': balances && balances.length > 1}]">
     <header v-if="!data.stellar_data">
       <h3>{{ data.wallet_name }}</h3>
       <span class="error">(not funded)</span>
@@ -132,7 +132,7 @@
 
       <p>Details<br> Press the Details button to see all details about your Wallet.</p>
     </modal>
-  </div>
+  </b-card>
 </template>
 
 <script>
