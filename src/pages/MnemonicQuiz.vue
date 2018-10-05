@@ -25,8 +25,8 @@
           </b-col>
         </b-row>
         <hr>
-        <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onVerify">Finish</b-button>
         <b-button type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onBack">Go back and show mnemonic</b-button>
+        <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onVerify">Finish</b-button>
         <div v-if="hasErrors" class="text-danger py-2">Invalid input!<br></div>
       </b-card>
     </b-col>

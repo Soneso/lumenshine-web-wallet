@@ -7,24 +7,26 @@
       <div class="text">
         <h1>{{ config.APP_TITLE }}</h1>
         <h2>{{ config.APP_SUBTITLE }}</h2>
+
+        <div v-if="registrationComplete">
+          <currency-ticker/>
+          <p>{{ $route.meta ? $route.meta.pageName : '' }}</p>
+        </div>
+
+        <small v-if="authToken && !registrationComplete" class="user-info">
+          <div class="user-info-email">
+            {{ userStatus.email }}
+            <a href="#" class="user-info-logout" @click="onLogoutClick">Sign out</a>
+          </div>
+        </small>
+
+        <div v-if="$route.name === 'Wallets'" class="header-buttons">
+          <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
+            <i class="fa fa-plus"/>
+            <span class="header-button-description">Add Wallet</span>
+          </a>
+        </div>
       </div>
-    </div>
-
-    <div v-if="registrationComplete">
-      <currency-ticker/>
-      <p>{{ $route.meta ? $route.meta.pageName : '' }}</p>
-    </div>
-
-    <div v-if="authToken && !registrationComplete" class="user-info">
-      <div class="user-info__email">{{ userStatus.email }}</div>
-      <a href="#" class="user-info__logout" @click="onLogoutClick">Sign out</a>
-    </div>
-
-    <div v-if="$route.name === 'Wallets'" class="header__buttons">
-      <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
-        <i class="fa fa-plus"/>
-        <span class="header__button-description">Add Wallet</span>
-      </a>
     </div>
   </header>
 </template>
