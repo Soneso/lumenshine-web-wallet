@@ -1,23 +1,36 @@
 <template>
-  <div class="page-box form">
-    <h1>Setup Wallet</h1>
-    <h2>Step 3 of 3</h2>
-    <h3>Prove noting of mnemonic</h3>
-    <p>To prove the noting of your mnemonic, please complete following quiz.</p>
-    <hr>
-    <p>Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</p>
-    <p>The first word starts at position one.</p>
-    <table>
-      <tr v-for="(word, key) in mnemonicRandomWords" :key="word">
-        <td>{{ word }}</td>
-        <td><input :class="{ error: hasErrors }" :value="fields[key]" type="text" placeholder="Position" @input="e => onChangeInput(e, key)"></td>
-      </tr>
-    </table>
-    <hr>
-    <span v-if="hasErrors" class="error">Invalid input!<br></span>
-    <button @click="onVerify">Finish setup</button>
-    <button @click="onBack">Go back and show mnemonic</button>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="9" md="7" lg="6" xl="5">
+      <b-card class="p-4 text-center">
+        <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
+        <small class="text-secondary">Step 3 of 3</small>
+        <h6 class="text-danger py-3">Prove noting of mnemonic</h6>
+        <p>To prove the noting of your mnemonic, please complete following quiz.</p>
+        <hr>
+        <p>Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</p>
+        <p>The first word starts at position one.</p>
+
+        <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" class="w-75 m-auto">
+          <b-col cols="4">{{ word }}</b-col>
+          <b-col cols="8">
+            <b-form-group>
+              <b-form-input
+                id="login-email"
+                :class="{ error: hasErrors }"
+                :value="fields[index]"
+                type="text"
+                placeholder="Position"
+                @input="e => onChangeInput(e, index)"/>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <hr>
+        <button type="submit" variant="secondary" class="btn-rounded text-uppercase" @click="onBack">Go back and show mnemonic</button>
+        <button type="submit" variant="success" class="btn-rounded text-uppercase" @click="onVerify">Finish setup</button>
+        <span v-if="hasErrors" class="text-danger">Invalid input!<br></span>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -95,26 +108,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-input {
-  min-width: auto !important;
-  width: 90px !important;
-  display: inline-block;
-  border: 1px solid #666;
-  padding: 5px;
-  &.error {
-    background: rgb(255, 229, 229);
-    border: 1px solid red;
-  }
-}
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-}
-table {
-  width: 200px;
-  margin: 0 auto;
-  text-align: center;
-}
-</style>

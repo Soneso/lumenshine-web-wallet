@@ -17,7 +17,6 @@
       </b-card>
     </b-col>
   </b-row>
-
 </template>
 
 <script>

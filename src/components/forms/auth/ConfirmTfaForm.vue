@@ -14,7 +14,7 @@
         <!--tfaCode field-->
         <b-form-group>
           <b-form-input
-            id="login-email"
+            id="tfa-code"
             :class="{ error: $v.tfaCode.$error }"
             v-model="tfaCode"
             :state="!$v.tfaCode.$error"
