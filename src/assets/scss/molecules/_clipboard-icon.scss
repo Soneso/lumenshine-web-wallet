@@ -1,0 +1,12 @@
+.icon-copy {
+  &.clipboard {
+    font-size: 1.35rem;
+    cursor: pointer;
+    position: relative;
+    top: .25rem;
+
+    &:before {
+      color: $info
+    }
+  }
+}

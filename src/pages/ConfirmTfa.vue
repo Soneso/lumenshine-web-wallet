@@ -1,11 +1,15 @@
 <template>
-  <div class="page-box form">
-    <h1>Setup Wallet</h1>
-    <h2>Step 1 of 3</h2>
-    <h3>2 Factor Authentication (2FA)</h3>
-    <div class="warning">For security reasons, your wallet will be protected by 2 Factor Authentication (2FA).</div>
-    <confirm-tfa-form :tfa-data="tfaData" :loading="loading" :errors="registration2FAStatus.err" :decrypt-error="decryptError" @submit="onSubmitClick"/>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="9" md="7" lg="6" xl="5">
+      <b-card class="p-4 text-center">
+        <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
+        <small class="text-secondary">Step 1 of 3</small>
+        <h6 class="text-danger py-3">2 Factor Authentication (2FA)</h6>
+        <div class="text-danger pb-3">For security reasons, your wallet will be protected by 2FA.</div>
+        <confirm-tfa-form :tfa-data="tfaData" :loading="loading" :errors="registration2FAStatus.err" :decrypt-error="decryptError" @submit="onSubmitClick"/>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -54,12 +58,9 @@ export default {
     onCopy (e) {
       alert('You just copied: ' + e.text);
     },
-    onError (e) {
+    onError () {
       alert('Failed to copy texts');
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

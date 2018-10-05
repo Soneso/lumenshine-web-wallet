@@ -41,7 +41,7 @@
     <b-row class="py-2 soneso-logo">
       <b-col class="text-uppercase">
         <p>Powered by</p>
-        <img src="../assets/images/ui/soneso-logo.svg">
+        <img class="not-stretching" src="../assets/images/ui/soneso-logo.svg">
       </b-col>
     </b-row>
 

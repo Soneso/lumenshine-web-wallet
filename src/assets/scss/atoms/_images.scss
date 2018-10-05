@@ -1,0 +1,6 @@
+img {
+  &:not(.not-stretching) {
+    width: 100%;
+    height: auto;
+  }
+}

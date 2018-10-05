@@ -11,7 +11,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
 import WalletCard from '@/components/cards/WalletCard';
 
 export default {
@@ -27,7 +26,7 @@ export default {
     this.getWallets();
   },
   methods: {
-    ...mapActions(['getWallets']),
+    ...mapActions(['getWallets'])
   }
 };
 </script>

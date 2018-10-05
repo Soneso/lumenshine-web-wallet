@@ -2,12 +2,13 @@
 
   <b-form v-if="!loading" id="login-form" @submit.prevent="onLoginClick">
     <!--Email field-->
+    <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
     <b-form-group>
       <b-form-input
         id="login-email"
         :class="{ error: $v.email.$error }"
         v-model="email"
-        :state="!hasUnknownError && !$v.email.$error"
+        :state="!$v.email.$error"
         type="text"
         placeholder="email"
         tabindex="1"
@@ -15,7 +16,6 @@
         required
         @blur="$v.email.$touch()"/>
       <b-form-invalid-feedback id="inputLiveEmailFeedback">
-        <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
         <template v-if="$v.email.$error" class="field__errors">
           <template v-if="!$v.email.required">Email is required!</template>
           <template v-if="!$v.email.email">Not valid email!</template>
