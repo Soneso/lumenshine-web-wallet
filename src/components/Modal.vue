@@ -1,10 +1,10 @@
 <template>
-  <div class="modal" style="display: block">
+  <div class="modal" style="display: block; background: #fff;">
     <div class="modal__bg" @click="onCloseClick"/>
     <div class="modal__content">
       <div class="modal__header">
         <slot name="title"/>
-        <a href="#" @click="onCloseClick"><i class="fa fa-close"/></a>
+        <a href="#" @click="onCloseClick"><i class="fa fa-close">X</i></a>
       </div>
       <div class="modal__content-wrapper">
         <slot/>
@@ -20,7 +20,7 @@ export default {
     onCloseClick (e) {
       e.preventDefault();
       this.$emit('close');
-    }
+    },
   }
 };
 </script>
