@@ -55,7 +55,7 @@
         </template>
       </b-form-invalid-feedback>
       <b-form-text id="inputLivePasswordHelp">
-        <a href="#" @click="onLostPasswordClick">Lost password?</a>
+        <a href="#" @click.prevent="onLostPasswordClick">Lost password?</a>
       </b-form-text>
     </b-form-group>
 
@@ -71,7 +71,8 @@
         tabindex="3"
         aria-describedby="inputLive2faHelp inputLive2faFeedback"
         required
-        @blur="$v.twoFactorCode.$touch()"/>
+        @input="onTwoFactorCodeInput(twoFactorCode)"
+        @blur="onTwoFactorCodeBlur(twoFactorCode)"/>
       <b-form-invalid-feedback id="inputLive2faFeedback">
         <template v-if="$v.twoFactorCode.$error" class="field__errors">
           <template v-if="!$v.twoFactorCode.numeric">2FA code should be numeric!</template>
@@ -81,7 +82,7 @@
         </template>
       </b-form-invalid-feedback>
       <b-form-text id="inputLive2faHelp">
-        <a href="#" @click="onLostTfaClick">Lost 2FA Secret?</a>
+        <a href="#" @click.prevent="onLostTfaClick">Lost 2FA Secret?</a>
       </b-form-text>
     </b-form-group>
 
@@ -132,13 +133,17 @@ export default {
       this.backendQuery = { email: this.email, password: this.password, twoFactorCode: this.twoFactorCode };
       this.$emit('submit', this.email, this.password, this.twoFactorCode);
     },
-    onLostPasswordClick (e) {
-      e.preventDefault();
+    onLostPasswordClick () {
       this.$router.push({ name: 'LostPasswordStep1' });
     },
-    onLostTfaClick (e) {
-      e.preventDefault();
+    onLostTfaClick () {
       this.$router.push({ name: 'LostTfaStep1' });
+    },
+    onTwoFactorCodeInput () {
+      this.twoFactorCode = this.twoFactorCode.replace(/(\d)\s+(?=\d)/g, '');
+    },
+    onTwoFactorCodeBlur () {
+      this.$v.twoFactorCode.$touch();
     }
   },
   validations () {

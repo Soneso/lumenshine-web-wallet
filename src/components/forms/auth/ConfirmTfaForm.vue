@@ -23,7 +23,8 @@
             tabindex="1"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
             required
-            @blur="$v.tfaCode.$touch()"/>
+            @input="onTwoFactorCodeInput(twoFactorCode)"
+            @blur="onTwoFactorCodeBlur(twoFactorCode)"/>
 
           <b-form-invalid-feedback id="inputLive2FACodeFeedback">
             <template v-if="$v.tfaCode.$error" class="field__errors">
@@ -71,6 +72,12 @@ export default {
       }
       this.backendQuery = { tfaCode: this.tfaCode };
       this.$emit('submit', this.tfaCode);
+    },
+    onTwoFactorCodeInput () {
+      this.tfaCode = this.tfaCode.replace(/(\d)\s+(?=\d)/g, '');
+    },
+    onTwoFactorCodeBlur () {
+      this.$v.tfaCode.$touch();
     }
   },
   validations () {
