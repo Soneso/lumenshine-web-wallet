@@ -1,14 +1,13 @@
 #logo-group {
   @include clearfix;
   @extend .py-4;
-  margin-left: calc(50% - 2.5rem);
-  width: 24rem;
+  margin-left: calc(50% - 3rem);
 
   h1 {
     @extend .text-uppercase;
     @extend .pt-2;
     @extend .my-0;
-    font-size: 18px;
+    font-size: 17px;
     color: $blue
   }
 
@@ -17,19 +16,20 @@
     font-weight: 300;
   }
 
-  .logo, .text {
-    float: left;
+  @include media-breakpoint-up(sm) {
+    .logo, .text {
+      float: left;
+    }
   }
 
   .logo {
     @extend .p-1;
-    width: 5rem;
+    width: 6rem;
   }
 
   .text {
-    @extend .pl-2;
-    @extend .pt-3;
-    width: 19rem
+    width: 13rem;
+    color: $gray-500
   }
 }
 
