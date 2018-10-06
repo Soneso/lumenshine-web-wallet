@@ -10,7 +10,7 @@
           <div v-else>
             <div class="py-3">
               <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onCheckConfirmation">Continue</b-button>
-              <div v-if="alreadyConfirmedFailed" class="text-danger">Please confirm your email address first.</div>
+              <div v-if="alreadyConfirmedFailed" class="text-danger pt-2">Please confirm your email address first.</div>
             </div>
             <br>
             <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onResendEmail">Resend confirmation email</b-button>
