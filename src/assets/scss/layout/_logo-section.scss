@@ -7,12 +7,12 @@
     @extend .text-uppercase;
     @extend .pt-2;
     @extend .my-0;
-    font-size: 17px;
+    font-size: 1.0625rem;
     color: $blue
   }
 
   h2 {
-    font-size: 13px;
+    font-size: .8rem;
     font-weight: 300;
   }
 
@@ -30,6 +30,12 @@
   .text {
     width: 13rem;
     color: $gray-500
+  }
+
+  .user-info {
+    @extend %text-ellipsis;
+    font-size: .75rem;
+    color: $body-color
   }
 }
 

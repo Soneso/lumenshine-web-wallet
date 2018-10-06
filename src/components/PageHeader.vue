@@ -14,7 +14,7 @@
 
         <small v-if="authToken && !registrationComplete" class="user-info">
           <div class="user-info-email">
-            {{ userStatus.email }}
+            {{ userStatus.email }} <br>
             <a href="#" class="user-info-logout" @click="onLogoutClick">Sign out</a>
           </div>
         </small>
