@@ -7,7 +7,7 @@
         Your 2FA Secret: {{ tfaData.tfa_secret }}
         <i v-clipboard:copy="tfaData.tfa_secret" v-b-tooltip="'2FA secret copied to clipboard!'" class="icon-copy clipboard"/>
       </strong>
-      <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="w-75 m-auto"></p>
+      <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img"></p>
       <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
       <template v-if="hasUnknownError" class="error">Unknown backend error!<br></template>
       <p class="w-50 pt-4 m-auto">
