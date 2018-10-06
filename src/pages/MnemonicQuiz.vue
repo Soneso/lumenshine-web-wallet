@@ -4,29 +4,31 @@
       <b-card class="p-4 text-center">
         <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
         <small class="text-secondary">Step 3 of 3</small>
-        <h6 class="text-danger py-3">Prove noting of mnemonic</h6>
+        <h6 class="text-danger pt-3">Prove noting of mnemonic</h6>
         <p>To prove the noting of your mnemonic, please complete following quiz.</p>
-        <hr>
+        <hr class="divider light">
         <p>Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</p>
         <p>The first word starts at position one.</p>
 
-        <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" class="w-75 m-auto">
-          <b-col cols="4">{{ word }}</b-col>
-          <b-col cols="8">
+        <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" class="w-50 m-auto">
+          <b-col cols="6" class="text-right px-2">
+            <div class="pt-2">{{ word }}</div>
+          </b-col>
+          <b-col cols="6" class="px-2">
             <b-form-group>
               <b-form-input
                 id="login-email"
-                :class="{ error: hasErrors }"
+                :class="['default-placeholders', { error: hasErrors }]"
                 :value="fields[index]"
                 type="text"
-                placeholder="Position"
+                placeholder="position"
                 @input="value => onChangeInput(value, index)"/>
             </b-form-group>
           </b-col>
         </b-row>
-        <hr>
-        <b-button type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onBack">Go back and show mnemonic</b-button>
-        <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onVerify">Finish</b-button>
+        <b-button type="submit" variant="info" size="lg" class="btn-rounded mb-4" @click="onVerify">Finish</b-button>
+        <br>
+        <b-button type="submit" variant="warning" size="lg" class="btn-rounded" @click="onBack">Go back and show mnemonic</b-button>
         <div v-if="hasErrors" class="text-danger py-2">Invalid input!<br></div>
       </b-card>
     </b-col>

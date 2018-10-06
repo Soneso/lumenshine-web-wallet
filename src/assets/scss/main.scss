@@ -17,6 +17,7 @@
 @import "global/variables";
 @import "global/mixins";
 @import "global/reusables";
+@import "global/typography";
 @import "global/scrolbars";
 @import "global/z-layout";
 
@@ -33,15 +34,18 @@
 @import "atoms/hovering";
 @import "atoms/images";
 @import "atoms/bar-code-img";
+@import "atoms/hr";
 
 
 // molecules
+@import "molecules/ul";
 @import "molecules/card";
 @import "molecules/switch";
 @import "molecules/vue-datepicker";
 @import "molecules/forms-inline-actions";
 @import "molecules/button-group";
 @import "molecules/clipboard-icon";
+@import "molecules/words";
 
 
 // clusters

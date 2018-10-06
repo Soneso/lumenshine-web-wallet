@@ -1,0 +1,32 @@
+hr {
+  &.divider {
+
+    &.light {
+      border-top-color: $gray-100
+    }
+
+    &.primary {
+      border-top-color: lighten($primary, 25%)
+    }
+
+    &.secondary {
+      border-top-color: lighten($secondary, 25%)
+    }
+
+    &.info {
+      border-top-color: lighten($info, 25%)
+    }
+
+    &.danger {
+      border-top-color: lighten($danger, 25%)
+    }
+
+    &.warning {
+      border-top-color: lighten($warning, 25%)
+    }
+
+    &.white {
+      border-top-color: rgba($white, .5)
+    }
+  }
+}

@@ -1,11 +1,6 @@
-.text-uppercase {
-  text-transform: uppercase;
-}
-
-.text-lowercase {
-  text-transform: lowercase;
-}
-
-.text-capitalize {
-  text-transform: capitalize;
+// gray text colors
+@each $item, $color in $grays {
+  .text-gray-#{$item} {
+    color: $color
+  }
 }

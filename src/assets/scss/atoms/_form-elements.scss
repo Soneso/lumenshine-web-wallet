@@ -99,24 +99,21 @@ input {
       @extend %input-border-color-focused
     }
 
-    &::placeholder {
-      text-transform: uppercase;
-    }
+    &:not(.default-placeholders) {
+      &::placeholder {
+        text-transform: uppercase;
+      }
 
-    &:-ms-input-placeholder {
-      text-transform: uppercase;
-    }
+      &:-ms-input-placeholder {
+        text-transform: uppercase;
+      }
 
-    &:-ms-input-placeholder {
-      text-transform: uppercase;
+      &:-ms-input-placeholder {
+        text-transform: uppercase;
+      }
     }
   }
 }
-
-
-// placeholders
-
-
 
 
 // Form checkbox

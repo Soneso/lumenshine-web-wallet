@@ -89,7 +89,7 @@
     <div class="text-center">
       <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">Login</b-button>
       <br>
-      <small>Don't have an account? Sign up <router-link to="/register">here</router-link></small>
+      <small class="text-gray-500">Don't have an account? Sign up <router-link to="/register">here</router-link></small>
     </div>
   </b-form>
 

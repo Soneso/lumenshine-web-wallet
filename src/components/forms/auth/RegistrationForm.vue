@@ -444,7 +444,7 @@
     <div class="text-center">
       <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
       <br>
-      <small>Already have an account? Login <router-link to="/login">here</router-link></small>
+      <small class="text-gray-500">Already have an account? Login <router-link to="/login">here</router-link></small>
     </div>
   </form>
 </template>
