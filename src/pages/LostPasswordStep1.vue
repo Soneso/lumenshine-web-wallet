@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
       <b-card class="p-4 single-card text-center">
-        <h4 class="form-headline text-uppercase pb-3">Lost Password</h4>
+        <p class="form-headline pb-3">Lost Password</p>
         <div v-if="loading" class="py-4 px-2">Loading...</div>
         <template v-if="emailSuccess">
           <small class="text-success">Password lost email sent</small>
