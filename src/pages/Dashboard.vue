@@ -1,8 +1,12 @@
 <template>
   <b-row align-h="center" align-v="center">
-    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
-      <div v-if="wallets.loading" class="py-4 px-2">Loading...</div>
-      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
+    <b-col cols="8" sm="12" md="8" lg="8" xl="8">
+      <b-container fluid>
+        <div v-if="wallets.loading" class="py-4 px-2">Loading...</div>
+        <b-row align-h="start" align-v="center">
+          <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
+        </b-row>
+      </b-container>
     </b-col>
   </b-row>
 </template>

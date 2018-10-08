@@ -50,33 +50,102 @@
         <a href="#" class="error only-desktop" @click.prevent="addCurrency = false">cancel</a>
         <br>
 
-        <ul class="button-group">
-          <li :class="['button-group__button', {'button-group__button--active': addCurrencyFormType === 'known'}]"><button @click="onTabChange('known')">Known Currencies</button></li>
-          <li :class="['button-group__button', {'button-group__button--active': addCurrencyFormType === 'fields'}]"><button @click="onTabChange('fields')">Provide Currency Data</button></li>
-        </ul>
+        <b-button-group>
+          <b-button :disabled="addCurrencyFormType === 'known'" variant="default" @click="onTabChange('known')">Known Currencies</b-button>
+          <b-button :disabled="addCurrencyFormType === 'fields'" variant="default" @click="onTabChange('fields')">Provide Currency Data</b-button>
+        </b-button-group>
 
         <div v-if="addCurrencyFormType === 'fields'" class="tab-page">
           <div>
-            <div v-if="$v.assetCode.$error" class="field__errors">
-              <div v-if="!$v.assetCode.required">Asset code is required</div>
-              <div v-if="!$v.assetCode.validAssetCode">Invalid asset code</div>
-            </div>
-            <input :class="{ error: $v.assetCode.$error }" v-model="assetCode" type="text" placeholder="Currency/asset code, e.g. MOBI" @blur="$v.assetCode.$touch()">
-            <br>
+            <b-form-group label="Public key of currency issuer" label-for="assetCodeInput">
+              <b-form-input
+                id="assetCodeInput"
+                :class="{ error: $v.assetCode.$error }"
+                v-model="assetCode"
+                :state="!$v.assetCode.$error"
+                type="text"
+                placeholder="Currency/asset code, e.g. MOBI"
+                aria-describedby="inputLiveAssetCodeHelp inputLiveAssetCodeFeedback"
+                required
+                @blur="$v.assetCode.$touch()"/>
+              <b-form-invalid-feedback id="inputLiveAssetCodeFeedback">
+                <template v-if="$v.assetCode.$error" class="field__errors">
+                  <template v-if="!$v.assetCode.required">Asset code is required</template>
+                  <template v-if="!$v.assetCode.validAssetCode">Invalid asset code</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveAssetCodeHelp">
+                Currency/asset code, e.g. MOBI
+              </b-form-text>
+            </b-form-group>
 
-            <div v-if="$v.issuer.$error" class="field__errors">
-              <div v-if="!$v.issuer.required">Issuer is required</div>
-              <div v-if="!$v.issuer.publicKey">Invalid issuer</div>
-              <div v-if="!$v.issuer.validIssuer">Issuer does not exists</div>
-            </div>
-            <input :class="{ error: $v.issuer.$error }" v-model="issuer" type="text" placeholder="Public key of currency issuer" @blur="$v.issuer.$touch()">
-            <br>
-            <div v-if="$v.password.$error" class="field__errors">
-              <div v-if="!$v.password.required">Password required</div>
-              <div v-if="!$v.password.validPassword">Invalid password</div>
-            </div>
-            <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+            <b-form-group label="Public key of currency issuer" label-for="issuerInput">
+              <b-form-input
+                id="issuerInput"
+                :class="{ error: $v.issuer.$error }"
+                v-model="issuer"
+                :state="!$v.issuer.$error"
+                type="text"
+                placeholder="Public key of currency issuer"
+                aria-describedby="inputLiveIssuerHelp inputLiveIssuerFeedback"
+                required
+                @blur="$v.issuer.$touch()"/>
+              <b-form-invalid-feedback id="inputLiveIssuerFeedback">
+                <template v-if="$v.issuer.$error" class="field__errors">
+                  <template v-if="!$v.issuer.required">Issuer is required</template>
+                  <template v-if="!$v.issuer.publicKey">Invalid issuer</template>
+                  <template v-if="!$v.issuer.validIssuer">Issuer does not exists</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveIssuerHelp">
+                Public key of currency issuer
+              </b-form-text>
+            </b-form-group>
 
+            <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+              <b-form-input
+                id="passwordInput"
+                :class="{ error: $v.password.$error }"
+                v-model="password"
+                :state="!$v.password.$error"
+                type="password"
+                placeholder="Password"
+                aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+                required
+                @blur="$v.password.$touch()"/>
+              <b-form-invalid-feedback id="inputLivePasswordFeedback">
+                <template v-if="$v.password.$error" class="field__errors">
+                  <template v-if="!$v.password.required">Password is required!</template>
+                  <template v-if="!$v.password.validPassword">Wrong password!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLivePasswordHelp">
+                Your password.
+              </b-form-text>
+            </b-form-group>
+
+            <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
+              <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+              <b-form-input
+                id="signerSeedInput"
+                :class="{ error: $v.signerSeed.$error }"
+                v-model="signerSeed"
+                :state="!$v.signerSeed.$error"
+                type="text"
+                placeholder="Seed for selected signer"
+                aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
+                required
+                @blur="$v.signerSeed.$touch()"/>
+              <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+                <template v-if="$v.signerSeed.$error" class="field__errors">
+                  <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                  <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveSignerSeedHelp">
+                Your secret seed for selected signer.
+              </b-form-text>
+            </b-form-group>
             <br>
             <span>Password required to add currency</span>
             <div class="form-buttons">
@@ -97,12 +166,50 @@
                 <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
               </div>
               <div v-else-if="openedKnownCurrency === currency">
-                <div v-if="$v.password.$error" class="field__errors">
-                  <div v-if="!$v.password.required">Password required</div>
-                  <div v-if="!$v.password.validPassword">Invalid password</div>
-                </div>
-                <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+                <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+                  <b-form-input
+                    id="passwordInput"
+                    :class="{ error: $v.password.$error }"
+                    v-model="password"
+                    :state="!$v.password.$error"
+                    type="password"
+                    placeholder="Your password"
+                    aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+                    required
+                    @blur="$v.password.$touch()"/>
+                  <b-form-invalid-feedback id="inputLivePasswordFeedback">
+                    <template v-if="$v.password.$error" class="field__errors">
+                      <template v-if="!$v.password.required">Password is required!</template>
+                      <template v-if="!$v.password.validPassword">Wrong password!</template>
+                    </template>
+                  </b-form-invalid-feedback>
+                  <b-form-text id="inputLivePasswordHelp">
+                    Your password.
+                  </b-form-text>
+                </b-form-group>
 
+                <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
+                  <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+                  <b-form-input
+                    id="signerSeedInput"
+                    :class="{ error: $v.signerSeed.$error }"
+                    v-model="signerSeed"
+                    :state="!$v.signerSeed.$error"
+                    type="text"
+                    placeholder="Seed for selected signer"
+                    aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
+                    required
+                    @blur="$v.signerSeed.$touch()"/>
+                  <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+                    <template v-if="$v.signerSeed.$error" class="field__errors">
+                      <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                      <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                    </template>
+                  </b-form-invalid-feedback>
+                  <b-form-text id="inputLiveSignerSeedHelp">
+                    Your secret seed for selected signer.
+                  </b-form-text>
+                </b-form-group>
                 <br>
                 <span>Password required to add currency</span>
                 <div class="form-buttons">
@@ -126,8 +233,7 @@ import { required } from 'vuelidate/lib/validators';
 
 import Amount from '@/util/Amount';
 
-import assetCodeValidator from '@/validators/assetCode';
-import publicKeyValidator from '@/validators/publicKey';
+import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
 
@@ -160,6 +266,8 @@ export default {
       addCurrency: false,
       addCurrencyFormType: 'known',
       openedKnownCurrency: null,
+      signer: null,
+      signerSeed: '',
     };
   },
   computed: {
@@ -170,6 +278,15 @@ export default {
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }))];
+    },
+    signers () {
+      if (!this.data.stellar_data) return [];
+      const stellarData = this.data.stellar_data;
+      const threshold = stellarData.thresholds.med_threshold;
+      return stellarData.signers.filter(signer => signer.weight >= threshold);
+    },
+    canSignWithPassword () {
+      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
     },
   },
   watch: {
@@ -204,6 +321,8 @@ export default {
       this.password = '';
       this.assetCode = '';
       this.issuer = '';
+      this.signer = null;
+      this.signerSeed = '';
     },
     openAddCurrency () {
       this.addCurrency = true;
@@ -219,9 +338,26 @@ export default {
         return;
       }
 
-      this.backendQuery = this.openedKnownCurrency
-        ? { assetCode: this.openedKnownCurrency.asset_code, issuer: this.openedKnownCurrency.issuer_public_key, password: this.password }
-        : { assetCode: this.assetCode, issuer: this.issuer, password: this.password };
+      const signerData = this.canSignWithPassword
+        ? { password: this.password }
+        : {
+          signer: this.signer,
+          signerSeed: this.signerSeed,
+        };
+
+      if (this.openedKnownCurrency) {
+        this.backendQuery = {
+          assetCode: this.openedKnownCurrency.asset_code,
+          issuer: this.openedKnownCurrency.issuer_public_key,
+          ...signerData,
+        };
+      } else {
+        this.backendQuery = {
+          assetCode: this.assetCode,
+          issuer: this.issuer,
+          ...signerData
+        };
+      }
 
       this.$emit('add', this.backendQuery);
     },
@@ -245,22 +381,31 @@ export default {
     }
   },
   validations () {
+    const signerValidators = this.canSignWithPassword ? {
+      password: {
+        required,
+        decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
+      },
+    } : {
+      signerSeed: {
+        required,
+        ...validators.secretSeed.call(this),
+      },
+    };
+
     return {
       ...(this.openedKnownCurrency ? {} : {
         assetCode: {
           required,
-          ...assetCodeValidator.call(this),
+          ...validators.assetCode.call(this),
         },
         issuer: {
           required,
-          ...publicKeyValidator.call(this),
+          ...validators.publicKey.call(this),
           validIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_ISSUER'),
         },
       }),
-      password: {
-        required,
-        validPassword: value => this.backendQuery.password !== value || !this.decryptionError,
-      }
+      ...signerValidators
     };
   }
 };

@@ -9,17 +9,16 @@
       </a>
     </div>
     <div class="menu__container">
-      <a href="#"><i class="fa fa-snowflake-o"/>{{ userStatus.email }}</a>
+      <a href="#">{{ userStatus.email }}</a>
       <div class="separator"/>
-      <router-link to="/dashboard"><i class="fa fa-home"/>Home</router-link>
-      <router-link to="/wallets"><i class="fa fa-credit-card"/>Wallets</router-link>
-      <a href="#"><i class="fa fa-exchange"/>Transactions</a>
-      <a href="#"><i class="fa fa-delicious"/>Currencies</a>
-      <a href="#"><i class="fa fa-user"/>Contacts</a>
-      <a href="#"><i class="fa fa-star-o"/>Extras</a>
+      <router-link to="/dashboard">Home</router-link>
+      <router-link to="/wallets">Wallets</router-link>
+      <a href="#">Transactions</a>
+      <a href="#">Currencies</a>
+      <a href="#">Contacts</a>
+      <a href="#">Extras</a>
       <div class="separator"/>
       <router-link to="/settings">
-        <i class="fa fa-cog"/>
         Settings
         <div class="submenu">
           <router-link to="/change-password">Change Password</router-link>
@@ -28,9 +27,9 @@
           <!-- <router-link to="/dashboard">Avatar</router-link> -->
         </div>
       </router-link>
-      <a href="#"><i class="fa fa-question-circle"/>Help</a>
+      <a href="#">Help</a>
       <div class="separator"/>
-      <a href="#" @click="onLogoutClick"><i class="fa fa-sign-out"/>Sign Out</a>
+      <a href="#" @click="onLogoutClick">Sign Out</a>
     </div>
   </nav>
 </template>

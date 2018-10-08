@@ -2,15 +2,31 @@
   <form class="form" @submit.prevent="onSubmitClick">
     <div v-if="!loading && nextPublicKey !== null">
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div class="field">
-        <div v-if="$v.walletName.$error" class="field__errors">
-          <div v-if="!$v.walletName.required">Wallet name is required</div>
-          <div v-if="!$v.walletName.maxLength">Max. 40 characters allowed</div>
-        </div>
-        <input :class="{ error: $v.walletName.$error }" v-model="walletName" placeholder="Wallet name" @blur="$v.walletName.$touch()">
-      </div>
-      <h3>Stellar public key</h3>
+
+      <b-form-group label-for="nameInput">
+        <b-form-input
+          id="nameInput"
+          :class="{ error: $v.walletName.$error }"
+          :state="!$v.walletName.$error"
+          v-model="walletName"
+          placeholder="Wallet name"
+          type="text"
+          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
+          required
+          @blur="$v.walletName.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+          <template v-if="$v.walletName.$error" class="field__errors">
+            <template v-if="!$v.walletName.required">Wallet name is required</template>
+            <template v-if="!$v.walletName.maxLength">Max. 40 characters allowed</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveAmountHelp">
+          New wallet name.
+        </b-form-text>
+      </b-form-group>
+
       <p class="centered">
+        <strong>Stellar public key</strong><br>
         <strong>Account ID / Public key</strong>
         <br>
         <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
@@ -26,8 +42,8 @@
         <label for="homeScreenCheckbox">Show wallet on home screen</label>
       </p>
     </div>
-    <button @click.prevent="onCancelClick">Cancel</button>
-    <button @click.prevent="onSubmitClick">Add</button>
+    <b-button @click="onCancelClick">Cancel</b-button>
+    <b-button variant="primary" @click="onSubmitClick">Add</b-button>
   </form>
 </template>
 

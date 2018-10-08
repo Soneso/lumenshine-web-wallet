@@ -1,34 +1,33 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
+  <form class="form">
     <div>
       <div v-for="transaction in transactions" :key="transaction.id" class="transaction">
         <div v-for="operation in transaction.operations" :key="operation.id">
-          <p>
-            Date: {{ dayjs(transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
-            <span v-if="transaction.memo_type !== 'none'">Memo type: {{ transaction.memo_type }}<br></span>
-            <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
-          </p>
-          <p>
-            <span>Operation - Type: {{ operation.type }}<br></span>
-            <span>Operation - ID: {{ operation.id }}<br></span>
-            <span v-if="operation.amount">Amount: <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">{{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}</span><br></span>
-            <br>
-            <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
-          </p>
+          <b-row>
+            <b-col>
+              Date: {{ dayjs(transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
+              <span v-if="transaction.memo_type !== 'none'">Memo type: {{ transaction.memo_type }}<br></span>
+              <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
+            </b-col>
+            <b-col>
+              <span>Operation - Type: {{ operation.type }}<br></span>
+              <span>Operation - ID: {{ operation.id }}<br></span>
+              <span v-if="operation.amount">Amount: <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">{{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}</span><br></span>
+              <br>
+              <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
+            </b-col>
+          </b-row>
           <hr>
         </div>
       </div>
       <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
     </div>
     <div v-if="loading">Loading transactions... <i class="fa fa-spinner fa-spin fa-fw"/></div>
-    <modal v-if="detailsModalShown" @close="detailsModalShown = false">
-      <template slot="title">
-        Operation details
-      </template>
+    <b-modal ref="transationDetailsModal" title="Operation details">
       <pre>
         {{ JSON.stringify(detailsModalData, null, 2) }}
       </pre>
-    </modal>
+    </b-modal>
   </form>
 </template>
 
@@ -53,7 +52,6 @@ export default {
     return {
       transactions: [],
       loading: false,
-      detailsModalShown: false,
       detailsModalData: null,
     };
   },
@@ -85,7 +83,7 @@ export default {
     },
     onDetailsClick (operation) {
       this.detailsModalData = operation;
-      this.detailsModalShown = true;
+      this.$refs.transationDetailsModal.show();
     },
     dayjs
   },

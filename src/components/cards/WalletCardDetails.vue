@@ -1,18 +1,15 @@
 <template>
-  <div class="card__details">
-    <h3>Details <i data-v-221f4c5c="" class="fa fa-question-circle-o"/></h3>
-    <a href="#" class="card__close" @click.prevent="$emit('close')"><i data-v-221f4c5c="" class="fa fa-close"/></a>
+  <div>
+    <p class="card__checkbox float-right">
+      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
+      <label for="homeScreenCheckbox">Show wallet on home screen</label>
+    </p>
 
     <wallet-name-form
       :loading="saveWalletLoading"
       :errors="editWalletStatus.err"
       :wallet-name="data.wallet_name"
       @submit="onSaveWalletName"/>
-
-    <p class="card__checkbox">
-      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
-      <label for="homeScreenCheckbox">Show wallet on home screen</label>
-    </p>
 
     <wallet-address-form
       :loading="saveWalletLoading"
@@ -22,7 +19,7 @@
       @submit="onSaveWalletAddress"/>
 
     <wallet-inflation-form
-      v-if="knownDestinations"
+      v-if="knownDestinations && data"
       :loading="inflationDestinationLoading"
       :decryption-error="decryptedWallet.err"
       :known-destinations="knownDestinations"
@@ -30,7 +27,7 @@
       @submit="onSetInflationDestination"/>
 
     <wallet-currencies-form
-      v-if="knownCurrencies"
+      v-if="knownCurrencies && data"
       :loading="walletDetailsLoading"
       :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
       :decryption-error="decryptedWallet.err"
@@ -39,7 +36,7 @@
       @remove="onRemoveCurrency"
       @add="onAddCurrency"/>
 
-    <p class="only-mobile">
+    <p class="d-none d-sm-block d-md-none">
       <strong>Balances</strong>
       <br>
       <table v-if="!data.stellar_data">
@@ -56,7 +53,7 @@
       </table>
     </p>
 
-    <p class="only-mobile">
+    <p class="d-none d-sm-block d-md-none">
       <strong>Available</strong>
       <br>
       <table>
@@ -68,8 +65,8 @@
     </p>
 
     <div class="form-buttons">
-      <a class="only-mobile" href="#" @click.prevent="$emit('close', 'send')">send</a>
-      <a class="only-mobile" href="#" @click.prevent="$emit('close', 'receive')">receive</a>
+      <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'send')">send</a>
+      <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'receive')">receive</a>
     </div>
 
     <p>

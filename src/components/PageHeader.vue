@@ -21,8 +21,7 @@
 
         <div v-if="$route.name === 'Wallets'" class="header-buttons">
           <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
-            <i class="fa fa-plus"/>
-            <span class="header-button-description">Add Wallet</span>
+            <span class="header-button-description">+ Add Wallet</span>
           </a>
         </div>
       </div>

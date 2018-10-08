@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent>
+  <form v-if="data.stellar_data" class="form" @submit.prevent>
     <div>
       <p>
         <strong>Inflation destination</strong>
@@ -7,28 +7,87 @@
         <a v-else href="#" class="error only-desktop" @click.prevent="onCancelClick">cancel</a>
         <br>
         <span v-if="!data.stellar_data.inflation_destination">
-          <span class="left error">none</span>
-          <span class="right info">Hint: Vote or earn free lumens by setting the inflation destination</span>
+          <span class="left text-danger">none</span><br>
+          <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
         </span>
         <span v-else>{{ data.stellar_data.inflation_destination }}</span>
       </p>
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
       <div v-if="fieldOpen && !loading" class="field">
-        <ul class="button-group">
-          <li :class="['button-group__button', {'button-group__button--active': formType === 'known'}]"><button @click="onTabChange('known')">Known Destinations</button></li>
-          <li :class="['button-group__button', {'button-group__button--active': formType === 'fields'}]"><button @click="onTabChange('fields')">Provide Destination Data</button></li>
-        </ul>
+
+        <b-button-group>
+          <b-button :disabled="formType === 'known'" variant="default" @click="onTabChange('known')">Known Destinations</b-button>
+          <b-button :disabled="formType === 'fields'" variant="default" @click="onTabChange('fields')">Provide Destination Data</b-button>
+        </b-button-group>
+
         <div v-if="formType === 'fields'" class="tab-page">
-          <div v-if="$v.destination.$error" class="field__errors">
-            <div v-if="!$v.destination.required">Wallet destination is required</div>
-            <div v-if="!$v.destination.publicKey">Not valid public key!</div>
-          </div>
-          <input :class="{ error: $v.destination.$error }" v-model="destination" placeholder="Public key of destination account" @blur="$v.destination.$touch()">
-          <div v-if="$v.password.$error" class="field__errors">
-            <div v-if="!$v.password.required">Password is required</div>
-            <div v-if="!$v.password.decryptValid">Invalid password</div>
-          </div>
-          <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
+          <b-form-group label-for="destinationInput">
+            <b-form-input
+              id="destinationInput"
+              :class="{ error: $v.destination.$error }"
+              v-model="destination"
+              :state="!$v.destination.$error"
+              type="text"
+              placeholder="Public key of destination account"
+              aria-describedby="inputLiveDestinationHelp inputLiveDestinationFeedback"
+              required
+              @blur="$v.destination.$touch()"/>
+            <b-form-invalid-feedback id="inputLiveDestinationFeedback">
+              <template v-if="$v.destination.$error" class="field__errors">
+                <template v-if="!$v.destination.required">Wallet destination is required</template>
+                <template v-if="!$v.destination.publicKey">Not valid public key!</template>
+              </template>
+            </b-form-invalid-feedback>
+            <b-form-text id="inputLiveDestinationHelp">
+              Public key of destination account
+            </b-form-text>
+          </b-form-group>
+
+          <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+            <b-form-input
+              id="passwordInput"
+              :class="{ error: $v.password.$error }"
+              v-model="password"
+              :state="!$v.password.$error"
+              type="password"
+              placeholder="Your password"
+              aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+              required
+              @blur="$v.password.$touch()"/>
+            <b-form-invalid-feedback id="inputLivePasswordFeedback">
+              <template v-if="$v.password.$error" class="field__errors">
+                <template v-if="!$v.password.required">Password is required!</template>
+                <template v-if="!$v.password.decryptValid">Wrong password!</template>
+              </template>
+            </b-form-invalid-feedback>
+            <b-form-text id="inputLivePasswordHelp">
+              Your password.
+            </b-form-text>
+          </b-form-group>
+
+          <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
+            <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+            <b-form-input
+              id="signerSeedInput"
+              :class="{ error: $v.signerSeed.$error }"
+              v-model="signerSeed"
+              :state="!$v.signerSeed.$error"
+              type="text"
+              placeholder="Seed for selected signer"
+              aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
+              required
+              @blur="$v.signerSeed.$touch()"/>
+            <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+              <template v-if="$v.signerSeed.$error" class="field__errors">
+                <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+              </template>
+            </b-form-invalid-feedback>
+            <b-form-text id="inputLiveSignerSeedHelp">
+              Your secret seed for selected signer.
+            </b-form-text>
+          </b-form-group>
+
           <div class="form-buttons">
             <a v-if="!fieldOpen" href="#" class="only-mobile" @click.prevent="onSetDestinationClick">set inflation destination</a>
             <a v-else href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
@@ -50,13 +109,52 @@
               <p>Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</p>
               <a href="#" @click.prevent>details</a>
               <div v-if="openedKnownDestination === destination">
-                <div v-if="$v.password.$error" class="field__errors">
-                  <div v-if="!$v.password.required">Password is required</div>
-                  <div v-if="!$v.password.decryptValid">Invalid password</div>
-                </div>
-                <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
 
-                <br>
+                <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+                  <b-form-input
+                    id="passwordInput"
+                    :class="{ error: $v.password.$error }"
+                    v-model="password"
+                    :state="!$v.password.$error"
+                    type="password"
+                    placeholder="Your password"
+                    aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+                    required
+                    @blur="$v.password.$touch()"/>
+                  <b-form-invalid-feedback id="inputLivePasswordFeedback">
+                    <template v-if="$v.password.$error" class="field__errors">
+                      <template v-if="!$v.password.required">Password is required!</template>
+                      <template v-if="!$v.password.decryptValid">Wrong password!</template>
+                    </template>
+                  </b-form-invalid-feedback>
+                  <b-form-text id="inputLivePasswordHelp">
+                    Your password.
+                  </b-form-text>
+                </b-form-group>
+
+                <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
+                  <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+                  <b-form-input
+                    id="signerSeedInput"
+                    :class="{ error: $v.signerSeed.$error }"
+                    v-model="signerSeed"
+                    :state="!$v.signerSeed.$error"
+                    type="text"
+                    placeholder="Seed for selected signer"
+                    aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
+                    required
+                    @blur="$v.signerSeed.$touch()"/>
+                  <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+                    <template v-if="$v.signerSeed.$error" class="field__errors">
+                      <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                      <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                    </template>
+                  </b-form-invalid-feedback>
+                  <b-form-text id="inputLiveSignerSeedHelp">
+                    Your secret seed for selected signer.
+                  </b-form-text>
+                </b-form-group>
+
                 <span>Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</span>
                 <div class="form-buttons">
                   <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
@@ -108,7 +206,21 @@ export default {
       password: '',
       formType: 'known',
       openedKnownDestination: null,
+
+      signer: null,
+      signerSeed: '',
     };
+  },
+  computed: {
+    signers () {
+      if (!this.data.stellar_data) return [];
+      const stellarData = this.data.stellar_data;
+      const threshold = stellarData.thresholds.med_threshold;
+      return stellarData.signers.filter(signer => signer.weight >= threshold);
+    },
+    canSignWithPassword () {
+      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
+    },
   },
   watch: {
     loading (loading) {
@@ -126,6 +238,8 @@ export default {
     resetForms () {
       this.password = '';
       this.destination = '';
+      this.signer = null;
+      this.signerSeed = '';
       this.$v.$reset();
     },
     onCancelClick () {
@@ -144,14 +258,32 @@ export default {
         return;
       }
 
-      this.backendQuery = this.openedKnownDestination
-        ? { destination: this.openedKnownDestination.issuer_public_key, password: this.password }
-        : { destination: this.destination, password: this.password };
+      this.backendQuery = {
+        destination: this.openedKnownDestination ? this.openedKnownDestination.issuer_public_key : this.destination,
+        ...(this.canSignWithPassword ? {
+          password: this.password,
+        } : {
+          signer: this.signer,
+          signerSeed: this.signerSeed,
+        }),
+      };
 
       this.$emit('submit', this.backendQuery);
     }
   },
   validations () {
+    const signerValidators = this.canSignWithPassword ? {
+      password: {
+        required,
+        decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
+      },
+    } : {
+      signerSeed: {
+        required,
+        ...validators.secretSeed.call(this),
+      },
+    };
+
     return {
       ...(this.formType === 'known' ? {} : {
         destination: {
@@ -159,10 +291,7 @@ export default {
           ...validators.publicKey.call(this),
         },
       }),
-      password: {
-        required,
-        decryptValid: value => this.backendQuery.password !== value || !this.decryptionError,
-      }
+      ...signerValidators
     };
   }
 };

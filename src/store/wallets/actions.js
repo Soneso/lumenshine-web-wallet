@@ -337,13 +337,18 @@ export default {
       }
     }
 
-    await dispatch('decryptWallet', { publicKey: data.publicKey, password: data.password });
-    if (getters.decryptedWallet.err) {
-      commit('SET_SEND_PAYMENT_LOADING', false);
-      return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'WRONG_PASSWORD' }]);
+    let sourceKeypair;
+    if (data.password) {
+      await dispatch('decryptWallet', { publicKey: data.publicKey, password: data.password });
+      if (getters.decryptedWallet.err) {
+        commit('SET_SEND_PAYMENT_LOADING', false);
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'WRONG_PASSWORD' }]);
+      }
+      sourceKeypair = StellarSdk.Keypair.fromSecret(getters.decryptedWallet.secretSeed);
+      commit('RESET_DECRYPTED_WALLET');
+    } else {
+      sourceKeypair = StellarSdk.Keypair.fromSecret(data.signerSeed);
     }
-    const sourceKeypair = StellarSdk.Keypair.fromSecret(getters.decryptedWallet.secretSeed);
-    commit('RESET_DECRYPTED_WALLET');
     const sourcePublicKey = sourceKeypair.publicKey();
 
     let memo;

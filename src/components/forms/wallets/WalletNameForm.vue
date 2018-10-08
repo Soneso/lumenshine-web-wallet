@@ -1,29 +1,44 @@
 <template>
   <form class="form" @submit.prevent="onSubmitClick">
-    <div>
-      <p>
-        <strong>Wallet name</strong>
-        <a v-if="!fieldOpen" class="only-desktop" href="#" @click.prevent="onEditClick">change name</a>
-        <a v-else href="#" class="error only-desktop" @click.prevent="onCancelClick">cancel</a>
-        <br>
-        {{ walletName }}
-      </p>
-      <div v-if="fieldOpen && !loading" class="field">
-        <div v-if="$v.name.$error" class="field__errors">
-          <div v-if="!$v.name.required">Wallet name is required</div>
-          <div v-if="!$v.name.uniqueName">Wallet name is already used</div>
-        </div>
-        <input :class="{ error: $v.name.$error }" v-model="name" type="name" placeholder="Wallet name" @blur="$v.name.$touch()">
-      </div>
-      <div class="form-buttons">
-        <a v-if="!fieldOpen" class="only-mobile" href="#" @click.prevent="onEditClick">change name</a>
-        <a v-else href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
+    <p v-if="!fieldOpen || loading">
+      <strong>Wallet name</strong>
+      <a v-if="!fieldOpen" class="only-desktop" href="#" @click.prevent="onEditClick">change name</a>
+      <br>
+      {{ walletName }}
+    </p>
+
+    <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
+      <strong>Wallet name</strong><br>
+      <b-row>
+        <b-form-group label-for="nameInput">
+          <b-form-input
+            id="nameInput"
+            :class="{ error: $v.name.$error }"
+            v-model="name"
+            :state="!$v.name.$error"
+            type="text"
+            placeholder="Wallet name"
+            aria-describedby="inputLiveNameHelp inputLiveNameFeedback"
+            required
+            @blur="$v.name.$touch()"/>
+          <b-form-invalid-feedback id="inputLiveNameFeedback">
+            <template v-if="$v.name.$error" class="field__errors">
+              <template v-if="!$v.name.required">Wallet name is required</template>
+              <template v-if="!$v.name.uniqueName">Wallet name is already used</template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text id="inputLiveNameHelp">
+            Name of the wallet
+          </b-form-text>
+        </b-form-group>
+
+        <a href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
         <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
           <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-          <span v-else>save</span>
+          <span v-else class="text-success">save</span>
         </a>
-      </div>
-    </div>
+      </b-row>
+    </b-card>
   </form>
 </template>
 

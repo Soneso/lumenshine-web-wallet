@@ -1,95 +1,170 @@
 <template>
   <form class="form">
     <div v-if="!result">
-      <table v-if="!loading">
-        <tr>
-          <td>Currency</td>
-          <td>
-            <!-- <span v-if="data.stellar_data.balances.length < 2">Stellar Lumens (XLM)</span> -->
-            <select v-model="assetCode">
-              <option v-for="assetCode in uniqueCurrencies" :key="assetCode" :value="assetCode">{{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode }}</option>
-              <option value="_other">Other</option>
-            </select>
-          </td>
-        </tr>
-        <tr v-if="assetCode === '_other'">
-          <td>Asset code</td>
-          <td>
-            <div v-if="$v.customAssetCode.$error" class="field__errors">
-              <div v-if="!$v.customAssetCode.required">Asset code is required!</div>
-              <div v-if="!$v.customAssetCode.validAssetCode">Not valid asset code!</div>
-            </div>
-            <input :class="{ error: $v.customAssetCode.$error }" v-model="customAssetCode" style="width:100%" placeholder="Asset code" @blur="$v.customAssetCode.$touch()">
-          </td>
-        </tr>
-        <tr v-if="currentAssetCodeBalances.length > 1">
-          <td>Issuer</td>
-          <td>
-            <select v-model="issuer">
-              <option v-for="bal in currentAssetCodeBalances" :key="bal.asset_issuer" :value="bal.asset_issuer">{{ bal.asset_issuer }}</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Send to</td>
-          <td>
-            <div v-if="$v.recipient.$error" class="field__errors">
-              <div v-if="!$v.recipient.required">Recipient is required!</div>
-              <div v-if="!$v.recipient.validRecipient">Not valid recipient!</div>
-              <div v-if="!$v.recipient.isTrusted">Not trusted asset!</div>
-              <div v-if="!$v.recipient.canFund">Cannot fund user with other asset than XLM!</div>
-              <div v-if="!$v.recipient.noDestination">Invalid destination!</div>
-            </div>
-            <input :class="{ error: $v.recipient.$error }" v-model="recipient" style="width:100%" placeholder="Recepient's public key or address" @blur="$v.recipient.$touch()">
-            <i class="fa fa-question-circle-o"/>
-          </td>
-        </tr>
-        <tr>
-          <td>Amount</td>
-          <td>
-            <div v-if="$v.amount.$error" class="field__errors">
-              <div v-if="!$v.amount.required">Amount is required!</div>
-              <div v-if="!$v.amount.decimal">Not valid amount!</div>
-              <div v-if="!$v.amount.hasEnoughFunds">Not enough funds!</div>
-            </div>
-            <input :class="{ error: $v.amount.$error }" v-model="amount" placeholder="Amount to send" @blur="$v.amount.$touch()"> {{ currentAssetCode }}
-          </td>
-        </tr>
-        <tr>
-          <td>Memo (optional)</td>
-          <td>
-            <select v-model="memoType">
-              <option value="MEMO_TEXT">MEMO_TEXT</option>
-              <option value="MEMO_ID">MEMO_ID</option>
-              <option value="MEMO_HASH">MEMO_HASH</option>
-              <option value="MEMO_RETURN">MEMO_RETURN</option>
-            </select>
-            <div v-if="$v.memo.$error" class="field__errors">
-              <div v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</div>
-              <div v-if="!$v.memo.maxLength">Max length is 28 characters!</div>
-              <div v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</div>
-            </div>
-            <input :class="{ error: $v.memo.$error }" v-model="memo" :placeholder="memoPlaceholder" @blur="$v.memo.$touch()">
-          </td>
-        </tr>
-        <tr>
-          <td>Password</td>
-          <td>
-            <div v-if="$v.password.$error" class="field__errors">
-              <div v-if="!$v.password.required">Password is required!</div>
-              <div v-if="!$v.password.decryptValid">Wrong password!</div>
-            </div>
-            <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Your password" @blur="$v.password.$touch()">
-          </td>
-        </tr>
-      </table>
+      <b-form-group label="Currency:" label-for="assetCodeInput">
+        <b-form-select id="assetCodeInput" v-model="assetCode" :options="assetCodeOptions" required/>
+      </b-form-group>
+
+      <b-form-group v-if="assetCode === '_other'" label="Asset code" label-for="customAssetCodeInput">
+        <b-form-input
+          id="customAssetCodeInput"
+          :class="{ error: $v.customAssetCode.$error }"
+          v-model="customAssetCode"
+          :state="!$v.customAssetCode.$error"
+          type="text"
+          placeholder="Asset code"
+          tabindex="1"
+          aria-describedby="inputLiveAssetCodeHelp inputLiveAssetCodeFeedback"
+          required
+          @blur="$v.customAssetCode.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveAssetCodeFeedback">
+          <template v-if="$v.customAssetCode.$error" class="field__errors">
+            <template v-if="!$v.customAssetCode.required">Asset code is required!</template>
+            <template v-if="!$v.customAssetCode.validAssetCode">Not valid asset code!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveAssetCodeHelp">
+          Your custom asset code.
+        </b-form-text>
+      </b-form-group>
+
+      <b-form-group v-if="currentAssetCodeBalances.length > 1" label="Issuer:" label-for="issuerInput">
+        <b-form-select id="issuerInput" v-model="issuer" :options="issuerOptions" required/>
+      </b-form-group>
+
+      <b-form-group label="Send to" label-for="recipientInput">
+        <b-form-input
+          id="recipientInput"
+          :class="{ error: $v.recipient.$error }"
+          v-model="recipient"
+          :state="!$v.recipient.$error"
+          type="text"
+          placeholder="Recepient's public key or address"
+          tabindex="2"
+          aria-describedby="inputLiveRecipientHelp inputLiveRecipientFeedback"
+          required
+          @blur="$v.recipient.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveRecipientFeedback">
+          <template v-if="$v.recipient.$error" class="field__errors">
+            <template v-if="!$v.recipient.required">Recipient is required!</template>
+            <template v-if="!$v.recipient.validRecipient">Not valid recipient!</template>
+            <template v-if="!$v.recipient.isTrusted">Not trusted asset!</template>
+            <template v-if="!$v.recipient.canFund">Cannot fund user with other asset than XLM!</template>
+            <template v-if="!$v.recipient.noDestination">Invalid destination!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveRecipientHelp">
+          Your destination.
+        </b-form-text>
+      </b-form-group>
+
+      <b-form-group label="Send to" label-for="amountInput">
+        <b-form-input
+          id="amountInput"
+          :class="{ error: $v.amount.$error }"
+          v-model="amount"
+          :state="!$v.amount.$error"
+          type="text"
+          placeholder="Amount to send"
+          tabindex="3"
+          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
+          required
+          @blur="$v.amount.$touch()"/>
+        {{ currentAssetCode }}
+        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+          <template v-if="$v.amount.$error" class="field__errors">
+            <template v-if="!$v.amount.required">Amount is required!</template>
+            <template v-if="!$v.amount.decimal">Not valid amount!</template>
+            <template v-if="!$v.amount.hasEnoughFunds">Not enough funds!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveAmountHelp">
+          Your amount to send.
+        </b-form-text>
+      </b-form-group>
+
+      <b-form-group label="Memo Type" label-for="memoTypeInput">
+        <b-form-select id="memoTypeInput" v-model="memoType" :options="memoTypeOptions"/>
+      </b-form-group>
+
+      <b-form-group label="Memo (optional)" label-for="memoInput">
+        <b-form-input
+          id="memoInput"
+          :class="{ error: $v.memo.$error }"
+          :placeholder="memoPlaceholder"
+          :state="!$v.memo.$error"
+          v-model="memo"
+          type="text"
+          tabindex="4"
+          aria-describedby="inputLiveMemoHelp inputLiveMemoFeedback"
+          required
+          @blur="$v.memo.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveMemoFeedback">
+          <template v-if="$v.memo.$error" class="field__errors">
+            <template v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</template>
+            <template v-if="!$v.memo.maxLength">Max length is 28 characters!</template>
+            <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveMemoHelp">
+          Your memo.
+        </b-form-text>
+      </b-form-group>
+
+      <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+        <b-form-input
+          id="passwordInput"
+          :class="{ error: $v.password.$error }"
+          v-model="password"
+          :state="!$v.password.$error"
+          type="password"
+          placeholder="Your password"
+          tabindex="5"
+          aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+          required
+          @blur="$v.password.$touch()"/>
+        <b-form-invalid-feedback id="inputLivePasswordFeedback">
+          <template v-if="$v.password.$error" class="field__errors">
+            <template v-if="!$v.password.required">Password is required!</template>
+            <template v-if="!$v.password.decryptValid">Wrong password!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLivePasswordHelp">
+          Your password.
+        </b-form-text>
+      </b-form-group>
+
+      <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
+        <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+        <b-form-input
+          id="signerSeedInput"
+          :class="{ error: $v.signerSeed.$error }"
+          v-model="signerSeed"
+          :state="!$v.signerSeed.$error"
+          type="text"
+          placeholder="Seed for selected signer"
+          tabindex="6"
+          aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
+          required
+          @blur="$v.signerSeed.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+          <template v-if="$v.signerSeed.$error" class="field__errors">
+            <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+            <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveSignerSeedHelp">
+          Your secret seed for selected signer.
+        </b-form-text>
+      </b-form-group>
+
       <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
-        <span class="error">Warning: Recipient account does not exist or is not funded. Send Anyway:</span>
+        <span class="error">Warning: Recipient account does not exist or is not funded. Send Anyway?</span>
       </div>
-      <button @click.prevent="onSendClick">
+      <b-button variant="primary" class="btn-rounded" @click.prevent="onSendClick">
         <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
         <span v-else>Send {{ currentAssetCode }}</span>
-      </button>
+      </b-button>
     </div>
     <div v-else-if="result">
       <table>
@@ -124,9 +199,11 @@
           <td>{{ transactionFee.format() }} XLM</td>
         </tr>
       </table>
-      <button @click.prevent="reset">Send other</button>
-      <button @click.prevent="window.print()">Print</button>
-      <button @click.prevent="$emit('close')">Done</button>
+      <b-button-group>
+        <b-button variant="success" @click.prevent="reset">Send other</b-button>
+        <b-button variant="info" @click.prevent="window.print()">Print</b-button>
+        <b-button variant="warning" @click.prevent="$emit('close')">Done</b-button>
+      </b-button-group>
     </div>
   </form>
 </template>
@@ -167,8 +244,16 @@ export default {
       memo: '',
       memoType: 'MEMO_TEXT',
       amount: '',
+
+      signer: null,
+      signerSeed: '',
+
       issuer: '',
       password: '',
+
+      memoTypeOptions: [
+        'MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN'
+      ]
     };
   },
   computed: {
@@ -203,6 +288,24 @@ export default {
       if (!this.data.stellar_data) return [];
       return this.data.stellar_data.balances.filter(b => b.asset_code === this.assetCode);
     },
+    signers () {
+      if (!this.data.stellar_data) return [];
+      const stellarData = this.data.stellar_data;
+      const threshold = stellarData.thresholds.med_threshold;
+      return stellarData.signers.filter(signer => signer.weight >= threshold);
+    },
+    canSignWithPassword () {
+      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
+    },
+    assetCodeOptions () {
+      return [
+        ...this.uniqueCurrencies.map(assetCode => ({ text: assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode, value: assetCode })),
+        { text: 'Other', value: '_other' },
+      ];
+    },
+    issuerOptions () {
+      return this.currentAssetCodeBalances.map(bal => bal.asset_issuer);
+    }
   },
   watch: {
     assetCode (val) {
@@ -221,6 +324,16 @@ export default {
       if (this.memoType === 'MEMO_ID' && val.match(/[a-z]/ig)) {
         this.memoType = 'MEMO_TEXT';
       }
+    },
+    data () {
+      if (!this.canSignWithPassword) {
+        this.signer = this.signers[0] ? this.signers[0].public_key : null;
+      }
+    }
+  },
+  created () {
+    if (!this.canSignWithPassword) {
+      this.signer = this.signers[0] ? this.signers[0].public_key : null;
     }
   },
   methods: {
@@ -237,6 +350,8 @@ export default {
         amount: '',
         issuer: '',
         password: '',
+        signer: null,
+        signerSeed: '',
       };
       Object.keys(data).forEach(d => { this[d] = data[d]; });
     },
@@ -253,8 +368,13 @@ export default {
         memo: this.memo,
         memoType: this.memoType,
         amount: this.amount,
-        password: this.password,
-        shouldFund: !!this.errors.find(err => err.error_code === 'SHOULD_FUND')
+        shouldFund: !!this.errors.find(err => err.error_code === 'SHOULD_FUND'),
+        ...(this.canSignWithPassword ? {
+          password: this.password,
+        } : {
+          signer: this.signer,
+          signerSeed: this.signerSeed,
+        }),
       };
       this.backendQuery = data;
 
@@ -279,6 +399,18 @@ export default {
 
     const customAssetCodeValidators = this.assetCode === '_other' ? { required, ...validators.assetCode.call(this) } : {};
 
+    const signerValidators = this.canSignWithPassword ? {
+      password: {
+        required,
+        decryptValid: value => this.backendQuery.password !== value || !this.errors.find(err => err.error_code === 'WRONG_PASSWORD'),
+      },
+    } : {
+      signerSeed: {
+        required,
+        ...validators.secretSeed.call(this),
+      },
+    };
+
     return {
       recipient: {
         required,
@@ -293,10 +425,7 @@ export default {
       memo: {
         ...memoValidators
       },
-      password: {
-        required,
-        decryptValid: value => this.backendQuery.password !== value || !this.errors.find(err => err.error_code === 'WRONG_PASSWORD'),
-      },
+      ...signerValidators,
       amount: {
         required,
         decimal,

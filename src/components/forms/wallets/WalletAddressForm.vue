@@ -1,38 +1,58 @@
 <template>
   <form class="form" @submit.prevent="onSubmitClick">
-    <div>
-      <p>
-        <strong>Stellar address</strong>
-        <a v-if="!fieldOpen && address" href="#" class="error only-desktop" @click.prevent="onRemoveAddressClick">remove address</a>
-        <a v-else-if="!fieldOpen && !address" href="#" class="only-desktop" @click.prevent="onSetAddressClick">set address</a>
-        <a v-else-if="fieldOpen" href="#" class="error only-desktop" @click.prevent="onCancelClick">cancel</a>
-        <br>
-        <span v-if="!address">
-          <span class="left error">none</span>
-          <span class="right info">Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</span>
-        </span>
-        <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
-        <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
-      </p>
-      <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
-      <div v-if="fieldOpen && !loading" class="field">
-        <div v-if="$v.address.$error" class="field__errors">
-          <div v-if="!$v.address.required">Wallet address is required</div>
-          <div v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</div>
-        </div>
-        <input :class="{ error: $v.address.$error }" v-model="address" placeholder="Wallet address" @blur="$v.address.$touch()">
-        <span class="warning">*{{ config.FEDERATION_DOMAIN }}</span>
-      </div>
-      <div class="form-buttons">
-        <a v-if="!fieldOpen && address" href="#" class="error only-mobile" @click.prevent="onRemoveAddressClick">remove address</a>
-        <a v-else-if="!fieldOpen && !address" href="#" class="only-mobile" @click.prevent="onSetAddressClick">set address</a>
-        <a v-else-if="fieldOpen" href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
-        <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
+    <p v-if="!fieldOpen || loading">
+      <strong>Stellar address</strong>
+      <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
+      <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
+      <br>
+      <span v-if="!address">
+        <span class="text-danger">none</span><br>
+        <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
+      </span>
+      <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
+      <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
+    </p>
+
+    <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
+
+    <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
+      <strong>Stellar address</strong><br>
+      <b-row>
+        <b-form-group v-if="fieldOpen && !loading" label-for="addressInput">
+          <b-form-input
+            id="addressInput"
+            :class="{ error: $v.address.$error }"
+            v-model="address"
+            :state="!$v.address.$error"
+            type="text"
+            placeholder="Wallet address"
+            aria-describedby="inputLiveAddressHelp inputLiveAddressFeedback"
+            required
+            @blur="$v.address.$touch()"/>
+
+          <b-form-invalid-feedback id="inputLiveAddressFeedback">
+            <template v-if="$v.address.$error" class="field__errors">
+              <template v-if="!$v.address.required">Wallet address is required</template>
+              <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text id="inputLiveAddressHelp">
+            Address of the wallet
+          </b-form-text>
+        </b-form-group>
+
+        <span class="text-warning">*{{ config.FEDERATION_DOMAIN }}</span>
+
+        <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
+        <a v-else-if="!fieldOpen && !address" href="#" class="text-success" @click.prevent="onSetAddressClick">set address</a>
+        <a v-else-if="fieldOpen" href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
+
+        <a v-if="fieldOpen" href="#" class="text-success" @click.prevent="onSubmitClick">
           <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-          <span v-else>submit</span>
+          <span v-else>save</span>
         </a>
-      </div>
-    </div>
+      </b-row>
+    </b-card>
   </form>
 </template>
 

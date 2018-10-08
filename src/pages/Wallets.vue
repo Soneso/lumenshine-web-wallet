@@ -1,17 +1,17 @@
 <template>
-  <div class="page">
-    <div v-if="wallets.loading">Loading...</div>
-    <div class="card-container">
-      <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
-    </div>
-    <modal v-if="addWalletModalShown" @close="onModalClose">
-      <template slot="title">
-        Add Wallet
-      </template>
-
-      <add-wallet-form v-if="nextFreePublicKey" :errors="addWalletStatus.err" :next-public-key="nextFreePublicKey" @cancel="onModalClose" @submit="onSubmitNewWallet"/>
-    </modal>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="8" sm="12" md="8" lg="8" xl="8">
+      <b-container fluid>
+        <div v-if="wallets.loading">Loading...</div>
+        <b-row align-h="start" align-v="center">
+          <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
+        </b-row>
+        <b-modal v-model="addWalletModalShown" hide-footer title="Add new wallet">
+          <add-wallet-form v-if="nextFreePublicKey" :errors="addWalletStatus.err" :next-public-key="nextFreePublicKey" @cancel="onModalClose" @submit="onSubmitNewWallet"/>
+        </b-modal>
+      </b-container>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -32,19 +32,22 @@ export default {
     return {
       nextFreePublicKey: null,
       inProgress: false,
+      addWalletModalShown: this.$route.params.add === 'add',
     };
   },
   computed: {
     ...mapGetters(['wallets', 'publicKeys', 'addWalletStatus']),
-    addWalletModalShown () {
-      return this.$route.params.add === 'add';
-    }
   },
   watch: {
     addWalletModalShown (val) {
       if (val) {
         this.getFreePublicKey();
+      } else {
+        this.onModalClose();
       }
+    },
+    $route (val) {
+      this.addWalletModalShown = this.$route.params.add === 'add';
     }
   },
   async created () {

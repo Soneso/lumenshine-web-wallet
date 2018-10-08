@@ -21,32 +21,44 @@
         <br>
         <span class="warning">{{ data.federation_address }}</span>
       </p>
-      <table>
-        <tr>
-          <td>Currency</td>
-          <td>
-            <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
-            <select v-else v-model="assetCode">
-              <option v-for="assetCode in uniqueCurrencies" :key="assetCode" :value="assetCode">{{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode }}</option>
-            </select>
-          </td>
-        </tr>
-        <tr v-if="currentAssetCodeBalances.length > 1">
-          <td>Issuer</td>
-          <td>
-            <select v-model="issuer">
-              <option v-for="bal in currentAssetCodeBalances" :key="bal.asset_issuer" :value="bal.asset_issuer">{{ bal.asset_issuer }}</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ assetCode }}</td>
-          <td><input :class="{ error: $v.amount.$error }" v-model="amount" placeholder="Amount to receive" @blur="$v.amount.$touch()"></td>
-        </tr>
-      </table>
-      <a :href="`mailto:?subject=${encodeURIComponent('Payment data')}&body=${encodeURIComponent(emailBody)}`" class="button" target="_blank" @click="onSendEmailClick">Send by email</a>
-      <button @click.prevent="onPrintClick">Print</button>
-      <button @click.prevent="onDoneClick">Done</button>
+
+      <b-form-group label="Currency" label-for="currencyInput">
+        <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
+        <b-form-select v-else id="currencyInput" v-model="assetCode" :options="currencyOptions"/>
+      </b-form-group>
+
+      <b-form-group v-if="currentAssetCodeBalances.length > 1" label="Issuer" label-for="issuerInput">
+        <b-form-select id="issuerInput" v-model="issuer" :options="issuerOptions"/>
+      </b-form-group>
+
+      <b-form-group label-for="amountInput">
+        {{ assetCode }}
+        <b-form-input
+          id="amountInput"
+          :class="{ error: $v.amount.$error }"
+          :state="!$v.amount.$error"
+          v-model="amount"
+          placeholder="Amount to receive"
+          type="text"
+          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
+          required
+          @blur="$v.amount.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+          <template v-if="$v.amount.$error" class="field__errors">
+            <template v-if="!$v.amount.required">Amount is required</template>
+            <template v-if="!$v.amount.decimal">Amount should be numeric!</template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveAmountHelp">
+          Amount to receive.
+        </b-form-text>
+      </b-form-group>
+
+      <b-button-group>
+        <b-button variant="success" @click="onSendEmailClick">Send by email</b-button>
+        <b-button variant="info" @click="onPrintClick">Print</b-button>
+        <b-button variant="warning" @click="onDoneClick">Done</b-button>
+      </b-button-group>
     </div>
   </form>
 </template>
@@ -94,6 +106,15 @@ export default {
     currentAssetCodeBalances () {
       if (!this.data.stellar_data) return [];
       return this.data.stellar_data.balances.filter(b => b.asset_code === this.assetCode);
+    },
+    currencyOptions () {
+      return this.uniqueCurrencies.map(assetCode => ({
+        text: assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode,
+        value: assetCode,
+      }));
+    },
+    issuerOptions () {
+      return this.currentAssetCodeBalances.map(bal => bal.asset_issuer);
     }
   },
   watch: {
@@ -110,8 +131,10 @@ export default {
     onSendEmailClick (e) {
       this.$v.$touch();
       if (this.$v.$invalid) {
-        e.preventDefault();
+        return;
       }
+      const win = window.open(`mailto:?subject=${encodeURIComponent('Payment data')}&body=${encodeURIComponent(this.emailBody)}`, '_blank');
+      win.focus();
     },
     onPrintClick () {
       this.$v.$touch();
