@@ -1,22 +1,34 @@
 <template>
-  <form class="form" @submit.prevent="onSaveClick">
-    <div v-if="!loading">
+  <b-form class="form" @submit.prevent="onSaveClick">
+    <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your current 2FA code from the authenticator app and press "Next"</p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div class="field">
-        <div v-if="$v.twoFactorCode.$error" class="field__errors">
-          <div v-if="!$v.twoFactorCode.numeric">2FA code should be numeric!</div>
-          <div v-if="!$v.twoFactorCode.length">2FA code should have length of 6 characters!</div>
-          <div v-if="!$v.twoFactorCode.validTfa || !$v.twoFactorCode.backendTfaError">2FA code is invalid</div>
-          <div v-if="!$v.twoFactorCode.required">2FA code is required</div>
-        </div>
-        <input :class="{ error: $v.twoFactorCode.$error }" v-model="twoFactorCode" type="twoFactorCode" placeholder="2FA code" @blur="$v.twoFactorCode.$touch()">
-        <br>
-        <a href="#" class="field__link" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost 2FA Secret?</a>
-      </div>
-    </div>
-    <button @click.prevent="onSaveClick">Next</button>
-  </form>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <b-form-group class="py-4">
+        <b-form-input
+          id="lost-password-email"
+          :class="{ 'error': $v.twoFactorCode.$error }"
+          v-model="twoFactorCode"
+          :state="!$v.twoFactorCode.$error"
+          type="text"
+          placeholder="2FA code"
+          tabindex="1"
+          aria-describedby="inputLiveTwoFactorCodeHelp inputLiveTwoFactorCodeFeedback"
+          @blur="$v.twoFactorCode.$touch()"/>
+        <b-form-invalid-feedback id="inputLiveTwoFactorCodeFeedback">
+          <template v-if="$v.twoFactorCode.$error" class="field-errors">
+            <template v-if="!$v.twoFactorCode.numeric">2FA code should be numeric! <br></template>
+            <template v-if="!$v.twoFactorCode.length">2FA code should have length of 6 characters! <br></template>
+            <template v-if="!$v.twoFactorCode.validTfa || !$v.twoFactorCode.backendTfaError">2FA code is invalid <br></template>
+            <template v-if="!$v.twoFactorCode.required">2FA code is required <br></template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveTwoFactorCodeHelp">
+          <a href="#" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost 2FA Secret?</a>
+        </b-form-text>
+      </b-form-group>
+    </template>
+    <b-button variant="info" class="btn-rounded" @click.prevent="onSaveClick">Next</b-button>
+  </b-form>
 </template>
 
 <script>

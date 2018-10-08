@@ -10,16 +10,6 @@
 import config from '@/config';
 
 export default {
-  data () {
-    return {
-      config
-    };
-  }
+  data: () => ({ config })
 };
 </script>
-
-<style lang="scss" scoped>
-h1 {
-  color: #CF2A29;
-}
-</style>
