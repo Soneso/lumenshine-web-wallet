@@ -1,17 +1,22 @@
 <template>
-  <div class="page-box form">
-    <h1>Lost Password</h1>
-    <div v-if="inProgress">Loading...</div>
-    <div v-if="emailSuccess">
-      <h3>Password lost email sent</h3>
-      <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>
-      <div v-if="emailLostPasswordResent" class="info">Resent email</div>
-      <button @click="onEmailLostPasswordResendClick">Resend email</button>
-      <button @click="onDoneClick">Done</button>
-    </div>
-    <lost-password-email-form v-if="!emailSuccess" v-show="!loading && !lostPasswordStatus.res" :loading="loading" :errors="lostPasswordStatus.err" @submit="onEmailSubmitClick"/>
-    <confirm-email-form v-if="emailNotConfirmed" :email-resent="emailResent" :already-confirmed-failed="alreadyConfirmedFailed" @recheck="onEmailRecheckClick" @resend="onEmailResendClick"/>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4 single-card text-center">
+        <h4 class="form-headline text-uppercase pb-3">Lost Password</h4>
+        <div v-if="loading" class="py-4 px-2">Loading...</div>
+        <template v-if="emailSuccess">
+          <small class="text-success">Password lost email sent</small>
+          <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>
+          <b-button variant="warning" class="text-uppercase btn-rounded" @click="onEmailLostPasswordResendClick">Resend email</b-button>
+          <br>
+          <small v-if="emailLostPasswordResent" class="d-block pt-2 text-success">Resent email</small>
+          <b-button variant="info" class="mt-4 text-uppercase btn-rounded" @click="onDoneClick">Done</b-button>
+        </template>
+        <lost-password-email-form v-else v-show="!loading && !lostPasswordStatus.res" :loading="loading" :errors="lostPasswordStatus.err" @submit="onEmailSubmitClick"/>
+        <confirm-email-form v-if="emailNotConfirmed" :email-resent="emailResent" :already-confirmed-failed="alreadyConfirmedFailed" @recheck="onEmailRecheckClick" @resend="onEmailResendClick"/>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -81,6 +86,7 @@ export default {
       await this.resendConfirmationEmail(email);
       if (this.resendEmailStatus.err.length === 0) {
         this.emailResent = true;
+        setTimeout(() => { this.emailResent = false; }, 3e3);
       }
       this.inProgress = false;
     },
@@ -94,6 +100,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
