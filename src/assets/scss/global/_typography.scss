@@ -3,4 +3,17 @@
   .text-gray-#{$item} {
     color: $color
   }
+  .bg-gray-#{$item} {
+    background-color: $color
+  }
+}
+
+// color text
+@each $item, $color in $colors {
+  .text-#{$item} {
+    color: $color
+  }
+  .bg-#{$item} {
+    background-color: $color
+  }
 }

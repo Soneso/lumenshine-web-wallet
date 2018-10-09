@@ -1,0 +1,19 @@
+$all-colors: map_merge($colors, $theme-colors);
+
+@each $item, $color in $all-colors {
+  i {
+    &[class*='icon-'] {
+      &.text-#{$item} {
+        &:before {
+          color: $color
+        }
+      }
+    }
+  }
+}
+
+.btn {
+  i[class*='icon-'] {
+    font-size: 85%;
+  }
+}

@@ -1,20 +1,38 @@
 <template>
-  <form class="form" @submit.prevent="onRecoverClick">
-    <div v-if="!loading">
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div v-if="!$v.email.backendEmailConfirmed" class="error">Your email address is not confirmed.</div>
-      <div v-else class="field">
-        <div v-if="$v.email.$error" class="field__errors">
-          <div v-if="!$v.email.required">Email is required!</div>
-          <div v-if="!$v.email.email">Not valid email!</div>
-          <div v-if="!$v.email.backendHasUser">User not found</div>
-          <div v-if="!$v.email.backendEmailConfirmed">Email is not confirmed</div>
-        </div>
-        <input :class="{ error: $v.email.$error }" v-model="email" type="text" placeholder="Your email address" @blur="$v.email.$touch()">
-      </div>
-    </div>
-    <button v-if="$v.email.backendEmailConfirmed" @click.prevent="onRecoverClick">Next</button>
-  </form>
+  <b-form class="form" @submit.prevent="onRecoverClick">
+    <template v-if="!loading">
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="!$v.email.backendEmailConfirmed" class="d-block text-danger text-center pb-2">Your email address is not confirmed.</small>
+      <template v-else>
+
+        <b-form-group class="py-4">
+          <b-form-input
+            id="lost-password-email"
+            :class="{ error: $v.email.$error }"
+            v-model="email"
+            :state="!$v.email.$error"
+            type="text"
+            placeholder="Your email address"
+            tabindex="1"
+            aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
+            required
+            @blur="$v.email.$touch()"/>
+          <b-form-invalid-feedback id="inputLiveEmailFeedback">
+            <template v-if="$v.email.$error" class="field-errors">
+              <template v-if="!$v.email.required">Email is required! <br></template>
+              <template v-if="!$v.email.email">Not valid email! <br></template>
+              <template v-if="!$v.email.backendHasUser">User not found <br></template>
+              <template v-if="!$v.email.backendEmailConfirmed">Email is not confirmed <br></template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text id="inputLiveEmailHelp">
+            Your email address
+          </b-form-text>
+        </b-form-group>
+        <b-button v-if="$v.email.backendEmailConfirmed" variant="info" class="btn-rounded text-uppercase" @click.prevent="onRecoverClick">Next</b-button>
+      </template>
+    </template>
+  </b-form>
 </template>
 
 <script>
@@ -53,7 +71,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

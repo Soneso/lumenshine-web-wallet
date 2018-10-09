@@ -4,9 +4,9 @@ $card-shadow: 3px 3px 3px rgba($black, .15);
   box-shadow: $card-shadow;
 
   &.single-card {
-    @include media-breakpoint-up(xl) {
+    @include media-breakpoint-up(lg) {
       margin: auto;
-      max-width: 40rem;
+      max-width: 30rem;
     }
   }
 }

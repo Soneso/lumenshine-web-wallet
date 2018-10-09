@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
-      <b-card class="p-4 text-center">
+      <b-card class="p-4 single-card text-center">
         <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
         <small class="text-secondary">Step 3 of 3</small>
         <h6 class="text-danger pt-3">Prove noting of mnemonic</h6>
@@ -26,9 +26,9 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-button type="submit" variant="info" size="lg" class="btn-rounded mb-4" @click="onVerify">Finish</b-button>
+        <b-button type="submit" variant="warning" size="lg" class="btn-rounded mb-4" @click="onBack"><i class="icon-options-left text-white"/> Go back and show mnemonic</b-button>
         <br>
-        <b-button type="submit" variant="warning" size="lg" class="btn-rounded" @click="onBack">Go back and show mnemonic</b-button>
+        <b-button type="submit" variant="info" size="lg" class="btn-rounded" @click="onVerify">Finish</b-button>
         <div v-if="hasErrors" class="text-danger py-2">Invalid input!<br></div>
       </b-card>
     </b-col>

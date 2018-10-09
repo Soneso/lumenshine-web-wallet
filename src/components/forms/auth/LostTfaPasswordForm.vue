@@ -1,19 +1,40 @@
 <template>
   <form class="form" @submit.prevent="onRecoverClick">
-    <div v-if="!loading">
-      <p>Thank you for confirming your email address. To continue, please insert your password and press "Next"</p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div class="field">
-        <div v-if="$v.password.$error" class="field__errors">
-          <div v-if="!$v.password.required">Password is required!</div>
-          <div v-if="!$v.password.decryptValid">Invalid Password</div>
-        </div>
-        <input :class="{ error: $v.password.$error }" v-model="password" type="password" placeholder="Password" @blur="$v.password.$touch()">
-        <br>
-        <a href="#" class="field__link" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost password?</a>
-      </div>
-    </div>
-    <button @click.prevent="onRecoverClick">Next</button>
+    <template v-if="!loading">
+      <p>Thank you for confirming your email address. To continue, please insert your password and press "Next".</p>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+
+      <b-form-group class="my-4">
+        <b-form-input
+          id="lost-2fa-password"
+          :class="{ error: $v.password.$error }"
+          v-model="password"
+          :type="passwordIsHidden ? 'password' : 'text'"
+          placeholder="Password"
+          aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
+          required
+          @blur="$v.password.$touch()"/>
+        <!-- a special row that flows over the input field providing contextual actions -->
+        <b-row class="floating-icons align-right one-item">
+          <b-col>
+            <i :class="{'icon-show': passwordIsHidden, 'icon-hide': !passwordIsHidden}" @click="passwordIsHidden = !passwordIsHidden" />
+          </b-col>
+        </b-row>
+
+        <b-form-invalid-feedback id="inputLiveEmailFeedback">
+          <template v-if="$v.password.$error" class="field-errors">
+            <template v-if="!$v.password.required">Password is required! <br></template>
+            <template v-if="!$v.password.decryptValid">Invalid Password <br></template>
+          </template>
+        </b-form-invalid-feedback>
+        <b-form-text id="inputLiveEmailHelp">
+          Your password
+        </b-form-text>
+      </b-form-group>
+      <b-button variant="info" class="text-uppercase btn-rounded" @click.prevent="onRecoverClick">Next</b-button>
+      <br>
+      <a href="#" class="field-link" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost password?</a>
+    </template>
   </form>
 </template>
 
@@ -33,6 +54,7 @@ export default {
   data () {
     return {
       password: '',
+      passwordIsHidden: true
     };
   },
   methods: {
