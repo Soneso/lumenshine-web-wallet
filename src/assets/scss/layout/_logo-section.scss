@@ -1,6 +1,15 @@
+.user-info {
+  @extend .px-3, .py-2;
+  position: absolute;
+  font-size: .75rem;
+  color: $body-color;
+  background: rgba($white, .75);
+}
+
 #logo-group {
   @include clearfix;
   @extend .py-4;
+  position: relative;
   margin-left: calc(50% - 3rem);
 
   h1 {
@@ -30,12 +39,6 @@
   .text {
     width: 13rem;
     color: $gray-500
-  }
-
-  .user-info {
-    @extend %text-ellipsis;
-    font-size: .75rem;
-    color: $body-color
   }
 }
 

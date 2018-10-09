@@ -1,5 +1,12 @@
 <template>
   <header :class="[ 'header', { 'header--full': $route.meta.fullHeader } ]">
+    <small v-if="authToken && !registrationComplete" class="user-info">
+      <div class="user-info-email">
+        {{ userStatus.email }} <br>
+        <a v-if="userStatus.email.length > 5" href="#" class="user-info-logout" @click="onLogoutClick">Sign out</a>
+      </div>
+    </small>
+
     <div id="logo-group">
       <div class="logo">
         <img id="logo" src="../assets/images/ui/logo.svg">
@@ -11,13 +18,6 @@
           <currency-ticker/>
           <p>{{ $route.meta ? $route.meta.pageName : '' }}</p>
         </div>
-
-        <small v-if="authToken && !registrationComplete" class="user-info">
-          <div class="user-info-email">
-            {{ userStatus.email }} <br>
-            <a v-if="userStatus.email.length > 5" href="#" class="user-info-logout" @click="onLogoutClick">Sign out</a>
-          </div>
-        </small>
 
         <div v-if="$route.name === 'Wallets'" class="header-buttons">
           <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
