@@ -18,25 +18,25 @@
     <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
       <strong>Stellar address</strong><br>
       <b-row>
-        <b-form-group v-if="fieldOpen && !loading" label-for="addressInput">
+        <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
           <b-form-input
-            id="addressInput"
+            :id="`addressInput_${uuid}`"
             :class="{ error: $v.address.$error }"
-            v-model="address"
+            :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
             :state="!$v.address.$error"
+            v-model="address"
             type="text"
             placeholder="Wallet address"
-            aria-describedby="inputLiveAddressHelp inputLiveAddressFeedback"
             required
             @blur="$v.address.$touch()"/>
 
-          <b-form-invalid-feedback id="inputLiveAddressFeedback">
+          <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
             <template v-if="$v.address.$error" class="field__errors">
               <template v-if="!$v.address.required">Wallet address is required</template>
               <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
             </template>
           </b-form-invalid-feedback>
-          <b-form-text id="inputLiveAddressHelp">
+          <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
             Address of the wallet
           </b-form-text>
         </b-form-group>

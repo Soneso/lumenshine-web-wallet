@@ -22,34 +22,34 @@
         <span class="warning">{{ data.federation_address }}</span>
       </p>
 
-      <b-form-group label="Currency" label-for="currencyInput">
+      <b-form-group :label-for="`currencyInput_${uuid}`" label="Currency">
         <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
-        <b-form-select v-else id="currencyInput" v-model="assetCode" :options="currencyOptions"/>
+        <b-form-select v-else :id="`currencyInput_${uuid}`" v-model="assetCode" :options="currencyOptions"/>
       </b-form-group>
 
-      <b-form-group v-if="currentAssetCodeBalances.length > 1" label="Issuer" label-for="issuerInput">
-        <b-form-select id="issuerInput" v-model="issuer" :options="issuerOptions"/>
+      <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer">
+        <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions"/>
       </b-form-group>
 
-      <b-form-group label-for="amountInput">
+      <b-form-group :label-for="`amountInput_${uuid}`">
         {{ assetCode }}
         <b-form-input
-          id="amountInput"
+          :id="`amountInput_${uuid}`"
           :class="{ error: $v.amount.$error }"
           :state="!$v.amount.$error"
+          :aria-describedby="`inputAmountHelp_${uuid} inputAmountFeedback_${uuid}`"
           v-model="amount"
           placeholder="Amount to receive"
           type="text"
-          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
           required
           @blur="$v.amount.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+        <b-form-invalid-feedback :id="`inputAmountFeedback_${uuid}`">
           <template v-if="$v.amount.$error" class="field__errors">
             <template v-if="!$v.amount.required">Amount is required</template>
             <template v-if="!$v.amount.decimal">Amount should be numeric!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveAmountHelp">
+        <b-form-text :id="`inputAmountHelp_${uuid}`">
           Amount to receive.
         </b-form-text>
       </b-form-group>

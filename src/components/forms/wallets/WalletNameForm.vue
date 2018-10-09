@@ -10,9 +10,9 @@
     <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
       <strong>Wallet name</strong><br>
       <b-row>
-        <b-form-group label-for="nameInput">
+        <b-form-group :label-for="`nameInput_${uuid}`">
           <b-form-input
-            id="nameInput"
+            :id="`nameInput_${uuid}`"
             :class="{ error: $v.name.$error }"
             v-model="name"
             :state="!$v.name.$error"
@@ -21,13 +21,13 @@
             aria-describedby="inputLiveNameHelp inputLiveNameFeedback"
             required
             @blur="$v.name.$touch()"/>
-          <b-form-invalid-feedback id="inputLiveNameFeedback">
+          <b-form-invalid-feedback :id="`inputLiveNameFeedback_${uuid}`">
             <template v-if="$v.name.$error" class="field__errors">
               <template v-if="!$v.name.required">Wallet name is required</template>
               <template v-if="!$v.name.uniqueName">Wallet name is already used</template>
             </template>
           </b-form-invalid-feedback>
-          <b-form-text id="inputLiveNameHelp">
+          <b-form-text :id="`inputLiveNameHelp_${uuid}`">
             Name of the wallet
           </b-form-text>
         </b-form-group>

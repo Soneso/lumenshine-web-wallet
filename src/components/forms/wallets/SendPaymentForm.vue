@@ -1,50 +1,50 @@
 <template>
   <form class="form">
     <div v-if="!result">
-      <b-form-group label="Currency:" label-for="assetCodeInput">
-        <b-form-select id="assetCodeInput" v-model="assetCode" :options="assetCodeOptions" required/>
+      <b-form-group :label-for="`assetCodeInput_${uuid}`" label="Currency:">
+        <b-form-select :id="`assetCodeInput_${uuid}`" v-model="assetCode" :options="assetCodeOptions" required/>
       </b-form-group>
 
-      <b-form-group v-if="assetCode === '_other'" label="Asset code" label-for="customAssetCodeInput">
+      <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
         <b-form-input
-          id="customAssetCodeInput"
+          :id="`customAssetCodeInput_${uuid}`"
           :class="{ error: $v.customAssetCode.$error }"
+          :aria-describedby="`inputAssetCodeHelp_${uuid} inputAssetCodeFeedback_${uuid}`"
           v-model="customAssetCode"
           :state="!$v.customAssetCode.$error"
           type="text"
           placeholder="Asset code"
           tabindex="1"
-          aria-describedby="inputLiveAssetCodeHelp inputLiveAssetCodeFeedback"
           required
           @blur="$v.customAssetCode.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveAssetCodeFeedback">
+        <b-form-invalid-feedback :id="`inputAssetCodeFeedback_${uuid}`">
           <template v-if="$v.customAssetCode.$error" class="field__errors">
             <template v-if="!$v.customAssetCode.required">Asset code is required!</template>
             <template v-if="!$v.customAssetCode.validAssetCode">Not valid asset code!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveAssetCodeHelp">
+        <b-form-text :id="`inputAssetCodeHelp_${uuid}`">
           Your custom asset code.
         </b-form-text>
       </b-form-group>
 
-      <b-form-group v-if="currentAssetCodeBalances.length > 1" label="Issuer:" label-for="issuerInput">
-        <b-form-select id="issuerInput" v-model="issuer" :options="issuerOptions" required/>
+      <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer:">
+        <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions" required/>
       </b-form-group>
 
-      <b-form-group label="Send to" label-for="recipientInput">
+      <b-form-group :label-for="`recipientInput_${uuid}`" label="Send to">
         <b-form-input
-          id="recipientInput"
+          :id="`recipientInput_${uuid}`"
           :class="{ error: $v.recipient.$error }"
+          :aria-describedby="`inputLiveRecipientHelp_${uuid} inputLiveRecipientFeedback_${uuid}`"
           v-model="recipient"
           :state="!$v.recipient.$error"
           type="text"
           placeholder="Recepient's public key or address"
           tabindex="2"
-          aria-describedby="inputLiveRecipientHelp inputLiveRecipientFeedback"
           required
           @blur="$v.recipient.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveRecipientFeedback">
+        <b-form-invalid-feedback :id="`inputLiveRecipientFeedback_${uuid}`">
           <template v-if="$v.recipient.$error" class="field__errors">
             <template v-if="!$v.recipient.required">Recipient is required!</template>
             <template v-if="!$v.recipient.validRecipient">Not valid recipient!</template>
@@ -53,107 +53,106 @@
             <template v-if="!$v.recipient.noDestination">Invalid destination!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveRecipientHelp">
+        <b-form-text :id="`inputLiveRecipientHelp_${uuid}`">
           Your destination.
         </b-form-text>
       </b-form-group>
 
-      <b-form-group label="Send to" label-for="amountInput">
+      <b-form-group :label-for="`amountInput_${uuid}`" label="Send to">
         <b-form-input
-          id="amountInput"
+          :id="`amountInput_${uuid}`"
           :class="{ error: $v.amount.$error }"
+          :aria-describedby="`inputLiveAmountHelp_${uuid} inputLiveAmountFeedback_${uuid}`"
           v-model="amount"
           :state="!$v.amount.$error"
           type="text"
           placeholder="Amount to send"
           tabindex="3"
-          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
           required
           @blur="$v.amount.$touch()"/>
         {{ currentAssetCode }}
-        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+        <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
           <template v-if="$v.amount.$error" class="field__errors">
             <template v-if="!$v.amount.required">Amount is required!</template>
             <template v-if="!$v.amount.decimal">Not valid amount!</template>
             <template v-if="!$v.amount.hasEnoughFunds">Not enough funds!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveAmountHelp">
+        <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
           Your amount to send.
         </b-form-text>
       </b-form-group>
 
-      <b-form-group label="Memo Type" label-for="memoTypeInput">
-        <b-form-select id="memoTypeInput" v-model="memoType" :options="memoTypeOptions"/>
+      <b-form-group :label-for="`memoTypeInput_${uuid}`" label="Memo Type">
+        <b-form-select :id="`memoTypeInput_${uuid}`" v-model="memoType" :options="memoTypeOptions"/>
       </b-form-group>
 
-      <b-form-group label="Memo (optional)" label-for="memoInput">
+      <b-form-group :label-for="`memoInput_${uuid}`" label="Memo (optional)">
         <b-form-input
-          id="memoInput"
+          :id="`memoInput_${uuid}`"
           :class="{ error: $v.memo.$error }"
           :placeholder="memoPlaceholder"
           :state="!$v.memo.$error"
+          :aria-describedby="`inputLiveMemoHelp_${uuid} inputLiveMemoFeedback_${uuid}`"
           v-model="memo"
           type="text"
           tabindex="4"
-          aria-describedby="inputLiveMemoHelp inputLiveMemoFeedback"
           required
           @blur="$v.memo.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveMemoFeedback">
+        <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
           <template v-if="$v.memo.$error" class="field__errors">
             <template v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</template>
             <template v-if="!$v.memo.maxLength">Max length is 28 characters!</template>
             <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveMemoHelp">
+        <b-form-text :id="`inputLiveMemoHelp_${uuid}`">
           Your memo.
         </b-form-text>
       </b-form-group>
 
-      <b-form-group v-if="canSignWithPassword" label="Password" label-for="passwordInput">
+      <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
         <b-form-input
-          id="passwordInput"
+          :id="`passwordInput_${uuid}`"
           :class="{ error: $v.password.$error }"
-          v-model="password"
+          :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
           :state="!$v.password.$error"
+          v-model="password"
           type="password"
           placeholder="Your password"
           tabindex="5"
-          aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
           required
           @blur="$v.password.$touch()"/>
-        <b-form-invalid-feedback id="inputLivePasswordFeedback">
+        <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
           <template v-if="$v.password.$error" class="field__errors">
             <template v-if="!$v.password.required">Password is required!</template>
             <template v-if="!$v.password.decryptValid">Wrong password!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLivePasswordHelp">
+        <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
           Your password.
         </b-form-text>
       </b-form-group>
 
-      <b-form-group v-if="!canSignWithPassword" label="Select signer for payment" label-for="signerInput">
-        <b-form-select id="signerInput" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+      <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
+        <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
         <b-form-input
-          id="signerSeedInput"
           :class="{ error: $v.signerSeed.$error }"
+          :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
           v-model="signerSeed"
           :state="!$v.signerSeed.$error"
           type="text"
           placeholder="Seed for selected signer"
           tabindex="6"
-          aria-describedby="inputLiveSignerSeedHelp inputLiveSignerSeedFeedback"
           required
           @blur="$v.signerSeed.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveSignerSeedFeedback">
+        <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
           <template v-if="$v.signerSeed.$error" class="field__errors">
             <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
             <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveSignerSeedHelp">
+        <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
           Your secret seed for selected signer.
         </b-form-text>
       </b-form-group>

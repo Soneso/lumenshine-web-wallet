@@ -12,24 +12,24 @@
 
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
 
-      <b-form-group v-if="fieldOpen && !loading && !secretSeed" label="Password" label-for="passwordInput">
+      <b-form-group v-if="fieldOpen && !loading && !secretSeed" :label-for="`passwordInput_${uuid}`" label="Password">
         <b-form-input
-          id="passwordInput"
+          :id="`passwordInput_${uuid}`"
           :class="{ error: $v.password.$error }"
-          v-model="password"
+          :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
           :state="!$v.password.$error"
+          v-model="password"
           type="password"
           placeholder="Insert password to reveal"
-          aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
           required
           @blur="$v.password.$touch()"/>
-        <b-form-invalid-feedback id="inputLivePasswordFeedback">
+        <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
           <template v-if="$v.password.$error" class="field__errors">
             <template v-if="!$v.password.required">Password is required!</template>
             <template v-if="!$v.password.decryptValid">Wrong password!</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLivePasswordHelp">
+        <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
           Your password.
         </b-form-text>
       </b-form-group>

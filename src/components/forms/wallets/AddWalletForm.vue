@@ -3,24 +3,24 @@
     <div v-if="!loading && nextPublicKey !== null">
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
 
-      <b-form-group label-for="nameInput">
+      <b-form-group :label-for="`nameInput_${uuid}`">
         <b-form-input
-          id="nameInput"
+          :id="`nameInput_${uuid}`"
           :class="{ error: $v.walletName.$error }"
           :state="!$v.walletName.$error"
+          :aria-describedby="`inputLiveAmountHelp_${uuid} inputLiveAmountFeedback_${uuid}`"
           v-model="walletName"
           placeholder="Wallet name"
           type="text"
-          aria-describedby="inputLiveAmountHelp inputLiveAmountFeedback"
           required
           @blur="$v.walletName.$touch()"/>
-        <b-form-invalid-feedback id="inputLiveAmountFeedback">
+        <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
           <template v-if="$v.walletName.$error" class="field__errors">
             <template v-if="!$v.walletName.required">Wallet name is required</template>
             <template v-if="!$v.walletName.maxLength">Max. 40 characters allowed</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveAmountHelp">
+        <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
           New wallet name.
         </b-form-text>
       </b-form-group>
@@ -38,8 +38,8 @@
           <i class="fa fa-clone"/>
         </a>
         <br>
-        <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
-        <label for="homeScreenCheckbox">Show wallet on home screen</label>
+        <input :id="`homeScreenCheckbox_${uuid}`" v-model="homescreen" type="checkbox" class="switch">
+        <label :for="`homeScreenCheckbox_${uuid}`">Show wallet on home screen</label>
       </p>
     </div>
     <b-button @click="onCancelClick">Cancel</b-button>

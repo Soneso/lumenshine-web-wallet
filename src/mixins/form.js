@@ -1,3 +1,5 @@
+let uuid = 0;
+
 export default {
   props: {
     loading: {
@@ -13,6 +15,10 @@ export default {
     return {
       backendQuery: {}
     };
+  },
+  beforeCreate () {
+    this.uuid = uuid.toString();
+    uuid += 1;
   },
   computed: {
     hasUnknownError () {
