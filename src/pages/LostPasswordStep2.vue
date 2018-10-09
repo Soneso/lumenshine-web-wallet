@@ -8,7 +8,6 @@
           <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
           <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
         </template>
-
         <template v-else-if="userStatus.res">
           <div v-if="inProgress" class="py-4 px-2">Loading...</div>
           <template v-if="userStatus.res.tfa_confirmed === false">

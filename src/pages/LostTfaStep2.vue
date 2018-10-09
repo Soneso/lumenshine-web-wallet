@@ -1,41 +1,47 @@
 <template>
-  <div class="page-box form">
-    <h1>Lost 2FA Secret</h1>
-    <!-- Token: {{$route.params.token}} -->
-    <div v-if="confirmEmailStatus.err.length > 0">
-      <div v-if="tokenNotFound" class="error">Token could not be found in the database.</div>
-      <div v-if="tokenExpired" class="error">Token expired.</div>
-      <div v-if="emailAlreadyConfirmed" class="error">Email address already confirmed.</div>
-    </div>
-    <div v-else-if="userStatus.res">
-      <div v-if="inProgress">Loading...</div>
-      <div v-if="userStatus.res.tfa_confirmed === false">
-        <div v-if="userStatus.res.mnemonic_confirmed === true">
-          <h3>Error - 002</h3>
-          <p>Please contact</p>
-          <p><a :href="`mailto:${config.SUPPORT_MAIL}?subject=${encodeURIComponent('Error - 002 - Lost 2FA Secret')}`">support</a></p>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4 single-card text-center">
+        <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
+        <template v-if="confirmEmailStatus.err.length > 0">
+          <small v-if="tokenNotFound" class="text-danger d-block">Token could not be found in the database.</small>
+          <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
+          <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
+        </template>
+        <template v-else-if="userStatus.res">
+          <div v-if="inProgress" class="py-4 px-2">Loading...</div>
+          <template v-if="userStatus.res.tfa_confirmed === false">
+            <template v-if="userStatus.res.mnemonic_confirmed === true">
+              <p class="text-danger">Error - 002</p>
+              <p>Please contact</p>
+              <p><a :href="`mailto:${config.SUPPORT_MAIL}?subject=${encodeURIComponent('Error - 002 - Lost 2FA Secret')}`">support</a></p>
+            </template>
+            <template v-else-if="userStatus.res.mnemonic_confirmed === false">
+              <lost-tfa-password-form v-show="!loading" :loading="loading" :errors="lostTfaStatus.err" :decrypt-error="decryptError" @submit="onLoginToSetup"/>
+            </template>
+          </template>
+
+          <template v-else> <!-- userStatus.res.tfa_confirmed === true -->
+            <template v-if="step === 'password'">
+              <lost-tfa-password-form v-show="!loading && !lostTfaStatus.res" :decrypt-error="decryptError" :loading="loading" :errors="lostTfaStatus.err" @submit="onPasswordSubmitClick"/>
+            </template>
+            <template v-if="step === 'tfa'">
+              <lost-tfa-form v-show="!loading && !lostTfaStatus.res" :tfa-data="tfaData" :loading="loading" :errors="registration2FAStatus.err" @submit="onTfaSubmitClick"/>
+            </template>
+          </template>
+        </template>
+
+        <template v-if="step === 'finish'">
+          <p class="info">Your 2FA Secret has been reset successfully.</p>
+          <b-button variant="info" class="btn-rounded text-uppercase" @click="$router.push({ name: 'Login' })">Login</b-button>
+        </template>
+
+        <div v-if="step === 'error'">
+          <small class="text-danger d-block">Cannot update 2FA, please try again later.</small>
         </div>
-        <div v-else-if="userStatus.res.mnemonic_confirmed === false">
-          <lost-tfa-password-form v-show="!loading" :loading="loading" :errors="lostTfaStatus.err" :decrypt-error="decryptError" @submit="onLoginToSetup"/>
-        </div>
-      </div>
-      <div v-else> <!-- userStatus.res.tfa_confirmed === true -->
-        <div v-if="step === 'password'">
-          <lost-tfa-password-form v-show="!loading && !lostTfaStatus.res" :decrypt-error="decryptError" :loading="loading" :errors="lostTfaStatus.err" @submit="onPasswordSubmitClick"/>
-        </div>
-        <div v-if="step === 'tfa'">
-          <lost-tfa-form v-show="!loading && !lostTfaStatus.res" :tfa-data="tfaData" :loading="loading" :errors="registration2FAStatus.err" @submit="onTfaSubmitClick"/>
-        </div>
-      </div>
-    </div>
-    <div v-if="step === 'finish'">
-      <p class="info">Your 2FA Secret has been reset successfully.</p>
-      <button @click="$router.push({ name: 'Login' })">Login</button>
-    </div>
-    <div v-if="step === 'error'">
-      Cannot update 2FA, please try again later.
-    </div>
-  </div>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -193,6 +199,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

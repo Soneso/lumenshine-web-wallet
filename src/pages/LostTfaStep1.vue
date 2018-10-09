@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
       <b-card class="p-4 single-card text-center">
-        <p class="form-headline pb-3">Lost 2FA Secret</p>
+        <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
         <div v-if="inProgress" class="py-4 px-2">Loading...</div>
         <template v-if="emailSuccess">
           <small class="text-success">Lost 2FA Secret lost email sent</small>
