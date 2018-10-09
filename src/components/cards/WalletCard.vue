@@ -241,14 +241,14 @@ export default {
 
         const trustlines = this.data.stellar_data.balances.length - 1;
         const signers = this.data.stellar_data.signers.length - 1;
-        const dataEntries = Object.keys(this.data.stellar_data.data).length;
+        const dataEntries = Object.keys(this.data.stellar_data.data_attr).length;
         const offers = this.data.stellar_data.subentry_count - trustlines - signers - dataEntries;
         const items = [
-          `${(2 * baseReserve).toFixed(1)} XLM - account reserve`,
-          ...trustlines > 0 ? (trustlines === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 trustline to other currency`] : [`${(trustlines * baseReserve).toFixed(1)} XLM - ${trustlines} trustlines to other currencies`]) : [],
-          ...signers > 0 ? (signers === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 additional signer`] : [`${(signers * baseReserve).toFixed(1)} XLM - ${signers} additional signers`]) : [],
-          ...dataEntries > 0 ? (dataEntries === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 data entry`] : [`${(dataEntries * baseReserve).toFixed(1)} XLM - ${dataEntries} data entries`]) : [],
-          ...offers > 0 ? (offers === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 offer`] : [`${(offers * baseReserve).toFixed(1)} XLM - ${offers} offers`]) : [],
+          `${(2 * baseReserve).toFixed(2)} XLM - account reserve`,
+          ...trustlines > 0 ? (trustlines === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 trustline to other currency`] : [`${(trustlines * baseReserve).toFixed(2)} XLM - ${trustlines} trustlines to other currencies`]) : [],
+          ...signers > 0 ? (signers === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 additional signer`] : [`${(signers * baseReserve).toFixed(2)} XLM - ${signers} additional signers`]) : [],
+          ...dataEntries > 0 ? (dataEntries === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 data entry`] : [`${(dataEntries * baseReserve).toFixed(2)} XLM - ${dataEntries} data entries`]) : [],
+          ...offers > 0 ? (offers === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 offer`] : [`${(offers * baseReserve).toFixed(2)} XLM - ${offers} offers`]) : [],
         ];
 
         const liabilities = balance.sellingLiabilities && balance.sellingLiabilities !== '0.0000000' ? `
@@ -258,9 +258,14 @@ export default {
           <p>${new Amount(balance.sellingLiabilities).format()} XLM</p>
         ` : '';
 
+        let totalAmount = new Amount(((2 + this.data.stellar_data.subentry_count) * baseReserve).toString());
+        if (balance.sellingLiabilities) {
+          totalAmount = totalAmount.plus(balance.sellingLiabilities);
+        }
+
         const total = `
           <strong>Total amount reserved</strong>
-          <p>${((2 + this.data.stellar_data.subentry_count) * baseReserve).toFixed(1)} XLM</p>
+          <p>${totalAmount.format()} XLM</p>
         `;
         return header + items.join('<br>') + '<br><br>' + liabilities + total;
       } else {

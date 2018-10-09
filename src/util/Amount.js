@@ -69,8 +69,18 @@ class Amount {
     return this;
   }
 
-  format (decimalPlaces = 7) {
-    return this.val.toFormat(decimalPlaces);
+  format () {
+    // max 7 characters after decimal point
+    // min 2 characters after decimal point
+    const value = this.val.toFormat(7);
+    const parts = value.split('.');
+    while (parts[1].charAt(parts[1].length - 1) === '0') {
+      parts[1] = parts[1].substring(0, parts[1].length - 1);
+    }
+    while (parts[1].length < 2) {
+      parts[1] += '0';
+    }
+    return parts[0] + '.' + parts[1];
   }
 
   toNumber () {
