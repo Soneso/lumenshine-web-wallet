@@ -11,9 +11,14 @@
         <p>Read more about mnemonics <a href="#">here</a></p>
         <hr class="divider light">
         <strong>Your Secret (24 words mnemonic):</strong>
-        <ul class="words">
-          <li v-for="(word, index) in mnemonicWords" :key="index"><small class="text-secondary">{{ index + 1 }}.</small> {{ word }}</li>
-        </ul>
+        <div class="words">
+          <b-row v-for="(word, index) in mnemonicWords" :key="index" h-align="center">
+            <b-col cols="2" offset="3" class="text-right px-1">
+              <small>{{ index + 1 }}.</small>
+            </b-col>
+            <b-col cols="7" class="text-left px-1">{{ word }}</b-col>
+          </b-row>
+        </div>
         <b-button type="submit" variant="danger" size="lg" class="btn-rounded" @click="onNext">Confirm noting of your mnemonic</b-button>
       </b-card>
     </b-col>
