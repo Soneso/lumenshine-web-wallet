@@ -1,6 +1,6 @@
 <template>
   <form class="form" @submit.prevent="onSubmitClick">
-    <div v-if="!loading && nextPublicKey !== null">
+    <div v-if="!loading && nextPublicKey !== null" class="text-center">
       <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
 
       <b-form-group :label-for="`nameInput_${uuid}`">
@@ -26,24 +26,26 @@
       </b-form-group>
 
       <p class="centered">
-        <strong>Stellar public key</strong><br>
-        <strong>Account ID / Public key</strong>
+        <strong class="text-info">Stellar public key</strong><br>
+        <span>Account ID / Public key</span>
         <br>
         <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
-        {{ nextPublicKey }}
-        <a
-          v-clipboard:copy="nextPublicKey"
-          v-clipboard:success="onCopy"
-          class="wallet-link">
-          <i class="fa fa-clone"/>
-        </a>
+        <b-row align-h="center">
+          <strong class="col-6 d-inline-block text-truncate">{{ nextPublicKey }}</strong>
+          <a
+            v-clipboard:copy="nextPublicKey"
+            v-clipboard:success="onCopy"
+            class="wallet-link">
+            <span class="text-info"><i class="icon-copy"/></span>
+          </a>
+        </b-row>
         <br>
         <input :id="`homeScreenCheckbox_${uuid}`" v-model="homescreen" type="checkbox" class="switch">
         <label :for="`homeScreenCheckbox_${uuid}`">Show wallet on home screen</label>
       </p>
+      <b-button @click="onCancelClick">Cancel</b-button>
+      <b-button variant="info" @click="onSubmitClick">Add</b-button>
     </div>
-    <b-button @click="onCancelClick">Cancel</b-button>
-    <b-button variant="primary" @click="onSubmitClick">Add</b-button>
   </form>
 </template>
 

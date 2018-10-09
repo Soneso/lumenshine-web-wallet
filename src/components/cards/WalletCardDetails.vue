@@ -78,7 +78,7 @@
         v-clipboard:copy="data.public_key_0"
         v-clipboard:success="onCopy"
         class="wallet-link">
-        <i class="fa fa-clone"/>
+        <i class="icon-copy"/>
       </a>
     </p>
 

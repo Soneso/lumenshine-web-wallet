@@ -1,7 +1,7 @@
 <template>
   <form class="form" @submit.prevent="onSubmitClick">
     <p v-if="!fieldOpen || loading">
-      <strong>Stellar address</strong>
+      <strong>Short stellar address</strong>
       <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
       <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
       <br>
@@ -16,7 +16,7 @@
     <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
 
     <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
-      <strong>Stellar address</strong><br>
+      <strong>Short stellar address</strong><br>
       <b-row>
         <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
           <b-form-input

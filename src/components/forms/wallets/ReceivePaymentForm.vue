@@ -10,7 +10,7 @@
         v-clipboard:copy="data.public_key_0"
         v-clipboard:success="onCopy"
         class="wallet-link">
-        <i class="fa fa-clone"/>
+        <i class="icon-copy"/>
       </a>
       <p>
         <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>

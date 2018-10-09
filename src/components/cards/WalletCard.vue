@@ -1,19 +1,16 @@
 <template>
   <b-col cols="6" sm="8" md="6" lg="6" xl="6">
     <b-card :class="['p-4 my-1', 'card', {'card--wide': balances && balances.length > 1}]">
-      <header v-if="!data.stellar_data">
-        <h3>{{ data.wallet_name }} WALLET</h3>
-        <span class="text-danger">not funded</span>
-      </header>
-
-      <header v-else>
-        <h3>{{ data.wallet_name }} WALLET</h3>
-        <span v-if="data.federation_address" class="warning card__federation-address">{{ data.federation_address }}</span>
+      <header >
+        <h5><strong>{{ data.wallet_name }}</strong> WALLET</h5>
+        <span v-if="!data.stellar_data" class="text-danger">not funded</span>
+        <span v-else-if="data.federation_address" class="text-warning">{{ data.federation_address }}</span>
+        <span v-else class="text-warning">No short address</span>
       </header>
 
       <b-card-group deck>
         <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
-          <h4 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h4>
+          <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
           <p v-if="!data.stellar_data">0.0 <small>XLM</small></p>
           <ul v-else class="list-unstyled">
             <li v-for="item in balances" :key="item.type + item.issuer">
@@ -23,7 +20,7 @@
         </b-card>
 
         <b-card v-if="data.stellar_data">
-          <h4 class="text-info text-uppercase">Available</h4>
+          <h5 class="text-info text-uppercase">Available</h5>
           <ul class="list-unstyled">
             <li v-for="item in balances" :key="item.type + item.issuer">
               {{ item.available }} <small>{{ item.type }}</small>
@@ -39,17 +36,17 @@
 
       <div slot="footer">
         <footer v-if="!data.stellar_data">
-          <div class="actions">
-            <a href="#" @click.prevent="$refs.fundWalletModal.show()">Fund Wallet</a>
+          <div class="border-top pt-3 text-right">
+            <a href="#" class="p-1" @click.prevent="$refs.fundWalletModal.show()">Fund Wallet</a>
           </div>
         </footer>
 
         <footer v-else-if="showActions">
-          <div class="actions">
-            <a href="#" @click.prevent="$refs.infoModal.show()">Info</a>
-            <a href="#" @click.prevent="$refs.sendModal.show()">Send</a>
-            <a href="#" @click.prevent="$refs.receiveModal.show()">Receive</a>
-            <a href="#" @click.prevent="$refs.detailsModal.show()">Details</a>
+          <div class="border-top pt-3 text-right">
+            <a href="#" class="p-1" @click.prevent="$refs.infoModal.show()">Info</a>
+            <a href="#" class="p-1" @click.prevent="$refs.sendModal.show()">Send</a>
+            <a href="#" class="p-1" @click.prevent="$refs.receiveModal.show()">Receive</a>
+            <a href="#" class="p-1" @click.prevent="$refs.detailsModal.show()">Details</a>
           </div>
         </footer>
       </div>
@@ -124,15 +121,15 @@
 
       <b-modal ref="infoModal" hide-footer title="Info">
         <p>This is a wallet card.</p>
-        <p>Wallet name<br> Shows the name of your wallet in the title of the card. You can change the name by pressing the Details button.</p>
-        <p>Federation Address<br> If this wallet is connected to a federation address, the address is displayed below of the name of the wallet. To add a federation address, pls press the Details button. To learn more about federation address please click here.</p>
-        <p>Balance<br> Shows the overall balance of Stellar Lumens (XLM) that the wallet holds. If you have other curencies in this wallet, the card also shows their balances.</p>
-        <p>Base reserve<br> In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen) - also called base reserve. One can not spend the base reserve.</p>
-        <p>Transaction fee<br> The amount of stellar lumens needed to perform a transaction, such as a payment transaction.</p>
-        <p>Available balance<br> Shows the amount that can be spent. It is calculated by substracting the base reserve and stellar transaction fee from the overall balance.</p>
-        <p>Send<br> Press the Send button to send lumens or other currencies form this wallet.</p>
-        <p>Receive<br> Press the Receive button to receive lumens or other currencies to this wallet.</p>
-        <p>Details<br> Press the Details button to see all details about your Wallet.</p>
+        <p><strong>Wallet name</strong><br> Shows the name of your wallet in the title of the card. You can change the name by pressing the Details button.</p>
+        <p><strong>Federation Address</strong><br> If this wallet is connected to a federation address, the address is displayed below of the name of the wallet. To add a federation address, pls press the Details button. To learn more about federation address please click here.</p>
+        <p><strong>Balance</strong><br> Shows the overall balance of Stellar Lumens (XLM) that the wallet holds. If you have other curencies in this wallet, the card also shows their balances.</p>
+        <p><strong>Base reserve</strong><br> In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen) - also called base reserve. One can not spend the base reserve.</p>
+        <p><strong>Transaction fee</strong><br> The amount of stellar lumens needed to perform a transaction, such as a payment transaction.</p>
+        <p><strong>Available balance</strong><br> Shows the amount that can be spent. It is calculated by substracting the base reserve and stellar transaction fee from the overall balance.</p>
+        <p><strong>Send</strong><br> Press the Send button to send lumens or other currencies form this wallet.</p>
+        <p><strong>Receive</strong><br> Press the Receive button to receive lumens or other currencies to this wallet.</p>
+        <p><strong>Details</strong><br> Press the Details button to see all details about your Wallet.</p>
       </b-modal>
     </b-card>
   </b-col>

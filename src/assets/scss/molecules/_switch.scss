@@ -4,22 +4,22 @@ input[type="checkbox"].switch {
   &:checked {
     + label {
       &:after {
-        margin-left: 1rem
+        margin-right: 0;
       }
 
       &:before {
-        background: $success
+        background: $success;
       }
     }
   }
 
   + label {
     position: relative;
-    padding: .3125rem 0 0 3.125rem;
+    padding: .3125rem 3.125rem 0 0;
     width: auto;
 
     &:hover:after {
-      box-shadow: 0 0 .3125rem rgba($black, .3)
+      box-shadow: 0 0 .3125rem rgba($black, .3);
     }
 
     &:before,
@@ -27,21 +27,22 @@ input[type="checkbox"].switch {
       content: '';
       position: absolute;
       display: block;
-      left: 0;
+      right: 0;
       top: 0;
       height: 1.5rem;
       border-radius: 1rem;
       background: $white;
       border: 1px solid $gray-200;
-      transition: all .3s
+      transition: all .3s;
     }
 
     &:before {
-      width: 2.5rem
+      width: 2.5rem;
     }
 
     &:after {
-      width: 1.5rem
+      width: 1.5rem;
+      margin-right: 1rem;
     }
   }
 }
