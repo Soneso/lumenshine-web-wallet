@@ -434,14 +434,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.form {
-  table {
-    width: 100%;
-  }
-  input, select {
-    width: auto;
-  }
-}
-</style>

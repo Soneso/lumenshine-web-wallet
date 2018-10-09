@@ -294,29 +294,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-p {
-  word-wrap: break-word;
-}
-
-.known-destinations {
-  display: block;
-  padding: 0;
-  margin: 0 auto;
-  list-style: none;
-  min-width: 300px;
-  width: 50%;
-  li {
-    padding-bottom: 8px;
-    border-bottom: 1px solid #666;
-  }
-  input.error {
-    margin-bottom: -12px;
-    display: block;
-  }
-  .checkbox {
-    float: right;
-  }
-}
-</style>

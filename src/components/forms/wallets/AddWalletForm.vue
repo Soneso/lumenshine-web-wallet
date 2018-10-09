@@ -93,12 +93,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.form {
-  text-align: center;
-}
-p {
-  word-wrap: break-word;
-}
-</style>

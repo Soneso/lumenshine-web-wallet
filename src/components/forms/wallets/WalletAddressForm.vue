@@ -128,9 +128,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-input {
-  width: auto !important;
-}
-</style>
