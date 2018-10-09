@@ -16,8 +16,8 @@
           <h4 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h4>
           <p v-if="!data.stellar_data">0.0 <small>XLM</small></p>
           <ul v-else class="list-unstyled">
-            <li v-for="balance in balances" :key="balance.type + balance.issuer">
-              {{ balance.balance }} <small>{{ balance.type }}</small>
+            <li v-for="item in balances" :key="item.type + item.issuer">
+              {{ item.balance }} <small>{{ item.type }}</small>
             </li>
           </ul>
         </b-card>
@@ -25,8 +25,13 @@
         <b-card v-if="data.stellar_data">
           <h4 class="text-info text-uppercase">Available</h4>
           <ul class="list-unstyled">
-            <li v-for="balance in avalaibleBalances" :key="balance.type + balance.issuer">
-              {{ balance.balance }} <small>{{ balance.type }}</small>
+            <li v-for="item in balances" :key="item.type + item.issuer">
+              {{ item.available }} <small>{{ item.type }}</small>
+              <i
+                v-b-popover.hover.html="() => getAvailablePopup(item)"
+                v-if="item.available !== item.balance"
+                :title="`Available ${item.type}`"
+                class="icon-help"/>
             </li>
           </ul>
         </b-card>
@@ -70,7 +75,6 @@
         <wallet-card-details
           :data="data"
           :balances="balances"
-          :avalaible-balances="avalaibleBalances"
           :decrypt-wallet-loading="decryptedWallet.loading"
           :inflation-destination-loading="setInflationDestLoading"
           :wallet-details-loading="walletDetailsLoading"
@@ -181,31 +185,34 @@ export default {
   },
   computed: {
     ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
-    balances () {
-      if (!this.data.stellar_data) return [];
-      const balances = this.data.stellar_data.balances;
-      const xlmBalance = { balance: new Amount(balances.find(b => b.asset_type === 'native').balance).format(), type: 'XLM' };
-
-      const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code, issuer: bal.asset_issuer }))];
-    },
-    minBalance () {
+    minXLMBalance () {
       if (!this.data.stellar_data) return new Amount('0');
       const entryCount = this.data.stellar_data.subentry_count;
       const baseReserve = 0.5;
-      const minBalance = new Amount(`${(2 + entryCount) * baseReserve}`);
-      return minBalance.plus('0.00001'); // transaction cost
+      const reserved = new Amount(`${(2 + entryCount) * baseReserve}`);
+      const xlmBalance = this.data.stellar_data.balances.find(b => b.asset_type === 'native');
+      const minBalance = xlmBalance.selling_liabilities ? reserved.minus(xlmBalance.selling_liabilities) : reserved;
+      return minBalance;
     },
-    avalaibleBalances () {
+    balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
-      const xlmBalance = { balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' };
-
-      const xlmAvailble = { balance: new Amount(xlmBalance.balance).minus(this.minBalance).format(), type: 'XLM' };
+      const xlmBalanceObject = balances.find(b => b.asset_type === 'native');
+      const xlmBalance = new Amount(xlmBalanceObject.balance);
+      const xlmAvailble = new Amount(xlmBalance).minus(this.minXLMBalance);
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [xlmAvailble, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance).format(), type: bal.asset_code, issuer: bal.asset_issuer }))];
-    }
+      return [
+        { balance: xlmBalance.format(), available: xlmAvailble.format(), type: 'XLM', sellingLiabilities: xlmBalanceObject.selling_liabilities },
+        ...otherBalances.map(bal => ({
+          balance: new Amount(bal.balance).format(),
+          available: bal.selling_liabilities ? new Amount(bal.balance).minus(bal.selling_liabilities).format() : new Amount(bal.balance).format(),
+          type: bal.asset_code,
+          issuer: bal.asset_issuer,
+          sellingLiabilities: bal.selling_liabilities,
+        }))
+      ];
+    },
   },
   methods: {
     ...mapActions([
@@ -223,6 +230,50 @@ export default {
     ]),
     onCopy () {
       this.accountIDCopied = true;
+    },
+    getAvailablePopup (balance) {
+      const baseReserve = 0.5;
+      if (!this.data.stellar_data) return '';
+
+      if (balance.type === 'XLM') {
+        const header = `
+          <strong>Minimum balance</strong>
+          <p>All Stellar accounts/wallets must maintain a minimum balance of lumens that can not be spent. The minimum balance for a basic account is 1.0 XLM. Additional entries such as trustlines for other currencies and additional signers increase the minimum balance.</p>
+          <p>The minimum balance for this account is:</p>
+        `;
+
+        const trustlines = this.data.stellar_data.balances.length - 1;
+        const signers = this.data.stellar_data.signers.length - 1;
+        const dataEntries = Object.keys(this.data.stellar_data.data).length;
+        const offers = this.data.stellar_data.subentry_count - trustlines - signers - dataEntries;
+        const items = [
+          `${(2 * baseReserve).toFixed(1)} XLM - account reserve`,
+          ...trustlines > 0 ? (trustlines === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 trustline to other currency`] : [`${(trustlines * baseReserve).toFixed(1)} XLM - ${trustlines} trustlines to other currencies`]) : [],
+          ...signers > 0 ? (signers === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 additional signer`] : [`${(signers * baseReserve).toFixed(1)} XLM - ${signers} additional signers`]) : [],
+          ...dataEntries > 0 ? (dataEntries === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 data entry`] : [`${(dataEntries * baseReserve).toFixed(1)} XLM - ${dataEntries} data entries`]) : [],
+          ...offers > 0 ? (offers === 1 ? [`${baseReserve.toFixed(1)} XLM - 1 offer`] : [`${(offers * baseReserve).toFixed(1)} XLM - ${offers} offers`]) : [],
+        ];
+
+        const liabilities = balance.sellingLiabilities && balance.sellingLiabilities !== '0.0000000' ? `
+          <strong>Selling liabilities</strong>
+          <p>Selling liabilities equal the total amount of this currency offered to sell aggregated over all offers owned by this wallet. This amount can not be spent.</p>
+          <p>The amount reserved for selling liabilities in this account is:</p>
+          <p>${new Amount(balance.sellingLiabilities).format()} XLM</p>
+        ` : '';
+
+        const total = `
+          <strong>Total amount reserved</strong>
+          <p>${((2 + this.data.stellar_data.subentry_count) * baseReserve).toFixed(1)} XLM</p>
+        `;
+        return header + items.join('<br>') + '<br><br>' + liabilities + total;
+      } else {
+        return `
+          <strong>Selling liabilities</strong>
+          <p>Selling liabilities equal the total amount of this currency offered to sell aggregated over all offers owned by this wallet. This amount can not be spent.</p>
+          <p>The amount reserved for selling liabilities in this account is:</p>
+          <p>${new Amount(balance.sellingLiabilities).format()} ${balance.type}</p>
+        `;
+      }
     },
     async onSendPaymentClick (data) {
       await this.sendPayment({ ...data, publicKey: this.data.public_key_0 });

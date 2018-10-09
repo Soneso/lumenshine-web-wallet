@@ -46,9 +46,9 @@
         </tr>
       </table>
       <table v-else>
-        <tr v-for="balance in balances" :key="balance.type + balance.issuer">
-          <td>{{ balance.balance }}</td>
-          <td>{{ balance.type }}</td>
+        <tr v-for="item in balances" :key="item.type + item.issuer">
+          <td>{{ item.balance }}</td>
+          <td>{{ item.type }}</td>
         </tr>
       </table>
     </p>
@@ -57,9 +57,9 @@
       <strong>Available</strong>
       <br>
       <table>
-        <tr v-for="balance in avalaibleBalances" :key="balance.type + balance.issuer">
-          <td>{{ balance.balance }}</td>
-          <td>{{ balance.type }}</td>
+        <tr v-for="item in balances" :key="item.type + item.issuer">
+          <td>{{ item.available }}</td>
+          <td>{{ item.type }}</td>
         </tr>
       </table>
     </p>
@@ -122,10 +122,6 @@ export default {
       required: true,
     },
     balances: {
-      type: Array,
-      required: true,
-    },
-    avalaibleBalances: {
       type: Array,
       required: true,
     },
