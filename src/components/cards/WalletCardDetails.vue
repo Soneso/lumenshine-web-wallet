@@ -91,7 +91,7 @@
       @reveal="onDecryptWallet"/>
 
     <strong>Transactions</strong>
-    <wallet-card-transactions :data="data"/>
+    <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>
   </div>
 </template>
 

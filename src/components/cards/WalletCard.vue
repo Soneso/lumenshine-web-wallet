@@ -79,7 +79,14 @@
           @setInflationDestination="onSetInflationDestination"
           @addCurrency="onAddCurrency"
           @removeCurrency="onRemoveCurrency"
+          @openOperationsModal="data => {operationDetailsModalData = data, $refs.operationDetailsModal.show()}"
           @close="$refs.detailsModal.hide()"/>
+      </b-modal>
+
+      <b-modal ref="operationDetailsModal" title="Operation details">
+        <pre>
+          {{ JSON.stringify(operationDetailsModalData, null, 2) }}
+        </pre>
       </b-modal>
 
       <link rel="stylesheet" href="https://changelly.com/widget.css"> <!-- needed by changelly modal -->
@@ -177,6 +184,8 @@ export default {
       fundWalletLoading: false,
 
       changellyModalVisible: false,
+
+      operationDetailsModalData: null,
 
       config
     };

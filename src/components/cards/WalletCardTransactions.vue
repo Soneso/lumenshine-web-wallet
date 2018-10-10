@@ -23,11 +23,6 @@
       <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
     </div>
     <div v-if="loading">Loading transactions... <i class="fa fa-spinner fa-spin fa-fw"/></div>
-    <b-modal ref="transationDetailsModal" title="Operation details">
-      <pre>
-        {{ JSON.stringify(detailsModalData, null, 2) }}
-      </pre>
-    </b-modal>
   </form>
 </template>
 
@@ -52,7 +47,6 @@ export default {
     return {
       transactions: [],
       loading: false,
-      detailsModalData: null,
     };
   },
   async created () {
@@ -82,8 +76,7 @@ export default {
       this.loading = false;
     },
     onDetailsClick (operation) {
-      this.detailsModalData = operation;
-      this.$refs.transationDetailsModal.show();
+      this.$emit('openOperationsModal', operation);
     },
     dayjs
   },
