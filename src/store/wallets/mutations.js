@@ -24,7 +24,8 @@ export default {
   },
 
   SET_WALLETS (state, msg) {
-    state.walletsResult = msg;
+    const wallets = [...msg].sort((a, b) => a.id - b.id);
+    state.walletsResult = wallets;
     state.walletsErrors = [];
   },
   SET_WALLETS_LOADING (state, msg) {
