@@ -1,19 +1,11 @@
-// offcanvas open button
 .offcanvas-open-btn {
   position: absolute;
   left: 1.5rem;
   top: 1.5rem;
   cursor: pointer;
   transform: rotate(180deg);
-
-  i {
-    &:before {
-      color: $info;
-    }
-  }
 }
 
-// offcanvas X
 .offcanvas-close-btn {
   @extend .px-2;
   position: absolute;
@@ -24,7 +16,6 @@
   cursor: pointer;
 }
 
-// offcanvas menu wrapper
 #offcanvas-menu {
   @extend .py-5;
   width: 0;

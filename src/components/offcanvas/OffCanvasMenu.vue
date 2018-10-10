@@ -7,7 +7,7 @@
       </span>
     </div>
     <div class="offcanvas-open-btn" @click="openMenu">
-      <i class="icon-hamburger-menu"/>
+      <i class="icon-hamburger-menu text-info"/>
     </div>
   </div>
 </template>
