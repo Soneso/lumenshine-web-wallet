@@ -17,7 +17,7 @@ export default {
   name: 'OffCanvasMenu',
   data () {
     return {
-      width: 300,
+      width: 220,
       collapsedWidth: 64,
       viewportWidth: 0
     };
@@ -70,7 +70,6 @@ export default {
       document.querySelector('#app').style.height = '100%';
 
       document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
-      document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
       document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
       document.querySelector('#page-wrapper').style.overflow = 'hidden';
     },
@@ -81,7 +80,6 @@ export default {
       document.querySelector('#app').style.overflow = '';
       document.querySelector('#app').style.height = '';
 
-      document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
       document.querySelector('#page-wrapper').style.transform = '';
       document.querySelector('#page-wrapper').style.transformStyle = '';
       document.querySelector('#page-wrapper').style.transformOrigin = '';

@@ -1,7 +1,12 @@
+#page-wrapper {
+  transition: all .25s ease 0s
+}
+
 .offcanvas-open-btn {
   position: absolute;
   left: 1.5rem;
   top: 1.5rem;
+  font-size: 1.125rem;
   cursor: pointer;
   transform: rotate(180deg);
 }
@@ -27,15 +32,55 @@
   background: rgba($info, 1);
   overflow-x: hidden;
   transition: .5s;
+  box-shadow: .125rem .125rem .5rem rgba($black, .25);
+}
+
+.menu-container {
+  > li {
+    @extend %offcanvas-hoverings;
+
+    &:hover {
+      background: rgba($white, .1)
+    }
+  }
+
+  ul {
+    @extend .d-none
+  }
+
+  a, i {
+    line-height: 1
+  }
 
   a {
-    @extend .d-block, .py-2;
+    @extend .d-flex, .px-3, .py-2;
     font-weight: 200;
     color: $white;
 
     &:hover,
     &:focus {
-      color: $gray-200;
+      color: $gray-100
+    }
+  }
+
+  i {
+    @extend .text-white;
+    font-size: 1.75rem
+  }
+
+  div {
+    &:not(.separator) {
+      @extend .py-2, .pl-3, %offcanvas-hoverings;
+    }
+
+    &.separator {
+      margin: 1px 0;
+      height: 1px;
+      background-color: $info;
+      background: -moz-linear-gradient(left, rgba($white, .25) 0%, $info 100%);
+      background: -webkit-linear-gradient(left, rgba($white, .25) 0%,$info 100%);
+      background: linear-gradient(to right, rgba($white, .25) 0%,$info 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#3aace2', GradientType=1);
     }
   }
 }

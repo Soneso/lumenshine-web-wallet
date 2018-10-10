@@ -6,6 +6,14 @@
   }
 }
 
+%offcanvas-hoverings {
+  transition: all .75s ease;
+
+  &:hover {
+    transition: all .25s ease
+  }
+}
+
 %slow-transitions {
   transition: all 2s ease
 }
