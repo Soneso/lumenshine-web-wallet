@@ -89,9 +89,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.form {
-  text-align: left;
-}
-</style>

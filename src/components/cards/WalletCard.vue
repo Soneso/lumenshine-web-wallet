@@ -1,38 +1,14 @@
 <template>
-  <b-col cols="6" sm="8" md="6" lg="6" xl="6">
+  <b-col :cols="wideCard ? 12 : 6" :md="wideCard ? 12 : 6" sm="8">
     <b-card :class="['p-4 my-1', 'card', {'card--wide': balances && balances.length > 1}]">
-      <header >
+      <header>
         <h5><strong>{{ data.wallet_name }}</strong> WALLET</h5>
         <span v-if="!data.stellar_data" class="text-danger">not funded</span>
         <span v-else-if="data.federation_address" class="text-warning">{{ data.federation_address }}</span>
         <span v-else class="text-warning">No short address</span>
       </header>
 
-      <b-card-group deck>
-        <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
-          <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
-          <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
-          <ul v-else class="list-unstyled">
-            <li v-for="item in balances" :key="item.type + item.issuer">
-              {{ item.balance }} <small>{{ item.type }}</small>
-            </li>
-          </ul>
-        </b-card>
-
-        <b-card v-if="data.stellar_data">
-          <h5 class="text-info text-uppercase">Available</h5>
-          <ul class="list-unstyled">
-            <li v-for="item in balances" :key="item.type + item.issuer">
-              {{ item.available }} <small>{{ item.type }}</small>
-              <i
-                v-b-popover.hover.html="() => getAvailablePopup(item)"
-                v-if="item.available !== item.balance"
-                :title="`Available ${item.type}`"
-                class="icon-help"/>
-            </li>
-          </ul>
-        </b-card>
-      </b-card-group>
+      <wallet-card-balances :wide-card="wideCard" :balances="balances" :data="data"/>
 
       <div slot="footer">
         <footer v-if="!data.stellar_data">
@@ -92,14 +68,14 @@
       <link rel="stylesheet" href="https://changelly.com/widget.css"> <!-- needed by changelly modal -->
 
       <b-modal ref="fundWalletModal" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" hide-footer>
-        <p class="centered">
+        <p class="text-center">
           <img v-if="!config.IS_TEST_NETWORK" src="@/assets/qr.svg"><br>
-          <span v-if="accountIDCopied" class="copiedtext info">Copied to clipboard<br></span>
           <strong v-if="!config.IS_TEST_NETWORK">Account ID / Public key</strong>
           <strong v-else>Stellar test net public key</strong>
-          <br> {{ data.public_key_0 }}
+          <br><span class="text-wrap">{{ data.public_key_0 }}</span>
+          <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
           <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
-            <i class="fa fa-clone" />
+            <i class="icon-copy" />
           </a>
         </p>
         <div v-if="!config.IS_TEST_NETWORK">
@@ -111,7 +87,7 @@
             <img src="https://changelly.com/pay_button_pay_with.png">
           </a>
         </div>
-        <div v-else class="form">
+        <div v-else class="text-center">
           <p>This client operates on the test net. Do not send real Stellar Lumens from the main/public net. To fund your wallet for testing purposes we can kindly ask Friendbot to send you some test lumens. Please press the button below to receive the test net lumens from Freindbot.</p>
           <b-button v-if="!fundWalletLoading" variant="primary" @click.prevent="fundWithFriendbot">Fund with test lumens</b-button>
           <b-button v-else variant="primary"><i class="fa fa-spinner fa-spin fa-fw"/></b-button>
@@ -155,6 +131,7 @@ import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
 
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
+import WalletCardBalances from '@/components/cards/WalletCardBalances';
 
 export default {
   components: {
@@ -163,6 +140,7 @@ export default {
     SendPaymentForm,
     WalletSecretSeedForm,
     WalletCardDetails,
+    WalletCardBalances,
   },
   props: {
     data: {
@@ -192,6 +170,9 @@ export default {
   },
   computed: {
     ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
+    wideCard () {
+      return this.balances.length > 3;
+    },
     minXLMBalance () {
       if (!this.data.stellar_data) return new Amount('0');
       const entryCount = this.data.stellar_data.subentry_count;
@@ -237,55 +218,6 @@ export default {
     ]),
     onCopy () {
       this.accountIDCopied = true;
-    },
-    getAvailablePopup (balance) {
-      const baseReserve = 0.5;
-      if (!this.data.stellar_data) return '';
-
-      if (balance.type === 'XLM') {
-        const header = `
-          <strong>Minimum balance</strong>
-          <p>All Stellar accounts/wallets must maintain a minimum balance of lumens that can not be spent. The minimum balance for a basic account is 1.0 XLM. Additional entries such as trustlines for other currencies and additional signers increase the minimum balance.</p>
-          <p>The minimum balance for this account is:</p>
-        `;
-
-        const trustlines = this.data.stellar_data.balances.length - 1;
-        const signers = this.data.stellar_data.signers.length - 1;
-        const dataEntries = Object.keys(this.data.stellar_data.data_attr).length;
-        const offers = this.data.stellar_data.subentry_count - trustlines - signers - dataEntries;
-        const items = [
-          `${(2 * baseReserve).toFixed(2)} XLM - account reserve`,
-          ...trustlines > 0 ? (trustlines === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 trustline to other currency`] : [`${(trustlines * baseReserve).toFixed(2)} XLM - ${trustlines} trustlines to other currencies`]) : [],
-          ...signers > 0 ? (signers === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 additional signer`] : [`${(signers * baseReserve).toFixed(2)} XLM - ${signers} additional signers`]) : [],
-          ...dataEntries > 0 ? (dataEntries === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 data entry`] : [`${(dataEntries * baseReserve).toFixed(2)} XLM - ${dataEntries} data entries`]) : [],
-          ...offers > 0 ? (offers === 1 ? [`${baseReserve.toFixed(2)} XLM - 1 offer`] : [`${(offers * baseReserve).toFixed(2)} XLM - ${offers} offers`]) : [],
-        ];
-
-        const liabilities = balance.sellingLiabilities && balance.sellingLiabilities !== '0.0000000' ? `
-          <strong>Selling liabilities</strong>
-          <p>Selling liabilities equal the total amount of this currency offered to sell aggregated over all offers owned by this wallet. This amount can not be spent.</p>
-          <p>The amount reserved for selling liabilities in this account is:</p>
-          <p>${new Amount(balance.sellingLiabilities).format()} XLM</p>
-        ` : '';
-
-        let totalAmount = new Amount(((2 + this.data.stellar_data.subentry_count) * baseReserve).toString());
-        if (balance.sellingLiabilities) {
-          totalAmount = totalAmount.plus(balance.sellingLiabilities);
-        }
-
-        const total = `
-          <strong>Total amount reserved</strong>
-          <p>${totalAmount.format()} XLM</p>
-        `;
-        return header + items.join('<br>') + '<br><br>' + liabilities + total;
-      } else {
-        return `
-          <strong>Selling liabilities</strong>
-          <p>Selling liabilities equal the total amount of this currency offered to sell aggregated over all offers owned by this wallet. This amount can not be spent.</p>
-          <p>The amount reserved for selling liabilities in this account is:</p>
-          <p>${new Amount(balance.sellingLiabilities).format()} ${balance.type}</p>
-        `;
-      }
     },
     async onSendPaymentClick (data) {
       await this.sendPayment({ ...data, publicKey: this.data.public_key_0 });
