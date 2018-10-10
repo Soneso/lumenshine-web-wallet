@@ -2,11 +2,11 @@
   <div>
     <div id="offcanvas-menu">
       <slot/>
-      <span class="offcanvas-close-btn" @click="closeMenu">
+      <span class="offcanvas-close-btn" @click.stop="closeMenu">
         <i class="icon-arrow-left text-white"/>
       </span>
     </div>
-    <div class="offcanvas-open-btn" @click="openMenu">
+    <div class="offcanvas-open-btn" @click.stop="openMenu">
       <i class="icon-hamburger-menu text-info"/>
     </div>
   </div>
@@ -33,7 +33,7 @@ export default {
   },
   mounted () {
     document.addEventListener('keyup', this.closeMenuOnEsc);
-    document.addEventListener('click', this.documentClick);
+    document.addEventListener('click', this.closeMenuOnDocumentClick);
 
     this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
     window.addEventListener('resize', () => {
@@ -42,7 +42,7 @@ export default {
   },
   destroyed () {
     document.removeEventListener('keyup', this.closeMenuOnEsc);
-    document.removeEventListener('click', this.documentClick);
+    document.removeEventListener('click', this.closeMenuOnDocumentClick);
   },
   methods: {
     openMenu () {
@@ -59,7 +59,7 @@ export default {
         this.closeMenu();
       }
     },
-    documentClick (e) {
+    closeMenuOnDocumentClick (e) {
       const element = document.getElementById('offcanvas-menu');
       if (element !== e.target && !element.contains(e.target)) {
         this.closeMenu();
