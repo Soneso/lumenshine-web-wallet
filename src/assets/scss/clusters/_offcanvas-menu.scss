@@ -1,0 +1,61 @@
+// external button
+.offcanvas-open-btn {
+  position: absolute;
+  left: 1.5rem;
+  top: 1.5rem;
+  cursor: pointer;
+  transform: rotate(180deg);
+
+  i {
+    &:before {
+      color: $info;
+    }
+  }
+}
+
+.line-style {
+  position: absolute;
+  height: 20%;
+  left: 0;
+  right: 0;
+}
+
+// x
+.offcanvas-close-btn {
+  @extend .px-2;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  height: 1.5rem;
+  color: $white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+// offcanvas menu
+#offcanvas-menu {
+  @extend .py-5;
+  width: 0;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgba($info, .92);
+  overflow-x: hidden;
+  transition: .5s;
+
+  a {
+    @extend .d-block;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      color: $gray-200;
+    }
+  }
+}
+
+.offcanvas-overlay {
+  background-color: $gray-200
+}

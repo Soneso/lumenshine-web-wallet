@@ -1,11 +1,14 @@
 <template>
-  <div v-if="userStatus.res || userStatus.err" id="app">
-    <div :class="['content', {'content--open': menuOpen}]">
-      <page-header :class="[{ 'header--open': menuOpen }]"/>
-      <dashboard-menu v-if="registrationComplete && authTokenType !== 'partial'" :menu-open="menuOpen" @toggleMenu="toggleMenu"/>
+  <div id="app">
+    <off-canvas-menu-animation v-if="!registrationComplete && authTokenType !== 'partial'" width="300">
+      <dashboard-menu/>
+    </off-canvas-menu-animation>
+
+    <div v-if="userStatus.res || userStatus.err" id="page-wrapper">
+      <page-header/>
       <router-view/>
+      <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
     </div>
-    <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
   </div>
 </template>
 
@@ -16,15 +19,22 @@ import redirectHandler from '@/util/redirectHandler';
 import pageHeader from '@/components/PageHeader';
 import pageFooter from '@/components/PageFooter';
 
-import dashboardMenu from '@/components/DashboardMenu';
+import dashboardMenu from '@/components/offcanvas/DashboardMenu';
+import offCanvasMenu from '@/components/offcanvas/OffCanvasMenu';
+import offCanvasMenuAnimation from '@/components/offcanvas/OffCanvasMenuAnimation';
 
 export default {
   name: 'App',
-  components: { pageHeader, pageFooter, dashboardMenu },
+  components: {
+    pageHeader,
+    pageFooter,
+    dashboardMenu,
+    offCanvasMenu,
+    offCanvasMenuAnimation
+  },
   data () {
     return {
-      menuOpen: false,
-      refreshInterval: null,
+      refreshInterval: null
     };
   },
   computed: {
@@ -74,9 +84,6 @@ export default {
     async onLogoutClick () {
       await this.logout();
       window.location.href = '/login';
-    },
-    toggleMenu () {
-      this.menuOpen = !this.menuOpen;
     }
   }
 };

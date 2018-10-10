@@ -13,8 +13,9 @@ let setInteraction = debounce(({ commit }) => {
 
 export default new Vuex.Store({
   modules: {
+    offcanvas: require('./offcanvas').default,
     users: require('./users').default,
-    wallets: require('./wallets').default,
+    wallets: require('./wallets').default
   },
   store: {
     lastInteraction: 0,
@@ -28,8 +29,8 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    SET_INTERACTION  (state, timestamp) {
+    SET_INTERACTION (state, timestamp) {
       state.lastInteraction = timestamp;
-    },
+    }
   },
 });
