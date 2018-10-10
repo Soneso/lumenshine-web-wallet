@@ -1,4 +1,4 @@
-// external button
+// offcanvas open button
 .offcanvas-open-btn {
   position: absolute;
   left: 1.5rem;
@@ -13,40 +13,33 @@
   }
 }
 
-.line-style {
-  position: absolute;
-  height: 20%;
-  left: 0;
-  right: 0;
-}
-
-// x
+// offcanvas X
 .offcanvas-close-btn {
   @extend .px-2;
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 1.6rem;
+  left: .95rem;
   height: 1.5rem;
   color: $white;
-  font-size: 2rem;
   cursor: pointer;
 }
 
-// offcanvas menu
+// offcanvas menu wrapper
 #offcanvas-menu {
   @extend .py-5;
   width: 0;
   position: fixed;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   z-index: 1000;
-  background: rgba($info, .92);
+  background: rgba($info, 1);
   overflow-x: hidden;
   transition: .5s;
 
   a {
-    @extend .d-block;
+    @extend .d-block, .py-2;
+    font-weight: 200;
     color: $white;
 
     &:hover,

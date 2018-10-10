@@ -2,7 +2,9 @@
   <div>
     <div id="offcanvas-menu">
       <slot/>
-      <span class="offcanvas-close-btn" @click="closeMenu">&times;</span>
+      <span class="offcanvas-close-btn" @click="closeMenu">
+        <i class="icon-arrow-left text-white"/>
+      </span>
     </div>
     <div class="offcanvas-open-btn" @click="openMenu">
       <i class="icon-hamburger-menu"/>
@@ -14,12 +16,17 @@
 import {mapGetters} from 'vuex';
 
 export default {
-  name: 'Menubar',
+  name: 'OffCanvasMenu',
   props: {
     width: {
       type: String,
       required: true
     }
+  },
+  data () {
+    return {
+      viewportWidth: 0
+    };
   },
   computed: {
     ...mapGetters(['offCanvasMenuOpen'])
@@ -27,6 +34,11 @@ export default {
   mounted () {
     document.addEventListener('keyup', this.closeMenuOnEsc);
     document.addEventListener('click', this.documentClick);
+
+    this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+    window.addEventListener('resize', () => {
+      this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+    }, true);
   },
   destroyed () {
     document.removeEventListener('keyup', this.closeMenuOnEsc);
@@ -34,18 +46,12 @@ export default {
   },
   methods: {
     openMenu () {
-      this.$emit('openMenu');
       this.$store.commit('mutateOffCanvasMenuOpen', true);
-      document.body.classList.add('offcanvas-overlay');
-      this.$nextTick(() => {
-        document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
-      });
+      this.openMenuAnimation();
     },
     closeMenu () {
-      this.$emit('closeMenu');
       this.$store.commit('mutateOffCanvasMenuOpen', false);
-      document.body.classList.remove('offcanvas-overlay');
-      document.getElementById('offcanvas-menu').style.width = '0px';
+      this.closeMenuAnimation();
     },
     closeMenuOnEsc (e) {
       e = e || window.event;
@@ -54,11 +60,38 @@ export default {
       }
     },
     documentClick (e) {
-      const element = document.querySelector('.offcanvas-open-btn');
-      const target = e.target;
-      if (element !== target && !element.contains(target) && e.target.className !== 'offcanvas-menu') {
+      const element = document.getElementById('offcanvas-menu');
+      if (element !== e.target && !element.contains(e.target)) {
         this.closeMenu();
       }
+    },
+    openMenuAnimation () {
+      document.body.classList.add('offcanvas-overlay');
+      this.$nextTick(() => {
+        document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
+      });
+
+      document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
+      document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
+      document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
+      document.querySelector('#page-wrapper').style.overflow = 'hidden';
+
+      document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
+      document.querySelector('#app').style.overflow = 'hidden';
+      document.querySelector('#app').style.height = '100%';
+    },
+    closeMenuAnimation () {
+      document.body.classList.remove('offcanvas-overlay');
+      document.getElementById('offcanvas-menu').style.width = '0px';
+
+      document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
+      document.querySelector('#page-wrapper').style.transform = '';
+      document.querySelector('#page-wrapper').style.transformStyle = '';
+      document.querySelector('#page-wrapper').style.transformOrigin = '';
+      document.querySelector('#page-wrapper').style.overflow = 'auto';
+
+      document.querySelector('#app').style.overflow = '';
+      document.querySelector('#app').style.height = '';
     }
   }
 };

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <off-canvas-menu-animation v-if="!registrationComplete && authTokenType !== 'partial'" width="300">
+    <off-canvas-menu v-if="!registrationComplete && authTokenType !== 'partial'" width="300">
       <dashboard-menu/>
-    </off-canvas-menu-animation>
+    </off-canvas-menu>
 
     <div v-if="userStatus.res || userStatus.err" id="page-wrapper">
       <page-header/>
@@ -21,7 +21,6 @@ import pageFooter from '@/components/PageFooter';
 
 import dashboardMenu from '@/components/offcanvas/DashboardMenu';
 import offCanvasMenu from '@/components/offcanvas/OffCanvasMenu';
-import offCanvasMenuAnimation from '@/components/offcanvas/OffCanvasMenuAnimation';
 
 export default {
   name: 'App',
@@ -29,8 +28,7 @@ export default {
     pageHeader,
     pageFooter,
     dashboardMenu,
-    offCanvasMenu,
-    offCanvasMenuAnimation
+    offCanvasMenu
   },
   data () {
     return {

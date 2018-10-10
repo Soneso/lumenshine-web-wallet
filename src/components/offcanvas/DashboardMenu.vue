@@ -26,15 +26,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
 import config from '@/config';
 
 export default {
-  data () {
-    return {
-      config
-    };
-  },
+  data: () => ({ config }),
   computed: {
     ...mapGetters(['userStatus', 'authToken']),
   },
