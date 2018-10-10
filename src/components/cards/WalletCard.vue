@@ -43,7 +43,7 @@
 
         <footer v-else-if="showActions">
           <div class="border-top pt-3 text-right">
-            <a href="#" class="p-1" @click.prevent="$refs.infoModal.show()">Info</a>
+            <!-- <a href="#" class="p-1" @click.prevent="$refs.infoModal.show()">Info</a> -->
             <a href="#" class="p-1" @click.prevent="resetSendPayment(), $refs.sendModal.show()">Send</a>
             <a href="#" class="p-1" @click.prevent="$refs.receiveModal.show()">Receive</a>
             <a href="#" class="p-1" @click.prevent="$refs.detailsModal.show()">Details</a>
@@ -120,7 +120,7 @@
         </div>
       </div>
 
-      <b-modal ref="infoModal" hide-footer title="Info">
+      <!-- <b-modal ref="infoModal" hide-footer title="Info">
         <p>This is a wallet card.</p>
         <p><strong>Wallet name</strong><br> Shows the name of your wallet in the title of the card. You can change the name by pressing the Details button.</p>
         <p><strong>Federation Address</strong><br> If this wallet is connected to a federation address, the address is displayed below of the name of the wallet. To add a federation address, pls press the Details button. To learn more about federation address please click here.</p>
@@ -131,7 +131,7 @@
         <p><strong>Send</strong><br> Press the Send button to send lumens or other currencies form this wallet.</p>
         <p><strong>Receive</strong><br> Press the Receive button to receive lumens or other currencies to this wallet.</p>
         <p><strong>Details</strong><br> Press the Details button to see all details about your Wallet.</p>
-      </b-modal>
+      </b-modal> -->
     </b-card>
   </b-col>
 </template>
