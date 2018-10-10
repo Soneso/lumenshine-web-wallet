@@ -420,6 +420,10 @@ export default {
       if (!transactionIdMatch || !transactionIdMatch[1]) {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN' }]);
       }
+
+      // needs some sleep, otherwise Horizon gives back http 404 for the transaction
+      await new Promise(resolve => setTimeout(() => resolve(), 1000));
+
       const transactionId = transactionIdMatch[1];
       const transactionDetails = await StellarAPI.transactions().transaction(transactionId).call();
       const operations = await transactionDetails.operations();

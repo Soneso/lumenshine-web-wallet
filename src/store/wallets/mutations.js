@@ -158,6 +158,7 @@ export default {
   SET_SEND_PAYMENT_RESULT (state, msg) {
     state.sendPaymentResult = msg;
     state.sendPaymentErrors = [];
+    state.sendPaymentLoading = false;
   },
   SET_SEND_PAYMENT_LOADING (state, msg) {
     state.sendPaymentLoading = msg;

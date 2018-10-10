@@ -1,65 +1,69 @@
 <template>
   <form class="form">
-    <div class="column column--left">
-      <strong>QR-Code</strong><br>
-      <p><img src="@/assets/qr.svg"></p>
-    </div>
-    <div class="column column--right">
-      <strong>Receive public key</strong>
-      <a
-        v-clipboard:copy="data.public_key_0"
-        v-clipboard:success="onCopy"
-        class="wallet-link">
-        <i class="icon-copy"/>
-      </a>
-      <p>
-        <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
-        {{ data.public_key_0 }}
-      </p>
-      <p v-if="data.federation_address">
-        <strong>Stellar address</strong>
+    <b-row align-h="center">
+      <b-col cols="9">
+        <b-row align-h="center">
+          <b-col cols="4">
+            <img src="@/assets/qr.svg">
+          </b-col>
+        </b-row>
         <br>
-        <span class="warning">{{ data.federation_address }}</span>
-      </p>
+        <p class="text-center">
+          <strong>Receive public key</strong>
+          <a
+            v-clipboard:copy="data.public_key_0"
+            v-clipboard:success="onCopy"
+            class="wallet-link">
+            <i class="icon-copy"/>
+          </a>
+          <span v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></span>
+          {{ data.public_key_0 }}
+        </p>
 
-      <b-form-group :label-for="`currencyInput_${uuid}`" label="Currency">
-        <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
-        <b-form-select v-else :id="`currencyInput_${uuid}`" v-model="assetCode" :options="currencyOptions"/>
-      </b-form-group>
+        <p v-if="data.federation_address" class="text-center">
+          <strong>Stellar address</strong>
+          <br>
+          <span class="text-warning">{{ data.federation_address }}</span>
+        </p>
 
-      <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer">
-        <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions"/>
-      </b-form-group>
+        <b-form-group :label-for="`currencyInput_${uuid}`" label="Currency">
+          <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
+          <b-form-select v-else :id="`currencyInput_${uuid}`" v-model="assetCode" :options="currencyOptions"/>
+        </b-form-group>
 
-      <b-form-group :label-for="`amountInput_${uuid}`">
-        {{ assetCode }}
-        <b-form-input
-          :id="`amountInput_${uuid}`"
-          :class="{ error: $v.amount.$error }"
-          :state="!$v.amount.$error"
-          :aria-describedby="`inputAmountHelp_${uuid} inputAmountFeedback_${uuid}`"
-          v-model="amount"
-          placeholder="Amount to receive"
-          type="text"
-          required
-          @blur="$v.amount.$touch()"/>
-        <b-form-invalid-feedback :id="`inputAmountFeedback_${uuid}`">
-          <template v-if="$v.amount.$error" class="field__errors">
-            <template v-if="!$v.amount.required">Amount is required</template>
-            <template v-if="!$v.amount.decimal">Amount should be numeric!</template>
-          </template>
-        </b-form-invalid-feedback>
-        <b-form-text :id="`inputAmountHelp_${uuid}`">
-          Amount to receive.
-        </b-form-text>
-      </b-form-group>
+        <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer">
+          <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions"/>
+        </b-form-group>
 
-      <b-button-group>
-        <b-button variant="success" @click="onSendEmailClick">Send by email</b-button>
-        <b-button variant="info" @click="onPrintClick">Print</b-button>
-        <b-button variant="warning" @click="onDoneClick">Done</b-button>
-      </b-button-group>
-    </div>
+        <b-form-group :label-for="`amountInput_${uuid}`">
+          {{ assetCode }}
+          <b-form-input
+            :id="`amountInput_${uuid}`"
+            :class="{ error: $v.amount.$error }"
+            :state="!$v.amount.$error"
+            :aria-describedby="`inputAmountFeedback_${uuid}`"
+            v-model="amount"
+            placeholder="Amount to receive"
+            type="text"
+            required
+            @blur="$v.amount.$touch()"/>
+          <b-form-invalid-feedback :id="`inputAmountFeedback_${uuid}`">
+            <template v-if="$v.amount.$error" class="field__errors">
+              <template v-if="!$v.amount.required">Amount is required</template>
+              <template v-if="!$v.amount.decimal">Amount should be numeric!</template>
+            </template>
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <div class="text-center py-4">
+          <b-button-group>
+            <b-button variant="success" class="text-uppercase" @click="onSendEmailClick">Send by email</b-button>
+            <b-button variant="info" class="text-uppercase" @click="onPrintClick">Print</b-button>
+            <b-button variant="warning" class="text-uppercase" @click="onDoneClick">Done</b-button>
+          </b-button-group>
+        </div>
+      </b-col>
+    </b-row>
   </form>
 </template>
 

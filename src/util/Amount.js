@@ -17,7 +17,7 @@ class Amount {
     if (val instanceof Amount) {
       this.val = BigNumber(val.val);
     } else {
-      this.val = BigNumber(val);
+      this.val = BigNumber(val.replace(/,/g, ''));
     }
   }
 
@@ -89,6 +89,10 @@ class Amount {
 
   toFixed (x) {
     return this.val.toFixed(x);
+  }
+
+  toStellarAmount () {
+    return this.val.toFixed(7);
   }
 
   equal (x) {

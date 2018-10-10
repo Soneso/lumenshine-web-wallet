@@ -11,7 +11,7 @@
       <b-card-group deck>
         <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
           <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
-          <p v-if="!data.stellar_data">0.0 <small>XLM</small></p>
+          <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
           <ul v-else class="list-unstyled">
             <li v-for="item in balances" :key="item.type + item.issuer">
               {{ item.balance }} <small>{{ item.type }}</small>
@@ -44,7 +44,7 @@
         <footer v-else-if="showActions">
           <div class="border-top pt-3 text-right">
             <a href="#" class="p-1" @click.prevent="$refs.infoModal.show()">Info</a>
-            <a href="#" class="p-1" @click.prevent="$refs.sendModal.show()">Send</a>
+            <a href="#" class="p-1" @click.prevent="resetSendPayment(), $refs.sendModal.show()">Send</a>
             <a href="#" class="p-1" @click.prevent="$refs.receiveModal.show()">Receive</a>
             <a href="#" class="p-1" @click.prevent="$refs.detailsModal.show()">Details</a>
           </div>
@@ -57,7 +57,8 @@
 
       <b-modal ref="sendModal" hide-footer title="Send">
         <send-payment-form
-          v-if="data"
+          v-if="data && balances"
+          :balances="balances"
           :result="sendPaymentStatus.res"
           :loading="sendPaymentStatus.loading || decryptedWallet.loading"
           :data="data"
@@ -354,7 +355,8 @@ export default {
       await this.fundAccountWithFriendbot(this.data.public_key_0);
       this.fundWalletLoading = false;
       this.$refs.fundWalletModal.hide();
-    }
+    },
+    Amount
   }
 };
 </script>
