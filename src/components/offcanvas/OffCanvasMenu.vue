@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div id="offcanvas-menu">
-      <slot/>
-      <span class="offcanvas-close-btn" @click.stop="closeMenu">
-        <i class="icon-arrow-left text-white"/>
-      </span>
+  <div id="offcanvas-menu">
+    <slot/>
+    <div v-if="offCanvasMenuOpen" class="offcanvas-close-btn" @click.stop="closeMenu">
+      <i class="icon-arrow-left text-white"/>
     </div>
-    <div class="offcanvas-open-btn" @click.stop="openMenu">
-      <i class="icon-hamburger-menu text-info"/>
+    <div v-else class="offcanvas-open-btn" @click.stop="openMenu">
+      <i class="icon-hamburger-menu text-white"/>
     </div>
   </div>
 </template>
@@ -17,14 +15,10 @@ import {mapGetters} from 'vuex';
 
 export default {
   name: 'OffCanvasMenu',
-  props: {
-    width: {
-      type: String,
-      required: true
-    }
-  },
   data () {
     return {
+      width: 300,
+      collapsedWidth: 64,
       viewportWidth: 0
     };
   },
@@ -61,7 +55,7 @@ export default {
     },
     closeMenuOnDocumentClick (e) {
       const element = document.getElementById('offcanvas-menu');
-      if (element !== e.target && !element.contains(e.target)) {
+      if (this.offCanvasMenuOpen && element !== e.target && !element.contains(e.target)) {
         this.closeMenu();
       }
     },
@@ -71,27 +65,27 @@ export default {
         document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
       });
 
+      document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
+      document.querySelector('#app').style.overflow = 'hidden';
+      document.querySelector('#app').style.height = '100%';
+
       document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
       document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
       document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
       document.querySelector('#page-wrapper').style.overflow = 'hidden';
-
-      document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
-      document.querySelector('#app').style.overflow = 'hidden';
-      document.querySelector('#app').style.height = '100%';
     },
     closeMenuAnimation () {
       document.body.classList.remove('offcanvas-overlay');
-      document.getElementById('offcanvas-menu').style.width = '0px';
+      document.getElementById('offcanvas-menu').style.width = `${this.collapsedWidth}px`;
+
+      document.querySelector('#app').style.overflow = '';
+      document.querySelector('#app').style.height = '';
 
       document.querySelector('#page-wrapper').style.transition = 'all .25s ease 0s';
       document.querySelector('#page-wrapper').style.transform = '';
       document.querySelector('#page-wrapper').style.transformStyle = '';
       document.querySelector('#page-wrapper').style.transformOrigin = '';
       document.querySelector('#page-wrapper').style.overflow = 'auto';
-
-      document.querySelector('#app').style.overflow = '';
-      document.querySelector('#app').style.height = '';
     }
   }
 };
