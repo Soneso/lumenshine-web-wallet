@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <off-canvas-menu v-if="!registrationComplete && authTokenType !== 'partial'">
+    <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
     </off-canvas-menu>
 
