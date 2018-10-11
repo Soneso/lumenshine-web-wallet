@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import redirectHandler from '@/util/redirectHandler';
 
 import pageHeader from '@/components/PageHeader';
@@ -36,7 +36,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userStatus', 'authTokenType', 'registrationComplete']),
+    ...mapGetters([
+      'userStatus',
+      'authTokenType',
+      'registrationComplete',
+      'viewportWidth'
+    ]),
   },
   watch: {
     $route () {
@@ -62,7 +67,13 @@ export default {
       deep: true,
     });
 
-    this.setIsMobile();
+    this.mutateMq();
+
+    window.addEventListener('resize', () => {
+      const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+      this.mutateViewportWidth(newScreenWidth);
+      this.mutateMq();
+    }, true);
   },
   beforeDestroy () {
     if (this.refreshInterval !== null) {
@@ -71,7 +82,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserStatus', 'logout', 'clearAuthToken', 'refreshAuthToken', 'catchInteraction', 'setIsMobile']),
+    ...mapActions([
+      'getUserStatus',
+      'logout',
+      'clearAuthToken',
+      'refreshAuthToken',
+      'catchInteraction'
+    ]),
+    ...mapMutations([
+      'mutateMq',
+      'mutateViewportWidth'
+    ]),
     async interactionHandler () {
       const recordedTime = this.$store.state.lastInteraction;
       const now = new Date().getTime();

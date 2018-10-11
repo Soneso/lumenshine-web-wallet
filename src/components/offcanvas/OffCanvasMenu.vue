@@ -18,21 +18,15 @@ export default {
   data () {
     return {
       width: 220,
-      collapsedWidth: 64,
-      viewportWidth: 0
+      collapsedWidth: 64
     };
   },
   computed: {
-    ...mapGetters(['offCanvasMenuOpen'])
+    ...mapGetters(['offCanvasMenuOpen', 'viewportWidth'])
   },
   mounted () {
     document.addEventListener('keyup', this.closeMenuOnEsc);
     document.addEventListener('click', this.closeMenuOnDocumentClick);
-
-    this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-    window.addEventListener('resize', () => {
-      this.viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-    }, true);
   },
   destroyed () {
     document.removeEventListener('keyup', this.closeMenuOnEsc);
