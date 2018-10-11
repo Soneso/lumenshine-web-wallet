@@ -1,19 +1,25 @@
 <template>
-  <div class="page-box">
-    <h1>Settings</h1>
-    <div class="navi-links">
-      <router-link to="/change-password">Change Password</router-link>
-      <router-link to="/change-tfa">Change 2FA Secret</router-link>
-      <router-link to="/backup-mnemonic">Backup Secret/Mnemonic</router-link>
-    </div>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4 single-card">
+        <h4 class="form-headline text-uppercase">Settings</h4>
+        <ul class="navi-links pt-4">
+          <li>
+            <router-link to="/change-password">Change Password</router-link>
+          </li>
+          <li>
+            <router-link to="/change-tfa">Change 2FA Secret</router-link>
+          </li>
+          <li>
+            <router-link to="/backup-mnemonic">Backup Secret/Mnemonic</router-link>
+          </li>
+        </ul>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 export default {
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
