@@ -31,12 +31,11 @@ import StellarSdk from 'stellar-sdk';
 import dayjs from 'dayjs';
 
 import config from '@/config';
-import Modal from '@/components/Modal';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { Modal },
+  components: { },
   props: {
     data: {
       type: Object,

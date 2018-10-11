@@ -125,7 +125,6 @@ import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
 
 import Amount from '@/util/Amount';
-import Modal from '@/components/Modal';
 import ReceivePaymentForm from '@/components/forms/wallets/ReceivePaymentForm';
 import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
@@ -135,7 +134,6 @@ import WalletCardBalances from '@/components/cards/WalletCardBalances';
 
 export default {
   components: {
-    Modal,
     ReceivePaymentForm,
     SendPaymentForm,
     WalletSecretSeedForm,
@@ -150,7 +148,7 @@ export default {
     showActions: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   data () {
     return {

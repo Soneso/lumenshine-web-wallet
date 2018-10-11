@@ -22,12 +22,11 @@ import config from '@/config';
 
 import WalletCard from '@/components/cards/WalletCard';
 import AddWalletForm from '@/components/forms/wallets/AddWalletForm';
-import Modal from '@/components/Modal';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { WalletCard, Modal, AddWalletForm },
+  components: { WalletCard, AddWalletForm },
   data () {
     return {
       nextFreePublicKey: null,
