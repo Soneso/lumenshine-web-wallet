@@ -97,8 +97,8 @@
           </div>
         </div>
         <div v-else> <!-- Known destinations -->
-          <ul class="known-destinations">
-            <li v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
+          <b-list-group>
+            <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
               <p class="checkbox">
                 <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
                 <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
@@ -162,11 +162,12 @@
                   </div>
                 </div>
               </div>
-            </li>
-          </ul>
+            </b-list-group-item>
+          </b-list-group>
         </div>
       </div>
       <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+      <br>
     </div>
   </form>
 </template>

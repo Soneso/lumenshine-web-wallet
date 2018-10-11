@@ -57,7 +57,7 @@
 
         <div v-if="addCurrencyFormType === 'fields'" class="tab-page">
           <div>
-            <b-form-group :label-for="`assetCodeInput_${uuid}`" label="Public key of currency issuer">
+            <b-form-group :label-for="`assetCodeInput_${uuid}`" label="Asset code">
               <b-form-input
                 :id="`assetCodeInput_${uuid}`"
                 :class="{ error: $v.assetCode.$error }"
@@ -162,12 +162,12 @@
               <h5>{{ currency.name }} ({{ currency.asset_code }})</h5>
               <span v-if="currency.needsAuth" class="text-danger">needs issuer athorization</span>
               <p>Issuer public key: {{ currency.issuer_public_key.slice(0, 10) }}...</p>
+              <div v-if="openedKnownCurrency === null" class="form-buttons">
+                <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
+              </div>
             </b-list-group-item>
           </b-list-group>
-          <div v-if="openedKnownCurrency === null" class="form-buttons">
-            <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
-          </div>
-          <div v-else-if="openedKnownCurrency === currency">
+          <div v-if="openedKnownCurrency">
             <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
               <b-form-input
                 :id="`passwordInput_${uuid}`"
@@ -211,7 +211,6 @@
                 Your secret seed for selected signer.
               </b-form-text>
             </b-form-group>
-            <br>
             <span>Password required to add currency</span>
             <div class="form-buttons">
               <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
@@ -220,6 +219,7 @@
                 <a href="#" @click.prevent="onAddClick">add</a>
               </div>
             </div>
+            <br><br>
           </div>
         </div>
       </div>
