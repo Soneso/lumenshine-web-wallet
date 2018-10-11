@@ -60,7 +60,7 @@
       </a>
     </li>
 
-    <li>
+    <li class="has-submenu">
       <router-link to="/settings">
 
         <i class="icon-settings"/>
@@ -68,22 +68,19 @@
         <ul class="submenu">
           <li>
             <router-link to="/change-password">
-              <i class="icon-home"/>
-              <div :style="toggleText">Change Password</div>
+              <div>Change Password</div>
             </router-link>
           </li>
 
           <li>
             <router-link to="/change-tfa">
-              <i class="icon-home"/>
-              <div :style="toggleText">Change 2FA Secret</div>
+              <div>Change 2FA Secret</div>
             </router-link>
           </li>
 
           <li>
             <router-link to="/backup-mnemonic">
-              <i class="icon-home"/>
-              <div :style="toggleText">Backup Secret/Mnemonic</div>
+              <div>Backup Secret/Mnemonic</div>
             </router-link>
           </li>
 

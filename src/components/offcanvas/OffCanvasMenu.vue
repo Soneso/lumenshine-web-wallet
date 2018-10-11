@@ -69,6 +69,10 @@ export default {
     closeMenuAnimation () {
       document.body.classList.remove('offcanvas-overlay');
       document.getElementById('offcanvas-menu').style.width = '';
+      document.getElementById('offcanvas-menu').style.overflowX = 'hidden';
+      setTimeout(() => {
+        document.getElementById('offcanvas-menu').style.overflowX = '';
+      }, 1e3);
 
       document.querySelector('#app').style.overflow = '';
 

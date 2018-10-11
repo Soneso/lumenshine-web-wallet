@@ -1,3 +1,5 @@
+$offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
+
 #app {
   height: 100%;
 }
@@ -34,15 +36,16 @@
   left: 0;
   bottom: 0;
   background: rgba($info, 1);
-  overflow-x: hidden;
   transition: .5s;
-  box-shadow: .125rem .125rem .5rem rgba($black, .25);
+  box-shadow: $offcanvas-shadow;
 }
 
 .menu-container {
-  width: 220px;
+  @extend %fast-transitions;
 
   &.expanded {
+    width: 220px;
+
     .user-avatar {
       left: calc(50% - 2.5rem);
       width: 5rem;
@@ -51,9 +54,15 @@
         font-size: 5rem;
       }
     }
+
+    .submenu {
+      left: 14.75rem;
+    }
   }
 
   &.collapsed {
+    width: 64px;
+
     .user-avatar {
       left: .75rem;
       width: 2.5rem;
@@ -61,12 +70,22 @@
       i {
         font-size: 2.5rem;
       }
+    }
 
+    .submenu {
+      left: 4.75rem;
     }
   }
 
   > li {
-    &.user-section {
+    &.has-submenu {
+      position: relative;
+
+      &:hover {
+        .submenu {
+          @extend .d-block;
+        }
+      }
     }
 
     &:not(.user-section) {
@@ -78,8 +97,41 @@
     }
   }
 
-  ul {
-    @extend .d-none
+  .submenu {
+    @extend .d-none;
+    position: absolute;
+    top: 0;
+    background: $info;
+    background: -moz-linear-gradient(left, $info 0%, lighten($info, 10%) 100%);
+    background: -webkit-linear-gradient(left, $info 0%, lighten($info, 10%) 100%);
+    background: linear-gradient(to right, $info 0%, lighten($info, 10%) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#3aace2', GradientType=1);
+
+    width: 17rem;
+    border-radius: .25rem;
+    box-shadow: $offcanvas-shadow;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: -.5rem;
+      top: 1rem;
+      width: 1rem;
+      height: 1rem;
+      transform: rotate(45deg);
+      background: $info;
+      z-index: -1;
+    }
+
+    li {
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba($white, .125);
+      }
+
+      &:hover {
+        background-color: rgba($white, .0625);
+      }
+    }
   }
 
   a, i {
