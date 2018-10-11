@@ -1,3 +1,4 @@
 export default {
-  offCanvasMenuOpen: false
+  offCanvasMenuOpen: false,
+  isMobile: false
 };

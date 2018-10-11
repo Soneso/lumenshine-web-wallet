@@ -67,7 +67,6 @@ export default {
 
       document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
       document.querySelector('#app').style.overflow = 'hidden';
-      document.querySelector('#app').style.height = '100%';
 
       document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
       document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
@@ -75,10 +74,9 @@ export default {
     },
     closeMenuAnimation () {
       document.body.classList.remove('offcanvas-overlay');
-      document.getElementById('offcanvas-menu').style.width = `${this.collapsedWidth}px`;
+      document.getElementById('offcanvas-menu').style.width = '';
 
       document.querySelector('#app').style.overflow = '';
-      document.querySelector('#app').style.height = '';
 
       document.querySelector('#page-wrapper').style.transform = '';
       document.querySelector('#page-wrapper').style.transformStyle = '';

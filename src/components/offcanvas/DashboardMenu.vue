@@ -103,6 +103,7 @@ import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
 
 export default {
+  name: 'DashboardMenu',
   data: () => ({ config }),
   computed: {
     ...mapGetters(['offCanvasMenuOpen', 'userStatus', 'authToken']),

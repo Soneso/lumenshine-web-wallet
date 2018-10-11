@@ -1,3 +1,4 @@
 export default {
-  offCanvasMenuOpen: state => state.offCanvasMenuOpen
+  offCanvasMenuOpen: state => state.offCanvasMenuOpen,
+  isMobile: state => state.isMobile
 };
