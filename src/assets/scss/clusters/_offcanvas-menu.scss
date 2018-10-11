@@ -47,8 +47,8 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     width: 220px;
 
     .user-avatar {
-      left: calc(50% - 2.5rem);
-      width: 5rem;
+      left: calc(50% - 3rem);
+      width: 6rem;
 
       i {
         font-size: 5rem;
@@ -64,8 +64,8 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     width: 64px;
 
     .user-avatar {
-      left: .75rem;
-      width: 2.5rem;
+      left: 0;
+      width: 4rem;
 
       i {
         font-size: 2.5rem;
@@ -155,8 +155,11 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
   }
 
   div {
-    &:not(.separator):not(.user-avatar) {
-      @extend .py-2, .pl-3, %offcanvas-hoverings;
+    &:not(.separator):not(.user-section) {
+      @extend .py-2, %fast-transitions;
+    }
+    &:not(.separator):not(.user-section):not(.user-avatar):not(.user-email) {
+      @extend .pl-3;
     }
 
     &.separator {
@@ -173,6 +176,7 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
   .user-avatar {
     @extend %fast-transitions;
     position: relative;
+    top: 0;
 
     i {
       @extend %fast-transitions;

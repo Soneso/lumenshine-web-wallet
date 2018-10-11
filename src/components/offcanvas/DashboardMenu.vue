@@ -1,7 +1,7 @@
 <template>
   <ul :class="['menu-container', 'pt-5', {'expanded': offCanvasMenuOpen, 'collapsed': !offCanvasMenuOpen}]">
     <li class="user-section text-center">
-      <div class="user-avatar pl-0">
+      <div class="user-avatar">
         <template v-if="userStatus.avatar">
           <img src="#" alt="">
         </template>
@@ -9,7 +9,7 @@
           <i class="icon-user-circle"/>
         </template>
       </div>
-      <div :style="toggleText" class="text-white">
+      <div :style="toggleText" class="user-email text-white">
         <small>{{ userStatus.email }}</small>
       </div>
     </li>
