@@ -82,7 +82,7 @@
     &.separator {
       margin: 1px 0;
       height: 1px;
-      background-color: $info;
+      background-color: rgba($white, .25);
       background: -moz-linear-gradient(left, rgba($white, .25) 0%, $info 100%);
       background: -webkit-linear-gradient(left, rgba($white, .25) 0%,$info 100%);
       background: linear-gradient(to right, rgba($white, .25) 0%,$info 100%);
@@ -92,5 +92,8 @@
 }
 
 .offcanvas-overlay {
-  background-color: $gray-200
+  background: -moz-linear-gradient(left, $gray-400 0%, $gray-100 50%);
+  background: -webkit-linear-gradient(left, $gray-400 0%,$gray-100 50%);
+  background: linear-gradient(to right, $gray-400 0%,$gray-100 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#7db9e8', GradientType=1);
 }
