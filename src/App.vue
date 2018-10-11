@@ -61,6 +61,8 @@ export default {
     this.$store.watch(state => state, () => this.interactionHandler(), {
       deep: true,
     });
+
+    this.setIsMobile();
   },
   beforeDestroy () {
     if (this.refreshInterval !== null) {
@@ -69,7 +71,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserStatus', 'logout', 'clearAuthToken', 'refreshAuthToken', 'catchInteraction']),
+    ...mapActions(['getUserStatus', 'logout', 'clearAuthToken', 'refreshAuthToken', 'catchInteraction', 'setIsMobile']),
     async interactionHandler () {
       const recordedTime = this.$store.state.lastInteraction;
       const now = new Date().getTime();
