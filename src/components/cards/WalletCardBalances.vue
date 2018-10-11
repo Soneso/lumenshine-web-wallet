@@ -1,28 +1,30 @@
 <template>
   <b-card-group deck>
-    <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
-      <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
-      <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
-      <ul v-else class="list-unstyled">
-        <li v-for="item in balances" :key="item.type + item.issuer">
-          {{ item.balance }} <small>{{ item.type }}</small>
-        </li>
-      </ul>
-    </b-card>
+    <template v-for="balances in balanceGroups">
+      <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
+        <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
+        <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
+        <ul v-else class="list-unstyled">
+          <li v-for="item in balances" :key="item.type + item.issuer">
+            {{ item.balance }} <small>{{ item.type }}</small>
+          </li>
+        </ul>
+      </b-card>
 
-    <b-card v-if="data.stellar_data">
-      <h5 class="text-info text-uppercase">Available</h5>
-      <ul class="list-unstyled">
-        <li v-for="item in balances" :key="item.type + item.issuer">
-          {{ item.available }} <small>{{ item.type }}</small>
-          <i
-            v-b-popover.hover.html="() => getAvailablePopup(item)"
-            v-if="item.available !== item.balance"
-            :title="`Available ${item.type}`"
-            class="icon-help"/>
-        </li>
-      </ul>
-    </b-card>
+      <b-card v-if="data.stellar_data" :key="balances.map(b => b.type + b.issuer).join('')">
+        <h5 class="text-info text-uppercase">Available</h5>
+        <ul class="list-unstyled">
+          <li v-for="item in balances" :key="item.type + item.issuer">
+            {{ item.available }} <small>{{ item.type }}</small>
+            <i
+              v-b-popover.hover.html="() => getAvailablePopup(item)"
+              v-if="item.available !== item.balance"
+              :title="`Available ${item.type}`"
+              class="icon-help"/>
+          </li>
+        </ul>
+      </b-card>
+    </template>
   </b-card-group>
 </template>
 
@@ -43,6 +45,16 @@ export default {
       type: Object,
       required: true,
     }
+  },
+  computed: {
+    balanceGroups () {
+      const groups = [];
+      const maxItems = 3;
+      for (let i = 0; i < this.balances.length; i += maxItems) {
+        groups.push(this.balances.slice(i, i + maxItems));
+      }
+      return groups;
+    },
   },
   methods: {
     getAvailablePopup (balance) {
