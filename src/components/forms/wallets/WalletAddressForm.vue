@@ -43,7 +43,7 @@
               </b-form-text>
             </b-form-group>
 
-            <span class="text-warning">*{{ config.FEDERATION_DOMAIN }}</span>
+            <span class="text-warning">{{ domain }}</span>
 
             <a v-if="!fieldOpen && address" href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
             <a v-else-if="!fieldOpen && !address" href="#" class="text-success px-2" @click.prevent="onSetAddressClick">set address</a>
@@ -67,6 +67,10 @@ import formMixin from '@/mixins/form';
 
 import config from '@/config';
 
+function stripDomain (text) {
+  return text.replace('*' + config.FEDERATION_DOMAIN, '');
+}
+
 export default {
   mixins: [ formMixin ],
   props: {
@@ -74,7 +78,7 @@ export default {
       type: Boolean,
       required: true,
     },
-    walletAddress: {
+    walletAddress: { // contains domain too
       type: String,
       default: () => null,
     }
@@ -82,21 +86,26 @@ export default {
   data () {
     return {
       fieldOpen: false,
-      address: this.walletAddress,
+      address: stripDomain(this.walletAddress), /* not includes domain */
       removingWallet: false,
       config
     };
   },
+  computed: {
+    domain () {
+      return '*' + config.FEDERATION_DOMAIN;
+    }
+  },
   watch: {
     loading (loading) {
       if (!loading) {
-        if (this.walletAddress === this.address) { // reset form and close
+        if (this.walletAddress === this.address + this.domain) { // reset form and close
           this.fieldOpen = false;
         }
         if (this.removingWallet) {
           this.removingWallet = false;
           if (this.errors.length === 0) {
-            this.address = this.walletAddress;
+            this.address = stripDomain(this.walletAddress);
           }
         }
       }
@@ -119,8 +128,8 @@ export default {
         return;
       }
       this.backendQuery = { address: this.address };
-      this.$emit('submit', this.address + '*' + config.FEDERATION_DOMAIN);
-    }
+      this.$emit('submit', this.address + this.domain);
+    },
   },
   validations () {
     return {

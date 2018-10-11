@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="card__checkbox float-right">
+    <p class="card__checkbox float-right p-3">
       <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
       <label for="homeScreenCheckbox">Show wallet on home screen</label>
     </p>
@@ -9,12 +9,26 @@
       :loading="saveWalletLoading"
       :errors="editWalletStatus.err"
       :wallet-name="data.wallet_name"
+      class="py-3"
       @submit="onSaveWalletName"/>
+
+    <p>
+      <strong>Stellar public key</strong>
+      <br>
+      <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
+      {{ data.public_key_0 }}
+      <a
+        v-clipboard:copy="data.public_key_0"
+        v-clipboard:success="onCopy">
+        <i class="icon-copy"/>
+      </a>
+    </p>
 
     <wallet-address-form
       :loading="saveWalletLoading"
       :errors="editWalletStatus.err"
       :wallet-address="data.federation_address"
+      class="py-3"
       @remove="onRemoveWalletAddress"
       @submit="onSaveWalletAddress"/>
 
@@ -68,19 +82,6 @@
       <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'send')">send</a>
       <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'receive')">receive</a>
     </div>
-
-    <p>
-      <strong>Stellar public key</strong>
-      <br>
-      <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
-      {{ data.public_key_0 }}
-      <a
-        v-clipboard:copy="data.public_key_0"
-        v-clipboard:success="onCopy"
-        class="wallet-link">
-        <i class="icon-copy"/>
-      </a>
-    </p>
 
     <wallet-secret-seed-form
       :data="data"
@@ -173,7 +174,7 @@ export default {
   },
   methods: {
     ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies']),
-    onCopy () {
+    onCopy (e) {
       this.accountIDCopied = true;
     },
     async onDecryptWallet (password) {

@@ -1,31 +1,35 @@
 <template>
-  <b-card-group deck>
-    <template v-for="balances in balanceGroups">
-      <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%'}" text-variant="white">
-        <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
-        <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
-        <ul v-else class="list-unstyled">
-          <li v-for="item in balances" :key="item.type + item.issuer">
-            {{ item.balance }} <small>{{ item.type }}</small>
-          </li>
-        </ul>
-      </b-card>
+  <div>
+    <div v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)">
+      <b-card-group deck> <!-- TODO -->
+        <template v-for="balances in balanceLine">
+          <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => 'b' + b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%', width: wideCard ? '22%' : '50%', flex: '0 0 auto'}" text-variant="white" class="mb-3"> <!-- TODO -->
+            <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
+            <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
+            <ul v-else class="list-unstyled">
+              <li v-for="item in balances" :key="'b' + item.type + item.issuer">
+                {{ item.balance }} <small>{{ item.type }}</small>
+              </li>
+            </ul>
+          </b-card>
 
-      <b-card v-if="data.stellar_data" :key="balances.map(b => b.type + b.issuer).join('')">
-        <h5 class="text-info text-uppercase">Available</h5>
-        <ul class="list-unstyled">
-          <li v-for="item in balances" :key="item.type + item.issuer">
-            {{ item.available }} <small>{{ item.type }}</small>
-            <i
-              v-b-popover.hover.html="() => getAvailablePopup(item)"
-              v-if="item.available !== item.balance"
-              :title="`Available ${item.type}`"
-              class="icon-help"/>
-          </li>
-        </ul>
-      </b-card>
-    </template>
-  </b-card-group>
+          <b-card v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')" :style="[{'box-shadow': 'none !important'}, 'flex: 0 0 auto', { width: wideCard ? '22%' : '50%', flex: '0 0 auto' }]" class="mb-3"> <!-- TODO -->
+            <h5 class="text-info text-uppercase">Available</h5>
+            <ul class="list-unstyled">
+              <li v-for="item in balances" :key="'a' + item.type + item.issuer">
+                {{ item.available }} <small>{{ item.type }}</small>
+                <i
+                  v-b-popover.hover.html="() => getAvailablePopup(item)"
+                  v-if="item.available !== item.balance"
+                  :title="`Available ${item.type}`"
+                  class="icon-help"/>
+              </li>
+            </ul>
+          </b-card>
+        </template>
+      </b-card-group>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -55,6 +59,14 @@ export default {
       }
       return groups;
     },
+    balanceRows () {
+      const rows = [];
+      const maxItems = 2;
+      for (let i = 0; i < this.balanceGroups.length; i += maxItems) {
+        rows.push(this.balanceGroups.slice(i, i + maxItems));
+      }
+      return rows;
+    }
   },
   methods: {
     getAvailablePopup (balance) {
