@@ -65,26 +65,27 @@
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
-        <ul class="submenu">
-          <li>
-            <router-link to="/change-password">
-              <div>Change Password</div>
-            </router-link>
-          </li>
+        <div class="submenu">
+          <ul>
+            <li>
+              <router-link to="/change-password">
+                <div>Change Password</div>
+              </router-link>
+            </li>
 
-          <li>
-            <router-link to="/change-tfa">
-              <div>Change 2FA Secret</div>
-            </router-link>
-          </li>
+            <li>
+              <router-link to="/change-tfa">
+                <div>Change 2FA Secret</div>
+              </router-link>
+            </li>
 
-          <li>
-            <router-link to="/backup-mnemonic">
-              <div>Backup Secret/Mnemonic</div>
-            </router-link>
-          </li>
-
-        </ul>
+            <li>
+              <router-link to="/backup-mnemonic">
+                <div>Backup Secret/Mnemonic</div>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </router-link>
     </li>
 
