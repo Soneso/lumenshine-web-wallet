@@ -43,7 +43,7 @@ export default {
       'registrationComplete',
       'viewportWidth',
       'offCanvasMenuOpen'
-    ]),
+    ])
   },
   watch: {
     $route () {
@@ -70,7 +70,6 @@ export default {
     });
 
     this.mutateMq();
-
     window.addEventListener('resize', () => {
       const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
       this.mutateViewportWidth(newScreenWidth);
@@ -103,10 +102,6 @@ export default {
         await this.refreshAuthToken();
       }
       await this.catchInteraction();
-    },
-    async onLogoutClick () {
-      await this.logout();
-      window.location.href = '/login';
     }
   }
 };

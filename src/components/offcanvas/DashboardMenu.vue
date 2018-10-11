@@ -101,7 +101,7 @@
     </li>
 
     <li>
-      <a href="#" @click="onLogoutClick">
+      <a href="#" @click.prevent="onLogoutClick">
         <i class="icon-logout"/>
         <div :style="toggleText">Sign Out</div>
       </a>
@@ -115,9 +115,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
+import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
 export default {
   name: 'DashboardMenu',
+  mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
     ...mapGetters(['offCanvasMenuOpen', 'userStatus', 'authToken']),
@@ -129,8 +131,9 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    async onLogoutClick (e) {
-      e.preventDefault();
+    async onLogoutClick () {
+      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.closeMenuAnimation();
       await this.logout();
       this.$router.push({ name: 'Login' });
     }
