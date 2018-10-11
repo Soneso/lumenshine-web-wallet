@@ -1,23 +1,25 @@
 <template>
-  <div class="page-box form">
-    <h1>Change 2FA Secret</h1>
-    <div>
-      <div v-if="inProgress">Loading...</div>
-      <div v-if="step === 'password'" v-show="!loading">
-        <change-tfa-password-form :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>
-      </div>
-      <div v-if="step === 'qr'" v-show="!loading">
-        <change-tfa-form :tfa-data="tfaData" :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onTfaSubmit"/>
-      </div>
-      <div v-if="step === 'finish'">
-        Your 2FA Secret has been changed successfully.<br>
-        <button @click="onDoneClick">Done</button>
-      </div>
-      <div v-if="step === 'error'">
-        Cannot update 2FA, please try again later.
-      </div>
-    </div>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4 single-card">
+        <h4 class="form-headline text-uppercase">Change 2FA Secret</h4>
+        <div v-if="inProgress" class="py-4">Loading...</div>
+        <template v-if="step === 'password'" v-show="!loading">
+          <change-tfa-password-form :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>
+        </template>
+        <template v-if="step === 'qr'" v-show="!loading">
+          <change-tfa-form :tfa-data="tfaData" :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onTfaSubmit"/>
+        </template>
+        <template v-if="step === 'finish'">
+          Your 2FA Secret has been changed successfully.<br>
+          <button @click="onDoneClick">Done</button>
+        </template>
+        <template v-if="step === 'error'">
+          Cannot update 2FA, please try again later.
+        </template>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
