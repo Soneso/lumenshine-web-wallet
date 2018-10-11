@@ -68,7 +68,7 @@
                 </b-button-group>
               </b-col>
             </b-row>
-            <b-row v-if="!sendItAll && $v.amount">
+            <b-row>
               <b-col cols="10">
                 <b-form-input
                   :id="`amountInput_${uuid}`"
@@ -81,7 +81,7 @@
                   tabindex="3"
                   required
                   @blur="$v.amount.$touch()"/>
-                <b-form-invalid-feedback v-if="$v.amount" :id="`inputLiveAmountFeedback_${uuid}`">
+                <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
                   <template v-if="$v.amount.$error" class="field__errors">
                     <template v-if="!$v.amount.required">Amount is required!</template>
                     <template v-if="!$v.amount.decimal">Not valid amount!</template>
@@ -91,7 +91,7 @@
               </b-col>
               <b-col>{{ currentAssetCode }}</b-col>
             </b-row>
-            <b-form-text v-if="!sendItAll" :id="`inputLiveAmountHelp_${uuid}`">
+            <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
               Stellar transaction fee: 0.00001 XLM
             </b-form-text>
           </b-form-group>
@@ -361,6 +361,16 @@ export default {
       if (!this.canSignWithPassword) {
         this.signer = this.signers[0] ? this.signers[0].public_key : null;
       }
+    },
+    sendItAll (sendItAll) {
+      if (sendItAll) {
+        this.amount = this.sendItAllAmount;
+      }
+    },
+    amount (amount) {
+      if (this.sendItAll && amount !== this.sendItAllAmount) {
+        this.sendItAll = false;
+      }
     }
   },
   created () {
@@ -444,14 +454,6 @@ export default {
       },
     };
 
-    const amountValidators = this.sendItAll ? {} : {
-      amount: {
-        required,
-        decimal,
-        hasEnoughFunds: value => this.backendQuery.amount !== value || !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
-      }
-    };
-
     return {
       recipient: {
         required,
@@ -467,7 +469,11 @@ export default {
         ...memoValidators
       },
       ...signerValidators,
-      ...amountValidators,
+      amount: {
+        required,
+        decimal,
+        hasEnoughFunds: value => this.backendQuery.amount !== value || !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
+      }
     };
   }
 };
