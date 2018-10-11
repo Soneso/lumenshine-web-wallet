@@ -65,26 +65,27 @@
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
-        <ul class="submenu">
-          <li>
-            <router-link to="/change-password">
-              <div>Change Password</div>
-            </router-link>
-          </li>
+        <div class="submenu">
+          <ul>
+            <li>
+              <router-link to="/change-password">
+                <div>Change Password</div>
+              </router-link>
+            </li>
 
-          <li>
-            <router-link to="/change-tfa">
-              <div>Change 2FA Secret</div>
-            </router-link>
-          </li>
+            <li>
+              <router-link to="/change-tfa">
+                <div>Change 2FA Secret</div>
+              </router-link>
+            </li>
 
-          <li>
-            <router-link to="/backup-mnemonic">
-              <div>Backup Secret/Mnemonic</div>
-            </router-link>
-          </li>
-
-        </ul>
+            <li>
+              <router-link to="/backup-mnemonic">
+                <div>Backup Secret/Mnemonic</div>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </router-link>
     </li>
 
@@ -100,7 +101,7 @@
     </li>
 
     <li>
-      <a href="#" @click="onLogoutClick">
+      <a href="#" @click.prevent="onLogoutClick">
         <i class="icon-logout"/>
         <div :style="toggleText">Sign Out</div>
       </a>
@@ -114,9 +115,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
+import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
 export default {
   name: 'DashboardMenu',
+  mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
     ...mapGetters(['offCanvasMenuOpen', 'userStatus', 'authToken']),
@@ -128,8 +131,9 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    async onLogoutClick (e) {
-      e.preventDefault();
+    async onLogoutClick () {
+      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.closeMenuAnimation();
       await this.logout();
       this.$router.push({ name: 'Login' });
     }

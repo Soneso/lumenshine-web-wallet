@@ -12,9 +12,11 @@
 
 <script>
 import {mapGetters} from 'vuex';
+import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
 export default {
   name: 'OffCanvasMenu',
+  mixins: [offcanvasNavigation],
   data () {
     return {
       width: 220,
@@ -52,34 +54,6 @@ export default {
       if (this.offCanvasMenuOpen && element !== e.target && !element.contains(e.target)) {
         this.closeMenu();
       }
-    },
-    openMenuAnimation () {
-      document.body.classList.add('offcanvas-overlay');
-      this.$nextTick(() => {
-        document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
-      });
-
-      document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
-      document.querySelector('#app').style.overflow = 'hidden';
-
-      document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
-      document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
-      document.querySelector('#page-wrapper').style.overflow = 'hidden';
-    },
-    closeMenuAnimation () {
-      document.body.classList.remove('offcanvas-overlay');
-      document.getElementById('offcanvas-menu').style.width = '';
-      document.getElementById('offcanvas-menu').style.overflowX = 'hidden';
-      setTimeout(() => {
-        document.getElementById('offcanvas-menu').style.overflowX = '';
-      }, 1e3);
-
-      document.querySelector('#app').style.overflow = '';
-
-      document.querySelector('#page-wrapper').style.transform = '';
-      document.querySelector('#page-wrapper').style.transformStyle = '';
-      document.querySelector('#page-wrapper').style.transformOrigin = '';
-      document.querySelector('#page-wrapper').style.overflow = 'auto';
     }
   }
 };
