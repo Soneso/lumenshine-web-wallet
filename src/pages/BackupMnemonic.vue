@@ -1,16 +1,17 @@
 <template>
-  <div class="page-box form">
-    <h1>Backup Secret/Mnemonic</h1>
-    <div>
-      <backup-mnemonic-form
-        :mnemonic="mnemonic"
-        :loading="inProgress"
-        :decrypt-error="decryptError"
-        @hide="setMnemonic(null)"
-        @cancel="canceled = true"
-        @reveal="onRevealClick"/>
-    </div>
-  </div>
+  <b-row align-h="center" align-v="center">
+    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+      <b-card class="p-4 single-card">
+        <h4 class="form-headline text-uppercase pb-4">Backup Secret/Mnemonic</h4>
+        <backup-mnemonic-form
+          :mnemonic="mnemonic"
+          :loading="inProgress"
+          :decrypt-error="decryptError"
+          @hide="setMnemonic(null)"
+          @cancel="canceled = true"
+          @reveal="onRevealClick"/>      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
