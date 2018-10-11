@@ -26,7 +26,7 @@
 }
 
 #offcanvas-menu {
-  @extend .py-5;
+  @extend .pt-5, .pb-2;
   width: 64px;
   position: fixed;
   height: 120%;
@@ -40,13 +40,38 @@
 }
 
 .menu-container {
-  width: 300px;
+  width: 220px;
+
+  &.expanded {
+    .user-avatar {
+      left: calc(50% - 2.5rem);
+      width: 5rem;
+      height: 5rem;
+
+      i {
+        font-size: 4rem;
+      }
+    }
+  }
+
+  &.collapsed {
+    .user-avatar {
+      left: .75rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
 
   > li {
-    @extend %offcanvas-hoverings;
+    &.user-section {
+    }
 
-    &:hover {
-      background: rgba($white, .1)
+    &:not(.user-section) {
+      @extend %offcanvas-hoverings;
+
+      &:hover {
+        background: rgba($white, .1)
+      }
     }
   }
 
@@ -75,7 +100,7 @@
   }
 
   div {
-    &:not(.separator) {
+    &:not(.separator):not(.user-avatar) {
       @extend .py-2, .pl-3, %offcanvas-hoverings;
     }
 
@@ -88,6 +113,13 @@
       background: linear-gradient(to right, rgba($white, .25) 0%,$info 100%);
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#3aace2', GradientType=1);
     }
+  }
+
+  .user-avatar {
+    @extend %fast-transitions;
+    border: 1px solid $white;
+    border-radius: 50%;
+    position: relative;
   }
 }
 

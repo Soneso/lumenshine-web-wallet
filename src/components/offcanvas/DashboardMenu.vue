@@ -1,10 +1,22 @@
 <template>
-  <ul class="menu-container pt-5">
-    <li v-if="userStatus.email">
-      <a href="#">{{ userStatus.email }}</a>
+  <ul :class="['menu-container', 'pt-5', {'expanded': offCanvasMenuOpen, 'collapsed': !offCanvasMenuOpen}]">
+    <li class="user-section text-center">
+      <div class="user-avatar pl-0">
+        <template v-if="userStatus.avatar">
+          <img src="#" alt="">
+        </template>
+        <template v-else>
+          <i class="icon-user"/>
+        </template>
+      </div>
+      <div :style="toggleText" class="text-white">
+        <small>{{ userStatus.email }}</small>
+      </div>
     </li>
 
-    <div class="separator mt-5"/>
+    <li>
+      <div class="separator"/>
+    </li>
 
     <li>
       <router-link to="/dashboard">
@@ -79,7 +91,9 @@
       </router-link>
     </li>
 
-    <div class="separator"/>
+    <li>
+      <div class="separator"/>
+    </li>
 
     <li>
       <a href="#">
@@ -94,7 +108,9 @@
         <div :style="toggleText">Sign Out</div>
       </a>
     </li>
-    <div class="separator"/>
+    <li>
+      <div class="separator"/>
+    </li>
   </ul>
 </template>
 
