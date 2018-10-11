@@ -54,7 +54,6 @@ export default {
       }
     },
     openMenuAnimation () {
-      document.body.classList.add('offcanvas-overlay');
       this.$nextTick(() => {
         document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
       });
@@ -67,7 +66,6 @@ export default {
       document.querySelector('#page-wrapper').style.overflow = 'hidden';
     },
     closeMenuAnimation () {
-      document.body.classList.remove('offcanvas-overlay');
       document.getElementById('offcanvas-menu').style.width = '';
       document.getElementById('offcanvas-menu').style.overflowX = 'hidden';
       setTimeout(() => {

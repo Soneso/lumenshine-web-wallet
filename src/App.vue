@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div :class="['offcanvas-overlay', {'open': offCanvasMenuOpen}]"/>
     <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
     </off-canvas-menu>
@@ -40,7 +41,8 @@ export default {
       'userStatus',
       'authTokenType',
       'registrationComplete',
-      'viewportWidth'
+      'viewportWidth',
+      'offCanvasMenuOpen'
     ]),
   },
   watch: {
