@@ -46,10 +46,9 @@
     .user-avatar {
       left: calc(50% - 2.5rem);
       width: 5rem;
-      height: 5rem;
 
       i {
-        font-size: 4rem;
+        font-size: 5rem;
       }
     }
   }
@@ -58,7 +57,11 @@
     .user-avatar {
       left: .75rem;
       width: 2.5rem;
-      height: 2.5rem;
+
+      i {
+        font-size: 2.5rem;
+      }
+
     }
   }
 
@@ -117,9 +120,11 @@
 
   .user-avatar {
     @extend %fast-transitions;
-    border: 1px solid $white;
-    border-radius: 50%;
     position: relative;
+
+    i {
+      @extend %fast-transitions;
+    }
   }
 }
 

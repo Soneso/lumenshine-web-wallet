@@ -6,7 +6,7 @@
           <img src="#" alt="">
         </template>
         <template v-else>
-          <i class="icon-user"/>
+          <i class="icon-user-circle"/>
         </template>
       </div>
       <div :style="toggleText" class="text-white">
