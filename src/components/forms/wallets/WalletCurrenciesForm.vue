@@ -5,15 +5,15 @@
         <strong>Currencies</strong>
         <a v-if="!addCurrency" href="#" class="only-desktop" @click.prevent="openAddCurrency">add currency</a>
       </p>
-      <div v-if="!removeFieldBalance && !addCurrency" class="currencies">
-        <p v-for="balance in balances" :key="balance.type + balance.issuer" class="balance">
-          <span>
+      <b-list-group v-if="!removeFieldBalance && !addCurrency" class="py-3">
+        <b-list-group-item v-for="balance in balances" :key="balance.type + balance.issuer">
+          <h5>
             {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
-          </span>
-          <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="error only-desktop" @click.prevent="openRemoveCurrency(balance)">remove</a>
-          <span v-if="balance.issuer && !removeFieldBalance" class="balance__details">Issuer public key: {{ balance.issuer }}</span>
-        </p>
-      </div>
+            <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="text-danger small" @click.prevent="openRemoveCurrency(balance)">remove</a>
+          </h5>
+          <span v-if="balance.issuer && !removeFieldBalance" class="balance__details">Issuer public key: <small>{{ balance.issuer }}</small></span>
+        </b-list-group-item>
+      </b-list-group>
 
       <div v-if="removeFieldBalance" class="field balance balance--sub">
         <strong>Remove currency</strong>
@@ -50,7 +50,7 @@
         <a href="#" class="error only-desktop" @click.prevent="addCurrency = false">cancel</a>
         <br>
 
-        <b-button-group>
+        <b-button-group class="py-2">
           <b-button :disabled="addCurrencyFormType === 'known'" variant="default" @click="onTabChange('known')">Known Currencies</b-button>
           <b-button :disabled="addCurrencyFormType === 'fields'" variant="default" @click="onTabChange('fields')">Provide Currency Data</b-button>
         </b-button-group>
@@ -157,70 +157,70 @@
           </div>
         </div>
         <div v-else> <!-- Known currencies -->
-          <ul class="known-currencies">
-            <li v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer_public_key">
-              <h4>{{ currency.name }} ({{ currency.asset_code }})</h4>
-              <span v-if="currency.needsAuth" class="error">needs issuer athorization</span>
+          <b-list-group>
+            <b-list-group-item v-for="currency in knownCurrencies" :key="currency.asset_code + currency.issuer_public_key">
+              <h5>{{ currency.name }} ({{ currency.asset_code }})</h5>
+              <span v-if="currency.needsAuth" class="text-danger">needs issuer athorization</span>
               <p>Issuer public key: {{ currency.issuer_public_key.slice(0, 10) }}...</p>
-              <div v-if="openedKnownCurrency === null" class="form-buttons">
-                <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
-              </div>
-              <div v-else-if="openedKnownCurrency === currency">
-                <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
-                  <b-form-input
-                    :id="`passwordInput_${uuid}`"
-                    :class="{ error: $v.password.$error }"
-                    :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
-                    :state="!$v.password.$error"
-                    v-model="password"
-                    type="password"
-                    placeholder="Your password"
-                    required
-                    @blur="$v.password.$touch()"/>
-                  <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
-                    <template v-if="$v.password.$error" class="field__errors">
-                      <template v-if="!$v.password.required">Password is required!</template>
-                      <template v-if="!$v.password.validPassword">Wrong password!</template>
-                    </template>
-                  </b-form-invalid-feedback>
-                  <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
-                    Your password.
-                  </b-form-text>
-                </b-form-group>
+            </b-list-group-item>
+          </b-list-group>
+          <div v-if="openedKnownCurrency === null" class="form-buttons">
+            <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
+          </div>
+          <div v-else-if="openedKnownCurrency === currency">
+            <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+              <b-form-input
+                :id="`passwordInput_${uuid}`"
+                :class="{ error: $v.password.$error }"
+                :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
+                :state="!$v.password.$error"
+                v-model="password"
+                type="password"
+                placeholder="Your password"
+                required
+                @blur="$v.password.$touch()"/>
+              <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
+                <template v-if="$v.password.$error" class="field__errors">
+                  <template v-if="!$v.password.required">Password is required!</template>
+                  <template v-if="!$v.password.validPassword">Wrong password!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
+                Your password.
+              </b-form-text>
+            </b-form-group>
 
-                <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
-                  <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
-                  <b-form-input
-                    :class="{ error: $v.signerSeed.$error }"
-                    :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
-                    v-model="signerSeed"
-                    :state="!$v.signerSeed.$error"
-                    type="text"
-                    placeholder="Seed for selected signer"
-                    required
-                    @blur="$v.signerSeed.$touch()"/>
-                  <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
-                    <template v-if="$v.signerSeed.$error" class="field__errors">
-                      <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
-                      <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
-                    </template>
-                  </b-form-invalid-feedback>
-                  <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
-                    Your secret seed for selected signer.
-                  </b-form-text>
-                </b-form-group>
-                <br>
-                <span>Password required to add currency</span>
-                <div class="form-buttons">
-                  <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-                  <div v-else>
-                    <a href="#" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
-                    <a href="#" @click.prevent="onAddClick">add</a>
-                  </div>
-                </div>
+            <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
+              <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+              <b-form-input
+                :class="{ error: $v.signerSeed.$error }"
+                :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
+                v-model="signerSeed"
+                :state="!$v.signerSeed.$error"
+                type="text"
+                placeholder="Seed for selected signer"
+                required
+                @blur="$v.signerSeed.$touch()"/>
+              <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
+                <template v-if="$v.signerSeed.$error" class="field__errors">
+                  <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                  <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
+                Your secret seed for selected signer.
+              </b-form-text>
+            </b-form-group>
+            <br>
+            <span>Password required to add currency</span>
+            <div class="form-buttons">
+              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+              <div v-else>
+                <a href="#" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
+                <a href="#" @click.prevent="onAddClick">add</a>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

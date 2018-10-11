@@ -45,7 +45,7 @@
           @submit="onSendPaymentClick"/>
       </b-modal>
 
-      <b-modal ref="detailsModal" hide-footer title="Details">
+      <b-modal ref="detailsModal" hide-footer title="Wallet details">
         <wallet-card-details
           :data="data"
           :balances="balances"

@@ -72,7 +72,7 @@
     <p>
       <strong>Stellar public key</strong>
       <br>
-      <span v-if="accountIDCopied" class="copiedtext info">Copied to clipboard<br></span>
+      <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
       {{ data.public_key_0 }}
       <a
         v-clipboard:copy="data.public_key_0"

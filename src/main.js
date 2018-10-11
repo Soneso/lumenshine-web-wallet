@@ -40,14 +40,14 @@ import {
   // Jumbotron,
   Layout,
   Link,
-  // ListGroup,
+  ListGroup,
   // Media,
   Modal,
   // Nav,
   // Navbar,
   // Pagination,
   // PaginationNav,
-  // Popover,
+  Popover as PopoverComponent,
   Progress,
   // Table,
   // Tabs,
@@ -103,7 +103,7 @@ Vue.use(InputGroup);
 // Vue.use(Jumbotron);
 Vue.use(Layout);
 Vue.use(Link);
-// Vue.use(ListGroup);
+Vue.use(ListGroup);
 // Vue.use(Media);
 Vue.use(Modal);
 // Vue.use(Nav);
@@ -120,7 +120,7 @@ Vue.use(Tooltip);
 // Vue.use(Modal);
 // Vue.use(Scrollspy);
 // Vue.use(Tooltip);
-// Vue.use(Popover);
+Vue.use(PopoverComponent);
 
 Vue.use(Meta);
 

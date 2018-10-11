@@ -7,36 +7,34 @@
       {{ walletName }}
     </p>
 
-    <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
+    <b-card v-if="fieldOpen && !loading" class="p-1" style="max-width: 20rem;">
       <strong>Wallet name</strong><br>
       <b-row>
-        <b-form-group :label-for="`nameInput_${uuid}`">
-          <b-form-input
-            :id="`nameInput_${uuid}`"
-            :class="{ error: $v.name.$error }"
-            v-model="name"
-            :state="!$v.name.$error"
-            type="text"
-            placeholder="Wallet name"
-            aria-describedby="inputLiveNameHelp inputLiveNameFeedback"
-            required
-            @blur="$v.name.$touch()"/>
-          <b-form-invalid-feedback :id="`inputLiveNameFeedback_${uuid}`">
-            <template v-if="$v.name.$error" class="field__errors">
-              <template v-if="!$v.name.required">Wallet name is required</template>
-              <template v-if="!$v.name.uniqueName">Wallet name is already used</template>
-            </template>
-          </b-form-invalid-feedback>
-          <b-form-text :id="`inputLiveNameHelp_${uuid}`">
-            Name of the wallet
-          </b-form-text>
-        </b-form-group>
-
-        <a href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
-        <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-          <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-          <span v-else class="text-success">save</span>
-        </a>
+        <b-col cols>
+          <b-form-group :label-for="`nameInput_${uuid}`">
+            <b-form-input
+              :id="`nameInput_${uuid}`"
+              :class="{ error: $v.name.$error }"
+              :state="!$v.name.$error"
+              :aria-describedby="`inputLiveNameFeedback_${uuid}`"
+              v-model="name"
+              type="text"
+              placeholder="Wallet name"
+              required
+              @blur="$v.name.$touch()"/>
+            <b-form-invalid-feedback :id="`inputLiveNameFeedback_${uuid}`">
+              <template v-if="$v.name.$error" class="field__errors">
+                <template v-if="!$v.name.required">Wallet name is required</template>
+                <template v-if="!$v.name.uniqueName">Wallet name is already used</template>
+              </template>
+            </b-form-invalid-feedback>
+            <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+            <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
+              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+              <span v-else class="text-success px-2">save</span>
+            </a>
+          </b-form-group>
+        </b-col>
       </b-row>
     </b-card>
   </form>

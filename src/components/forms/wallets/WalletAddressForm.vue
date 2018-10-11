@@ -18,39 +18,43 @@
     <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
       <strong>Short stellar address</strong><br>
       <b-row>
-        <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
-          <b-form-input
-            :id="`addressInput_${uuid}`"
-            :class="{ error: $v.address.$error }"
-            :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
-            :state="!$v.address.$error"
-            v-model="address"
-            type="text"
-            placeholder="Wallet address"
-            required
-            @blur="$v.address.$touch()"/>
+        <b-col class="text-nowrap">
+          <b-row>
+            <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
+              <b-form-input
+                :id="`addressInput_${uuid}`"
+                :class="{ error: $v.address.$error }"
+                :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
+                :state="!$v.address.$error"
+                v-model="address"
+                type="text"
+                placeholder="Wallet address"
+                required
+                @blur="$v.address.$touch()"/>
 
-          <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
-            <template v-if="$v.address.$error" class="field__errors">
-              <template v-if="!$v.address.required">Wallet address is required</template>
-              <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
-            </template>
-          </b-form-invalid-feedback>
-          <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
-            Address of the wallet
-          </b-form-text>
-        </b-form-group>
+              <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
+                <template v-if="$v.address.$error" class="field__errors">
+                  <template v-if="!$v.address.required">Wallet address is required</template>
+                  <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
+                Address of the wallet
+              </b-form-text>
+            </b-form-group>
 
-        <span class="text-warning">*{{ config.FEDERATION_DOMAIN }}</span>
+            <span class="text-warning">*{{ config.FEDERATION_DOMAIN }}</span>
 
-        <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
-        <a v-else-if="!fieldOpen && !address" href="#" class="text-success" @click.prevent="onSetAddressClick">set address</a>
-        <a v-else-if="fieldOpen" href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
+            <a v-if="!fieldOpen && address" href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
+            <a v-else-if="!fieldOpen && !address" href="#" class="text-success px-2" @click.prevent="onSetAddressClick">set address</a>
+            <a v-else-if="fieldOpen" href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
 
-        <a v-if="fieldOpen" href="#" class="text-success" @click.prevent="onSubmitClick">
-          <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-          <span v-else>save</span>
-        </a>
+            <a v-if="fieldOpen" href="#" class="text-success px-2" @click.prevent="onSubmitClick">
+              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+              <span v-else>save</span>
+            </a>
+          </b-row>
+        </b-col>
       </b-row>
     </b-card>
   </form>
