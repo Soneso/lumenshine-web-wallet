@@ -10,20 +10,31 @@
     <b-row class="py-2 footer-menu">
       <b-col>
         <div class="menu">
-          <!-- No user was logged in OR partial user was logged in (without all registration steps completed) -->
-          <template v-if="!authToken || authToken && authTokenType === 'partial'">
+          <!-- No user was logged in -->
+          <template v-if="!authToken" class="menu">
             <router-link to="/about">About</router-link>
             <router-link to="/help">Help</router-link>
-          </template>
-          <!-- No user logged in -->
-          <template v-else-if="!authToken">
             <router-link to="/login">Login</router-link>
             <router-link to="/register">Sign up</router-link>
-          </template>
-          <!-- Partial OR Logged in user -->
-          <template v-else>
-            <a href="#" @click.prevent="onLogoutClick">Sign out</a>
             <router-link to="/impressum">Impressum</router-link>
+            <a href="https://soneso.com" target="_blank">Soneso</a>
+          </template>
+
+          <!-- Partial user was logged in (without all registration steps completed) -->
+          <template v-if="authToken && authTokenType === 'partial'" class="menu">
+            <router-link to="/about">About</router-link>
+            <router-link to="/help">Help</router-link>
+            <router-link to="/">&nbsp;</router-link>
+            <a href="/login" @click="onLogoutClick">Sign out</a>
+            <router-link to="/impressum">Impressum</router-link>
+            <a href="https://soneso.com" target="_blank">Soneso</a>
+          </template>
+
+          <!-- Logged in user -->
+          <template v-if="authToken && authTokenType !== 'partial'" class="menu menu--short">
+            <a href="https://soneso.com" target="_blank">Developed by Soneso</a>
+            <router-link to="/impressum">Impressum</router-link>
+            <a href="#"><i class="fa fa-flag"/></a>
           </template>
         </div>
       </b-col>
@@ -37,7 +48,6 @@
         </a>
       </b-col>
     </b-row>
-
   </footer>
 </template>
 
