@@ -16,13 +16,12 @@
             </div>
             <div class="text pl-3 pt-3 mt-2  d-none d-sm-block">
               <h1>{{ config.APP_TITLE }}</h1>
-              <h2>{{ config.APP_SUBTITLE }}</h2>
-              <div v-if="registrationComplete" style="height: 100px"> <!-- TODO -->
-                <!-- <currency-ticker/> -->
+              <h2 :class="['mb-1', {'text-uppercase': registrationComplete}]">{{ config.APP_SUBTITLE }}</h2>
+              <div v-if="registrationComplete">
+                <currency-ticker/>
                 <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
               </div>
             </div>
-
             <div v-if="$route.name === 'Wallets'" class="add-wallet">
               <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
                 <i>+</i>

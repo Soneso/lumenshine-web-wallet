@@ -24,7 +24,7 @@
   }
 
   h2 {
-    font-size: .8rem;
+    font-size: .85rem;
     font-weight: 300;
   }
 
@@ -40,8 +40,23 @@
   }
 
   .text {
-    width: 13rem;
-    color: $gray-500
+    color: $gray-500;
+
+    .narrow & {
+      width: 13rem;
+    }
+
+    .wide & {
+      width: calc(100% - 17rem);
+    }
+
+    .currency-ticker {
+      @extend .text-gray-500, %hidden-scroll;
+      height: 1.5rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: grab;
+    }
   }
 }
 
