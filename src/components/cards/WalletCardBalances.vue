@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)">
-      <b-card-group deck> <!-- TODO -->
+      <b-card-group deck style="flex-wrap: nowrap;"> <!-- TODO -->
         <template v-for="balances in balanceLine">
-          <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => 'b' + b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%', width: wideCard ? '22%' : '50%', flex: '0 0 auto'}" text-variant="white" class="mb-3"> <!-- TODO -->
+          <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => 'b' + b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%', width: wideCard ? '22%' : '45%', flex: '0 0 auto'}" text-variant="white" class="mb-3"> <!-- TODO -->
             <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
             <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
             <ul v-else class="list-unstyled">
@@ -13,7 +13,7 @@
             </ul>
           </b-card>
 
-          <b-card v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')" :style="[{'box-shadow': 'none !important'}, 'flex: 0 0 auto', { width: wideCard ? '22%' : '50%', flex: '0 0 auto' }]" class="mb-3"> <!-- TODO -->
+          <b-card v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')" :style="[{'box-shadow': 'none !important'}, 'flex: 0 0 auto', { width: wideCard ? '22%' : '45%', flex: '0 0 auto' }]" class="mb-3"> <!-- TODO -->
             <h5 class="text-info text-uppercase">Available</h5>
             <ul class="list-unstyled">
               <li v-for="item in balances" :key="'a' + item.type + item.issuer">
