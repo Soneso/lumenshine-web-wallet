@@ -1,5 +1,5 @@
 <template>
-  <b-col :cols="wideCard ? 12 : 6" :md="wideCard ? 12 : 6" sm="8">
+  <b-col cols="12" md="6">
     <b-card :class="['p-4 my-1', 'card', {'card--wide': balances && balances.length > 1}]">
       <header>
         <h5><strong>{{ data.wallet_name }}</strong> WALLET</h5>
