@@ -3,9 +3,10 @@
     <b-card :class="['p-4 my-1', 'card', {'card--wide': balances && balances.length > 1}]">
       <header>
         <h5><strong>{{ data.wallet_name }}</strong> WALLET</h5>
-        <span v-if="!data.stellar_data" class="text-danger">not funded</span>
-        <span v-else-if="data.federation_address" class="text-warning">{{ data.federation_address }}</span>
-        <span v-else class="text-warning">No short address</span>
+        <div style="margin-top: -6px; margin-bottom: 5px"> <!-- TODO -->
+          <span v-if="!data.stellar_data" class="text-danger">not funded</span>
+          <span v-else class="text-warning">{{ data.federation_address ? data.federation_address : 'no short address' }}</span>
+        </div>
       </header>
 
       <wallet-card-balances :wide-card="wideCard" :balances="balances" :data="data"/>
