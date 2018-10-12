@@ -18,7 +18,7 @@
               <h1>{{ config.APP_TITLE }}</h1>
               <h2>{{ config.APP_SUBTITLE }}</h2>
               <div v-if="registrationComplete">
-                <currency-ticker/>
+                <!-- <currency-ticker/> -->
                 <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
               </div>
             </div>
