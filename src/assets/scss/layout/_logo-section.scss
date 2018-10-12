@@ -62,8 +62,8 @@
 
 .add-wallet {
   @extend .px-3, .pb-2, .mt-3, .text-center;
-  margin-right: 100px;
-  float: right;
+  position: absolute;
+  right: 4rem;
   background: rgba($white, .5);
   border-radius: $border-radius-lg;
 
