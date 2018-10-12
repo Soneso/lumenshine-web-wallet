@@ -71,6 +71,7 @@ import Meta from 'vue-meta';
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
+VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
 Vue.use(VueAwesomeSwiper);
