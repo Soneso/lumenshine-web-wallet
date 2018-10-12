@@ -10,7 +10,10 @@
   @include clearfix;
   @extend .py-4;
   position: relative;
-  margin-left: calc(50% - 3rem);
+
+  .narrow & {
+    margin-left: calc(50% - 7rem);
+  }
 
   h1 {
     @extend .text-uppercase;

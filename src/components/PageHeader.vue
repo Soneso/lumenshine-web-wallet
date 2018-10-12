@@ -7,25 +7,30 @@
       </div>
     </small>
 
-    <div id="logo-group">
-      <div class="logo">
-        <img id="logo" src="../assets/images/ui/logo.svg">
-      </div>
-      <div class="text pl-3 pt-3 mt-2  d-none d-sm-block">
-        <h1>{{ config.APP_TITLE }}</h1>
-        <h2>{{ config.APP_SUBTITLE }}</h2>
-        <div v-if="registrationComplete">
-          <currency-ticker/>
-          <p>{{ $route.meta ? $route.meta.pageName : '' }}</p>
-        </div>
-
-        <div v-if="$route.name === 'Wallets'" class="header-buttons">
-          <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
-            <span class="header-button-description">+ Add Wallet</span>
-          </a>
-        </div>
-      </div>
-    </div>
+    <b-container fluid class="pl-5 pr-0 ml-4 mr-0">
+      <b-row>
+        <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete}]">
+          <div id="logo-group">
+            <div class="logo">
+              <img id="logo" src="../assets/images/ui/logo.svg">
+            </div>
+            <div class="text pl-3 pt-3 mt-2  d-none d-sm-block">
+              <h1>{{ config.APP_TITLE }}</h1>
+              <h2>{{ config.APP_SUBTITLE }}</h2>
+              <div v-if="registrationComplete">
+                <currency-ticker/>
+                <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
+              </div>
+              <div v-if="$route.name === 'Wallets'" class="header-buttons">
+                <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
+                  <span class="header-button-description">+ Add Wallet</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
   </header>
 </template>
 
@@ -34,20 +39,26 @@ import { mapActions, mapGetters } from 'vuex';
 
 import config from '@/config';
 import CurrencyTicker from '@/components/CurrencyTicker';
+import offcanvasNavigation from '../mixins/offcanvasNavigation.js';
 
 export default {
+  name: 'PageHeader',
   components: { CurrencyTicker },
-  data () {
-    return {
-      config
-    };
-  },
+  mixins: [offcanvasNavigation],
+  data: () => ({ config }),
   computed: {
-    ...mapGetters(['userStatus', 'authToken', 'registrationComplete']),
+    ...mapGetters([
+      'offCanvasMenuOpen',
+      'userStatus',
+      'authToken',
+      'registrationComplete'
+    ]),
   },
   methods: {
     ...mapActions(['logout']),
     async onLogoutClick () {
+      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.closeMenuAnimation();
       await this.logout();
       this.$router.push({ name: 'Login' });
     }
