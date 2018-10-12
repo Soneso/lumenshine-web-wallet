@@ -1,17 +1,19 @@
 <template>
-  <b-row align-h="center" align-v="center">
-    <b-col cols="8" sm="12" md="8" lg="8" xl="8">
-      <b-container fluid>
-        <div v-if="!wallets.loading" class="p-2 text-info">Loading...</div>
-        <b-row align-h="start" align-v="center">
-          <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
-        </b-row>
-        <b-modal v-model="addWalletModalShown" hide-footer title="Add new wallet">
-          <add-wallet-form v-if="nextFreePublicKey" :errors="addWalletStatus.err" :next-public-key="nextFreePublicKey" @cancel="onModalClose" @submit="onSubmitNewWallet"/>
-        </b-modal>
-      </b-container>
-    </b-col>
-  </b-row>
+  <b-container fluid class="pl-5 pr-4 ml-3 mr-0">
+    <b-row align-h="center" align-v="center">
+      <b-col>
+        <b-container fluid>
+          <div v-if="wallets.loading" class="p-2 text-info">Loading...</div>
+          <b-row align-h="start" align-v="center">
+            <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
+          </b-row>
+          <b-modal v-model="addWalletModalShown" hide-footer title="Add new wallet">
+            <add-wallet-form v-if="nextFreePublicKey" :errors="addWalletStatus.err" :next-public-key="nextFreePublicKey" @cancel="onModalClose" @submit="onSubmitNewWallet"/>
+          </b-modal>
+        </b-container>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>

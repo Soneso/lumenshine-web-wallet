@@ -1,14 +1,16 @@
 <template>
-  <b-row align-h="center" align-v="center">
-    <b-col cols="8" sm="12" md="8" lg="8" xl="8">
-      <b-container fluid>
-        <h5 v-if="wallets.loading" class="py-4 px-2 text-info" style="display: block;"><span class="py-3 px-4" style="display: inline-block; text-align: center; background: rgba(255, 255, 255, 0.5); border-radius: 20px">Loading...</span></h5> <!-- TODO -->
-        <b-row align-h="start" align-v="center">
-          <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
-        </b-row>
-      </b-container>
-    </b-col>
-  </b-row>
+  <b-container fluid class="pl-5 pr-4 ml-3 mr-0">
+    <b-row align-h="center" align-v="center">
+      <b-col>
+        <b-container fluid>
+          <div v-if="wallets.loading" class="p-2 text-info">Loading...</div>
+          <b-row align-h="start" align-v="center">
+            <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
+          </b-row>
+        </b-container>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
