@@ -21,11 +21,13 @@
                 <currency-ticker/>
                 <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
               </div>
-              <div v-if="$route.name === 'Wallets'" class="header-buttons">
-                <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
-                  <span class="header-button-description">+ Add Wallet</span>
-                </a>
-              </div>
+            </div>
+
+            <div v-if="$route.name === 'Wallets'" class="add-wallet">
+              <a href="#" @click.prevent="$router.push({ name: 'Wallets', params: { add: 'add' } })">
+                <i>+</i>
+                <span class="header-button-description">Add Wallet</span>
+              </a>
             </div>
           </div>
         </b-col>

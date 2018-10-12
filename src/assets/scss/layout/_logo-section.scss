@@ -45,6 +45,26 @@
   }
 }
 
+.add-wallet {
+  @extend .px-3, .pb-2, .mt-3, .text-center;
+  margin-right: 100px;
+  float: right;
+  background: rgba($white, .5);
+  border-radius: $border-radius-lg;
+
+  i {
+    @extend .text-primary, .d-block;
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  span {
+    @extend .text-uppercase, .text-secondary;
+    font-size: .75rem;
+    font-weight: 500;
+  }
+}
+
 #logo {
   width: 100%
 }
