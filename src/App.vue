@@ -5,11 +5,15 @@
       <dashboard-menu/>
     </off-canvas-menu>
 
-    <div v-if="userStatus.res || userStatus.err" id="page-wrapper">
-      <page-header/>
-      <router-view/>
-      <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
-    </div>
+    <b-container v-if="userStatus.res || userStatus.err" id="page-wrapper" fluid>
+      <b-row>
+        <b-col class="p-0">
+          <page-header/>
+          <router-view/>
+          <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
