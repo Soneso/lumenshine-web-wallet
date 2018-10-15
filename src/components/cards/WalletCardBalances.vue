@@ -1,21 +1,38 @@
 <template>
-  <div>
-    <div v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)">
-      <b-card-group deck style="flex-wrap: nowrap; overflow: hidden"> <!-- TODO -->
+  <b-row>
+    <b-col v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)" class="px-4">
+      <b-row>
         <template v-for="balances in balanceLine">
-          <b-card :bg-variant="data.stellar_data ? 'success' : 'danger'" :key="balances.map(b => 'b' + b.type + b.issuer).join('')" :style="{'max-width': data.stellar_data ? null : '25%', width: wideCard ? '23%' : '45%', flex: '0 0 auto'}" text-variant="white" class="mb-3"> <!-- TODO -->
-            <h5 class="text-uppercase">{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h5>
+
+          <b-col :class="data.stellar_data ? 'bg-success' : 'bg-danger'"
+                 :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
+                 :cols="data.stellar_data ? 12 : 8"
+                 sm="6"
+                 md="12"
+                 lg="6"
+                 class="balance-list current">
+
+            <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
             <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
-            <ul v-else class="list-unstyled">
+
+            <ul v-else>
               <li v-for="item in balances" :key="'b' + item.type + item.issuer">
                 {{ item.balance }} <small>{{ item.type }}</small>
               </li>
             </ul>
-          </b-card>
 
-          <b-card v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')" :style="[{'box-shadow': 'none !important'}, 'flex: 0 0 auto', { width: wideCard ? '23%' : '45%', flex: '0 0 auto' }]" class="mb-3"> <!-- TODO -->
-            <h5 class="text-info text-uppercase">Available</h5>
-            <ul class="list-unstyled">
+          </b-col>
+
+          <b-col v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
+                 cols="12"
+                 sm="6"
+                 md="12"
+                 lg="6"
+                 class="balance-list available">
+
+            <h6>Available</h6>
+
+            <ul>
               <li v-for="item in balances" :key="'a' + item.type + item.issuer">
                 {{ item.available }} <small>{{ item.type }}</small>
                 <i
@@ -25,11 +42,13 @@
                   class="icon-help"/>
               </li>
             </ul>
-          </b-card>
+
+          </b-col>
+
         </template>
-      </b-card-group>
-    </div>
-  </div>
+      </b-row>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

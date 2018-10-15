@@ -1,0 +1,26 @@
+.balance-list {
+  @extend
+    .p-2,
+    .rounded-box-md,
+    .font-weight-200,
+    .text-uppercase;
+
+  &.bg-success,
+  &.bg-danger {
+    @extend .text-white;
+  }
+
+  ul, p {
+    small {
+      opacity: .5;
+    }
+  }
+
+  &.current {
+
+  }
+
+  &.available {
+
+  }
+}
