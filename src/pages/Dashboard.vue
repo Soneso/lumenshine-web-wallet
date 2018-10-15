@@ -3,8 +3,8 @@
     <b-row align-h="center" align-v="center">
       <b-col>
         <b-container fluid>
-          <transition name="fade">
-            <div v-if="wallets.loading" class="loading-indicator">Loading...</div>
+          <transition v-if="wallets.loading" name="fade">
+            <div class="loading-indicator">Loading...</div>
           </transition>
           <b-row align-h="start" align-v="center">
             <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
