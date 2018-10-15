@@ -1,0 +1,18 @@
+.loading-indicator {
+  @extend
+    %slow-transitions,
+    .text-center,
+    .text-uppercase,
+    .text-info;
+
+  z-index: 1000;
+  position: fixed;
+  left: 4rem;
+  top: 0;
+  padding-top: 5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  background: rgba($gray-300, .9);
+  width: 100%;
+  height: 100%;
+}

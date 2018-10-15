@@ -3,7 +3,9 @@
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
       <b-card class="p-4 single-card text-center">
         <p class="form-headline pb-3">Lost Password</p>
-        <div v-if="loading" class="py-4 px-2">Loading...</div>
+        <transition v-if="loading" name="fade">
+          <div class="loading-indicator">Loading...</div>
+        </transition>
         <template v-if="emailSuccess">
           <small class="text-success">Password lost email sent</small>
           <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>

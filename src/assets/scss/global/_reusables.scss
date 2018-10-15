@@ -41,3 +41,16 @@
   text-overflow: ellipsis;
   white-space: nowrap
 }
+
+
+.rounded-box {
+  &-sm {
+    border-radius: .25rem;
+  }
+  &-md {
+    border-radius: .5rem;
+  }
+  &-lg {
+    border-radius: 1rem;
+  }
+}

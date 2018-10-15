@@ -1,0 +1,4 @@
+#page-wrapper {
+  @extend .ml-5, %hidden-scroll;
+  width: calc(100% - #{map-get($spacers, 5)});
+}

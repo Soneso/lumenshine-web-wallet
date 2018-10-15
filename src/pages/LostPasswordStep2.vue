@@ -9,7 +9,9 @@
           <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
         </template>
         <template v-else-if="userStatus.res">
-          <div v-if="inProgress" class="py-4 px-2">Loading...</div>
+          <transition v-if="inProgress" name="fade">
+            <div class="loading-indicator">Loading...</div>
+          </transition>
           <template v-if="userStatus.res.tfa_confirmed === false">
             <template v-if="userStatus.res.mnemonic_confirmed === true">
               <h3>Error - 001</h3>

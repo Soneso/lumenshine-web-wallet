@@ -3,7 +3,9 @@
     <b-col cols="11" sm="8" md="6" lg="5" xl="4">
       <b-card class="p-4 single-card text-center">
         <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
-        <div v-if="inProgress" class="py-4 px-2">Loading...</div>
+        <transition v-if="inProgress" name="fade">
+          <div class="loading-indicator">Loading...</div>
+        </transition>
         <template v-if="emailSuccess">
           <small class="text-success">Lost 2FA Secret lost email sent</small>
           <p>For resetting your 2FA Secret, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your 2FA Secret.</p>

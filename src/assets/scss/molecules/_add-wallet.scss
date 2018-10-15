@@ -1,0 +1,20 @@
+.add-wallet {
+  @extend .px-3, .pb-2, .mt-3, .text-center;
+  position: absolute;
+  top: 2.25rem;
+  right: 0;
+  background: rgba($white, .5);
+  border-radius: $border-radius-lg;
+
+  i {
+    @extend .text-primary, .d-block;
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  span {
+    @extend .text-uppercase, .text-secondary;
+    font-size: .75rem;
+    font-weight: 500;
+  }
+}

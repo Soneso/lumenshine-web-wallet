@@ -4,7 +4,9 @@
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2">Sign up</h4>
         <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
-        <div v-if="loading" class="py-4 px-2">Loading...</div>
+        <transition v-if="loading" name="fade">
+          <div class="loading-indicator">Loading...</div>
+        </transition>
         <registration-form v-show="!loading && !registrationStatus.res" :loading="loading" :errors="registrationStatus.err" @submit="onRegisterSubmit"/>
       </b-card>
     </b-col>
