@@ -1,6 +1,7 @@
 .add-wallet {
   @extend .px-3, .pb-2, .mt-3, .text-center;
   position: absolute;
+  top: 2.25rem;
   right: 0;
   background: rgba($white, .5);
   border-radius: $border-radius-lg;
