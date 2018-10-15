@@ -34,7 +34,6 @@
           <template v-if="authToken && authTokenType !== 'partial'" class="menu menu--short">
             <a href="https://soneso.com" target="_blank">Developed by Soneso</a>
             <router-link to="/impressum">Impressum</router-link>
-            <a href="#"><i class="fa fa-flag"/></a>
           </template>
         </div>
       </b-col>
