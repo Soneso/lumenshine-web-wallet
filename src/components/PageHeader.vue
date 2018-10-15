@@ -7,7 +7,7 @@
       </div>
     </small>
 
-    <b-container fluid class="pl-5 pr-0 ml-4 mr-0">
+    <b-container fluid class="px-4">
       <b-row>
         <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete}]">
           <div id="logo-group">

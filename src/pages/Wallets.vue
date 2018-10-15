@@ -1,9 +1,11 @@
 <template>
-  <b-container fluid class="pl-5 pr-4 ml-3 mr-0">
+  <b-container fluid class="px-3">
     <b-row align-h="center" align-v="center">
       <b-col>
         <b-container fluid>
-          <div v-if="wallets.loading" class="p-2 text-info">Loading...</div>
+          <transition name="fade">
+            <div v-if="wallets.loading" class="loading-indicator">Loading...</div>
+          </transition>
           <b-row align-h="start" align-v="center">
             <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
           </b-row>

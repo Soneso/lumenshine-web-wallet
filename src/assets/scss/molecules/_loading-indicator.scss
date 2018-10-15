@@ -1,0 +1,17 @@
+.loading-indicator {
+  @extend
+    %slow-transitions,
+    .px-5,
+    .py-1,
+    .text-center,
+    .text-uppercase,
+    .text-gray-500;
+
+  position: fixed;
+  left: 4rem;
+  top: 0;
+  font-size: .75rem;
+  font-weight: 500;
+  background: rgba($white, .75);
+  width: 100%;
+}

@@ -7,7 +7,7 @@
 
     <b-container v-if="userStatus.res || userStatus.err" id="page-wrapper" fluid>
       <b-row>
-        <b-col class="p-0">
+        <b-col>
           <page-header/>
           <router-view/>
           <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
