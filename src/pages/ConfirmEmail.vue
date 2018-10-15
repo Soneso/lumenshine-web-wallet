@@ -7,7 +7,7 @@
           <h6 class="text-danger py-3">Email confirmation required</h6>
           <p>In order to be able continue the setup process, you need to confirm your email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions from the received mail to confirm your email address.</p>
           <transition v-if="inProgress" name="fade">
-            <div v-if="inProgress" class="loading-indicator">Loading...</div>
+            <div class="loading-indicator">Loading...</div>
           </transition>
           <div v-else>
             <div class="py-3">
