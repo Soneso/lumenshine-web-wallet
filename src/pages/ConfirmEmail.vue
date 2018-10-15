@@ -6,8 +6,8 @@
           <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
           <h6 class="text-danger py-3">Email confirmation required</h6>
           <p>In order to be able continue the setup process, you need to confirm your email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions from the received mail to confirm your email address.</p>
-          <div v-if="inProgress">Loading...</div>
-          <div v-else>
+          <template v-if="inProgress">Loading...</template>
+          <template v-else>
             <div class="py-3">
               <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onCheckConfirmation">Continue</b-button>
               <div v-if="alreadyConfirmedFailed" class="text-danger pt-2">Please confirm your email address first.</div>
@@ -16,14 +16,14 @@
             <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onResendEmail">Resend confirmation email</b-button>
             <div v-if="emailResent && resendEmailStatus.err.length > 0" class="text-danger pt-2">An error happened during email resend</div>
             <div v-else-if="emailResent" class="text-success pt-2">Resent confirmation mail</div>
-          </div>
+          </template>
         </template>
-        <template v-else>
-          <h4 class="form-headline text-uppercase pl-2">Email Confirmation</h4>
+        <template v-else> <!-- hasToken = true -->
+          <h4 class="form-headline text-uppercase pl-2">Continue your account setup</h4>
           <p v-if="confirmEmailStatus.loading" class="text-info py-5">
             Confirming email address. Loading...
           </p>
-          <div v-else="" class="pt-4 pb-1">
+          <div v-else class="pt-4 pb-1">
             <div v-if="confirmEmailStatus.err.length > 0" class="text-danger">
               <div v-for="err in confirmEmailStatus.err" :key="err.error_code" class="pb-2">Error: {{ err.error_message }}</div>
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1000)" class="pb-2">Invalid confirmation URL!</div>
@@ -31,8 +31,16 @@
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1008)" class="pb-2">Email already confirmed!</div>
             </div>
             <div v-else>
-              <p class="text-success pb-4">Thank you for confirming your email address.</p>
-              <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onLoginClick">Login</b-button>
+              <p class="text-success pb-4">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</p>
+              <login-form
+                v-show="decryptError || (!loading && !loginStatus.res)"
+                :loading="loading"
+                :errors="loginStatus.err"
+                :decrypt-error="decryptError"
+                :show-email-field="showFullLoginForm"
+                :show-tfa-field="showFullLoginForm"
+                :should-continue="true"
+                @submit="onLoginSubmit"/>
             </div>
           </div>
         </template>
@@ -44,30 +52,45 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import LoginForm from '@/components/forms/auth/LoginForm';
+
+import CryptoHelper from '@/helpers/CryptoHelper';
+
 import redirectHandler from '@/util/redirectHandler';
 
 export default {
+  components: { LoginForm },
   data () {
     return {
-      inProgress: false,
       emailResent: false,
       alreadyConfirmedFailed: false,
+
+      inProgress: false,
+      decryptError: false,
     };
   },
   computed: {
-    ...mapGetters(['confirmEmailStatus', 'resendEmailStatus', 'userStatus']),
+    ...mapGetters(['confirmEmailStatus', 'resendEmailStatus', 'userStatus', 'loginStatus', 'encryptedServerData', 'userAuthData']),
     hasToken () {
       return this.$route.params.token;
-    }
+    },
+    loading () {
+      return this.inProgress || this.loginStatus.loading;
+    },
+    showFullLoginForm () {
+      return !this.confirmEmailStatus.res || this.confirmEmailStatus.res.token_already_confirmed;
+    },
   },
   async created () {
     if (this.$route.params.token) {
       await this.confirmEmail(this.$route.params.token);
       await this.getUserStatus();
+      await this.getUserAuthData();
     }
   },
   methods: {
-    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus']),
+    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail']),
+
     async onResendEmail () {
       this.inProgress = true;
       await this.resendConfirmationEmail(this.userStatus.email);
@@ -76,6 +99,7 @@ export default {
         this.emailResent = true;
       }
     },
+
     async onCheckConfirmation () {
       this.alreadyConfirmedFailed = false;
       this.inProgress = true;
@@ -90,9 +114,57 @@ export default {
         this.$router.push(redirectRes);
       }
     },
-    onLoginClick () {
-      this.$router.push({ name: 'Login' });
-    }
+
+    async onLoginSubmit (email, pass, tfaCode) {
+      this.inProgress = true;
+      this.decryptError = false;
+
+      let authData;
+      if (this.showFullLoginForm) {
+        try {
+          await this.loginStep1({ email, tfa_code: tfaCode });
+          authData = this.encryptedServerData;
+        } catch (err) {
+          this.inProgress = false;
+          return;
+        }
+
+        if (this.loginStatus.err.length > 0) {
+          this.inProgress = false;
+          return;
+        }
+      } else { // use partial JWT
+        authData = this.userAuthData.res;
+        if (this.confirmEmailStatus.res.email) {
+          await this.setEmail(this.confirmEmailStatus.res.email);
+        }
+      }
+
+      const decryptedServerData = await CryptoHelper.decryptServerData(pass, authData);
+
+      if (!decryptedServerData) {
+        this.decryptError = true;
+        this.inProgress = false;
+        return;
+      }
+
+      await this.setPublicKeys(decryptedServerData.publicKeys);
+
+      try {
+        await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
+      } catch (err) {
+        this.inProgress = false;
+        return;
+      }
+
+      await this.getUserStatus();
+
+      if (this.userStatus.res && !this.userStatus.res.mnemonic_confirmed) {
+        await this.setMnemonic(decryptedServerData.mnemonic);
+      }
+
+      this.$router.push(redirectHandler(this.userStatus.res, this.$route.name));
+    },
   }
 };
 </script>

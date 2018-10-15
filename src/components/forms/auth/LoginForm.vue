@@ -3,7 +3,7 @@
   <b-form v-if="!loading" id="login-form" @submit.prevent="onLoginClick">
     <!--Email field-->
     <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
-    <b-form-group>
+    <b-form-group v-if="showEmailField">
       <b-form-input
         id="login-email"
         :class="{ error: $v.email.$error }"
@@ -62,7 +62,7 @@
     </b-form-group>
 
     <!-- 2FA field -->
-    <b-form-group>
+    <b-form-group v-if="showTfaField">
       <b-form-input
         id="login-2fa"
         :class="{ error: $v.twoFactorCode.$error }"
@@ -91,9 +91,9 @@
 
     <!-- submit action -->
     <div class="text-center">
-      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">Login</b-button>
-      <br>
-      <small class="text-gray-500">Don't have an account? Sign up <router-link to="/register">here</router-link></small>
+      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">{{ shouldContinue ? 'Continue' : 'Login' }}</b-button>
+      <br v-if="!shouldContinue">
+      <small v-if="!shouldContinue" class="text-gray-500">Don't have an account? Sign up <router-link to="/register">here</router-link></small>
     </div>
   </b-form>
 
@@ -113,6 +113,18 @@ export default {
       type: Boolean,
       required: true
     },
+    showEmailField: {
+      type: Boolean,
+      default: true,
+    },
+    showTfaField: {
+      type: Boolean,
+      default: true,
+    },
+    shouldContinue: {
+      type: Boolean,
+      default: false,
+    }
   },
   data () {
     return {
@@ -150,20 +162,28 @@ export default {
     }
   },
   validations () {
-    return {
+    const emailValidators = this.showEmailField ? {
       email: {
         ...emailValidator.call(this),
         backendHasUser: value => this.backendQuery.email !== value || !this.errors.find(err => err.error_code === 1)
       },
-      password: {
-        required,
-        decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
-      },
+    } : {};
+
+    const tfaValidators = this.showTfaField ? {
       twoFactorCode: {
         ...tfaValidator.call(this),
         validTfa: value => this.backendQuery.twoFactorCode !== value || !this.errors.find(err => err.error_code === 1000),
         requiredTfa: value => this.backendQuery.twoFactorCode !== value || !this.errors.find(err => err.error_code === 1009)
       }
+    } : {};
+
+    return {
+      ...emailValidators,
+      password: {
+        required,
+        decryptValid: value => this.backendQuery.password !== value || !this.decryptError,
+      },
+      ...tfaValidators,
     };
   }
 };

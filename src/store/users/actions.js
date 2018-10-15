@@ -126,7 +126,12 @@ export default {
     commit('SET_CONFIRM_EMAIL_ERROR', []);
     try {
       const res = await UserService.confirmEmail(token);
-      commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
+      commit('SET_CONFIRM_EMAIL_RESULT', res.data);
+      if (res.headers.authorization) {
+        commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
+      } else {
+        commit('SET_AUTH_TOKEN', { token: null, type: null });
+      }
     } catch (err) {
       commit('SET_CONFIRM_EMAIL_ERROR', err.data);
     }
@@ -218,6 +223,10 @@ export default {
 
   setMnemonic ({ commit }, mnemonic) {
     commit('SET_MNEMONIC', mnemonic);
+  },
+
+  setEmail ({ commit }, email) {
+    commit('SET_USER_EMAIL', email);
   },
 
   async getUserStatus ({ commit, getters }) {

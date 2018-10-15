@@ -45,6 +45,7 @@ function getInitialState (clearAuthToken = false) {
 
     confirmEmailLoading: false,
     confirmEmailErrors: [],
+    confirmEmailResult: null,
 
     resendEmailLoading: false,
     resendEmailErrors: [],

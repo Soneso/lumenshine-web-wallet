@@ -51,7 +51,12 @@ export default {
   SET_CONFIRM_EMAIL_LOADING (state, msg) {
     state.confirmEmailLoading = msg;
   },
+  SET_CONFIRM_EMAIL_RESULT (state, msg) {
+    state.confirmEmailResult = msg;
+    state.confirmEmailErrors = [];
+  },
   SET_CONFIRM_EMAIL_ERROR (state, msg) {
+    state.confirmEmailResult = null;
     state.confirmEmailErrors = msg;
   },
 

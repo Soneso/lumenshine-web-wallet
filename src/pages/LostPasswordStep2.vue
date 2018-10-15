@@ -56,6 +56,8 @@ import config from '@/config';
 
 import workerCaller from '@/util/workerCaller';
 
+import CryptoHelper from '@/helpers/CryptoHelper';
+
 import lostPasswordTfaForm from '@/components/forms/auth/LostPasswordTfaForm';
 import lostPasswordMnemonicForm from '@/components/forms/auth/LostPasswordMnemonicForm';
 import lostPasswordForm from '@/components/forms/auth/LostPasswordForm';
@@ -119,6 +121,7 @@ export default {
       }
       this.inProgress = false;
     },
+
     async onMnemonicSubmitClick (mnemonic) {
       this.inProgress = true;
       this.mnemonicError = false;
@@ -139,54 +142,12 @@ export default {
       this.step = 'password';
       this.inProgress = false;
     },
-    async generateSecurityData (password, mnemonic) {
-      const [ kdfSalt, wordlistMasterKey, wordlistMasterKeyIV, mnemonicMasterKey, mnemonicMasterKeyIV, mnemonicIV, wordlist, wordlistIV ] =
-        await Promise.all([
-          workerCaller('generateSalt'),
-          workerCaller('generateMasterKey'),
-          workerCaller('generateIV'),
-          workerCaller('generateMasterKey'),
-          workerCaller('generateIV'),
-          workerCaller('generateIV'),
-          workerCaller('generateWordlist'),
-          workerCaller('generateIV')
-        ]);
 
-      const [ publicKey0, publicKey188, kdfPass, encryptedWordlist, mnemonicIndices ] =
-        await Promise.all([
-          workerCaller('getPublicKey', mnemonic, 0),
-          workerCaller('getPublicKey', mnemonic, 188),
-          workerCaller('derivePassword', password, kdfSalt),
-          workerCaller('cryptWordlist', wordlistMasterKey, wordlistIV, wordlist),
-          workerCaller('mnemonicToIndices', mnemonic, wordlist),
-        ]);
-
-      const [ encryptedMnemonicMasterKey, encryptedWordlistMasterKey, mnemonicEncrypted ] =
-        await Promise.all([
-          workerCaller('cryptMasterKey', kdfPass, mnemonicMasterKeyIV, mnemonicMasterKey),
-          workerCaller('cryptMasterKey', kdfPass, wordlistMasterKeyIV, wordlistMasterKey),
-          workerCaller('cryptMnemonic', mnemonicMasterKey, mnemonicIV, mnemonicIndices),
-        ]);
-
-      return {
-        kdf_salt: kdfSalt,
-        mnemonic_master_key: encryptedMnemonicMasterKey,
-        mnemonic_master_iv: mnemonicMasterKeyIV,
-        wordlist_master_key: encryptedWordlistMasterKey,
-        wordlist_master_iv: wordlistMasterKeyIV,
-        encrypted_mnemonic: mnemonicEncrypted,
-        encryption_mnemonic_iv: mnemonicIV,
-        encrypted_wordlist: encryptedWordlist,
-        encryption_wordlist_iv: wordlistIV,
-        public_key_0: publicKey0,
-        public_key_188: publicKey188,
-      };
-    },
     async onGenerateNewData (password) {
       this.inProgress = true;
       const newMnemonic = await workerCaller('generateMnemonic');
       this.setMnemonic(newMnemonic);
-      const params = await this.generateSecurityData(password, newMnemonic);
+      const params = await CryptoHelper.generateSecurityData(password, newMnemonic);
 
       await this.updateSecurityData({ ...params, tfa_code: this.lastTfaCode });
 
@@ -208,9 +169,10 @@ export default {
       this.inProgress = false;
       this.$router.push({ name: 'ConfirmTfa' });
     },
+
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
-      const params = await this.generateSecurityData(password, this.mnemonic);
+      const params = await CryptoHelper.generateSecurityData(password, this.mnemonic);
 
       await this.lostPasswordUpdate(params);
 

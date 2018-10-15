@@ -14,13 +14,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import loginForm from '@/components/forms/auth/LoginForm';
-import workerCaller from '@/util/workerCaller';
+import LoginForm from '@/components/forms/auth/LoginForm';
+
+import CryptoHelper from '@/helpers/CryptoHelper';
 
 import redirectHandler from '@/util/redirectHandler';
 
 export default {
-  components: { loginForm },
+  components: { LoginForm },
   data () {
     return {
       inProgress: false,
@@ -38,7 +39,6 @@ export default {
     async onLoginSubmit (email, pass, tfaCode) {
       this.inProgress = true;
       this.decryptError = false;
-      this.password = pass;
 
       try {
         await this.loginStep1({ email, tfa_code: tfaCode });
@@ -52,37 +52,25 @@ export default {
         return;
       }
 
-      const kdfPass = await workerCaller('derivePassword', this.password, this.encryptedServerData.kdf_password_salt);
-      const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
-        workerCaller('decryptMasterKey', kdfPass, this.encryptedServerData.mnemonic_master_key_encryption_iv, this.encryptedServerData.encrypted_mnemonic_master_key),
-        workerCaller('decryptMasterKey', kdfPass, this.encryptedServerData.wordlist_master_key_encryption_iv, this.encryptedServerData.encrypted_wordlist_master_key)
-      ]);
+      const decryptedServerData = await CryptoHelper.decryptServerData(pass, this.encryptedServerData);
 
-      const [ mnemonicIndices, wordlist ] = await Promise.all([
-        workerCaller('decryptMnemonic', mnemonicMasterKey, this.encryptedServerData.mnemonic_encryption_iv, this.encryptedServerData.encrypted_mnemonic),
-        workerCaller('decryptWordlist', wordlistMasterKey, this.encryptedServerData.wordlist_encryption_iv, this.encryptedServerData.encrypted_wordlist)
-      ]);
-
-      const isValidWordlist = !!(wordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
-      if (!isValidWordlist) {
+      if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
         return;
       }
 
-      const mnemonic = await workerCaller('indicesToMnemonic', mnemonicIndices, wordlist);
-      const publicKeys = await workerCaller('getPublicKeys', mnemonic);
-      this.setPublicKeys(publicKeys);
+      this.setPublicKeys(decryptedServerData.publicKeys);
 
       try {
-        await this.loginStep2({ key: publicKeys[188] });
+        await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
       } catch (err) {
         this.inProgress = false;
         return;
       }
 
       if (this.userStatus.res && !this.userStatus.res.mnemonic_confirmed) {
-        this.setMnemonic(mnemonic);
+        this.setMnemonic(decryptedServerData.mnemonic);
       }
 
       this.$router.push(redirectHandler(this.userStatus.res, this.$route.name));

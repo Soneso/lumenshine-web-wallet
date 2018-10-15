@@ -39,9 +39,6 @@ export default {
       prevHeight: 0,
     };
   },
-  created () {
-    console.log('component', this.component);
-  },
   methods: {
     onCloseClick (e) {
       e.preventDefault();

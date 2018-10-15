@@ -1,9 +1,9 @@
 <template>
   <header :class="[ 'header', { 'header--full': $route.meta.fullHeader } ]">
     <small v-if="authToken && !registrationComplete" class="user-info">
-      <div class="user-info-email">
+      <div v-if="userStatus.email" class="user-info-email">
         {{ userStatus.email }} <br>
-        <a v-if="userStatus.email.length > 5" href="#" class="user-info-logout" @click.prevent="onLogoutClick">Sign out</a>
+        <a href="#" class="user-info-logout" @click.prevent="onLogoutClick">Sign out</a>
       </div>
     </small>
 

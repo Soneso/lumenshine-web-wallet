@@ -168,7 +168,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
+    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
     wideCard () {
       return this.balances.length > 3;
     },
@@ -203,7 +203,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getUserAuthData',
       'setInflationDestination',
       'getWallets',
       'addCurrency',

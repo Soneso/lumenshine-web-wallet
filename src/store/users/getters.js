@@ -6,7 +6,7 @@ export default {
   userAuthData: state => ({ err: state.userAuthErrors, loading: state.userAuthLoading, res: state.userAuthData }),
   registrationStatus: state => ({ err: state.registrationErrors, loading: state.registrationLoading }),
   registration2FAStatus: state => ({ err: state.registration2FAErrors, loading: state.registrationLoading, res: state.registration2FAResult }),
-  confirmEmailStatus: state => ({ err: state.confirmEmailErrors, loading: state.confirmEmailLoading }),
+  confirmEmailStatus: state => ({ err: state.confirmEmailErrors, loading: state.confirmEmailLoading, res: state.confirmEmailResult }),
   confirmMnemonicStatus: state => ({ err: state.confirmMnemonicErrors, loading: state.confirmMnemonicLoading }),
   resendEmailStatus: state => ({ err: state.resendEmailErrors, loading: state.resendEmailLoading }),
   loginStatus: state => ({ err: state.loginErrors, loading: state.loginLoading }),

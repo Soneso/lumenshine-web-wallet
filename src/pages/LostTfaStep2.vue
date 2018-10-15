@@ -47,9 +47,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import workerCaller from '@/util/workerCaller';
-
 import config from '@/config';
+
+import CryptoHelper from '@/helpers/CryptoHelper';
 
 import lostTfaForm from '@/components/forms/auth/LostTfaForm';
 import lostTfaPasswordForm from '@/components/forms/auth/LostTfaPasswordForm';
@@ -115,28 +115,15 @@ export default {
 
       const authData = this.userAuthData.res;
 
-      const oldKdfPass = await workerCaller('derivePassword', password, authData.kdf_password_salt);
-      const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
-        workerCaller('decryptMasterKey', oldKdfPass, authData.mnemonic_master_key_encryption_iv, authData.encrypted_mnemonic_master_key),
-        workerCaller('decryptMasterKey', oldKdfPass, authData.wordlist_master_key_encryption_iv, authData.encrypted_wordlist_master_key)
-      ]);
+      const decryptedServerData = await CryptoHelper.decryptServerData(password, authData);
 
-      const [ oldMnemonicIndices, oldWordlist ] = await Promise.all([
-        workerCaller('decryptMnemonic', mnemonicMasterKey, authData.mnemonic_encryption_iv, authData.encrypted_mnemonic),
-        workerCaller('decryptWordlist', wordlistMasterKey, authData.wordlist_encryption_iv, authData.encrypted_wordlist)
-      ]);
-
-      const isValidWordlist = !!(oldWordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
-      if (!isValidWordlist) {
+      if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
         return;
       }
 
-      const mnemonic = await workerCaller('indicesToMnemonic', oldMnemonicIndices, oldWordlist);
-      const publicKey188 = await workerCaller('getPublicKey', mnemonic, 188);
-
-      await this.resetTfa(publicKey188);
+      await this.resetTfa(decryptedServerData.publicKeys[188]);
 
       this.inProgress = false;
 
@@ -152,31 +139,19 @@ export default {
 
       const encryptedData = this.userAuthData.res;
 
-      const kdfPass = await workerCaller('derivePassword', password, encryptedData.kdf_password_salt);
-      const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
-        workerCaller('decryptMasterKey', kdfPass, encryptedData.mnemonic_master_key_encryption_iv, encryptedData.encrypted_mnemonic_master_key),
-        workerCaller('decryptMasterKey', kdfPass, encryptedData.wordlist_master_key_encryption_iv, encryptedData.encrypted_wordlist_master_key)
-      ]);
+      const decryptedServerData = await CryptoHelper.decryptServerData(password, encryptedData);
 
-      const [ mnemonicIndices, wordlist ] = await Promise.all([
-        workerCaller('decryptMnemonic', mnemonicMasterKey, encryptedData.mnemonic_encryption_iv, encryptedData.encrypted_mnemonic),
-        workerCaller('decryptWordlist', wordlistMasterKey, encryptedData.wordlist_encryption_iv, encryptedData.encrypted_wordlist)
-      ]);
-
-      const isValidWordlist = !!(wordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
-      if (!isValidWordlist) {
+      if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
         return;
       }
 
-      const mnemonic = await workerCaller('indicesToMnemonic', mnemonicIndices, wordlist);
-      this.setMnemonic(mnemonic);
-      const publicKeys = await workerCaller('getPublicKeys', mnemonic);
-      this.setPublicKeys(publicKeys);
+      this.setMnemonic(decryptedServerData.mnemonic);
+      this.setPublicKeys(decryptedServerData.publicKeys);
 
       try {
-        await this.loginStep2({ key: publicKeys[188] });
+        await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
       } catch (err) {
         this.decryptError = true;
         this.inProgress = false;
