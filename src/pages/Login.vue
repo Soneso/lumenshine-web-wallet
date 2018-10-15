@@ -4,7 +4,9 @@
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2">Login</h4>
         <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
-        <div v-if="inProgress" class="py-4 px-2">Loading...</div>
+        <transition v-if="inProgress" name="fade">
+          <div class="loading-indicator">Loading...</div>
+        </transition>
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
     </b-col>

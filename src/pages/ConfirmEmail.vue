@@ -6,7 +6,9 @@
           <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
           <h6 class="text-danger py-3">Email confirmation required</h6>
           <p>In order to be able continue the setup process, you need to confirm your email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions from the received mail to confirm your email address.</p>
-          <div v-if="inProgress">Loading...</div>
+          <transition v-if="inProgress" name="fade">
+            <div v-if="inProgress" class="loading-indicator">Loading...</div>
+          </transition>
           <div v-else>
             <div class="py-3">
               <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onCheckConfirmation">Continue</b-button>
