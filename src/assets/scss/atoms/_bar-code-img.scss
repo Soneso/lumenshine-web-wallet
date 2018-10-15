@@ -1,4 +1,4 @@
 .bar-code-img {
-  @extend .m-auto;
+  @extend .m-auto, .not-stretching;
   max-width: 13rem;
 }

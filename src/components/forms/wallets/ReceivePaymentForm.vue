@@ -1,30 +1,23 @@
 <template>
-  <form class="form">
+  <b-form class="form">
     <b-row align-h="center">
-      <b-col cols="9">
-        <b-row align-h="center">
-          <b-col cols="4">
-            <img src="@/assets/qr.svg">
-          </b-col>
-        </b-row>
-        <br>
-        <p class="text-center">
-          <strong>Receive public key</strong>
-          <a
-            v-clipboard:copy="data.public_key_0"
-            v-clipboard:success="onCopy"
-            class="wallet-link">
-            <i class="icon-copy"/>
-          </a>
-          <span v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></span>
-          {{ data.public_key_0 }}
-        </p>
-
-        <p v-if="data.federation_address" class="text-center">
-          <strong>Stellar address</strong>
+      <b-col cols="10">
+        <div class="text-center pt-2">
+          <img class="bar-code-img" src="@/assets/qr.svg">
           <br>
-          <span class="text-warning">{{ data.federation_address }}</span>
-        </p>
+          <div :class="['pt-3', {'pb-4': data.federation_address}]">
+            <span class="font-weight-600">Receive public key</span>
+            <br>
+            <small class="break-word with-hyphens">{{ data.public_key_0 }}</small>
+            <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link"> <i class="icon-copy text-info"/> </a>
+            <small v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></small>
+          </div>
+
+          <div v-if="!data.federation_address" class="pt-3">
+            <div class="font-weight-600">Stellar address</div>
+            <small class="pb-4 text-warning d-block">{{ data.federation_address }}dskjlsdjkldskljdsklj sd sdljk</small>
+          </div>
+        </div>
 
         <b-form-group :label-for="`currencyInput_${uuid}`" label="Currency">
           <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
@@ -56,15 +49,15 @@
         </b-form-group>
 
         <div class="text-center py-4">
-          <b-button-group>
+          <b-button-group size="sm">
             <b-button variant="success" class="text-uppercase" @click="onSendEmailClick">Send by email</b-button>
-            <b-button variant="info" class="text-uppercase" @click="onPrintClick">Print</b-button>
-            <b-button variant="warning" class="text-uppercase" @click="onDoneClick">Done</b-button>
+            <b-button variant="warning" class="text-uppercase" @click="onPrintClick">Print</b-button>
+            <b-button variant="info" class="text-uppercase" @click="onDoneClick">Done</b-button>
           </b-button-group>
         </div>
       </b-col>
     </b-row>
-  </form>
+  </b-form>
 </template>
 
 <script>

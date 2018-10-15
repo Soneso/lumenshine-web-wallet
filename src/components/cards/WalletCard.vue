@@ -34,7 +34,7 @@
     </b-card>
 
     <!-- modals -->
-    <b-modal ref="receiveModal" hide-footer title="Receive">
+    <b-modal ref="receiveModal" hide-footer title="Receive" size="sm">
       <receive-payment-form :data="data" @cancel="$refs.receiveModal.hide()"/>
     </b-modal>
 
@@ -88,8 +88,7 @@
       <div v-if="!config.IS_TEST_NETWORK">
         <p>In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen). Please send your Stellar Lumens (XLM) to the above displayed Account ID / Public key. At least 1 XLM is needed to fund your wallet in the stellar blockchain. We recommend a minimum of 2 XLM.</p>
         <p>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?</p>
-        <p>A: You can pay an exchange that sells lumens in order to fund your wallet.
-        <a href="http://coinmarketcap.com/currencies/stellar/#markets" target="_blank">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens withdraw them from the exchange to your wallet by sending them to the above displayed Account ID / Public key in order to fund your wallet.</p>
+        <p> A: You can pay an exchange that sells lumens in order to fund your wallet. <a href="http://coinmarketcap.com/currencies/stellar/#markets" target="_blank">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens withdraw them from the exchange to your wallet by sending them to the above displayed Account ID / Public key in order to fund your wallet.</p>
         <a id="changellyButton" :href="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" target="_blank" @click.prevent="changellyModalVisible = true, $refs.fundWalletModal.hide()">
           <img src="https://changelly.com/pay_button_pay_with.png">
         </a>
