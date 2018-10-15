@@ -356,8 +356,8 @@ $input-btn-focus-color:       rgba($component-active-bg, .25) !default;
 $input-btn-focus-box-shadow:  none !default;
 //$input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
-$input-btn-padding-y-sm:      .25rem !default;
-$input-btn-padding-x-sm:      .75rem !default;
+$input-btn-padding-y-sm:      .35rem !default;
+$input-btn-padding-x-sm:      1rem !default;
 $input-btn-line-height-sm:    $line-height-sm !default;
 
 $input-btn-padding-y-lg:      .7rem !default;
@@ -713,7 +713,7 @@ $jumbotron-bg:                      $gray-200 !default;
 
 $card-spacer-y:                     .5rem !default;
 $card-spacer-x:                     .5rem !default;
-$card-border-width:                 0 !default;
+$card-border-width:                 1px !default;
 $card-border-radius:                1rem !default;
 $card-border-color:                 transparent !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width}) !default;
@@ -793,7 +793,7 @@ $badge-pill-border-radius:          10rem !default;
 $modal-inner-padding:               1rem !default;
 
 $modal-dialog-margin:               .5rem !default;
-$modal-dialog-margin-y-sm-up:       1.75rem !default;
+$modal-dialog-margin-y-sm-up:       9rem !default;
 
 $modal-title-line-height:           $line-height-base !default;
 
@@ -801,24 +801,24 @@ $modal-content-bg:                  $white !default;
 $modal-content-border-color:        $gray-100 !default;
 $modal-content-border-width:        $border-width !default;
 $modal-content-border-radius:       $border-radius-sm !default;
-$modal-content-box-shadow-xs:       0 .25rem .25rem rgba($black, .25) !default;
-$modal-content-box-shadow-sm-up:    0 .25rem .25rem rgba($black, .25) !default;
+$modal-content-box-shadow-xs:       .25rem .25rem .5rem rgba($black, .15) !default;
+$modal-content-box-shadow-sm-up:    .25rem .25rem .5rem rgba($black, .15) !default;
 
 $modal-backdrop-bg:                 $black !default;
 // TODO: implement this gradient
 //background-color: #ffffff;
 //@include filter-gradient(#ffffff, #000000, vertical);
 //@include background-image(linear-gradient(top, #ffffff 0%,#000000 30%,#000000 100%));
-$modal-backdrop-opacity:            .5 !default;
+$modal-backdrop-opacity:            1 !default;
 $modal-header-border-color:         $modal-content-border-color !default;
 $modal-footer-border-color:         $modal-content-border-color !default;
 $modal-header-border-width:         $modal-content-border-width !default;
 $modal-footer-border-width:         $modal-content-border-width !default;
 $modal-header-padding:              1rem !default;
 
-$modal-lg:                          800px !default;
-$modal-md:                          580px !default;
-$modal-sm:                          370px !default;
+$modal-lg:                          870px !default;
+$modal-md:                          660px !default;
+$modal-sm:                          450px !default;
 
 $modal-transition:                  transform .3s ease-out !default;
 
