@@ -1,6 +1,6 @@
 <template>
-  <b-col cols="12" md="6" class="px-2">
-    <b-card :class="['mb-2', {'card--wide': balances && balances.length > 1}]">
+  <b-col :md="wideCard ? 12 : 6" cols="12" class="px-2">
+    <b-card :class="['mb-2', {'card-wide': wideCard}]">
       <b-row class="card-header">
         <b-col>
           <h6>

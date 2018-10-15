@@ -9,7 +9,9 @@
             <span class="font-weight-600">Receive public key</span>
             <br>
             <small class="break-word with-hyphens">{{ data.public_key_0 }}</small>
-            <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link"> <i class="icon-copy text-info"/> </a>
+            <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
+              <i class="icon-copy text-info"/>
+            </a>
             <small v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></small>
           </div>
 
