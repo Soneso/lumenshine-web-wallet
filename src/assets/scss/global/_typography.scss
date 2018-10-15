@@ -1,4 +1,4 @@
-// gray text colors
+// text colors and backgrounds - grays only
 @each $item, $color in $grays {
   .text-gray-#{$item} {
     color: $color
@@ -8,12 +8,19 @@
   }
 }
 
-// color text
+// text colors and backgrounds
 @each $item, $color in $colors {
   .text-#{$item} {
     color: $color
   }
   .bg-#{$item} {
     background-color: $color
+  }
+}
+
+// font-weight
+@for $i from 1 through 9 {
+  .font-weight-#{$i}00 {
+    font-weight: $i * 100;
   }
 }
