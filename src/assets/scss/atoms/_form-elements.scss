@@ -118,8 +118,11 @@ input {
     }
 
     .modal & {
-      @extend .bg-white;
-      border: 1px solid $gray-500;
+      @extend .bg-white, %modals-input-border-color;
+
+      &:focus {
+        @extend %modals-input-border-color
+      }
 
       &::placeholder {
         font-size: .85rem;
