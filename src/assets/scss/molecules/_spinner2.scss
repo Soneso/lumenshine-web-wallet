@@ -1,0 +1,22 @@
+.spinner-wrapper {
+  @extend .p-3;
+  position: relative;
+
+  i {
+    &.spin {
+      @extend %slow-transitions;
+      position: absolute;
+      top: calc(50% - .75rem);
+      left: calc(50% - .75rem);
+      font-size: 1.5rem;
+
+      &.cw {
+        @extend %spin
+      }
+
+      &.ccw {
+        @extend %spin-back
+      }
+    }
+  }
+}
