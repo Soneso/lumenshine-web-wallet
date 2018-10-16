@@ -13,13 +13,11 @@
   position: relative;
 
   .narrow & {
-    margin-left: calc(50% - 7rem);
+    margin-left: calc(50% - 3rem);
   }
 
   h1 {
-    @extend .text-uppercase;
-    @extend .pt-2;
-    @extend .my-0;
+    @extend .text-uppercase, .pt-2, .my-0;
     font-size: 1.0625rem;
     color: $blue
   }
