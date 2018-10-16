@@ -797,7 +797,7 @@ $modal-dialog-margin-y-sm-up:       9rem !default;
 
 $modal-title-line-height:           $line-height-base !default;
 
-$modal-content-bg:                  $white !default;
+$modal-content-bg:                  rgba($white, .9) !default;
 $modal-content-border-color:        $gray-100 !default;
 $modal-content-border-width:        $border-width !default;
 $modal-content-border-radius:       $border-radius-sm !default;

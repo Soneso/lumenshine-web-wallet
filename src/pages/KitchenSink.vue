@@ -9,6 +9,54 @@
 
     <b-row>
       <b-col>
+        <hr>
+        <h4 class="py-3">Modals</h4>
+
+        <div>
+          <b-btn v-b-modal.modal variant="info">Launch demo modal</b-btn>
+          <b-modal id="modal" centered size="sm" title="Bootstrap modals">
+            <b-form v-if="show" class="p-4">
+              <b-form-group id="exampleInputGroup1"
+                            label="Email address:"
+                            label-for="exampleInput1"
+                            description="We'll never share your email with anyone else.">
+                <b-form-input id="exampleInput1"
+                              v-model="form.email"
+                              type="email"
+                              required
+                              placeholder="Enter email">
+                </b-form-input>
+              </b-form-group>
+              <b-form-group id="exampleInputGroup2"
+                            label="Your Name:"
+                            label-for="exampleInput2">
+                <b-form-input id="exampleInput2"
+                              v-model="form.name"
+                              type="text"
+                              required
+                              placeholder="Enter name">
+                </b-form-input>
+              </b-form-group>
+              <b-form-group id="exampleInputGroup3"
+                            label="Food:"
+                            label-for="exampleInput3">
+                <b-form-select id="exampleInput3"
+                               v-model="form.food"
+                               :options="foods"
+                               required>
+                </b-form-select>
+              </b-form-group>
+              <b-form-group id="exampleGroup4">
+                <b-form-checkbox-group v-model="form.checked" id="exampleChecks">
+                  <b-form-checkbox value="me">Check me out</b-form-checkbox>
+                  <b-form-checkbox value="that">Check that out</b-form-checkbox>
+                </b-form-checkbox-group>
+              </b-form-group>
+              <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @submit="onSubmit">Submit</b-button>
+              <b-button type="reset" variant="danger" class="btn-rounded text-uppercase" @reset="onReset">Reset</b-button>
+            </b-form>
+          </b-modal>
+        </div>
 
         <hr>
         <h4 class="py-3">Made some progress</h4>
@@ -222,16 +270,6 @@
           <b-badge variant="info">Info</b-badge>
           <b-badge variant="light">Light</b-badge>
           <b-badge variant="dark">Dark</b-badge>
-        </div>
-
-        <hr>
-        <h4 class="py-3">Modals</h4>
-
-        <div>
-          <b-btn v-b-modal.modal variant="info">Launch demo modal</b-btn>
-          <b-modal id="modal" centered size="lg" title="Bootstrap modals">
-            <p class="my-4">Hello from modal!</p>
-          </b-modal>
         </div>
 
         <hr>

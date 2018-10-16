@@ -1,11 +1,14 @@
 // Local vars & reusables
-
 %input-border-color {
   border-bottom-color: $gray-300
 }
 
 %input-border-color-focused {
   border-bottom-color: $info
+}
+
+%modals-input-border-color {
+  border-color: $gray-500
 }
 
 
@@ -93,6 +96,7 @@ input {
   &[type="tel"],
   &[type="number"],
   .vdp-datepicker & {
+
     @extend %input-border-color;
 
     &:focus {
@@ -112,6 +116,24 @@ input {
         text-transform: uppercase;
       }
     }
+
+    .modal & {
+      @extend .bg-white;
+      border: 1px solid $gray-500;
+
+      &::placeholder {
+        font-size: .85rem;
+      }
+
+      &:-ms-input-placeholder {
+        font-size: .85rem;
+      }
+
+      &:-ms-input-placeholder {
+        font-size: .85rem;
+      }
+
+    }
   }
 }
 
@@ -125,8 +147,21 @@ input {
 
 
 // form select
-.custom-select,
-.custom-select:focus {
+.custom-select {
+  .modal & {
+    @extend %modals-input-border-color, .bg-white;
+    background-image: url('../images/ui/options-down.svg');
+    background-repeat: no-repeat;
+    background-position: right .5rem center;
+    background-size: 1rem auto;
+
+    &:focus {
+      @extend %modals-input-border-color
+    }
+  }
+}
+
+.custom-select {
   @extend %input-border-color;
 
   &:focus {
