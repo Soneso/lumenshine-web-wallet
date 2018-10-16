@@ -30,6 +30,6 @@ export default {
   // API_BASE: 'http://192.168.1.56:9001',
   // API_BASE: 'http://localhost:9001',
 
-  HORIZON_URL: 'https://horizon-testnet.stellar.org',
+  HORIZON_URL: 'https://demohorizon.lumenshine.com',
   IS_TEST_NETWORK: true,
 };
