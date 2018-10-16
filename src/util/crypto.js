@@ -79,7 +79,7 @@ const crypto = {
   },
   derivePassword (password, kdfSalt) {
     const salt = Buffer.from(base64.toByteArray(kdfSalt));
-    return base64.fromByteArray(pbkdf2.pbkdf2Sync(password, salt, 20000, 32, 'sha1'));
+    return base64.fromByteArray(pbkdf2.pbkdf2Sync(password, salt, 65000, 32, 'sha1'));
   },
   mnemonicToIndices (mnemonic, wordlistStr) {
     const wordlist = wordlistStr.split(',');
