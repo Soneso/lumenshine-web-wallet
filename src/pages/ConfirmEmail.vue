@@ -33,7 +33,7 @@
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1008)" class="pb-2">Email already confirmed!</div>
             </div>
             <div v-else>
-              <p class="text-success pb-4">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</p>
+              <small class="text-success pb-5 d-block">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</small>
               <login-form
                 v-show="decryptError || (!loading && !loginStatus.res)"
                 :loading="loading"
