@@ -22,7 +22,14 @@
 }
 
 // Form group
-
+.b-form-group {
+  .blind-field {
+    .modal & {
+      @extend .p-2, .text-gray-600, .bg-gray-100;
+      border: 1px solid $gray-500;
+    }
+  }
+}
 
 // Labels
 .col-form-label {
@@ -160,6 +167,10 @@ input {
 
     &:focus {
       @extend %modals-input-border-color
+    }
+
+    &.disabled {
+      cursor: not-allowed;
     }
   }
 }

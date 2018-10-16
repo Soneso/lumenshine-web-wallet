@@ -22,16 +22,16 @@
         </div>
 
         <b-form-group :label-for="`currencyInput_${uuid}`" label="Currency">
-          <span v-if="uniqueCurrencies.length < 2">Stellar Lumens (XLM)</span>
-          <b-form-select v-else :id="`currencyInput_${uuid}`" v-model="assetCode" :options="currencyOptions"/>
+          <div v-if="uniqueCurrencies.length < 2" class="blind-field">Stellar Lumens (XLM)</div>
+          <b-form-select v-else :id="`currencyInput_${uuid}`" v-model="assetCode" :options="currencyOptions" :class="{'disabled': currencyOptions.length < 2}"/>
         </b-form-group>
 
         <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer">
-          <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions"/>
+          <b-form-select :id="`issuerInput_${uuid}`" v-model="issuer" :options="issuerOptions" :class="{'disabled': issuerOptions.length < 2}"/>
         </b-form-group>
 
         <b-form-group :label-for="`amountInput_${uuid}`">
-          {{ assetCode }}
+          <label :for="`amountInput_${uuid}`" class="col-form-label">{{ assetCode }}</label>
           <b-form-input
             :id="`amountInput_${uuid}`"
             :class="{ error: $v.amount.$error }"
