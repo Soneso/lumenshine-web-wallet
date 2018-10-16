@@ -1,6 +1,6 @@
 <template>
   <b-row align-h="center" align-v="center" class="text-center">
-    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+    <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
         <h3>Lumenshine</h3>
         <p>Landing page</p>

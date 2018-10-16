@@ -1,6 +1,7 @@
 .user-info {
   @extend .px-3, .py-2;
   position: absolute;
+  left: 0;
   font-size: .75rem;
   color: $body-color;
   background: rgba($white, .75);

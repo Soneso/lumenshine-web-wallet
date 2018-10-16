@@ -1,6 +1,6 @@
 <template>
   <b-row align-h="center" align-v="center">
-    <b-col cols="11" sm="8" md="6" lg="5" xl="4">
+    <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
         <h4 class="form-headline pb-3">Lost Password & 2FA Secret</h4>
         <p>We can not recover your account automatically, please contact</p>
