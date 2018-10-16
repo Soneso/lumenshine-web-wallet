@@ -4,9 +4,9 @@
 @font-face {
   font-family: '#{$icomoon-font-family}';
   src:
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?klbuh1') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?klbuh1') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?klbuh1##{$icomoon-font-family}') format('svg');
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?4syuip') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?4syuip') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?4syuip##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -26,6 +26,248 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-spinner1 .path1 {
+  &:before {
+    content: $icon-spinner1-path1;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.5636;
+  }
+}
+.icon-spinner1 .path2 {
+  &:before {
+    content: $icon-spinner1-path2;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.4909;
+  }
+}
+.icon-spinner1 .path3 {
+  &:before {
+    content: $icon-spinner1-path3;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.6364;
+  }
+}
+.icon-spinner1 .path4 {
+  &:before {
+    content: $icon-spinner1-path4;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.4182;
+  }
+}
+.icon-spinner1 .path5 {
+  &:before {
+    content: $icon-spinner1-path5;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.7091;
+  }
+}
+.icon-spinner1 .path6 {
+  &:before {
+    content: $icon-spinner1-path6;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.3455;
+  }
+}
+.icon-spinner1 .path7 {
+  &:before {
+    content: $icon-spinner1-path7;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.7818;
+  }
+}
+.icon-spinner1 .path8 {
+  &:before {
+    content: $icon-spinner1-path8;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner1 .path9 {
+  &:before {
+    content: $icon-spinner1-path9;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.8545;
+  }
+}
+.icon-spinner1 .path10 {
+  &:before {
+    content: $icon-spinner1-path10;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);
+  }
+}
+.icon-spinner1 .path11 {
+  &:before {
+    content: $icon-spinner1-path11;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.9273;
+  }
+}
+.icon-spinner2 .path1 {
+  &:before {
+    content: $icon-spinner2-path1;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner2 .path2 {
+  &:before {
+    content: $icon-spinner2-path2;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.8222;
+  }
+}
+.icon-spinner2 .path3 {
+  &:before {
+    content: $icon-spinner2-path3;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.7333;
+  }
+}
+.icon-spinner2 .path4 {
+  &:before {
+    content: $icon-spinner2-path4;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.6444;
+  }
+}
+.icon-spinner2 .path5 {
+  &:before {
+    content: $icon-spinner2-path5;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.5556;
+  }
+}
+.icon-spinner2 .path6 {
+  &:before {
+    content: $icon-spinner2-path6;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);
+  }
+}
+.icon-spinner2 .path7 {
+  &:before {
+    content: $icon-spinner2-path7;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.4667;
+  }
+}
+.icon-spinner2 .path8 {
+  &:before {
+    content: $icon-spinner2-path8;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.4667;
+  }
+}
+.icon-spinner2 .path9 {
+  &:before {
+    content: $icon-spinner2-path9;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.3778;
+  }
+}
+.icon-spinner2 .path10 {
+  &:before {
+    content: $icon-spinner2-path10;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2889;
+  }
+}
+.icon-spinner2 .path11 {
+  &:before {
+    content: $icon-spinner2-path11;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.9111;
+  }
+}
+.icon-spinner3 .path1 {
+  &:before {
+    content: $icon-spinner3-path1;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.9;
+  }
+}
+.icon-spinner3 .path2 {
+  &:before {
+    content: $icon-spinner3-path2;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);
+  }
+}
+.icon-spinner3 .path3 {
+  &:before {
+    content: $icon-spinner3-path3;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path4 {
+  &:before {
+    content: $icon-spinner3-path4;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path5 {
+  &:before {
+    content: $icon-spinner3-path5;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path6 {
+  &:before {
+    content: $icon-spinner3-path6;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path7 {
+  &:before {
+    content: $icon-spinner3-path7;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path8 {
+  &:before {
+    content: $icon-spinner3-path8;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
+.icon-spinner3 .path9 {
+  &:before {
+    content: $icon-spinner3-path9;  
+    margin-left: -1em;  
+    color: rgb(255, 255, 255);  
+    opacity: 0.2727;
+  }
+}
 .icon-user-circle {
   &:before {
     content: $icon-user-circle;     
