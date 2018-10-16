@@ -74,17 +74,21 @@
 
     <link rel="stylesheet" href="https://changelly.com/widget.css"> <!-- needed by changelly modal -->
 
-    <b-modal ref="fundWalletModal" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" hide-footer>
-      <p class="text-center">
-        <img v-if="!config.IS_TEST_NETWORK" src="@/assets/qr.svg"><br>
-        <strong v-if="!config.IS_TEST_NETWORK">Account ID / Public key</strong>
-        <strong v-else>Stellar test net public key</strong>
-        <br><span class="text-wrap">{{ data.public_key_0 }}</span>
-        <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
-        <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
-          <i class="icon-copy" />
-        </a>
-      </p>
+    <b-modal ref="fundWalletModal" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" size="sm" hide-footer>
+      <div class="text-center">
+        <img v-if="!config.IS_TEST_NETWORK" src="@/assets/qr.svg" class="bar-code-img pt-3 pb-4"><br>
+        <div v-if="!config.IS_TEST_NETWORK" class="font-weight-600">Account ID / Public key</div>
+        <div v-else class="font-weight-600">Stellar test net public key</div>
+        <br>
+        <div class="break-word with-hyphens">
+          {{ data.public_key_0 }}
+          <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
+            <i class="icon-copy text-info" />
+          </a>
+        </div>
+        <div v-if="accountIDCopied" class="text-info">Copied to clipboard<br></div>
+
+      </div>
       <div v-if="!config.IS_TEST_NETWORK">
         <p>In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen). Please send your Stellar Lumens (XLM) to the above displayed Account ID / Public key. At least 1 XLM is needed to fund your wallet in the stellar blockchain. We recommend a minimum of 2 XLM.</p>
         <p>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?</p>
@@ -93,10 +97,14 @@
           <img src="https://changelly.com/pay_button_pay_with.png">
         </a>
       </div>
-      <div v-else class="text-center">
-        <p>This client operates on the test net. Do not send real Stellar Lumens from the main/public net. To fund your wallet for testing purposes we can kindly ask Friendbot to send you some test lumens. Please press the button below to receive the test net lumens from Freindbot.</p>
-        <b-button v-if="!fundWalletLoading" variant="primary" @click.prevent="fundWithFriendbot">Fund with test lumens</b-button>
-        <b-button v-else variant="primary"><i class="fa fa-spinner fa-spin fa-fw"/></b-button>
+      <div v-else class="text-center pt-3">
+        <small>This client operates on the test net. Do not send real Stellar Lumens from the main/public net. To fund your wallet for testing purposes we can kindly ask Friendbot to send you some test lumens. Please press the button below to receive the test net lumens from Freindbot.</small>
+        <b-button v-if="!fundWalletLoading" variant="primary" class="btn-rounded my-3" @click.prevent="fundWithFriendbot">
+          Fund with test lumens
+        </b-button>
+        <b-button v-else variant="primary" class="btn-rounded my-3">
+          <i class="fa fa-spinner fa-spin fa-fw"/>
+        </b-button>
       </div>
     </b-modal>
 
@@ -220,6 +228,9 @@ export default {
     ]),
     onCopy () {
       this.accountIDCopied = true;
+      setTimeout(() => {
+        this.accountIDCopied = false;
+      }, 2e3);
     },
     async onSendPaymentClick (data) {
       await this.sendPayment({ ...data, publicKey: this.data.public_key_0 });
