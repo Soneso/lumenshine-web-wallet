@@ -8,7 +8,7 @@
             <small v-if="availableAmountToSend !== null">You have {{ availableAmountToSend }} {{ assetCode }} available</small>
           </b-form-group>
 
-          <!-- <hr> -->
+          <hr>
 
           <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
             <b-form-input
@@ -57,18 +57,18 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <!-- <hr> -->
+          <hr>
 
           <b-form-group :label-for="`amountInput_${uuid}`">
             <b-row>
-              <b-col cols="10">
-                <b-button-group>
-                  <b-button :disabled="!sendItAll" variant="default" @click.prevent="sendItAll = false">Amount</b-button>
-                  <b-button :disabled="sendItAll" variant="default" @click.prevent="sendItAll = true">Send it all</b-button>
+              <b-col cols="10" class="pb-3">
+                <b-button-group size="sm">
+                  <b-button :class="!sendItAll ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click.prevent="sendItAll = false">Amount</b-button>
+                  <b-button :class="sendItAll ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click.prevent="sendItAll = true">Send it all</b-button>
                 </b-button-group>
               </b-col>
             </b-row>
-            <b-row>
+            <b-row align-v="center">
               <b-col cols="10">
                 <b-form-input
                   :id="`amountInput_${uuid}`"
@@ -89,14 +89,16 @@
                   </template>
                 </b-form-invalid-feedback>
               </b-col>
-              <b-col>{{ currentAssetCode }}</b-col>
+              <b-col cols="2">
+                <small>{{ currentAssetCode }}</small>
+              </b-col>
             </b-row>
             <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
               Stellar transaction fee: 0.00001 XLM
             </b-form-text>
           </b-form-group>
 
-          <!-- <hr> -->
+          <hr>
 
           <b-form-group :label-for="`memoTypeInput_${uuid}`" label="Memo (optional)">
             <b-form-select :id="`memoTypeInput_${uuid}`" v-model="memoType" :options="memoTypeOptions"/>
@@ -123,7 +125,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <!-- <hr> -->
+          <hr>
 
           <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
             <b-form-input
@@ -168,15 +170,15 @@
             </b-form-text>
           </b-form-group>
 
-          <!-- <hr> -->
+          <hr>
 
           <div class="text-center">
             <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
               <span class="text-danger">Warning: Recipient account does not exist or is not funded. Send Anyway?</span>
             </div>
 
-            <b-button variant="primary" class="btn-rounded" @click.prevent="onSendClick">
-              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+            <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
+              <spinner2 v-if="loading"/>
               <span v-else>Send {{ currentAssetCode }}</span>
             </b-button>
           </div>
@@ -225,7 +227,11 @@ import Amount from '@/util/Amount';
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
 
+import spinner2 from '../../ui/spinner2.vue';
+
 export default {
+  name: 'SendPaymentForm',
+  components: {spinner2},
   mixins: [ formMixin ],
   props: {
     data: {

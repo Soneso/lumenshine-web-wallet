@@ -38,7 +38,7 @@
       <receive-payment-form :data="data" @cancel="$refs.receiveModal.hide()"/>
     </b-modal>
 
-    <b-modal ref="sendModal" hide-footer title="Send">
+    <b-modal ref="sendModal" hide-footer size="sm" title="Send">
       <send-payment-form
         v-if="data && balances"
         :balances="balances"
@@ -85,8 +85,8 @@
           <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
             <i class="icon-copy text-info" />
           </a>
+          <small v-if="accountIDCopied" class="text-info">Copied to clipboard<br></small>
         </div>
-        <div v-if="accountIDCopied" class="text-info">Copied to clipboard<br></div>
 
       </div>
       <div v-if="!config.IS_TEST_NETWORK">
