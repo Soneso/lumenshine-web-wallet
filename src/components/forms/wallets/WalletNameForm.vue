@@ -1,20 +1,20 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
-    <p v-if="!fieldOpen || loading">
-      <strong>Wallet name</strong>
+  <b-form id="wallet-details-change-name" @submit.prevent="onSubmitClick">
+    <div v-if="!fieldOpen || loading">
+      <span class="font-weight-600">Wallet name</span>
       <a v-if="!fieldOpen" class="only-desktop" href="#" @click.prevent="onEditClick">change name</a>
       <br>
       {{ walletName }}
-    </p>
+    </div>
 
-    <b-card v-if="fieldOpen && !loading" class="p-1" style="max-width: 20rem;">
-      <strong>Wallet name</strong><br>
-      <b-row>
-        <b-col cols>
+    <b-card v-if="fieldOpen && !loading" class="flat-card">
+      <div class="font-weight-600">Wallet name</div><br>
+      <ul class="inline-list">
+        <li>
           <b-form-group :label-for="`nameInput_${uuid}`">
             <b-form-input
               :id="`nameInput_${uuid}`"
-              :class="{ error: $v.name.$error }"
+              :class="[{ error: $v.name.$error }, '']"
               :state="!$v.name.$error"
               :aria-describedby="`inputLiveNameFeedback_${uuid}`"
               v-model="name"
@@ -28,16 +28,20 @@
                 <template v-if="!$v.name.uniqueName">Wallet name is already used</template>
               </template>
             </b-form-invalid-feedback>
-            <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
-            <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-              <span v-else class="text-success px-2">save</span>
-            </a>
           </b-form-group>
-        </b-col>
-      </b-row>
+        </li>
+        <li>
+          <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+        </li>
+        <li>
+          <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
+            <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
+            <span v-else class="text-success px-2">save</span>
+          </a>
+        </li>
+      </ul>
     </b-card>
-  </form>
+  </b-form>
 </template>
 
 <script>

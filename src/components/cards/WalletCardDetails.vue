@@ -1,36 +1,29 @@
 <template>
   <div>
-    <p class="card__checkbox float-right p-3">
-      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
+    <div class="card-checkbox float-right pt-3 pr-3">
+      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch pt-">
       <label for="homeScreenCheckbox">Show wallet on home screen</label>
-    </p>
+    </div>
 
     <wallet-name-form
       :loading="saveWalletLoading"
       :errors="editWalletStatus.err"
       :wallet-name="data.wallet_name"
-      class="py-3"
+      class="pt-3 pb-4"
       @submit="onSaveWalletName"/>
 
-    <p>
+    <div class="pb-4">
       <strong>Stellar public key</strong>
       <br>
-      {{ data.public_key_0 }}
-
+      <span class="break-word with-hyphens">{{ data.public_key_0 }}</span>
       <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
-      <!--<span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>-->
-      <!--<a-->
-      <!--v-clipboard:copy="data.public_key_0"-->
-      <!--v-clipboard:success="onCopy">-->
-      <!--<i class="icon-copy"/>-->
-      <!--</a>-->
-    </p>
+    </div>
 
     <wallet-address-form
       :loading="saveWalletLoading"
       :errors="editWalletStatus.err"
       :wallet-address="data.federation_address"
-      class="py-3"
+      class="pb-4"
       @remove="onRemoveWalletAddress"
       @submit="onSaveWalletAddress"/>
 
@@ -40,6 +33,7 @@
       :decryption-error="decryptedWallet.err"
       :known-destinations="knownDestinations"
       :data="data"
+      class="pb-4"
       @submit="onSetInflationDestination"/>
 
     <wallet-currencies-form
@@ -49,10 +43,11 @@
       :decryption-error="decryptedWallet.err"
       :known-currencies="knownCurrencies"
       :data="data"
+      class="pb-4"
       @remove="onRemoveCurrency"
       @add="onAddCurrency"/>
 
-    <p class="d-none d-sm-block d-md-none">
+    <div class="d-none d-sm-block d-md-none">
       <strong>Balances</strong>
       <br>
       <table v-if="!data.stellar_data">
@@ -67,9 +62,9 @@
           <td>{{ item.type }}</td>
         </tr>
       </table>
-    </p>
+    </div>
 
-    <p class="d-none d-sm-block d-md-none">
+    <div class="d-none d-sm-block d-md-none">
       <strong>Available</strong>
       <br>
       <table>
@@ -78,7 +73,7 @@
           <td>{{ item.type }}</td>
         </tr>
       </table>
-    </p>
+    </div>
 
     <div class="form-buttons">
       <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'send')">send</a>

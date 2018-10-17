@@ -1,26 +1,27 @@
 <template>
-  <form v-if="data.stellar_data" class="form" @submit.prevent>
-    <div>
-      <p>
-        <strong>Inflation destination</strong>
-        <a v-if="!fieldOpen" href="#" class="only-desktop" @click.prevent="onSetDestinationClick">set inflation destination</a>
-        <a v-else href="#" class="error only-desktop" @click.prevent="onCancelClick">cancel</a>
-        <br>
-        <span v-if="!data.stellar_data.inflation_destination">
-          <span class="left text-danger">none</span><br>
-          <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
-        </span>
-        <span v-else>{{ data.stellar_data.inflation_destination }}</span>
-      </p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div v-if="fieldOpen && !loading" class="field">
+  <b-form v-if="data.stellar_data" id="wallet-details-set-inflation" @submit.prevent>
+    <span class="font-weight-600">Inflation destination</span>
+    <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
+    <a v-else href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
+    <br>
+    <div v-if="!data.stellar_data.inflation_destination">
+      <span class="left text-danger">none</span><br>
+      <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
+    </div>
+    <div v-else>{{ data.stellar_data.inflation_destination }} <br></div>
 
-        <b-button-group>
-          <b-button :disabled="formType === 'known'" variant="default" @click="onTabChange('known')">Known Destinations</b-button>
-          <b-button :disabled="formType === 'fields'" variant="default" @click="onTabChange('fields')">Provide Destination Data</b-button>
-        </b-button-group>
+    <h6 v-if="hasUnknownError" class="text-danger">Unknown backend error!</h6>
 
-        <div v-if="formType === 'fields'" class="tab-page">
+    <div v-if="fieldOpen && !loading">
+      <b-button-group size="sm" class="my-3">
+        <b-button :class="formType === 'known' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Destinations</b-button>
+        <b-button :class="formType === 'fields' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Destination Data</b-button>
+      </b-button-group>
+
+      <!-- TODO the tabs content -->
+
+      <div v-if="formType === 'fields'" class="tab-page">
+        <b-card class="flat-card">
           <b-form-group :label-for="`destinationInput_${uuid}`">
             <b-form-input
               :id="`destinationInput_${uuid}`"
@@ -87,89 +88,91 @@
             </b-form-text>
           </b-form-group>
 
-          <div class="form-buttons">
-            <a v-if="!fieldOpen" href="#" class="only-mobile" @click.prevent="onSetDestinationClick">set inflation destination</a>
-            <a v-else href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
-            <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-              <span v-else>submit</span>
-            </a>
+          <div>
+            <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
+            <template v-else>
+              <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+              <a href="#" class="text-success px-2" @click.prevent="onSubmitClick">
+                <spinner2 v-if="loading" color="text-secondary" message="settings inflation..."/>
+                <span v-else>submit</span>
+              </a>
+            </template>
           </div>
-        </div>
-        <div v-else> <!-- Known destinations -->
-          <b-list-group>
-            <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
-              <p class="checkbox">
-                <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
-                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
-              </p>
-              <h4>{{ destination.name }}</h4>
-              <p>{{ destination.short_description }}</p>
-              <p>Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</p>
-              <a href="#" @click.prevent>details</a>
-              <div v-if="openedKnownDestination === destination">
+        </b-card>
+      </div>
+      <div v-else> <!-- Known destinations -->
+        <b-list-group>
+          <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
+            <p class="checkbox">
+              <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
+              <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
+            </p>
+            <h4>{{ destination.name }}</h4>
+            <p>{{ destination.short_description }}</p>
+            <p>Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</p>
+            <a href="#" @click.prevent>details</a>
+            <div v-if="openedKnownDestination === destination">
 
-                <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
-                  <b-form-input
-                    :id="`passwordInput_${uuid}`"
-                    :class="{ error: $v.password.$error }"
-                    :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
-                    :state="!$v.password.$error"
-                    v-model="password"
-                    type="password"
-                    placeholder="Your password"
-                    required
-                    @blur="$v.password.$touch()"/>
-                  <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
-                    <template v-if="$v.password.$error" class="field__errors">
-                      <template v-if="!$v.password.required">Password is required!</template>
-                      <template v-if="!$v.password.decryptValid">Wrong password!</template>
-                    </template>
-                  </b-form-invalid-feedback>
-                  <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
-                    Your password.
-                  </b-form-text>
-                </b-form-group>
+              <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+                <b-form-input
+                  :id="`passwordInput_${uuid}`"
+                  :class="{ error: $v.password.$error }"
+                  :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
+                  :state="!$v.password.$error"
+                  v-model="password"
+                  type="password"
+                  placeholder="Your password"
+                  required
+                  @blur="$v.password.$touch()"/>
+                <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
+                  <template v-if="$v.password.$error" class="field__errors">
+                    <template v-if="!$v.password.required">Password is required!</template>
+                    <template v-if="!$v.password.decryptValid">Wrong password!</template>
+                  </template>
+                </b-form-invalid-feedback>
+                <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
+                  Your password.
+                </b-form-text>
+              </b-form-group>
 
-                <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
-                  <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
-                  <b-form-input
-                    :class="{ error: $v.signerSeed.$error }"
-                    :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
-                    :state="!$v.signerSeed.$error"
-                    v-model="signerSeed"
-                    type="text"
-                    placeholder="Seed for selected signer"
-                    required
-                    @blur="$v.signerSeed.$touch()"/>
-                  <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
-                    <template v-if="$v.signerSeed.$error" class="field__errors">
-                      <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
-                      <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
-                    </template>
-                  </b-form-invalid-feedback>
-                  <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
-                    Your secret seed for selected signer.
-                  </b-form-text>
-                </b-form-group>
+              <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
+                <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+                <b-form-input
+                  :class="{ error: $v.signerSeed.$error }"
+                  :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
+                  :state="!$v.signerSeed.$error"
+                  v-model="signerSeed"
+                  type="text"
+                  placeholder="Seed for selected signer"
+                  required
+                  @blur="$v.signerSeed.$touch()"/>
+                <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
+                  <template v-if="$v.signerSeed.$error" class="field__errors">
+                    <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                    <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                  </template>
+                </b-form-invalid-feedback>
+                <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
+                  Your secret seed for selected signer.
+                </b-form-text>
+              </b-form-group>
 
-                <span>Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</span>
-                <div class="form-buttons">
-                  <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-                  <div v-else>
-                    <a href="#" @click.prevent="openKnownDestination(null)">cancel</a>
-                    <a href="#" @click.prevent="onSubmitClick">add</a>
-                  </div>
+              <span>Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</span>
+              <div>
+                <spinner2 v-if="loading" color="text-secondary" message="adding..."/>
+                <div v-else>
+                  <a href="#" @click.prevent="openKnownDestination(null)">cancel</a>
+                  <a href="#" @click.prevent="onSubmitClick">add</a>
                 </div>
               </div>
-            </b-list-group-item>
-          </b-list-group>
-        </div>
+            </div>
+          </b-list-group-item>
+        </b-list-group>
       </div>
-      <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-      <br>
     </div>
-  </form>
+    <spinner2 v-if="loading" color="text-secondary"/>
+    <br>
+  </b-form>
 </template>
 
 <script>
@@ -177,8 +180,11 @@ import { required } from 'vuelidate/lib/validators';
 
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
+import spinner2 from '@/components/ui/spinner2';
 
 export default {
+  name: 'WalletInflationForm',
+  components: { spinner2 },
   mixins: [ formMixin ],
   props: {
     loading: {

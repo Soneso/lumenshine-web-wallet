@@ -50,9 +50,9 @@
         <a href="#" class="error only-desktop" @click.prevent="addCurrency = false">cancel</a>
         <br>
 
-        <b-button-group class="py-2">
-          <b-button :disabled="addCurrencyFormType === 'known'" variant="default" @click="onTabChange('known')">Known Currencies</b-button>
-          <b-button :disabled="addCurrencyFormType === 'fields'" variant="default" @click="onTabChange('fields')">Provide Currency Data</b-button>
+        <b-button-group size="sm" class="my-2">
+          <b-button :class="addCurrencyFormType === 'known' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Currencies</b-button>
+          <b-button :class="addCurrencyFormType === 'fields' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Currency Data</b-button>
         </b-button-group>
 
         <div v-if="addCurrencyFormType === 'fields'" class="tab-page">

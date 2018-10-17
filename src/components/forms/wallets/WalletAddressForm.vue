@@ -1,7 +1,7 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
-    <p v-if="!fieldOpen || loading">
-      <strong>Short stellar address</strong>
+  <b-form id="wallet-details-change-address" @submit.prevent="onSubmitClick">
+    <div v-if="!fieldOpen || loading">
+      <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
       <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
       <br>
@@ -10,54 +10,61 @@
         <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
       </span>
       <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
-      <i v-if="loading && removingWallet" class="fa fa-spinner fa-spin fa-fw"/>
-    </p>
+      <spinner2 v-if="loading && removingWallet" color="text-secondary"/>
+    </div>
 
-    <!-- <div v-if="hasUnknownError" class="error">Unknown backend error!</div> -->
+    <b-card v-if="fieldOpen && !loading" class="flat-card">
+      <div class="font-weight-600">Short stellar address</div><br>
+      <ul class="inline-list">
+        <li>
+          <ul class="inline-list">
+            <li>
+              <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
+                <b-form-input
+                  :id="`addressInput_${uuid}`"
+                  :class="{ error: $v.address.$error }"
+                  :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
+                  :state="!$v.address.$error"
+                  v-model="address"
+                  type="text"
+                  placeholder="Wallet address"
+                  required
+                  @blur="$v.address.$touch()"/>
 
-    <b-card v-if="fieldOpen && !loading" style="max-width: 20rem;">
-      <strong>Short stellar address</strong><br>
-      <b-row>
-        <b-col class="text-nowrap">
-          <b-row>
-            <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
-              <b-form-input
-                :id="`addressInput_${uuid}`"
-                :class="{ error: $v.address.$error }"
-                :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
-                :state="!$v.address.$error"
-                v-model="address"
-                type="text"
-                placeholder="Wallet address"
-                required
-                @blur="$v.address.$touch()"/>
-
-              <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
-                <template v-if="$v.address.$error" class="field__errors">
-                  <template v-if="!$v.address.required">Wallet address is required</template>
-                  <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
-                </template>
-              </b-form-invalid-feedback>
-              <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
-                Address of the wallet
-              </b-form-text>
-            </b-form-group>
-
-            <span class="text-warning">{{ domain }}</span>
-
-            <a v-if="!fieldOpen && address" href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
-            <a v-else-if="!fieldOpen && !address" href="#" class="text-success px-2" @click.prevent="onSetAddressClick">set address</a>
-            <a v-else-if="fieldOpen" href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
-
-            <a v-if="fieldOpen" href="#" class="text-success px-2" @click.prevent="onSubmitClick">
-              <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-              <span v-else>save</span>
-            </a>
-          </b-row>
-        </b-col>
-      </b-row>
+                <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
+                  <template v-if="$v.address.$error" class="field__errors">
+                    <template v-if="!$v.address.required">Wallet address is required</template>
+                    <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
+                  </template>
+                </b-form-invalid-feedback>
+                <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
+                  Address of the wallet
+                </b-form-text>
+              </b-form-group>
+            </li>
+            <li>
+              <span class="text-warning">{{ domain }}</span>
+            </li>
+          </ul>
+        </li>
+        <li v-if="!fieldOpen && address">
+          <a href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
+        </li>
+        <li v-if="!fieldOpen && !address">
+          <a href="#" class="text-success px-2" @click.prevent="onSetAddressClick">set address</a>
+        </li>
+        <li v-if="fieldOpen">
+          <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+        </li>
+        <li v-if="fieldOpen">
+          <a href="#" class="p-0" @click.prevent="onSubmitClick">
+            <spinner2 v-if="loading" color="text-secondary" message="saving..."/>
+            <span v-else class="text-success">save</span>
+          </a>
+        </li>
+      </ul>
     </b-card>
-  </form>
+  </b-form>
 </template>
 
 <script>
@@ -67,11 +74,15 @@ import formMixin from '@/mixins/form';
 
 import config from '@/config';
 
+import spinner2 from '@/components/ui/spinner2';
+
 function stripDomain (text) {
   return text.replace('*' + config.FEDERATION_DOMAIN, '');
 }
 
 export default {
+  name: 'WalletAddressForm',
+  components: { spinner2 },
   mixins: [ formMixin ],
   props: {
     loading: {

@@ -8,7 +8,7 @@
             <small v-if="availableAmountToSend !== null">You have {{ availableAmountToSend }} {{ assetCode }} available</small>
           </b-form-group>
 
-          <hr>
+          <hr class="divider">
 
           <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
             <b-form-input
@@ -57,7 +57,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <hr>
+          <hr class="divider">
 
           <b-form-group :label-for="`amountInput_${uuid}`">
             <b-row>
@@ -98,7 +98,7 @@
             </b-form-text>
           </b-form-group>
 
-          <hr>
+          <hr class="divider">
 
           <b-form-group :label-for="`memoTypeInput_${uuid}`" label="Memo (optional)">
             <b-form-select :id="`memoTypeInput_${uuid}`" v-model="memoType" :options="memoTypeOptions"/>
@@ -125,7 +125,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <hr>
+          <hr class="divider">
 
           <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
             <b-form-input
@@ -170,7 +170,7 @@
             </b-form-text>
           </b-form-group>
 
-          <hr>
+          <hr class="divider">
 
           <div class="text-center">
             <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
