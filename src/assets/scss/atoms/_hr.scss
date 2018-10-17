@@ -28,5 +28,9 @@ hr {
     &.white {
       border-top-color: rgba($white, .5)
     }
+
+    .modal & {
+      border-top-color: $gray-200
+    }
   }
 }

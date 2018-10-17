@@ -17,3 +17,9 @@
     transform: translate(-100%, 0);
   }
 }
+
+.modal {
+  .modal-header {
+    @extend .pl-4
+  }
+}

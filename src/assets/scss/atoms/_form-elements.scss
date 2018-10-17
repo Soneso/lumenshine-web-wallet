@@ -11,6 +11,49 @@
   border-color: $gray-500
 }
 
+%default-input-styles {
+  @extend %input-border-color;
+
+  &:focus {
+    @extend %input-border-color-focused
+  }
+
+  &:not(.default-placeholders) {
+    &::placeholder {
+      text-transform: uppercase;
+    }
+
+    &:-ms-input-placeholder {
+      text-transform: uppercase;
+    }
+
+    &:-ms-input-placeholder {
+      text-transform: uppercase;
+    }
+  }
+}
+
+%modal-input-styles {
+  @extend .bg-white, %modals-input-border-color;
+
+  &:focus {
+    @extend %modals-input-border-color
+  }
+
+  &::placeholder {
+    font-size: .85rem;
+  }
+
+  &:-ms-input-placeholder {
+    font-size: .85rem;
+  }
+
+  &:-ms-input-placeholder {
+    font-size: .85rem;
+  }
+}
+
+
 
 
 // Form
@@ -93,7 +136,6 @@
 // type="datetime"
 // type="datetime-local"
 // type="color"
-
 input {
   &[type="text"],
   &[type="search"],
@@ -102,48 +144,21 @@ input {
   &[type="url"],
   &[type="tel"],
   &[type="number"],
+  .modal .flat-card &,
   .vdp-datepicker & {
+    @extend %default-input-styles
+  }
+}
 
-    @extend %input-border-color;
-
-    &:focus {
-      @extend %input-border-color-focused
-    }
-
-    &:not(.default-placeholders) {
-      &::placeholder {
-        text-transform: uppercase;
-      }
-
-      &:-ms-input-placeholder {
-        text-transform: uppercase;
-      }
-
-      &:-ms-input-placeholder {
-        text-transform: uppercase;
-      }
-    }
-
-    .modal & {
-      @extend .bg-white, %modals-input-border-color;
-
-      &:focus {
-        @extend %modals-input-border-color
-      }
-
-      &::placeholder {
-        font-size: .85rem;
-      }
-
-      &:-ms-input-placeholder {
-        font-size: .85rem;
-      }
-
-      &:-ms-input-placeholder {
-        font-size: .85rem;
-      }
-
-    }
+.modal {
+  &[type="text"],
+  &[type="search"],
+  &[type="email"],
+  &[type="password"],
+  &[type="url"],
+  &[type="tel"],
+  &[type="number"] {
+    @extend %modal-input-styles
   }
 }
 

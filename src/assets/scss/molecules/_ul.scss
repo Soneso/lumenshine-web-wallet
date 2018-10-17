@@ -1,5 +1,11 @@
 ul {
-  padding: 0;
+  @extend .p-0, .m-0;
+
+  &.inline-list {
+    li {
+      display: inline-block;
+    }
+  }
 
   li {
     list-style: none;

@@ -225,8 +225,8 @@ $line-height-sm:              1.42 !default;
 $border-width:                1px !default;
 $border-color:                $gray-200 !default;
 
-$border-radius:               .125rem !default;
-$border-radius-sm:            .25rem !default;
+$border-radius:               .25rem !default;
+$border-radius-sm:            .125rem !default;
 $border-radius-lg:            .75rem !default;
 
 $box-shadow-sm:               .125rem .125rem .125rem rgba($black, .15) !default;
@@ -798,17 +798,13 @@ $modal-dialog-margin-y-sm-up:       9rem !default;
 $modal-title-line-height:           $line-height-base !default;
 
 $modal-content-bg:                  rgba($white, .9) !default;
-$modal-content-border-color:        $gray-100 !default;
+$modal-content-border-color:        $gray-200 !default;
 $modal-content-border-width:        $border-width !default;
 $modal-content-border-radius:       $border-radius-sm !default;
 $modal-content-box-shadow-xs:       .25rem .25rem .5rem rgba($black, .15) !default;
 $modal-content-box-shadow-sm-up:    .25rem .25rem .5rem rgba($black, .15) !default;
 
 $modal-backdrop-bg:                 $black !default;
-// TODO: implement this gradient
-//background-color: #ffffff;
-//@include filter-gradient(#ffffff, #000000, vertical);
-//@include background-image(linear-gradient(top, #ffffff 0%,#000000 30%,#000000 100%));
 $modal-backdrop-opacity:            1 !default;
 $modal-header-border-color:         $modal-content-border-color !default;
 $modal-footer-border-color:         $modal-content-border-color !default;

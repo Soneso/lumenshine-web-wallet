@@ -24,3 +24,7 @@
     font-weight: $i * 100;
   }
 }
+
+.text-ellipsis {
+  @extend %text-ellipsis
+}
