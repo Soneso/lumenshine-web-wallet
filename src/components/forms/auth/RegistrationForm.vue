@@ -42,6 +42,7 @@
               :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Password"
               tabindex="2"
+              autocomplete="off"
               aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
               required
               @blur="$v.password.$touch()"/>
@@ -83,6 +84,7 @@
               :type="password2IsHidden ? 'password' : 'text'"
               placeholder="Repeat password"
               tabindex="3"
+              autocomplete="off"
               aria-describedby="inputLivePasswordConfirmHelp inputLivePasswordConfirmFeedback"
               required
               @blur="$v.passwordConfirm.$touch()"/>
@@ -436,13 +438,17 @@
             </div>
           </template>
         </b-col>
-
       </b-row>
     </template>
 
     <!-- submit action -->
     <div class="text-center">
-      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
+      <b-form-checkbox id="signup-agreement" v-model="agreed" value="accepted" unchecked-value="not_accepted" class="py-3">
+        <small>
+          You agree to abide by Lumenshine's <a href="/terms-of-service" target="_new">terms of service</a>
+        </small>
+      </b-form-checkbox>
+      <b-button :disabled="agreed !== 'accepted'" :variant="agreed !== 'accepted' ? 'secondary' : 'success'" type="submit" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
       <br>
       <small class="text-gray-500">Already have an account? Login <router-link to="/login">here</router-link></small>
     </div>
@@ -464,6 +470,7 @@ export default {
   mixins: [ formMixin ],
   data () {
     return {
+      agreed: 'not_accepted',
       email: '',
       password: '',
       passwordConfirm: '',
