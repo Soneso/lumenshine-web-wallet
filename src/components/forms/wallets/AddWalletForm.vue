@@ -32,11 +32,8 @@
         <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
         <b-row align-h="center">
           <strong class="col-6 d-inline-block text-truncate">{{ nextPublicKey }}</strong>
-          <a
-            v-clipboard:copy="nextPublicKey"
-            v-clipboard:success="onCopy"
-            class="wallet-link">
-            <span class="text-info"><i class="icon-copy"/></span>
+          <a v-clipboard:copy="nextPublicKey" v-clipboard:success="onCopy" class="wallet-link">
+            <i class="icon-copy text-info"/>
           </a>
         </b-row>
         <br>
@@ -66,7 +63,7 @@ export default {
     return {
       showCopiedText: false,
       walletName: '',
-      homescreen: false,
+      homescreen: true,
     };
   },
   methods: {
