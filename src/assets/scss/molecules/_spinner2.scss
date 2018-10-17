@@ -1,14 +1,29 @@
+$spinnerSize: 1.5rem;
+
 .spinner-wrapper {
-  @extend .p-3;
   position: relative;
+  height: $spinnerSize;
+
+  > div {
+    float: left;
+
+    &:first-child {
+      width: $spinnerSize;
+      height: $spinnerSize;
+    }
+
+    &:last-child {
+      @extend .pl-2;
+      width: calc(100% - #{$spinnerSize});
+      height: $spinnerSize;
+    }
+  }
 
   i {
     &.spin {
       @extend %slow-transitions;
       position: absolute;
-      top: calc(50% - .75rem);
-      left: calc(50% - .75rem);
-      font-size: 1.5rem;
+      font-size: $spinnerSize;
 
       &.cw {
         @extend %spin

@@ -7,6 +7,10 @@ $all-colors: map_merge($colors, $theme-colors);
         &:before {
           color: $color
         }
+
+        span:before {
+          color: $color
+        }
       }
     }
   }
