@@ -12,7 +12,13 @@
             <b-col>
               <span>Operation - Type: {{ operation.type }}<br></span>
               <span>Operation - ID: {{ operation.id }}<br></span>
-              <span v-if="operation.amount">Amount: <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">{{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}</span><br></span>
+              <span v-if="operation.amount">
+                Amount:
+                <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">
+                  {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
+                </span>
+                <br>
+              </span>
               <br>
               <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
             </b-col>
@@ -21,8 +27,8 @@
         </div>
       </div>
       <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
+      <spinner2 v-else color="text-info" width="200" message="Loading transactions..."/>
     </div>
-    <div v-if="loading">Loading transactions... <i class="fa fa-spinner fa-spin fa-fw"/></div>
   </form>
 </template>
 
@@ -32,10 +38,12 @@ import dayjs from 'dayjs';
 
 import config from '@/config';
 
+import spinner2 from '@/components/ui/spinner2.vue';
+
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { },
+  components: { spinner2 },
   props: {
     data: {
       type: Object,
