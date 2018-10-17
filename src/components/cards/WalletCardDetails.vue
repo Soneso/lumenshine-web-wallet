@@ -15,13 +15,15 @@
     <p>
       <strong>Stellar public key</strong>
       <br>
-      <span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>
       {{ data.public_key_0 }}
-      <a
-        v-clipboard:copy="data.public_key_0"
-        v-clipboard:success="onCopy">
-        <i class="icon-copy"/>
-      </a>
+
+      <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
+      <!--<span v-if="accountIDCopied" class="text-info">Copied to clipboard<br></span>-->
+      <!--<a-->
+      <!--v-clipboard:copy="data.public_key_0"-->
+      <!--v-clipboard:success="onCopy">-->
+      <!--<i class="icon-copy"/>-->
+      <!--</a>-->
     </p>
 
     <wallet-address-form
@@ -108,6 +110,8 @@ import WalletInflationForm from '@/components/forms/wallets/WalletInflationForm'
 import WalletCurrenciesForm from '@/components/forms/wallets/WalletCurrenciesForm';
 import WalletCardTransactions from '@/components/cards/WalletCardTransactions';
 
+import CopyToClipboard from '@/components/ui/copyToClipboard';
+
 export default {
   components: {
     WalletSecretSeedForm,
@@ -115,7 +119,8 @@ export default {
     WalletNameForm,
     WalletCurrenciesForm,
     WalletAddressForm,
-    WalletInflationForm
+    WalletInflationForm,
+    CopyToClipboard
   },
   props: {
     data: {
@@ -137,7 +142,6 @@ export default {
   },
   data () {
     return {
-      accountIDCopied: false,
 
       sendingPaymentLoading: false,
       saveWalletLoading: false,
@@ -174,9 +178,6 @@ export default {
   },
   methods: {
     ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies']),
-    onCopy (e) {
-      this.accountIDCopied = true;
-    },
     async onDecryptWallet (password) {
       await this.decryptWallet({ publicKey: this.data.public_key_0, password });
       // setTimeout(() => {
