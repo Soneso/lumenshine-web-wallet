@@ -30,7 +30,7 @@
                  lg="6"
                  class="balance-list available mb-4">
 
-            <h6>Available</h6>
+            <h6 class="text-info">Available</h6>
 
             <ul>
               <li v-for="item in balances" :key="'a' + item.type + item.issuer">
