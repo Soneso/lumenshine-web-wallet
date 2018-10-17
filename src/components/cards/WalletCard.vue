@@ -18,7 +18,7 @@
         <b-col class="px-0">
           <template v-if="!data.stellar_data">
             <div class="border-top px-3 pt-3 pb-2 text-right">
-              <a href="#" class="p-1" @click.prevent="$refs.fundWalletModal.show()">Fund Wallet</a>
+              <a href="#" class="p-1" @click.prevent="fundWalletModalVisible = true">Fund Wallet</a>
             </div>
           </template>
 
@@ -72,9 +72,7 @@
       </pre>
     </b-modal>
 
-    <link rel="stylesheet" href="https://changelly.com/widget.css"> <!-- needed by changelly modal -->
-
-    <b-modal ref="fundWalletModal" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" size="sm" hide-footer>
+    <b-modal v-model="fundWalletModalVisible" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" size="sm" hide-footer>
       <div class="text-center">
         <img v-if="!config.IS_TEST_NETWORK" src="@/assets/qr.svg" class="bar-code-img pt-3 pb-4"><br>
         <div v-if="!config.IS_TEST_NETWORK" class="font-weight-600">Account ID / Public key</div>
@@ -93,7 +91,7 @@
         <p>In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen). Please send your Stellar Lumens (XLM) to the above displayed Account ID / Public key. At least 1 XLM is needed to fund your wallet in the stellar blockchain. We recommend a minimum of 2 XLM.</p>
         <p>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?</p>
         <p> A: You can pay an exchange that sells lumens in order to fund your wallet. <a href="http://coinmarketcap.com/currencies/stellar/#markets" target="_blank">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens withdraw them from the exchange to your wallet by sending them to the above displayed Account ID / Public key in order to fund your wallet.</p>
-        <a id="changellyButton" :href="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" target="_blank" @click.prevent="changellyModalVisible = true, $refs.fundWalletModal.hide()">
+        <a id="changellyButton" :href="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" target="_blank" @click.prevent="changellyModalVisible = true, fundWalletModalVisible = false">
           <img src="https://changelly.com/pay_button_pay_with.png">
         </a>
       </div>
@@ -108,7 +106,7 @@
       </div>
     </b-modal>
 
-    <div id="changellyModal" :style="{display: changellyModalVisible ? 'block' : 'none'}">
+    <div v-if="!config.IS_TEST_NETWORK" id="changellyModal" :style="{display: changellyModalVisible ? 'block' : 'none'}">
       <div class="changellyModal-content">
         <span class="changellyModal-close" @click="changellyModalVisible = false">x</span>
         <iframe :src="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none">
@@ -173,6 +171,7 @@ export default {
       fundWalletLoading: false,
 
       changellyModalVisible: false,
+      fundWalletModalVisible: false,
 
       operationDetailsModalData: null,
 
@@ -308,7 +307,7 @@ export default {
       this.fundWalletLoading = true;
       await this.fundAccountWithFriendbot(this.data.public_key_0);
       this.fundWalletLoading = false;
-      this.$refs.fundWalletModal.hide();
+      this.fundWalletModalVisible = false;
     },
     Amount
   }
