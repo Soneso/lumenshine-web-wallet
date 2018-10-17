@@ -24,8 +24,7 @@
                               v-model="form.email"
                               type="email"
                               required
-                              placeholder="Enter email">
-                </b-form-input>
+                              placeholder="Enter email"/>
               </b-form-group>
               <b-form-group id="exampleInputGroup2"
                             label="Your Name:"
@@ -34,8 +33,7 @@
                               v-model="form.name"
                               type="text"
                               required
-                              placeholder="Enter name">
-                </b-form-input>
+                              placeholder="Enter name"/>
               </b-form-group>
               <b-form-group id="exampleInputGroup3"
                             label="Food:"
@@ -43,11 +41,10 @@
                 <b-form-select id="exampleInput3"
                                v-model="form.food"
                                :options="foods"
-                               required>
-                </b-form-select>
+                               required/>
               </b-form-group>
               <b-form-group id="exampleGroup4">
-                <b-form-checkbox-group v-model="form.checked" id="exampleChecks">
+                <b-form-checkbox-group id="exampleChecks" v-model="form.checked">
                   <b-form-checkbox value="me">Check me out</b-form-checkbox>
                   <b-form-checkbox value="that">Check that out</b-form-checkbox>
                 </b-form-checkbox-group>
