@@ -16,7 +16,7 @@ export default {
   name: 'Spinner2',
   props: {
     width: {
-      type: Number,
+      type: [Number, String],
       required: false
     },
     color: {
