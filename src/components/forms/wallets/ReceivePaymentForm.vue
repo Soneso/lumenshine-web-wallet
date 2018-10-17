@@ -15,9 +15,9 @@
             <small v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></small>
           </div>
 
-          <div v-if="!data.federation_address" class="pt-3">
+          <div v-if="data.federation_address" class="pt-3">
             <div class="font-weight-600">Stellar address</div>
-            <small class="pb-4 text-warning d-block">{{ data.federation_address }}dskjlsdjkldskljdsklj sd sdljk</small>
+            <small class="pb-4 text-warning d-block">{{ data.federation_address }}</small>
           </div>
         </div>
 
