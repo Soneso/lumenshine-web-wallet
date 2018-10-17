@@ -23,4 +23,6 @@ export default {
     loading: state.knownDestinationsLoading,
     shouldLoad: state.knownDestinationsErrors.length === 0 && !state.knownDestinationsLoading && !state.knownDestinationsResult
   }),
+  pendingTransactions: state => state.transactionQueue.filter(tr => !tr.data).map(tr => tr.id),
+  transactions: state => state.transactionQueue.filter(tr => tr.data).map(tr => tr.data),
 };

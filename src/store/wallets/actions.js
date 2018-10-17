@@ -39,7 +39,12 @@ export default {
             .forAccount(acc.public_key_0)
             .cursor(lastTransaction.records[0].paging_token)
             .stream({
-              onmessage: (msg) => {
+              onmessage: async tx => {
+                if (getters.pendingTransactions.find(t => t === tx.id)) {
+                  const operations = await tx.operations();
+                  tx.operation = operations.records[0];
+                  commit('RESOLVE_TRANSACTION', tx);
+                }
                 dispatch('updateWallets', [acc.public_key_0]);
               }
             });
@@ -420,18 +425,11 @@ export default {
       if (!transactionIdMatch || !transactionIdMatch[1]) {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN' }]);
       }
-
-      // needs some sleep, otherwise Horizon gives back http 404 for the transaction
-      await new Promise(resolve => setTimeout(() => resolve(), 1000));
-
       const transactionId = transactionIdMatch[1];
-      const transactionDetails = await StellarAPI.transactions().transaction(transactionId).call();
-      const operations = await transactionDetails.operations();
-      res.operation = operations.records[0];
-      res.transaction = transactionDetails;
-
+      res.transactionId = transactionId;
+      commit('ADD_PENDING_TRANSACTION', transactionId);
       commit('SET_SEND_PAYMENT_RESULT', res);
-      await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
+      // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
       commit('SET_SEND_PAYMENT_LOADING', false);
       if (err.response && err.response.data && err.response.data.extras) {

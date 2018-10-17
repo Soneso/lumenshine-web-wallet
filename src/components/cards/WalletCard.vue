@@ -47,6 +47,7 @@
         :data="data"
         :errors="sendPaymentStatus.err"
         :exchanges="exchanges"
+        :transaction="sendPaymentTransaction"
         @reset="resetSendPayment"
         @close="$refs.sendModal.hide()"
         @submit="onSendPaymentClick"/>
@@ -179,7 +180,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges']),
+    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges', 'transactions']),
     wideCard () {
       return this.balances.length > 3;
     },
@@ -211,6 +212,11 @@ export default {
         }))
       ];
     },
+    sendPaymentTransaction () {
+      if (!this.sendPaymentStatus.res) return;
+      const transactionId = this.sendPaymentStatus.res.transactionId;
+      return this.transactions.find(tr => tr.id === transactionId);
+    }
   },
   methods: {
     ...mapActions([

@@ -175,5 +175,18 @@ export default {
     if (config.KEEP_LOGGED_IN) {
       Vue.localStorage.set('publicKeys', msg);
     }
+  },
+
+  ADD_PENDING_TRANSACTION (state, id) {
+    state.transactionQueue = [...state.transactionQueue, { id, data: null }];
+  },
+
+  RESOLVE_TRANSACTION (state, data) {
+    const queue = [...state.transactionQueue];
+    const tx = queue.find(tx => tx.id === data.id);
+    if (tx) {
+      tx.data = data;
+    }
+    state.transactionQueue = queue;
   }
 };

@@ -203,7 +203,7 @@
             <strong>Memo Type: {{ memoType }}</strong>
           </p>
           <p class="small">
-            <strong>Operation ID: {{ result.operation.id }}</strong><br>
+            <strong>Operation ID: {{ transaction ? transaction.operation.id : '' }}</strong><br>
             <strong>Transaction fee: {{ transactionFee.format() }} <small>XLM</small></strong>
           </p>
           <div class="text-center py-4">
@@ -240,6 +240,7 @@ export default {
     },
     result: {
       type: Object,
+      default: null,
     },
     balances: {
       type: Array,
@@ -252,6 +253,10 @@ export default {
     exchanges: {
       type: Object,
       required: true,
+    },
+    transaction: {
+      type: Object,
+      default: null,
     }
   },
   data () {
@@ -291,8 +296,8 @@ export default {
       return '';
     },
     transactionFee () {
-      if (!this.result) return new Amount('0');
-      return new Amount(`${this.result.transaction.fee_paid}`).divide('10000000');
+      if (!this.transaction) return new Amount('0');
+      return new Amount(`${this.transaction.fee_paid}`).divide('10000000');
     },
     currentAssetCode () {
       return this.assetCode === '_other' ? this.customAssetCode : this.assetCode;
