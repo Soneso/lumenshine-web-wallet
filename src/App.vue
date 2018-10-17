@@ -55,7 +55,9 @@ export default {
     },
   },
   async created () {
-    await this.getUserStatus();
+    if (this.authTokenType) {
+      await this.getUserStatus();
+    }
     if (this.userStatus.err.length > 0) { // clear invalid token
       this.clearAuthToken();
       return;
