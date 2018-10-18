@@ -1,0 +1,9 @@
+.equal-heights {
+  > [class*='col-'] {
+    flex: 1 0 100%;
+
+    .card {
+      height: 100%;
+    }
+  }
+}

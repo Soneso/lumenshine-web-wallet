@@ -4,7 +4,7 @@
       <div class="loading-indicator">Loading...</div>
     </transition>
 
-    <b-row>
+    <b-row align-h="start" class="equal-heights">
       <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
     </b-row>
 

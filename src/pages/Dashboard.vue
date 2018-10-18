@@ -6,7 +6,7 @@
           <transition v-if="wallets.loading" name="fade">
             <div class="loading-indicator">Loading...</div>
           </transition>
-          <b-row align-h="start" align-v="center">
+          <b-row align-h="start" class="equal-heights">
             <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
           </b-row>
         </b-container>

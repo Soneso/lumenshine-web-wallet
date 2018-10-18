@@ -10,7 +10,7 @@
                  :sm="data.stellar_data ? 6 : 4"
                  :md="data.stellar_data ? 12 : 8"
                  :lg="data.stellar_data ? 6 : 4"
-                 class="balance-list current mb-4">
+                 class="balance-list current mb-2">
 
             <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
             <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
@@ -28,7 +28,7 @@
                  sm="6"
                  md="12"
                  lg="6"
-                 class="balance-list available mb-4">
+                 class="balance-list available mb-2">
 
             <h6 class="text-info">Available</h6>
 
