@@ -1,35 +1,37 @@
 <template>
-  <form class="form">
-    <div>
-      <div v-for="transaction in transactions" :key="transaction.id" class="transaction">
-        <div v-for="operation in transaction.operations" :key="operation.id">
-          <b-row>
-            <b-col>
-              Date: {{ dayjs(transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
-              <span v-if="transaction.memo_type !== 'none'">Memo type: {{ transaction.memo_type }}<br></span>
-              <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
-            </b-col>
-            <b-col>
-              <span>Operation - Type: {{ operation.type }}<br></span>
-              <span>Operation - ID: {{ operation.id }}<br></span>
-              <span v-if="operation.amount">
-                Amount:
-                <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">
-                  {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
-                </span>
-                <br>
+  <b-form class="form">
+    <div v-for="transaction in transactions" :key="transaction.id" class="transaction">
+      <div v-for="operation in transaction.operations" :key="operation.id">
+        <b-row>
+          <b-col>
+            Date: {{ dayjs(transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
+            <span v-if="transaction.memo_type !== 'none'">Memo type: {{ transaction.memo_type }}<br></span>
+            <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
+          </b-col>
+          <b-col>
+            <span>Operation - Type: {{ operation.type }}<br></span>
+            <span>Operation - ID: {{ operation.id }}<br></span>
+            <span v-if="operation.amount">
+              Amount:
+              <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">
+                {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
               </span>
               <br>
-              <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
-            </b-col>
-          </b-row>
-          <hr>
-        </div>
+            </span>
+            <br>
+            <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
+          </b-col>
+        </b-row>
+        <hr class="divider">
       </div>
-      <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
-      <spinner2 v-else color="text-info" width="200" message="Loading transactions..."/>
     </div>
-  </form>
+    <b-row align-h="center">
+      <b-col cols="6" md="4" class="text-center">
+        <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
+        <spinner2 v-else color="text-info" width="200" message="Loading transactions..."/>
+      </b-col>
+    </b-row>
+  </b-form>
 </template>
 
 <script>

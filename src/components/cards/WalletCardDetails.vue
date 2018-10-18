@@ -88,7 +88,7 @@
       @hide="resetDecryptedWallet"
       @reveal="onDecryptWallet"/>
 
-    <strong>Transactions</strong>
+    <h6 class="mb-3">Transactions</h6>
     <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>
   </div>
 </template>
