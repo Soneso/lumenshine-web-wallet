@@ -31,5 +31,6 @@ export default {
   // API_BASE: 'http://localhost:9001',
 
   HORIZON_URL: 'https://demohorizon.lumenshine.com',
+  // HORIZON_URL: 'https://horizon-testnet.stellar.org',
   IS_TEST_NETWORK: true,
 };
