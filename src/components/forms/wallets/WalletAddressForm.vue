@@ -47,18 +47,18 @@
             </li>
           </ul>
         </li>
-        <li v-if="!fieldOpen && address">
+        <li v-if="!fieldOpen && address && !loading">
           <a href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
         </li>
-        <li v-if="!fieldOpen && !address">
+        <li v-if="!fieldOpen && !address && !loading">
           <a href="#" class="text-info px-2" @click.prevent="onSetAddressClick">set address</a>
         </li>
-        <li v-if="fieldOpen">
+        <li v-if="fieldOpen && !loading">
           <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li v-if="fieldOpen">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
-            <spinner2 v-if="loading" color="text-secondary" message="saving..."/>
+            <spinner2 v-if="loading" color="text-info" message="saving..."/>
             <span v-else class="text-info">save</span>
           </a>
         </li>

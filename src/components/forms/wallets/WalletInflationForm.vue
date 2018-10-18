@@ -2,7 +2,7 @@
   <b-form v-if="data.stellar_data" @submit.prevent>
     <span class="font-weight-600">Inflation destination</span>
     <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
-    <a v-else href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
+    <a v-else href="#" class="text-secondary" @click.prevent="onCancelClick">cancel</a>
     <br>
     <div v-if="!data.stellar_data.inflation_destination">
       <span class="left text-danger">none</span><br>
@@ -160,7 +160,7 @@
 
               <small class="d-block mb-3 font-italic">Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</small>
               <div>
-                <spinner2 v-if="loading" color="text-secondary" message="adding..."/>
+                <spinner2 v-if="loading" color="text-info" message="adding..."/>
                 <div v-else>
                   <a href="#" class="text-secondary mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
                   <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>

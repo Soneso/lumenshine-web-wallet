@@ -31,11 +31,12 @@
           </b-form-group>
         </li>
         <li>
+        <li v-if="!loading">
           <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li>
           <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-            <spinner2 v-if="loading" color="text-secondary" message="saving..." width="100"/>
+            <spinner2 v-if="loading" color="text-info" message="saving..." width="100"/>
             <span v-else class="text-info px-2">save</span>
           </a>
         </li>
