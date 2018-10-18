@@ -1,5 +1,5 @@
 <template>
-  <b-form v-if="data.stellar_data" id="wallet-details-set-inflation" @submit.prevent>
+  <b-form v-if="data.stellar_data" @submit.prevent>
     <span class="font-weight-600">Inflation destination</span>
     <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
     <a v-else href="#" class="text-danger" @click.prevent="onCancelClick">cancel</a>
@@ -18,9 +18,7 @@
         <b-button :class="formType === 'fields' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Destination Data</b-button>
       </b-button-group>
 
-      <!-- TODO the tabs content -->
-
-      <div v-if="formType === 'fields'" class="tab-page">
+      <div v-if="formType === 'fields'" class="tab-page"><!-- new destination -->
         <b-card class="flat-card">
           <b-form-group :label-for="`destinationInput_${uuid}`">
             <b-form-input
@@ -91,8 +89,8 @@
           <div>
             <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
             <template v-else>
-              <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
-              <a href="#" class="text-success px-2" @click.prevent="onSubmitClick">
+              <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
+              <a href="#" class="text-info px-2" @click.prevent="onSubmitClick">
                 <spinner2 v-if="loading" color="text-secondary" message="settings inflation..."/>
                 <span v-else>submit</span>
               </a>
@@ -101,18 +99,21 @@
         </b-card>
       </div>
       <div v-else> <!-- Known destinations -->
-        <b-list-group>
+        <b-list-group class="flat-card">
           <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
-            <p class="checkbox">
-              <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
-              <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
-            </p>
-            <h4>{{ destination.name }}</h4>
-            <p>{{ destination.short_description }}</p>
-            <p>Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</p>
-            <a href="#" @click.prevent>details</a>
-            <div v-if="openedKnownDestination === destination">
+            <b-row align-h="between">
+              <b-col cols="10">
+                <h6>{{ destination.name }}</h6>
+                <span class="d-block">{{ destination.short_description }} <a href="#" class="pull-right" @click.prevent>details</a></span>
+                <span class="d-block">Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</span>
+              </b-col>
+              <b-col cols="2" class="text-right">
+                <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
+                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
+              </b-col>
+            </b-row>
 
+            <div v-if="openedKnownDestination === destination" class="pt-4 pb-1">
               <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
                 <b-form-input
                   :id="`passwordInput_${uuid}`"
@@ -157,12 +158,12 @@
                 </b-form-text>
               </b-form-group>
 
-              <span>Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</span>
+              <small class="d-block mb-3 font-italic">Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</small>
               <div>
                 <spinner2 v-if="loading" color="text-secondary" message="adding..."/>
                 <div v-else>
-                  <a href="#" @click.prevent="openKnownDestination(null)">cancel</a>
-                  <a href="#" @click.prevent="onSubmitClick">add</a>
+                  <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
+                  <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
                 </div>
               </div>
             </div>
