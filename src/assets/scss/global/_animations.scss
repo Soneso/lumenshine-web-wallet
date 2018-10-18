@@ -43,3 +43,8 @@
   animation: spin 1.5s linear infinite reverse
 }
 
+
+// columns
+[class*='.col-'] {
+  @extend %fast-transitions;
+}

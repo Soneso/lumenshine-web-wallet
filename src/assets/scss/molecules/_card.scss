@@ -22,3 +22,7 @@ $card-shadow: 3px 3px 3px rgba($black, .15);
 .card-header * {
   @extend .text-gray-800, .font-weight-300;
 }
+
+.card-footer {
+  border-top: 1px solid $gray-100;
+}

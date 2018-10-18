@@ -1,6 +1,6 @@
 <template>
-  <b-col :md="wideCard ? 12 : 6" cols="12" class="px-2">
-    <b-card :class="['mb-2', {'card-wide': wideCard}]">
+  <b-col :md="wideCard ? 12 : 6" cols="12" class="px-1 mb-2">
+    <b-card :class="[{'card-wide': wideCard}]">
       <b-row class="card-header">
         <b-col>
           <h6>
@@ -15,15 +15,15 @@
       <wallet-card-balances :wide-card="wideCard" :balances="balances" :data="data"/>
 
       <b-row slot="footer">
-        <b-col class="px-0">
+        <b-col>
           <template v-if="!data.stellar_data">
-            <div class="border-top px-3 pt-3 pb-2 text-right">
+            <div class="mx-2 py-2 text-right">
               <a href="#" class="p-1" @click.prevent="fundWalletModalVisible = true">Fund Wallet</a>
             </div>
           </template>
 
           <template v-else-if="showActions">
-            <div class="border-top px-3 pt-3 pb-2 text-right">
+            <div class="mx-2 py-2 text-right">
               <a href="#" class="px-1" @click.prevent="resetSendPayment(), $refs.sendModal.show()">Send</a>
               <a href="#" class="px-1" @click.prevent="$refs.receiveModal.show()">Receive</a>
               <a href="#" class="px-1" @click.prevent="$refs.detailsModal.show()">Details</a>

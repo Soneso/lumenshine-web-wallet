@@ -1,9 +1,58 @@
 .equal-heights {
-  > [class*='col-'] {
+  > [class*='col'] {
     flex: 1 0 100%;
 
     .card {
       height: 100%;
+    }
+  }
+}
+
+// more grid gutters
+.row {
+  &.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+
+    [class*='col'] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &.no-gutter-left {
+    margin-left: 0;
+
+    [class*='col'] {
+      padding-left: 0;
+    }
+  }
+
+  &.no-gutter-right {
+    margin-right: 0;
+
+    [class*='col'] {
+      padding-right: 0;
+    }
+  }
+
+  &.small-gutter {
+    margin-left: -1 * map_get($spacers, 2);
+    margin-right: -1 * map_get($spacers, 2);
+
+    [class*='col'] {
+      padding-left: map_get($spacers, 2);
+      padding-right: map_get($spacers, 2);
+    }
+  }
+
+  &.large-gutter {
+    margin-left: -1 * map_get($spacers, 4);
+    margin-right: -1 * map_get($spacers, 4);
+
+    [class*='col'] {
+      padding-left: map_get($spacers, 4);
+      padding-right: map_get($spacers, 4);
     }
   }
 }
