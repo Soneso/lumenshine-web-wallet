@@ -51,15 +51,15 @@
           <a href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
         </li>
         <li v-if="!fieldOpen && !address">
-          <a href="#" class="text-success px-2" @click.prevent="onSetAddressClick">set address</a>
+          <a href="#" class="text-info px-2" @click.prevent="onSetAddressClick">set address</a>
         </li>
         <li v-if="fieldOpen">
-          <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+          <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li v-if="fieldOpen">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
             <spinner2 v-if="loading" color="text-secondary" message="saving..."/>
-            <span v-else class="text-success">save</span>
+            <span v-else class="text-info">save</span>
           </a>
         </li>
       </ul>

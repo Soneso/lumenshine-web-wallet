@@ -31,12 +31,12 @@
           </b-form-group>
         </li>
         <li>
-          <a href="#" class="text-danger px-2" @click.prevent="onCancelClick">cancel</a>
+          <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li>
           <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-            <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-            <span v-else class="text-success px-2">save</span>
+            <spinner2 v-if="loading" color="text-secondary" message="saving..." width="100"/>
+            <span v-else class="text-info px-2">save</span>
           </a>
         </li>
       </ul>
@@ -48,8 +48,11 @@
 import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
+import spinner2 from '@/components/ui/spinner2';
 
 export default {
+  name: 'WalletNameForm',
+  components: { spinner2 },
   mixins: [ formMixin ],
   props: {
     loading: {

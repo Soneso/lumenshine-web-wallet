@@ -162,7 +162,7 @@
               <div>
                 <spinner2 v-if="loading" color="text-secondary" message="adding..."/>
                 <div v-else>
-                  <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
+                  <a href="#" class="text-secondary mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
                   <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
                 </div>
               </div>
