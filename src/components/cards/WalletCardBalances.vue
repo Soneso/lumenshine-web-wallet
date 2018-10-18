@@ -1,15 +1,15 @@
 <template>
-  <b-row>
-    <b-col v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)" :md="wideCard ? 6 : 12" cols="12" class="px-4">
-      <b-row>
+  <b-row class="balance-row">
+    <b-col v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)" cols="12" class="px-4">
+      <b-row class="balance-line">
         <template v-for="balances in balanceLine">
 
           <b-col :class="data.stellar_data ? 'bg-success' : 'bg-danger'"
                  :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
                  :cols="data.stellar_data ? 12 : 8"
                  :sm="data.stellar_data ? 6 : 4"
-                 :md="data.stellar_data ? 12 : 8"
-                 :lg="data.stellar_data ? 6 : 4"
+                 :md="data.stellar_data ? (wideCard ? 6 : 12) : 8"
+                 :lg="data.stellar_data ? (wideCard ? 3 : 6) : 4"
                  class="balance-list current mb-2">
 
             <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
@@ -24,10 +24,10 @@
           </b-col>
 
           <b-col v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
+                 :md="wideCard ? 6 : 12"
+                 :lg="wideCard ? 3 : 6"
                  cols="12"
                  sm="6"
-                 md="12"
-                 lg="6"
                  class="balance-list available mb-2">
 
             <h6 class="text-info">Available</h6>
