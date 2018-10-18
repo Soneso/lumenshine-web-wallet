@@ -30,7 +30,6 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </li>
-        <li>
         <li v-if="!loading">
           <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
