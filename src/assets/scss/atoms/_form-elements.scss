@@ -136,6 +136,8 @@
 // type="datetime"
 // type="datetime-local"
 // type="color"
+.flat-card input,
+.vdp-datepicker input,
 input {
   &[type="text"],
   &[type="search"],
@@ -143,14 +145,12 @@ input {
   &[type="password"],
   &[type="url"],
   &[type="tel"],
-  &[type="number"],
-  .modal .flat-card &,
-  .vdp-datepicker & {
+  &[type="number"] {
     @extend %default-input-styles
   }
 }
 
-.modal {
+.modal input {
   &[type="text"],
   &[type="search"],
   &[type="email"],
