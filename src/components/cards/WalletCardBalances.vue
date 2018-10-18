@@ -6,10 +6,10 @@
 
           <b-col :class="data.stellar_data ? 'bg-success' : 'bg-danger'"
                  :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
-                 :cols="data.stellar_data ? 12 : 8"
-                 :sm="data.stellar_data ? 6 : 4"
-                 :md="data.stellar_data ? (wideCard ? 6 : 12) : 8"
-                 :lg="data.stellar_data ? (wideCard ? 3 : 6) : 4"
+                 :cols="data.stellar_data ? 12 : 10"
+                 :sm="data.stellar_data ? 6 : 5"
+                 :md="data.stellar_data ? (wideCard ? 6 : 12) : 9"
+                 :lg="data.stellar_data ? (wideCard ? 3 : 6) : 5"
                  class="balance-list current mb-2">
 
             <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
@@ -26,9 +26,9 @@
           <b-col v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
                  :md="wideCard ? 6 : 12"
                  :lg="wideCard ? 3 : 6"
+                 :class="['balance-list', 'available', 'mb-2', {'pl-sm-3 pl-md-2 pl-lg-3': !wideCard, 'pl-sm-3': wideCard}]"
                  cols="12"
-                 sm="6"
-                 class="balance-list available mb-2">
+                 sm="6">
 
             <h6 class="text-info">Available</h6>
 
