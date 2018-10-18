@@ -1,95 +1,131 @@
 <template>
-  <div>
-    <div class="card-checkbox float-right pt-3 pr-3">
-      <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch pt-">
-      <label for="homeScreenCheckbox">Show wallet on home screen</label>
-    </div>
+  <div class="px-2">
+    <!-- change name + show wallet on dashboard-->
+    <b-row align-v="center" align-h="between" class="pb-4">
+      <b-col cols="12" sm="auto">
+        <wallet-name-form
+          :loading="saveWalletLoading"
+          :errors="editWalletStatus.err"
+          :wallet-name="data.wallet_name"
+          @submit="onSaveWalletName"/>
+      </b-col>
 
-    <wallet-name-form
-      :loading="saveWalletLoading"
-      :errors="editWalletStatus.err"
-      :wallet-name="data.wallet_name"
-      class="pt-3 pb-4"
-      @submit="onSaveWalletName"/>
+      <b-col cols="12" sm="5">
+        <div class="card-checkbox float-right px-sm-3">
+          <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">
+          <label for="homeScreenCheckbox">Show wallet on home screen</label>
+        </div>
+      </b-col>
+    </b-row>
 
-    <div class="pb-4">
-      <strong>Stellar public key</strong>
-      <br>
-      <span class="break-word with-hyphens">{{ data.public_key_0 }}</span>
-      <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
-    </div>
+    <!-- stellar pub key -->
+    <b-row class="pb-4">
+      <b-col>
+        <strong>Stellar public key</strong>
+        <br>
+        <span class="break-word with-hyphens">{{ data.public_key_0 }}</span>
+        <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
+      </b-col>
+    </b-row>
 
-    <wallet-address-form
-      :loading="saveWalletLoading"
-      :errors="editWalletStatus.err"
-      :wallet-address="data.federation_address"
-      class="pb-4"
-      @remove="onRemoveWalletAddress"
-      @submit="onSaveWalletAddress"/>
+    <!-- set address-->
+    <b-row class="pb-4">
+      <b-col>
+        <wallet-address-form
+          :loading="saveWalletLoading"
+          :errors="editWalletStatus.err"
+          :wallet-address="data.federation_address"
+          @remove="onRemoveWalletAddress"
+          @submit="onSaveWalletAddress"/>
+      </b-col>
+    </b-row>
 
-    <wallet-inflation-form
-      v-if="knownDestinations && data"
-      :loading="inflationDestinationLoading"
-      :decryption-error="decryptedWallet.err"
-      :known-destinations="knownDestinations"
-      :data="data"
-      class="pb-4"
-      @submit="onSetInflationDestination"/>
+    <!-- set inflation destination -->
+    <b-row class="pb-4">
+      <b-col>
+        <wallet-inflation-form
+          v-if="knownDestinations && data"
+          :loading="inflationDestinationLoading"
+          :decryption-error="decryptedWallet.err"
+          :known-destinations="knownDestinations"
+          :data="data"
+          @submit="onSetInflationDestination"/>
+      </b-col>
+    </b-row>
 
-    <wallet-currencies-form
-      v-if="knownCurrencies && data"
-      :loading="walletDetailsLoading"
-      :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
-      :decryption-error="decryptedWallet.err"
-      :known-currencies="knownCurrencies"
-      :data="data"
-      class="pb-4"
-      @remove="onRemoveCurrency"
-      @add="onAddCurrency"/>
+    <!-- add currencies -->
+    <b-row class="pb-4">
+      <b-col>
+        <wallet-currencies-form
+          v-if="knownCurrencies && data"
+          :loading="walletDetailsLoading"
+          :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
+          :decryption-error="decryptedWallet.err"
+          :known-currencies="knownCurrencies"
+          :data="data"
+          @remove="onRemoveCurrency"
+          @add="onAddCurrency"/>
+      </b-col>
+    </b-row>
 
-    <div class="d-none d-sm-block d-md-none">
-      <strong>Balances</strong>
-      <br>
-      <table v-if="!data.stellar_data">
-        <tr>
-          <td>0.0</td>
-          <td>XLM</td>
-        </tr>
-      </table>
-      <table v-else>
-        <tr v-for="item in balances" :key="item.type + item.issuer">
-          <td>{{ item.balance }}</td>
-          <td>{{ item.type }}</td>
-        </tr>
-      </table>
-    </div>
+    <!--balances / available-->
+    <b-row class="pb-4 d-none d-sm-block d-md-none">
+      <b-col>
+        <div>
+          <strong>Balances</strong>
+          <br>
+          <table v-if="!data.stellar_data">
+            <tr>
+              <td>0.0</td>
+              <td>XLM</td>
+            </tr>
+          </table>
+          <table v-else>
+            <tr v-for="item in balances" :key="item.type + item.issuer">
+              <td>{{ item.balance }}</td>
+              <td>{{ item.type }}</td>
+            </tr>
+          </table>
+        </div>
 
-    <div class="d-none d-sm-block d-md-none">
-      <strong>Available</strong>
-      <br>
-      <table>
-        <tr v-for="item in balances" :key="item.type + item.issuer">
-          <td>{{ item.available }}</td>
-          <td>{{ item.type }}</td>
-        </tr>
-      </table>
-    </div>
+        <div>
+          <strong>Available</strong>
+          <br>
+          <table>
+            <tr v-for="item in balances" :key="item.type + item.issuer">
+              <td>{{ item.available }}</td>
+              <td>{{ item.type }}</td>
+            </tr>
+          </table>
+        </div>
 
-    <div class="form-buttons">
-      <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'send')">send</a>
-      <a class="d-none d-sm-block d-md-none" href="#" @click.prevent="$emit('close', 'receive')">receive</a>
-    </div>
+        <div>
+          <a href="#" @click.prevent="$emit('close', 'send')">send</a>
+          <a href="#" @click.prevent="$emit('close', 'receive')">receive</a>
+        </div>
+      </b-col>
+    </b-row>
 
-    <wallet-secret-seed-form
-      :data="data"
-      :secret-seed="decryptedWallet.secretSeed"
-      :loading="decryptedWallet.loading"
-      :decryption-error="decryptedWallet.err"
-      @hide="resetDecryptedWallet"
-      @reveal="onDecryptWallet"/>
+    <!--secret seed-->
+    <b-row class="pb-4">
+      <b-col>
+        <wallet-secret-seed-form
+          :data="data"
+          :secret-seed="decryptedWallet.secretSeed"
+          :loading="decryptedWallet.loading"
+          :decryption-error="decryptedWallet.err"
+          @hide="resetDecryptedWallet"
+          @reveal="onDecryptWallet"/>
+      </b-col>
+    </b-row>
 
-    <h6 class="mb-3">Transactions</h6>
-    <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>
+    <!-- transactions -->
+    <b-row class="pb-4">
+      <b-col>
+        <h6 class="mb-3">Transactions</h6>
+        <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>
+      </b-col>
+    </b-row>
   </div>
 </template>
 

@@ -15,12 +15,7 @@ input[type="checkbox"].switch {
 
   + label {
     position: relative;
-    padding: .3125rem 3.125rem 0 0;
-    width: auto;
-
-    &:hover:after {
-      box-shadow: 0 0 .3125rem rgba($black, .3);
-    }
+    padding: 0 3rem 0 0;
 
     &:before,
     &:after {
@@ -43,6 +38,10 @@ input[type="checkbox"].switch {
     &:after {
       width: 1.5rem;
       margin-right: 1rem;
+    }
+
+    &:hover:after {
+      box-shadow: 0 0 .3rem rgba($black, .3);
     }
   }
 }

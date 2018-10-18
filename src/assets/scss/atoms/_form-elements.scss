@@ -1,10 +1,10 @@
 // Local vars & reusables
 %input-border-color {
-  border-bottom-color: $gray-300
+  border-color: transparent transparent $gray-300 transparent;
 }
 
 %input-border-color-focused {
-  border-bottom-color: $info
+  border-color: transparent transparent $info transparent;
 }
 
 %modals-input-border-color {
@@ -136,7 +136,7 @@
 // type="datetime"
 // type="datetime-local"
 // type="color"
-.flat-card input,
+.modal .flat-card input,
 .vdp-datepicker input,
 input {
   &[type="text"],
@@ -146,7 +146,11 @@ input {
   &[type="url"],
   &[type="tel"],
   &[type="number"] {
-    @extend %default-input-styles
+    @extend %default-input-styles;
+
+    &:focus {
+      @extend %default-input-styles
+    }
   }
 }
 
@@ -158,7 +162,11 @@ input {
   &[type="url"],
   &[type="tel"],
   &[type="number"] {
+    @extend %modal-input-styles;
+
+    &:focus {
     @extend %modal-input-styles
+    }
   }
 }
 

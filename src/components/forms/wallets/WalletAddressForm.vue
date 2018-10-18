@@ -1,5 +1,5 @@
 <template>
-  <b-form id="wallet-details-change-address" @submit.prevent="onSubmitClick">
+  <b-form @submit.prevent="onSubmitClick">
     <div v-if="!fieldOpen || loading">
       <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>

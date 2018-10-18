@@ -1,5 +1,5 @@
 <template>
-  <b-form id="wallet-details-change-name" @submit.prevent="onSubmitClick">
+  <b-form @submit.prevent="onSubmitClick">
     <div v-if="!fieldOpen || loading">
       <span class="font-weight-600">Wallet name</span>
       <a v-if="!fieldOpen" class="only-desktop" href="#" @click.prevent="onEditClick">change name</a>
