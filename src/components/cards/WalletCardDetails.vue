@@ -85,7 +85,7 @@
         </table>
       </b-col>
 
-      <b-col cols="12" sm="6" class="px-4">
+      <b-col cols="12" sm="6" class="px-4 pt-4 pt-sm-0">
         <div class="font-weight-600">Available</div>
         <table>
           <tr v-for="item in balances" :key="item.type + item.issuer">

@@ -1,18 +1,26 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
+  <b-form class="form" @submit.prevent="onSubmitClick">
     <div>
-      <p>
-        <strong>Secret seed / Private key</strong>
-        <a v-if="!fieldOpen && !secretSeed" href="#" class="only-desktop" @click.prevent="onRevealClick">reveal</a>
-        <a v-else-if="fieldOpen && !secretSeed" href="#" class="only-desktop error" @click.prevent="onCancelClick">cancel</a>
-        <a v-else-if="secretSeed" href="#" class="only-desktop" @click.prevent="onHideClick">hide</a>
-        <br>
+      <span class="font-weight-600">Secret seed / Private key</span>
+      <a v-if="!fieldOpen && !secretSeed" href="#" @click.prevent="onRevealClick">
+        <spinner2 v-if="loading" color="text-info" message="revealing..." width="100"/>
+        <template v-else>reveal</template>
+      </a>
+      <a v-if="fieldOpen && !secretSeed && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
+      <a v-if="secretSeed && !loading" href="#" class="text-warning" @click.prevent="onHideClick">hide</a>
+      <br>
+      <span>
         {{ secretSeed || '***********************' }}
-      </p>
+        <template v-if="secretSeed">
+          <copy-to-clipboard :text="secretSeed" color="text-info"/>
+        </template>
+      </span>
+    </div>
 
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+    <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
 
-      <b-form-group v-if="fieldOpen && !loading && !secretSeed" :label-for="`passwordInput_${uuid}`" label="Password">
+    <b-card v-if="fieldOpen && !loading && !secretSeed" class="flat-card">
+      <b-form-group :label-for="`passwordInput_${uuid}`" label="Password">
         <b-form-input
           :id="`passwordInput_${uuid}`"
           :class="{ error: $v.password.$error }"
@@ -34,15 +42,13 @@
         </b-form-text>
       </b-form-group>
 
-      <a v-else-if="fieldOpen && !secretSeed" href="#" class="error only-mobile" @click.prevent="onCancelClick">cancel</a>
-      <a v-else-if="secretSeed" href="#" class="only-mobile" @click.prevent="onHideClick">hide</a>
+      <a v-if="fieldOpen && !secretSeed" href="#" class="text-warning mr-3" @click.prevent="onCancelClick">cancel</a>
+      <a v-if="secretSeed" href="#" class="text-warning mr-3" @click.prevent="onHideClick">hide</a>
       <a v-if="fieldOpen && !secretSeed" href="#" @click.prevent="onSubmitClick">
-        <i v-if="loading" class="fa fa-spinner fa-spin fa-fw"/>
-        <span v-else>reveal</span>
-        <br><br>
+        <span v-if="!loading">reveal</span>
       </a>
-    </div>
-  </form>
+    </b-card>
+  </b-form>
 </template>
 
 <script>
@@ -50,7 +56,11 @@ import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
 
+import Spinner2 from '@/components/ui/spinner2';
+import CopyToClipboard from '@/components/ui/copyToClipboard';
+
 export default {
+  components: {Spinner2, CopyToClipboard},
   mixins: [ formMixin ],
   props: {
     loading: {
