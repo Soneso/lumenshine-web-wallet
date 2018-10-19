@@ -1,17 +1,13 @@
 <template>
   <b-row class="floating-icons align-right two-items">
-    <b-col v-if="helpTitle !== undefined || helpText !== undefined">
+    <b-col v-if="helpTitle || helpText">
       <i v-b-popover.hover="helpText" :title="helpTitle || ''" class="icon-help"/>
     </b-col>
     <b-col>
-      <i :class="value ? 'icon-show': 'icon-hide'" @click="togglePasswordVisibility" />
+      <i :class="password[1] ? 'icon-show': 'icon-hide'" @click="togglePasswordVisibility" />
     </b-col>
   </b-row>
 </template>
-<!--<password-assets-->
-<!--:pass1hidden.sync="pass1hidden"-->
-<!--:help-title="'Password requirement'"-->
-<!--:help-text="'Your new password must have at least 9 characters \nIt must contain numbers, small and capital letters.'"/>-->
 
 <script>
 export default {
@@ -25,18 +21,14 @@ export default {
       type: String,
       required: false
     },
-    value: {
-      type: Boolean
+    password: {
+      type: Array
     }
-  },
-  mounted () {
-    console.log('initial:', this.value);
   },
   methods: {
     togglePasswordVisibility () {
-      this.value = !this.value;
-      this.$emit('update:value', this.value);
-      console.log('mutated', this.value);
+      const updated = [this.password[0], !this.password[1]];
+      this.$emit('passwordUpdated', updated);
     }
   }
 };

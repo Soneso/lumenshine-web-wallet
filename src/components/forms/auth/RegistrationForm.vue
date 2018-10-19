@@ -47,17 +47,11 @@
               required
               @blur="$v.password.$touch()"/>
 
-            <!-- a special row that flows over the input field providing contextual actions -->
-            <b-row class="floating-icons align-right two-items">
-              <b-col>
-                <i
-                  v-b-popover.hover="'Your new password must have at least 9 characters \nIt must contain numbers, small and capital letters.'"
-                  class="icon-help" title="Password requirement"/>
-              </b-col>
-              <b-col>
-                <i :class="{'icon-show': password1IsHidden, 'icon-hide': !password1IsHidden}" @click="password1IsHidden = !password1IsHidden" />
-              </b-col>
-            </b-row>
+            <password-assets
+              :password="['password1IsHidden', password1IsHidden]"
+              :help-title="'Password requirement'"
+              :help-text="'Your new password must have at least 9 characters \nIt must contain numbers, small and capital letters.'"
+              @passwordUpdated="updatePasswordState($event)"/>
 
             <b-form-invalid-feedback id="inputLivePasswordFeedback">
               <template v-if="$v.password.$error" class="field-errors">
@@ -89,12 +83,7 @@
               required
               @blur="$v.passwordConfirm.$touch()"/>
 
-            <!-- a special row that flows over the input field providing contextual actions -->
-            <b-row class="floating-icons align-right one-item">
-              <b-col>
-                <i :class="{'icon-show': password2IsHidden, 'icon-hide': !password2IsHidden}" @click="password2IsHidden = !password2IsHidden" />
-              </b-col>
-            </b-row>
+            <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
             <b-form-invalid-feedback id="inputLivePasswordConfirmFeedback">
               <template v-if="$v.passwordConfirm.$error" class="field-errors">
@@ -465,8 +454,10 @@ import config from '@/config';
 
 import userService from '@/services/user';
 
+import passwordAssets from '@/components/ui/passwordAssets';
+
 export default {
-  components: { Datepicker },
+  components: { Datepicker, passwordAssets },
   mixins: [ formMixin ],
   data () {
     return {
@@ -557,6 +548,9 @@ export default {
         birthPlace: this.birthPlace
       };
       this.$emit('submit', data, this.password);
+    },
+    updatePasswordState (newPassword) {
+      this[newPassword[0]] = newPassword[1];
     }
   },
   validations () {
