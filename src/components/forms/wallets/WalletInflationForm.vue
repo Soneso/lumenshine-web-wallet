@@ -2,7 +2,7 @@
   <b-form v-if="data.stellar_data" @submit.prevent>
     <span class="font-weight-600">Inflation destination</span>
     <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
-    <a v-if="fieldOpen && !loading" href="#" class="text-secondary" @click.prevent="onCancelClick">cancel</a>
+    <a v-if="fieldOpen && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
     <br>
     <div v-if="!data.stellar_data.inflation_destination">
       <span class="left text-danger">none</span><br>
@@ -89,7 +89,7 @@
           <div>
             <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
             <template v-else>
-              <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
+              <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
               <a href="#" class="text-info px-2" @click.prevent="onSubmitClick">
                 <spinner2 v-if="loading" color="text-info" message="settings inflation..."/>
                 <span v-else>submit</span>
@@ -104,8 +104,8 @@
             <b-row align-h="between">
               <b-col cols="10">
                 <h6>{{ destination.name }}</h6>
-                <span class="d-block">{{ destination.short_description }} <a href="#" class="pull-right" @click.prevent>details</a></span>
-                <span class="d-block">Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</span>
+                <small class="d-block">{{ destination.short_description }} <a href="#" class="pull-right" @click.prevent>details</a></small>
+                <small class="d-block">Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</small>
               </b-col>
               <b-col cols="2" class="text-right">
                 <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
@@ -162,7 +162,7 @@
               <div>
                 <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
                 <div v-else>
-                  <a href="#" class="text-secondary mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
+                  <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
                   <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
                 </div>
               </div>

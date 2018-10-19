@@ -3,11 +3,11 @@
     <!-- remove currencies / add currency / currencies list buttons -->
     <template v-if="removeFieldBalance">
       <span class="font-weight-600">Remove currency</span>
-      <a href="#" class="text-secondary" @click.prevent="removeFieldBalance = null">cancel</a>
+      <a href="#" class="text-warning" @click.prevent="removeFieldBalance = null">cancel</a>
     </template>
     <template v-else-if="addCurrency">
       <span class="font-weight-600">Add currency</span>
-      <a href="#" class="text-secondary" @click.prevent="addCurrency = false">cancel</a>
+      <a href="#" class="text-warning" @click.prevent="addCurrency = false">cancel</a>
     </template>
     <template v-else>
       <span class="font-weight-600">Currencies</span>
@@ -161,7 +161,7 @@
           </b-form-group>
           <span>Password required to add currency</span>
           <div class="py-3">
-            <a href="#" class="text-secondary mr-2" @click.prevent="addCurrency = false">cancel</a>
+            <a href="#" class="text-warning mr-2" @click.prevent="addCurrency = false">cancel</a>
             <a href="#" @click.prevent="onAddClick">
               <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
               <span v-else>add</span>
@@ -218,7 +218,7 @@
           <div class="mt-3 mb-2">
             <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
             <div v-else>
-              <a href="#" class="text-secondary mr-2" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
+              <a href="#" class="text-warning mr-2" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
               <a href="#" class="text-info" @click.prevent="onAddClick">add</a>
             </div>
           </div>
@@ -248,10 +248,11 @@ import Amount from '@/util/Amount';
 import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
-import Spinner2 from "../../ui/spinner2"
+import Spinner2 from '../../ui/spinner2';
 
 export default {
-  components: {Spinner2}, mixins: [ formMixin ],
+  components: {Spinner2},
+  mixins: [ formMixin ],
   props: {
     loading: {
       type: Boolean,

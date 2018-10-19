@@ -1,7 +1,7 @@
 <template>
   <div class="px-2">
     <!-- change name + show wallet on dashboard-->
-    <b-row align-v="center" align-h="between" class="pb-4">
+    <b-row align-v="center" align-h="between" class="pb-2">
       <b-col cols="12" sm="auto">
         <wallet-name-form
           :loading="saveWalletLoading"
@@ -17,19 +17,18 @@
         </div>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!-- stellar pub key -->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
-        <strong>Stellar public key</strong>
-        <br>
+        <div class="font-weight-600">Stellar public key</div>
         <span class="break-word with-hyphens">{{ data.public_key_0 }}</span>
         <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!-- set address-->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
         <wallet-address-form
           :loading="saveWalletLoading"
@@ -39,9 +38,9 @@
           @submit="onSaveWalletAddress"/>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!-- set inflation destination -->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
         <wallet-inflation-form
           v-if="knownDestinations && data"
@@ -52,9 +51,9 @@
           @submit="onSetInflationDestination"/>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!-- add currencies -->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
         <wallet-currencies-form
           v-if="knownCurrencies && data"
@@ -67,47 +66,43 @@
           @add="onAddCurrency"/>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!--balances / available-->
-    <b-row class="pb-4 d-none d-sm-block d-md-none">
-      <b-col>
-        <div>
-          <strong>Balances</strong>
-          <br>
-          <table v-if="!data.stellar_data">
-            <tr>
-              <td>0.0</td>
-              <td>XLM</td>
-            </tr>
-          </table>
-          <table v-else>
-            <tr v-for="item in balances" :key="item.type + item.issuer">
-              <td>{{ item.balance }}</td>
-              <td>{{ item.type }}</td>
-            </tr>
-          </table>
-        </div>
+    <b-row class="pb-2">
+      <b-col cols="12" sm="6" class="px-4">
+        <div class="font-weight-600">Balances</div>
+        <table v-if="!data.stellar_data">
+          <tr>
+            <td>0.0</td>
+            <td>XLM</td>
+          </tr>
+        </table>
+        <table v-else>
+          <tr v-for="item in balances" :key="item.type + item.issuer">
+            <td><small>{{ item.balance }}</small></td>
+            <td><small>{{ item.type }}</small></td>
+          </tr>
+        </table>
+      </b-col>
 
-        <div>
-          <strong>Available</strong>
-          <br>
-          <table>
-            <tr v-for="item in balances" :key="item.type + item.issuer">
-              <td>{{ item.available }}</td>
-              <td>{{ item.type }}</td>
-            </tr>
-          </table>
-        </div>
+      <b-col cols="12" sm="6" class="px-4">
+        <div class="font-weight-600">Available</div>
+        <table>
+          <tr v-for="item in balances" :key="item.type + item.issuer">
+            <td><small>{{ item.available }}</small></td>
+            <td><small>{{ item.type }}</small></td>
+          </tr>
+        </table>
+      </b-col>
 
-        <div>
-          <a href="#" @click.prevent="$emit('close', 'send')">send</a>
-          <a href="#" @click.prevent="$emit('close', 'receive')">receive</a>
-        </div>
+      <b-col cols="12" class="px-4 pt-4">
+        <a class="pr-4 text-success text-uppercase font-weight-500" href="#" @click.prevent="$emit('close', 'send')">send</a>
+        <a class=" text-warning text-uppercase font-weight-500" href="#" @click.prevent="$emit('close', 'receive')">receive</a>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!--secret seed-->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
         <wallet-secret-seed-form
           :data="data"
@@ -118,9 +113,9 @@
           @reveal="onDecryptWallet"/>
       </b-col>
     </b-row>
-
+    <hr class="divider">
     <!-- transactions -->
-    <b-row class="pb-4">
+    <b-row class="pb-2">
       <b-col>
         <h6 class="mb-3">Transactions</h6>
         <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>

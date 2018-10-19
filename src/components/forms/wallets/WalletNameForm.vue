@@ -1,14 +1,14 @@
 <template>
   <b-form @submit.prevent="onSubmitClick">
-    <div v-if="!fieldOpen || loading">
+    <div>
       <span class="font-weight-600">Wallet name</span>
       <a v-if="!fieldOpen" class="only-desktop" href="#" @click.prevent="onEditClick">change name</a>
+      <a v-else href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
       <br>
-      {{ walletName }}
+      <template v-if="!fieldOpen">{{ walletName }}</template>
     </div>
 
-    <b-card v-if="fieldOpen && !loading" class="flat-card">
-      <div class="font-weight-600">Wallet name</div><br>
+    <b-card v-if="fieldOpen && !loading" class="flat-card mt-3">
       <ul class="inline-list">
         <li>
           <b-form-group :label-for="`nameInput_${uuid}`">
@@ -29,9 +29,6 @@
               </template>
             </b-form-invalid-feedback>
           </b-form-group>
-        </li>
-        <li v-if="!loading">
-          <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li>
           <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">

@@ -1,22 +1,22 @@
 <template>
   <b-form @submit.prevent="onSubmitClick">
-    <div v-if="!fieldOpen || loading">
+    <div class="mb-3">
       <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
       <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
+      <a v-if="fieldOpen && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
       <br>
       <span v-if="!address">
         <span class="text-danger">none</span><br>
         <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
       </span>
       <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
-      <spinner2 v-if="loading && removingWallet" color="text-secondary"/>
+      <spinner2 v-if="loading && removingWallet" color="text-warning"/>
     </div>
 
     <b-card v-if="fieldOpen && !loading" class="flat-card">
-      <div class="font-weight-600">Short stellar address</div><br>
       <ul class="inline-list">
-        <li>
+        <li class="pr-4">
           <ul class="inline-list">
             <li>
               <b-form-group v-if="fieldOpen && !loading" :label-for="`addressInput_${uuid}`">
@@ -43,7 +43,7 @@
               </b-form-group>
             </li>
             <li>
-              <span class="text-warning">{{ domain }}</span>
+              <small class="text-primary">{{ domain }}</small>
             </li>
           </ul>
         </li>
@@ -52,9 +52,6 @@
         </li>
         <li v-if="!fieldOpen && !address && !loading">
           <a href="#" class="text-info px-2" @click.prevent="onSetAddressClick">set address</a>
-        </li>
-        <li v-if="fieldOpen && !loading">
-          <a href="#" class="text-secondary px-2" @click.prevent="onCancelClick">cancel</a>
         </li>
         <li v-if="fieldOpen">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
