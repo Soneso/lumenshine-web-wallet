@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 class="form-headline text-uppercase">Change Password</h4>
+        <h4 :class="['form-headline', 'text-uppercase', {'text-center': step === 'finish' || step === 'error'}]">Change Password</h4>
         <transition v-if="inProgress" name="fade">
           <div class="loading-indicator">Loading...</div>
         </transition>
@@ -10,11 +10,21 @@
           <change-password-form v-show="!loading" :loading="loading" :errors="changePasswordStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>
         </template>
         <template v-if="step === 'finish'">
-          Password successfully changed.<br>
-          <button @click="onDoneClick">Done</button>
+          <b-row>
+            <b-col class="text-center">
+              <h6 class="text-success py-3">Password successfully changed.</h6>
+              <b-button variant="info" class="btn-rounded text-uppercase my-3" @click="onDoneClick">Done</b-button>
+            </b-col>
+          </b-row>
         </template>
         <template v-if="step === 'error'">
-          Cannot update password, please try again later.
+          <b-row>
+            <b-col class="text-center">
+              <h6 class="text-danger text-center py-3">
+                Cannot update password, please try again later.
+              </h6>
+            </b-col>
+          </b-row>
         </template>
       </b-card>
     </b-col>
@@ -29,6 +39,7 @@ import workerCaller from '@/util/workerCaller';
 import changePasswordForm from '@/components/forms/ChangePasswordForm';
 
 export default {
+  name: 'ChangePassword',
   components: { changePasswordForm },
   data () {
     return {
@@ -127,7 +138,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
