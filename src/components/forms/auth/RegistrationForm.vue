@@ -455,10 +455,11 @@ import config from '@/config';
 import userService from '@/services/user';
 
 import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
   components: { Datepicker, passwordAssets },
-  mixins: [ formMixin ],
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   data () {
     return {
       agreed: 'not_accepted',
@@ -548,10 +549,8 @@ export default {
         birthPlace: this.birthPlace
       };
       this.$emit('submit', data, this.password);
-    },
-    updatePasswordState (newPassword) {
-      this[newPassword[0]] = newPassword[1];
     }
+
   },
   validations () {
     return {
