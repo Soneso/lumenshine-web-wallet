@@ -9,7 +9,7 @@
 
     <b-container fluid class="px-4">
       <b-row>
-        <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete}]">
+        <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete || singleCardPage}]">
           <div id="logo-group">
             <div class="logo">
               <img id="logo" src="../assets/images/ui/logo.svg">
@@ -46,6 +46,12 @@ export default {
   name: 'PageHeader',
   components: { CurrencyTicker },
   mixins: [offcanvasNavigation],
+  props: {
+    singleCardPage: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: () => ({ config }),
   computed: {
     ...mapGetters([

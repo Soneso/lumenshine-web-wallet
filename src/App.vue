@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="registrationComplete && authTokenType !== 'partial' ? 'authenticated' : 'anonymous'">
+  <div id="app" :class="[registrationComplete && authTokenType !== 'partial' ? 'authenticated' : 'anonymous', {'single-card-page': isSingleCard}]">
     <div :class="['offcanvas-overlay', {'open': offCanvasMenuOpen}]"/>
     <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
@@ -8,7 +8,7 @@
     <b-container v-if="userStatus.res || userStatus.err" id="page-wrapper" fluid>
       <b-row>
         <b-col>
-          <page-header/>
+          <page-header :single-card-page="isSingleCard"/>
           <router-view/>
           <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
         </b-col>
@@ -47,7 +47,11 @@ export default {
       'registrationComplete',
       'viewportWidth',
       'offCanvasMenuOpen'
-    ])
+    ]),
+    isSingleCard () {
+      const nakedRoute = this.$route.path.substr(1);
+      return ['settings', 'change-password', 'change-tfa', 'backup-mnemonic'].includes(nakedRoute);
+    }
   },
   watch: {
     $route () {

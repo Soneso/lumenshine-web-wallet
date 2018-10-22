@@ -19,7 +19,7 @@
             v-model="password"
             :state="!$v.password.$error"
             :type="password1IsHidden ? 'password' : 'text'"
-            placeholder="Password to reveal"
+            placeholder="Password"
             tabindex="1"
             autocomplete="off"
             aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
