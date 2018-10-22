@@ -3,7 +3,7 @@
     <b-row v-if="!loading">
       <b-col cols="12 pb-4 mb-3">
         <small>To change your password please provide current and new password.</small>
-        <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
       </b-col>
 
       <b-col cols="12">
@@ -40,7 +40,7 @@
         <!-- New Password field-->
         <b-form-group>
           <b-form-input
-            id="signup-password"
+            id="change-password-new-password"
             :class="{ error: $v.newPassword.$error }"
             v-model="newPassword"
             :state="!$v.newPassword.$error"
@@ -48,7 +48,7 @@
             placeholder="New Password"
             tabindex="2"
             autocomplete="off"
-            aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+            aria-describedby="inputLiveNewPasswordHelp inputLiveNewPasswordFeedback"
             required
             @blur="$v.newPassword.$touch()"/>
 
@@ -58,7 +58,7 @@
             :help-text="'Your new password must have at least 9 characters \nIt must contain numbers, small and capital letters.'"
             @passwordUpdated="updatePasswordState($event)"/>
 
-          <b-form-invalid-feedback id="inputLivePasswordFeedback">
+          <b-form-invalid-feedback id="inputLiveNewPasswordFeedback">
             <template v-if="$v.newPassword.$error" class="field-errors">
               <template v-if="!$v.newPassword.required">Password is required!</template>
               <template v-if="!$v.newPassword.minLength">Password should be longer than 9 characters!</template>
@@ -67,7 +67,7 @@
               <template v-if="!$v.newPassword.hasNumber">Password should contain at least one number!</template>
             </template>
           </b-form-invalid-feedback>
-          <b-form-text id="inputLivePasswordHelp">
+          <b-form-text id="inputLiveNewPasswordHelp">
             Your new password
           </b-form-text>
         </b-form-group>
@@ -77,7 +77,7 @@
         <!-- Confirm New Password field-->
         <b-form-group>
           <b-form-input
-            id="signup-password"
+            id="change-password-confirm-current-password"
             :class="{ error: $v.passwordConfirm.$error }"
             v-model="passwordConfirm"
             :state="!$v.passwordConfirm.$error"
@@ -85,19 +85,19 @@
             placeholder="Repeat new password"
             tabindex="2"
             autocomplete="off"
-            aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
+            aria-describedby="inputLiveConfimNewPasswordHelp inputLiveConfimNewPasswordFeedback"
             required
             @blur="$v.passwordConfirm.$touch()"/>
 
           <password-assets :password="['password3IsHidden', password3IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
-          <b-form-invalid-feedback id="inputLivePasswordFeedback">
+          <b-form-invalid-feedback id="inputLiveConfimNewPasswordFeedback">
             <template v-if="$v.passwordConfirm.$error" class="field-errors">
               <template v-if="!$v.passwordConfirm.required">Password is required!</template>
               <template v-if="!$v.passwordConfirm.sameAsPass">The two passwords don't match!</template>
             </template>
           </b-form-invalid-feedback>
-          <b-form-text id="inputLivePasswordHelp">
+          <b-form-text id="inputLiveConfimNewPasswordHelp">
             Confirm your new password
           </b-form-text>
         </b-form-group>
