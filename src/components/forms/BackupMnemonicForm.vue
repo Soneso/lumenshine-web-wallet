@@ -2,13 +2,26 @@
   <b-form class="form" @submit.prevent="onSubmitClick">
     <b-row align-h="center">
       <b-col cols="12">
-        <span>Mnemonic</span>
+        <span class="font-weight-500">Mnemonic</span>
         <a v-if="!fieldOpen && !mnemonic" href="#" @click.prevent="onRevealClick">reveal</a>
-        <a v-else-if="fieldOpen && !mnemonic" href="#" class="text-secondary" @click.prevent="onCancelClick">cancel</a>
-        <a v-else-if="fieldOpen && mnemonic" href="#" @click.prevent="onHideClick">hide</a>
-        <br>
-        {{ (fieldOpen && mnemonic) || '***********************' }}
-        <br>
+        <a v-if="fieldOpen && !mnemonic" href="#" class="text-secondary" @click.prevent="onCancelClick">
+          <spinner2 v-if="loading" color="text-secondary"/>
+          <template v-else>cancel</template>
+        </a>
+        <a v-if="!!mnemonic" href="#" @click.prevent="onHideClick">hide</a>
+        <div v-if="!!mnemonicList && mnemonicList.length > 0" class="pb-4">
+          <div v-for="(item, index) in mnemonicList" :key="index" class="py-1">
+            <b-row align-h="center">
+              <b-col cols="2" sm="1" class="text-right px-1 text-gray-300">
+                {{ +index + 1 }}.
+              </b-col>
+              <b-col cols="10" sm="3" md="4" class="px-1 text-left">
+                {{ item }}
+              </b-col>
+            </b-row>
+          </div>
+        </div>
+        <div v-else>***********************</div>
         <small v-if="hasUnknownError" class="text-danger">Unknown backend error!</small>
       </b-col>
       <b-col v-if="fieldOpen && !loading && !mnemonic" cols="10" md="8">
@@ -39,14 +52,10 @@
           </b-form-text>
         </b-form-group>
 
-        <div class="form-buttons">
-          <b-button v-if="fieldOpen && !mnemonic" variant="outline-secondary" size="sm" class="text-uppercase text-secondary btn-rounded" @click.prevent="onCancelClick">cancel</b-button>
-          <b-button v-if="fieldOpen && mnemonic" variant="info" size="sm" class="text-uppercase btn-rounded " @click.prevent="onHideClick">hide</b-button>
-          <b-button v-if="fieldOpen && !mnemonic" variant="info" size="sm" class="text-uppercase btn-rounded" @click.prevent="onSubmitClick">
-            <spinner2 v-if="loading" color="text-info" width="100" message="Revealing..."/>
-            <span v-else>reveal</span>
-          </b-button>
-        </div>
+        <b-button v-if="fieldOpen && !mnemonic" variant="info" class="text-uppercase btn-rounded" @click.prevent="onSubmitClick">
+          <spinner2 v-if="loading" color="text-info" width="100" message="Revealing..."/>
+          <span v-else>reveal</span>
+        </b-button>
       </b-col>
     </b-row>
   </b-form>
@@ -54,12 +63,12 @@
 
 <script>
 import formMixin from '@/mixins/form';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 import { required } from 'vuelidate/lib/validators';
 
-import passwordAssets from '@/components/ui/passwordAssets';
-import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 import spinner2 from '@/components/ui/spinner2.vue';
+import passwordAssets from '@/components/ui/passwordAssets';
 
 export default {
   name: 'BackupMnemonicForm',
@@ -85,6 +94,13 @@ export default {
       password: '',
       password1IsHidden: true
     };
+  },
+  computed: {
+    mnemonicList () {
+      if (this.mnemonic) {
+        return this.mnemonic.split(' ');
+      }
+    }
   },
   methods: {
     onCancelClick () {
