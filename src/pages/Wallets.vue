@@ -8,7 +8,7 @@
       <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
     </b-row>
 
-    <b-modal v-model="addWalletModalShown" hide-footer title="Add new wallet">
+    <b-modal v-model="addWalletModalShown" size="sm" hide-footer title="ADD NEW WALLET">
       <add-wallet-form v-if="nextFreePublicKey" :errors="addWalletStatus.err" :next-public-key="nextFreePublicKey" @cancel="onModalClose" @submit="onSubmitNewWallet"/>
     </b-modal>
   </section>
@@ -45,7 +45,7 @@ export default {
         this.onModalClose();
       }
     },
-    $route (val) {
+    $route () {
       this.addWalletModalShown = this.$route.params.add === 'add';
     }
   },
