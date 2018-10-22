@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 class="form-headline text-uppercase">Change 2FA Secret</h4>
+        <h4 :class="['form-headline', 'text-uppercase', {'text-center': step !== 'qr'}]">Change 2FA Secret</h4>
         <transition v-if="inProgress" name="fade">
           <div class="loading-indicator">Loading...</div>
         </transition>
@@ -13,11 +13,19 @@
           <change-tfa-form :tfa-data="tfaData" :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onTfaSubmit"/>
         </template>
         <template v-if="step === 'finish'">
-          Your 2FA Secret has been changed successfully.<br>
-          <button @click="onDoneClick">Done</button>
+          <b-row>
+            <b-col class="text-center">
+              <h6 class="text-success pt-2 pb-4">Your 2FA Secret has been changed successfully.</h6>
+              <b-button variant="info" class="btn-rounded text-uppercase" @click="onDoneClick">Done</b-button>
+            </b-col>
+          </b-row>
         </template>
         <template v-if="step === 'error'">
-          Cannot update 2FA, please try again later.
+          <b-row>
+            <b-col class="text-center">
+              <h6 class="text-danger pt-2 pb-4">Cannot update 2FA, please try again later.</h6>
+            </b-col>
+          </b-row>
         </template>
       </b-card>
     </b-col>

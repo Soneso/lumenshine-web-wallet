@@ -1,37 +1,57 @@
 <template>
   <form class="form" @submit.prevent="onSubmitClick">
-    <h3>New 2FA Secret</h3>
-    <div v-if="!loading">
-      <p>1. Copy and enter the below displayed 2FA secret code into the authenticator app</p>
-      <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
-      <div>
-        <p v-if="tfaData">
-          <strong>
-            <div v-if="showCopiedText" class="copiedtext info">2FA secret copied to clipboard</div>
-            Your 2FA Secret: {{ tfaData.tfa_secret }}
-            <button
-              v-clipboard:copy="tfaData.tfa_secret"
-              v-clipboard:success="onCopy"
-              type="button">
-              <i class="fa fa-clone"/>
-            </button>
-          </strong>
-        </p>
-        <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`"></p>
-      </div>
-      <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
-      <div class="field">
-        <div v-if="$v.tfaCode.$error" class="field__errors">
-          <div v-if="!$v.tfaCode.numeric">2FA code should be numeric!</div>
-          <div v-if="!$v.tfaCode.length">2FA code should have length of 6 characters!</div>
-          <div v-if="!$v.tfaCode.validTfa">2FA code is invalid</div>
-          <div v-if="!$v.tfaCode.required">2FA code is required</div>
+    <h6 class="text-success text-center py-3">New 2FA Secret</h6>
+    <b-row v-if="!loading" align-h="center">
+      <b-col cols="12">
+        <p>1. Copy and enter the below displayed 2FA secret code into the authenticator app</p>
+        <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
+
+        <div v-if="tfaData" class="text-center">
+          Your 2FA Secret: {{ tfaData.tfa_secret }}
+          <copy-to-clipboard :text="tfaData.tfa_secret" message="2FA secret copied to clipboard" color="text-info"/>
+          <br>
+          <img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`">
         </div>
-        <input :class="{ error: $v.tfaCode.$error }" v-model="tfaCode" placeholder="2FA Code" @blur="$v.tfaCode.$touch()">
-      </div>
-    </div>
-    <button @click.prevent="onSubmitClick">Next</button>
+
+        <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
+        <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+      </b-col>
+
+      <b-col cols="10" sm="8" md="6">
+        <!-- Password field-->
+        <b-form-group>
+          <b-form-input
+            id="change-2fa-password"
+            :class="{ error: $v.tfaCode.$error }"
+            v-model="tfaCode"
+            :state="!$v.tfaCode.$error"
+            :type="password1IsHidden ? 'password' : 'text'"
+            placeholder="2FA Code"
+            tabindex="1"
+            autocomplete="off"
+            aria-describedby="inputLive2faHelp inputLive2faFeedback"
+            required
+            @blur="$v.tfaCode.$touch()"/>
+
+          <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
+          <b-form-invalid-feedback id="inputLive2faFeedback">
+            <template v-if="$v.tfaCode.$error" class="field__errors">
+              <template v-if="!$v.tfaCode.numeric">2FA code should be numeric!</template>
+              <template v-if="!$v.tfaCode.length">2FA code should have length of 6 characters!</template>
+              <template v-if="!$v.tfaCode.validTfa">2FA code is invalid</template>
+              <template v-if="!$v.tfaCode.required">2FA code is required</template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text id="inputLive2faHelp">
+            Your password
+          </b-form-text>
+        </b-form-group>
+      </b-col>
+      <b-col cols="12" class="text-center py-4">
+        <b-button variant="info" class="btn-rounded text-uppercase" @click.prevent="onSubmitClick">Next</b-button>
+      </b-col>
+    </b-row>
   </form>
 </template>
 
@@ -41,9 +61,13 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import tfaValidator from '@/validators/twoFactorCode';
+import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  mixins: [ formMixin ],
+  name: 'ChangeTfaForm',
+  components: { passwordAssets },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     tfaData: {
       type: Object,
