@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="[registrationComplete && authTokenType !== 'partial' ? 'authenticated' : 'anonymous', {'single-card-page': isSingleCard}]">
+  <div id="app" :class="[registrationComplete && authTokenType !== 'partial' ? 'authenticated' : 'anonymous']">
     <div :class="['offcanvas-overlay', {'open': offCanvasMenuOpen}]"/>
     <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
