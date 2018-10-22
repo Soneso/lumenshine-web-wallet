@@ -4,15 +4,16 @@ export default {
   async clearAuthToken ({ commit }) {
     commit('SET_AUTH_TOKEN', { token: null, type: null });
   },
-  async refreshAuthToken ({ commit, getters }) {
+
+  async refreshAuthToken ({ commit, getters, state }) {
     try {
       const res = await UserService.refreshToken(getters.authTokenType);
-      console.log('refreshAuthToken res', res);
-      // commit('SET_AUTH_TOKEN', { token: null, type: null });
+      commit('SET_AUTH_TOKEN', { token: res.token, type: state.authTokenType });
     } catch (err) {
-      console.log('refreshAuthToken err', err);
+      console.log('RefreshAuthToken error', err);
     }
   },
+
   async registerUser ({ commit }, params) {
     commit('SET_REGISTRATION_LOADING', true);
     commit('SET_REGISTRATION_ERROR', []);

@@ -2,14 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VueLocalStorage from 'vue-localstorage';
 
-import debounce from 'lodash/debounce';
-
 Vue.use(VueLocalStorage);
 Vue.use(Vuex);
-
-let setInteraction = debounce(({ commit }) => {
-  commit('SET_INTERACTION', new Date().getTime());
-}, 500);
 
 export default new Vuex.Store({
   modules: {
@@ -17,20 +11,25 @@ export default new Vuex.Store({
     users: require('./users').default,
     wallets: require('./wallets').default
   },
-  store: {
-    lastInteraction: 0,
+  state: {
+    lastInteraction: null,
   },
   actions: {
     resetStore ({ commit }) {
       commit('RESET');
     },
-    catchInteraction ({ commit }) {
-      setInteraction({ commit });
+    catchInteraction ({ commit, state }) {
+      if (state.lastInteraction === null) {
+        commit('SET_INTERACTION', new Date().getTime());
+      }
+    },
+    clearInteraction ({ commit }) {
+      commit('SET_INTERACTION', null);
     }
   },
   mutations: {
-    SET_INTERACTION (state, timestamp) {
-      state.lastInteraction = timestamp;
+    SET_INTERACTION (state, value) {
+      state.lastInteraction = value;
     }
   },
 });

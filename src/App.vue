@@ -94,20 +94,25 @@ export default {
       'logout',
       'clearAuthToken',
       'refreshAuthToken',
-      'catchInteraction'
+      'catchInteraction',
+      'clearInteraction'
     ]),
     ...mapMutations([
       'mutateMq',
       'mutateViewportWidth'
     ]),
     async interactionHandler () {
-      const recordedTime = this.$store.state.lastInteraction;
+      const lastInteraction = this.$store.state.lastInteraction;
+      if (lastInteraction === null) {
+        await this.catchInteraction();
+        return;
+      }
       const now = new Date().getTime();
-      const diffSeconds = (now - recordedTime) / 1000;
-      if (diffSeconds > 60 * 10) {
+      const diffSeconds = (now - lastInteraction) / 1000;
+      if (diffSeconds > 5) {
+        this.clearInteraction();
         await this.refreshAuthToken();
       }
-      await this.catchInteraction();
     }
   }
 };
