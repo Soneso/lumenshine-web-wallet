@@ -2,24 +2,22 @@
   <b-form class="form" @submit.prevent="onSubmitClick">
     <b-row align-h="center">
       <b-col cols="12">
-        <span class="font-weight-500">Mnemonic</span>
+        <span class="font-weight-500">Your Secret (24 words mnemonic)</span>
         <a v-if="!fieldOpen && !mnemonic" href="#" @click.prevent="onRevealClick">reveal</a>
         <a v-if="fieldOpen && !mnemonic" href="#" class="text-secondary" @click.prevent="onCancelClick">
           <spinner2 v-if="loading" color="text-secondary"/>
           <template v-else>cancel</template>
         </a>
         <a v-if="!!mnemonic" href="#" @click.prevent="onHideClick">hide</a>
-        <div v-if="!!mnemonicList && mnemonicList.length > 0" class="pb-4">
-          <div v-for="(item, index) in mnemonicList" :key="index" class="py-1">
-            <b-row align-h="center">
-              <b-col cols="2" sm="1" class="text-right px-1 text-gray-300">
-                {{ +index + 1 }}.
-              </b-col>
-              <b-col cols="10" sm="3" md="4" class="px-1 text-left">
-                {{ item }}
-              </b-col>
-            </b-row>
-          </div>
+        <div v-if="!!mnemonicList && mnemonicList.length > 0" class="pt-4">
+          <b-row v-for="(item, index) in mnemonicList" :key="index" align-h="center" class="w-auto m-auto py-1">
+            <b-col cols="3" sm="5" class="text-right px-1 text-gray-300">
+              {{ +index + 1 }}.
+            </b-col>
+            <b-col cols="9" sm="7" class="px-1 text-left">
+              {{ item }}
+            </b-col>
+          </b-row>
         </div>
         <div v-else>***********************</div>
         <small v-if="hasUnknownError" class="text-danger">Unknown backend error!</small>
