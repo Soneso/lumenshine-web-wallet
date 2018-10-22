@@ -134,6 +134,7 @@
 // type="datetime-local"
 // type="color"
 .modal .flat-card input,
+.modal .normal-input input,
 .vdp-datepicker input,
 input {
   &[type="text"],
@@ -148,6 +149,18 @@ input {
     &:focus {
       @extend %default-input-styles
     }
+  }
+}
+
+.modal .normal-input input {
+  &[type="text"],
+  &[type="search"],
+  &[type="email"],
+  &[type="password"],
+  &[type="url"],
+  &[type="tel"],
+  &[type="number"] {
+    background: transparent !important;
   }
 }
 
