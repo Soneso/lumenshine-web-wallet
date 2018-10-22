@@ -24,9 +24,9 @@
 
           <template v-else-if="showActions">
             <div class="mx-2 py-2 text-right">
-              <a href="#" class="px-1" @click.prevent="resetSendPayment(), $refs.sendModal.show()">Send</a>
-              <a href="#" class="px-1" @click.prevent="$refs.receiveModal.show()">Receive</a>
-              <a href="#" class="px-1" @click.prevent="$refs.detailsModal.show()">Details</a>
+              <a href="#" class="px-1" @click.prevent="resetSendPayment(), sendModalVisible = true">Send</a>
+              <a href="#" class="px-1" @click.prevent="receiveModalVisible = true">Receive</a>
+              <a href="#" class="px-1" @click.prevent="detailsModalVisible = true">Details</a>
             </div>
           </template>
         </b-col>
@@ -34,13 +34,13 @@
     </b-card>
 
     <!-- modals -->
-    <b-modal ref="receiveModal" hide-footer title="Receive" size="sm">
-      <receive-payment-form :data="data" @cancel="$refs.receiveModal.hide()"/>
+    <b-modal v-model="receiveModalVisible" hide-footer title="Receive" size="sm">
+      <receive-payment-form v-if="receiveModalVisible" :data="data" @cancel="receiveModalVisible = false"/>
     </b-modal>
 
-    <b-modal ref="sendModal" hide-footer size="sm" title="Send">
+    <b-modal v-model="sendModalVisible" hide-footer size="sm" title="Send">
       <send-payment-form
-        v-if="data && balances"
+        v-if="sendModalVisible && data && balances"
         :balances="balances"
         :result="sendPaymentStatus.res"
         :loading="sendPaymentStatus.loading || decryptedWallet.loading"
@@ -49,12 +49,13 @@
         :exchanges="exchanges"
         :transaction="sendPaymentTransaction"
         @reset="resetSendPayment"
-        @close="$refs.sendModal.hide()"
+        @close="sendModalVisible = false"
         @submit="onSendPaymentClick"/>
     </b-modal>
 
-    <b-modal ref="detailsModal" hide-footer title="Wallet details">
+    <b-modal v-model="detailsModalVisible" hide-footer title="Wallet details">
       <wallet-card-details
+        v-if="detailsModalVisible"
         :data="data"
         :balances="balances"
         :decrypt-wallet-loading="decryptedWallet.loading"
@@ -63,11 +64,11 @@
         @setInflationDestination="onSetInflationDestination"
         @addCurrency="onAddCurrency"
         @removeCurrency="onRemoveCurrency"
-        @openOperationsModal="data => {operationDetailsModalData = data, $refs.operationDetailsModal.show()}"
-        @close="$refs.detailsModal.hide()"/>
+        @openOperationsModal="data => {operationDetailsModalData = data, operationDetailsModalVisible = true}"
+        @close="detailsModalVisible = false"/>
     </b-modal>
 
-    <b-modal ref="operationDetailsModal" title="Operation details">
+    <b-modal v-model="operationDetailsModalVisible" title="Operation details">
       <pre>
         {{ JSON.stringify(operationDetailsModalData, null, 2) }}
       </pre>
@@ -173,6 +174,10 @@ export default {
 
       changellyModalVisible: false,
       fundWalletModalVisible: false,
+      receiveModalVisible: false,
+      sendModalVisible: false,
+      detailsModalVisible: false,
+      operationDetailsModalVisible: false,
 
       operationDetailsModalData: null,
 
@@ -216,6 +221,13 @@ export default {
       if (!this.sendPaymentStatus.res) return;
       const transactionId = this.sendPaymentStatus.res.transactionId;
       return this.transactions.find(tr => tr.id === transactionId);
+    }
+  },
+  watch: {
+    detailsModalVisible (visible) {
+      if (!visible) {
+        this.resetDecryptedWallet(); // clear revealed secret seed after closing modal
+      }
     }
   },
   methods: {

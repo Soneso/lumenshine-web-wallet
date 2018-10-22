@@ -3,8 +3,7 @@
     <div>
       <span class="font-weight-600">Secret seed / Private key</span>
       <a v-if="!fieldOpen && !secretSeed" href="#" @click.prevent="onRevealClick">
-        <spinner2 v-if="loading" color="text-info" message="revealing..." width="100"/>
-        <template v-else>reveal</template>
+        <template v-if="!loading">reveal</template>
       </a>
       <a v-if="fieldOpen && !secretSeed && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
       <a v-if="secretSeed && !loading" href="#" class="text-warning" @click.prevent="onHideClick">hide</a>
@@ -15,6 +14,7 @@
           <copy-to-clipboard :text="secretSeed" color="text-info"/>
         </template>
       </span>
+      <spinner2 v-if="loading" color="text-info" message="revealing..." width="100"/>
     </div>
 
     <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
@@ -91,6 +91,7 @@ export default {
     },
     onHideClick () {
       this.fieldOpen = false;
+      this.$v.$reset();
       this.$emit('hide');
     },
     onSubmitClick () {
@@ -100,6 +101,7 @@ export default {
       }
       this.backendQuery = { password: this.password };
       this.$emit('reveal', this.password);
+      this.password = '';
     }
   },
   validations () {

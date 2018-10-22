@@ -168,7 +168,6 @@ export default {
   },
   data () {
     return {
-
       sendingPaymentLoading: false,
       saveWalletLoading: false,
 
