@@ -59,14 +59,12 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import tfaValidator from '@/validators/twoFactorCode';
-import passwordAssets from '@/components/ui/passwordAssets';
-import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
   name: 'ChangeTfaForm',
-  components: { passwordAssets, copyToClipboard },
-  mixins: [ formMixin, updatePasswordVisibilityState ],
+  components: { copyToClipboard },
+  mixins: [ formMixin ],
   props: {
     tfaData: {
       type: Object,
