@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
-      <b-card class="p-4 single-card">
+      <b-card class="p-4 single-card text-center">
         <h4 class="form-headline text-uppercase pb-4">Backup Secret/Mnemonic</h4>
         <backup-mnemonic-form
           :mnemonic="mnemonic"
@@ -9,7 +9,8 @@
           :decrypt-error="decryptError"
           @hide="setMnemonic(null)"
           @cancel="canceled = true"
-          @reveal="onRevealClick"/>      </b-card>
+          @reveal="onRevealClick"/>
+      </b-card>
     </b-col>
   </b-row>
 </template>
@@ -22,6 +23,7 @@ import workerCaller from '@/util/workerCaller';
 import BackupMnemonicForm from '@/components/forms/BackupMnemonicForm';
 
 export default {
+  name: 'BackupMnemonic',
   components: { BackupMnemonicForm },
   data () {
     return {
@@ -81,7 +83,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
