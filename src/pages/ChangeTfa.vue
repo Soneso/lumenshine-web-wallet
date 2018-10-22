@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 :class="['form-headline', 'text-uppercase', {'text-center': step !== 'qr'}]">Change 2FA Secret</h4>
+        <h3 class="form-headline pb-3 text-center">Change 2FA Secret</h3>
         <transition v-if="inProgress" name="fade">
           <div class="loading-indicator">Loading...</div>
         </transition>

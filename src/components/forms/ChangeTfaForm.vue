@@ -1,17 +1,17 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitClick">
-    <h6 class="text-success text-center py-3">New 2FA Secret</h6>
+  <b-form class="text-center" @submit.prevent="onSubmitClick">
+    <div class="text-success pb-3">New 2FA Secret</div>
     <b-row v-if="!loading" align-h="center">
       <b-col cols="12">
-        <p>1. Copy and enter the below displayed 2FA secret code into the authenticator app</p>
+        <p>1. Download or open a two-factor authenticator app (like Google Authenticator)</p>
         <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
 
-        <div v-if="tfaData" class="text-center">
+        <h6 v-if="tfaData" class="text-center pt-2">
           Your 2FA Secret: {{ tfaData.tfa_secret }}
           <copy-to-clipboard :text="tfaData.tfa_secret" message="2FA secret copied to clipboard" color="text-info"/>
           <br>
-          <img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`">
-        </div>
+          <img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img">
+        </h6>
 
         <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
         <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
@@ -25,15 +25,13 @@
             :class="{ error: $v.tfaCode.$error }"
             v-model="tfaCode"
             :state="!$v.tfaCode.$error"
-            :type="password1IsHidden ? 'password' : 'text'"
+            :type="'text'"
             placeholder="2FA Code"
             tabindex="1"
             autocomplete="off"
             aria-describedby="inputLive2faHelp inputLive2faFeedback"
             required
             @blur="$v.tfaCode.$touch()"/>
-
-          <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
           <b-form-invalid-feedback id="inputLive2faFeedback">
             <template v-if="$v.tfaCode.$error" class="field__errors">
@@ -44,7 +42,7 @@
             </template>
           </b-form-invalid-feedback>
           <b-form-text id="inputLive2faHelp">
-            Your password
+            Your 2FA code
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -52,7 +50,7 @@
         <b-button variant="info" class="btn-rounded text-uppercase" @click.prevent="onSubmitClick">Next</b-button>
       </b-col>
     </b-row>
-  </form>
+  </b-form>
 </template>
 
 <script>
@@ -63,10 +61,11 @@ import { required } from 'vuelidate/lib/validators';
 import tfaValidator from '@/validators/twoFactorCode';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
   name: 'ChangeTfaForm',
-  components: { passwordAssets },
+  components: { passwordAssets, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     tfaData: {
@@ -78,6 +77,7 @@ export default {
     return {
       showCopiedText: false,
       tfaCode: '',
+      password1IsHidden: true
     };
   },
   methods: {

@@ -3,10 +3,10 @@
     <template v-if="!loading && tfaData">
       <p>1. Download a two-factor authenticator app (like Google Authenticator)</p>
       <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
-      <strong v-if="tfaData">
+      <h6 v-if="tfaData" class="font-weight-600">
         Your 2FA Secret: {{ tfaData.tfa_secret }}
         <i v-clipboard:copy="tfaData.tfa_secret" v-b-tooltip="'2FA secret copied to clipboard!'" class="icon-copy clipboard"/>
-      </strong>
+      </h6>
       <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img"></p>
       <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
       <template v-if="hasUnknownError" class="error">Unknown backend error!<br></template>
