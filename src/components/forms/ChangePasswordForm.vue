@@ -25,7 +25,7 @@
           <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
           <b-form-invalid-feedback id="inputLivePasswordFeedback">
-            <template v-if="$v.password.$error" class="field__errors">
+            <template v-if="$v.password.$error" class="field-errors">
               <template v-if="!$v.password.required">Password is required!</template>
               <template v-if="!$v.password.decryptValid">Wrong password!</template>
             </template>
@@ -59,7 +59,7 @@
             @passwordUpdated="updatePasswordState($event)"/>
 
           <b-form-invalid-feedback id="inputLivePasswordFeedback">
-            <template v-if="$v.newPassword.$error" class="field__errors">
+            <template v-if="$v.newPassword.$error" class="field-errors">
               <template v-if="!$v.newPassword.required">Password is required!</template>
               <template v-if="!$v.newPassword.minLength">Password should be longer than 9 characters!</template>
               <template v-if="!$v.newPassword.hasUpperCaseLetter">Password should contain at least one uppercase character!</template>
@@ -92,7 +92,7 @@
           <password-assets :password="['password3IsHidden', password3IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
           <b-form-invalid-feedback id="inputLivePasswordFeedback">
-            <template v-if="$v.passwordConfirm.$error" class="field__errors">
+            <template v-if="$v.passwordConfirm.$error" class="field-errors">
               <template v-if="!$v.passwordConfirm.required">Password is required!</template>
               <template v-if="!$v.passwordConfirm.sameAsPass">The two passwords don't match!</template>
             </template>
@@ -134,9 +134,9 @@ export default {
       password: '',
       newPassword: '',
       passwordConfirm: '',
-      password1IsHidden: false,
-      password2IsHidden: false,
-      password3IsHidden: false
+      password1IsHidden: true,
+      password2IsHidden: true,
+      password3IsHidden: true
     };
   },
   methods: {
