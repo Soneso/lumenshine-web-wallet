@@ -42,6 +42,16 @@
   white-space: nowrap
 }
 
+%card-headline {
+  @extend .m-0;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: $primary
+}
+
+.page-headline {
+  @extend %card-headline
+}
 
 .rounded-box {
   &-sm {
