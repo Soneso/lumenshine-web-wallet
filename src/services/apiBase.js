@@ -29,6 +29,7 @@ export default {
     }
     return response;
   },
+
   async post (path = '', params = null) {
     if (!store.getters.authToken && axios.defaults.headers.common['Authorization'] !== null) {
       delete axios.defaults.headers.common['Authorization'];

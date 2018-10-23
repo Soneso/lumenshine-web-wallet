@@ -8,19 +8,19 @@
           :id="`nameInput_${uuid}`"
           :class="[{ error: $v.walletName.$error }, 'default-placeholders']"
           :state="!$v.walletName.$error"
-          :aria-describedby="`inputLiveAmountHelp_${uuid} inputLiveAmountFeedback_${uuid}`"
+          :aria-describedby="`inputLiveWalletNameHelp_${uuid} inputLiveWalletNameFeedback_${uuid}`"
           v-model="walletName"
           placeholder="Wallet name"
           type="text"
           required
           @blur="$v.walletName.$touch()"/>
-        <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
+        <b-form-invalid-feedback :id="`inputLiveWalletNameFeedback_${uuid}`">
           <template v-if="$v.walletName.$error" class="field__errors">
             <template v-if="!$v.walletName.required">Wallet name is required</template>
             <template v-if="!$v.walletName.maxLength">Max. 40 characters allowed</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
+        <b-form-text :id="`inputLiveWalletNameHelp_${uuid}`">
           New wallet name.
         </b-form-text>
       </b-form-group>

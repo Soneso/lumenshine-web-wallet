@@ -47,10 +47,10 @@
     </li>
 
     <li>
-      <a href="#">
+      <router-link to="/contacts">
         <i class="icon-user"/>
         <div :style="toggleText">Contacts</div>
-      </a>
+      </router-link>
     </li>
 
     <li>

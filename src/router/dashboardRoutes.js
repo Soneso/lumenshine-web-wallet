@@ -54,4 +54,13 @@ export default [
       pageName: 'Backup Mnemonic',
     }
   },
+  {
+    path: '/contacts',
+    name: 'Contacts',
+    component: require('@/pages/Contacts').default,
+    meta: {
+      authNeeded: true,
+      pageName: 'Contacts',
+    }
+  },
 ];

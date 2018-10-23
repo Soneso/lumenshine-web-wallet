@@ -227,7 +227,7 @@ import Amount from '@/util/Amount';
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
 
-import spinner2 from '@/components/ui/spinner2.vue';
+import spinner2 from '@/components/ui/spinner2';
 
 export default {
   name: 'SendPaymentForm',
