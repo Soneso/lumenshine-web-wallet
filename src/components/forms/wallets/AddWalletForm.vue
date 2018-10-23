@@ -31,7 +31,7 @@
         <br>
         <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
         <b-row align-h="center">
-          <span class="col-10 font-weight-600 d-inline-block text-truncate">{{ nextPublicKey }}</span>
+          <span class="col-10 font-weight-600 d-inline-block break-word with-hyphens">{{ nextPublicKey }}</span>
           <copy-to-clipboard :text="nextPublicKey"/>
         </b-row>
         <br>
