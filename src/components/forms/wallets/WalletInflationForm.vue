@@ -8,7 +8,11 @@
       <span class="left text-danger">none</span><br>
       <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
     </div>
-    <div v-else>{{ data.stellar_data.inflation_destination }} <br></div>
+    <div v-else="" class="break-word with-hyphens">
+      {{ data.stellar_data.inflation_destination }}
+      <copy-to-clipboard :text="data.stellar_data.inflation_destination" color="text-info"/>
+      <br>
+    </div>
 
     <h6 v-if="hasUnknownError" class="text-danger">Unknown backend error!</h6>
 
@@ -104,8 +108,11 @@
             <b-row align-h="between">
               <b-col cols="10">
                 <h6>{{ destination.name }}</h6>
-                <small class="d-block">{{ destination.short_description }} <a href="#" class="pull-right" @click.prevent>details</a></small>
-                <small class="d-block">Public key: {{ destination.issuer_public_key.slice(0, 10) }}...</small>
+                <small class="d-block">
+                  {{ destination.short_description }}
+                  <!--<a href="#" class="pull-right" @click.prevent>details</a>-->
+                </small>
+                <small class="d-block break-word with-hyphens">Public key: {{ destination.issuer_public_key }}</small>
               </b-col>
               <b-col cols="2" class="text-right">
                 <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
@@ -182,10 +189,11 @@ import { required } from 'vuelidate/lib/validators';
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
 import spinner2 from '@/components/ui/spinner2';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
   name: 'WalletInflationForm',
-  components: { spinner2 },
+  components: { spinner2, copyToClipboard },
   mixins: [ formMixin ],
   props: {
     loading: {
