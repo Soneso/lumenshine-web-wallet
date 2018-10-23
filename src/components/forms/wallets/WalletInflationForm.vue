@@ -37,7 +37,7 @@
               @blur="$v.destination.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveDestinationFeedback_${uuid}`">
               <template v-if="$v.destination.$error" class="field__errors">
-                <template v-if="!$v.destination.required">Wallet destination is required</template>
+                <template v-if="!$v.destination.required">Wallet destination is required <br></template>
                 <template v-if="!$v.destination.publicKey">Not valid public key!</template>
               </template>
             </b-form-invalid-feedback>
@@ -59,7 +59,7 @@
               @blur="$v.password.$touch()"/>
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
-                <template v-if="!$v.password.required">Password is required!</template>
+                <template v-if="!$v.password.required">Password is required! <br></template>
                 <template v-if="!$v.password.decryptValid">Wrong password!</template>
               </template>
             </b-form-invalid-feedback>
@@ -81,7 +81,7 @@
               @blur="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field__errors">
-                <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
                 <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
               </template>
             </b-form-invalid-feedback>
@@ -134,7 +134,7 @@
                   @blur="$v.password.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
                   <template v-if="$v.password.$error" class="field__errors">
-                    <template v-if="!$v.password.required">Password is required!</template>
+                    <template v-if="!$v.password.required">Password is required! <br></template>
                     <template v-if="!$v.password.decryptValid">Wrong password!</template>
                   </template>
                 </b-form-invalid-feedback>
@@ -156,7 +156,7 @@
                   @blur="$v.signerSeed.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
                   <template v-if="$v.signerSeed.$error" class="field__errors">
-                    <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                    <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
                     <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
                   </template>
                 </b-form-invalid-feedback>

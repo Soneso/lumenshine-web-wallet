@@ -3,3 +3,41 @@
     @extend .m-0;
   }
 }
+
+
+@keyframes introduceNewRow {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  20% {
+    background: $yellow;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  80% {
+    background: $yellow;
+  }
+
+  100% {
+    background: $white;
+  }
+}
+
+%row-motion {
+  -webkit-animation-name: introduceNewRow;
+  animation-name: introduceNewRow;
+}
+
+%animated {
+  -webkit-animation-duration: 10s;
+  animation-duration: 10s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.shining {
+  @extend %animated, %row-motion;
+}
