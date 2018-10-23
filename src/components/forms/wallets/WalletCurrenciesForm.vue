@@ -21,7 +21,11 @@
           {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
           <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="text-danger small pull-right" @click.prevent="openRemoveCurrency(balance)">remove</a>
         </h6>
-        <small v-if="balance.issuer && !removeFieldBalance" class="break-word with-hyphens">Issuer public key: <span>{{ balance.issuer }}</span></small>
+        <small v-if="balance.issuer && !removeFieldBalance" class="break-word with-hyphens">
+          Issuer public key:
+          <span>{{ balance.issuer }}</span>
+          <copy-to-clipboard :text="balance.issuer" :tune-with="balance.type" color="text-secondary"/>
+        </small>
       </b-list-group-item>
     </b-list-group>
 
@@ -248,10 +252,11 @@ import Amount from '@/util/Amount';
 import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
-import Spinner2 from '../../ui/spinner2';
+import spinner2 from '../../ui/spinner2';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
-  components: {Spinner2},
+  components: { spinner2, copyToClipboard },
   mixins: [ formMixin ],
   props: {
     loading: {
