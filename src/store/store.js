@@ -7,11 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-<<<<<<< HEAD
     settings: require('./settings').default,
-=======
     contacts: require('./contacts').default,
->>>>>>> Contacts page.
     offcanvas: require('./offcanvas').default,
     users: require('./users').default,
     wallets: require('./wallets').default
