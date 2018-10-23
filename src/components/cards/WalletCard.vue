@@ -3,12 +3,14 @@
     <b-card :class="[{'card-wide': wideCard}]">
       <b-row class="card-header">
         <b-col>
-          <h6>
+          <h6 class="mb-0">
             <span class="font-weight-700">{{ data.wallet_name }}</span>
             <span>WALLET</span>
           </h6>
-          <span v-if="!data.stellar_data" class="text-danger">not funded</span>
-          <span v-else class="text-warning">{{ data.federation_address || 'no short address' }}</span>
+          <b-badge v-if="!data.stellar_data" variant="secondary" class="text-white font-weight-700 mb-3 text-uppercase">not funded</b-badge>
+          <b-badge v-else :variant="data.federation_address ? 'warning' : 'secondary'" class="text-white font-weight-700 mb-3">
+            {{ data.federation_address || 'no short address' }}
+          </b-badge>
         </b-col>
       </b-row>
 
@@ -116,19 +118,6 @@
         </iframe>
       </div>
     </div>
-
-    <!-- <b-modal ref="infoModal" hide-footer title="Info">
-      <p>This is a wallet card.</p>
-      <p><strong>Wallet name</strong><br> Shows the name of your wallet in the title of the card. You can change the name by pressing the Details button.</p>
-      <p><strong>Federation Address</strong><br> If this wallet is connected to a federation address, the address is displayed below of the name of the wallet. To add a federation address, pls press the Details button. To learn more about federation address please click here.</p>
-      <p><strong>Balance</strong><br> Shows the overall balance of Stellar Lumens (XLM) that the wallet holds. If you have other curencies in this wallet, the card also shows their balances.</p>
-      <p><strong>Base reserve</strong><br> In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen) - also called base reserve. One can not spend the base reserve.</p>
-      <p><strong>Transaction fee</strong><br> The amount of stellar lumens needed to perform a transaction, such as a payment transaction.</p>
-      <p><strong>Available balance</strong><br> Shows the amount that can be spent. It is calculated by substracting the base reserve and stellar transaction fee from the overall balance.</p>
-      <p><strong>Send</strong><br> Press the Send button to send lumens or other currencies form this wallet.</p>
-      <p><strong>Receive</strong><br> Press the Receive button to receive lumens or other currencies to this wallet.</p>
-      <p><strong>Details</strong><br> Press the Details button to see all details about your Wallet.</p>
-    </b-modal> -->
   </b-col>
 </template>
 

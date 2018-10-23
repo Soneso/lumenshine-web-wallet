@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent="onSubmitClick">
+  <b-form id="wallet-address-form" @submit.prevent="onSubmitClick">
     <div class="mb-3">
       <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
@@ -43,17 +43,21 @@
               </b-form-group>
             </li>
             <li>
-              <small class="text-primary">{{ domain }}</small>
+              <h4>
+                <b-badge id="wallet-domain-name" variant="secondary" class="text-white">
+                  {{ domain }}
+                </b-badge>
+              </h4>
             </li>
           </ul>
         </li>
-        <li v-if="!fieldOpen && address && !loading">
+        <li v-if="!fieldOpen && address && !loading" class="action-btn">
           <a href="#" class="text-danger px-2" @click.prevent="onRemoveAddressClick">remove address</a>
         </li>
-        <li v-if="!fieldOpen && !address && !loading">
+        <li v-if="!fieldOpen && !address && !loading" class="action-btn">
           <a href="#" class="text-info px-2" @click.prevent="onSetAddressClick">set address</a>
         </li>
-        <li v-if="fieldOpen">
+        <li v-if="fieldOpen" class="action-btn">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
             <spinner2 v-if="loading" color="text-info" message="saving..."/>
             <span v-else class="text-info">save</span>
