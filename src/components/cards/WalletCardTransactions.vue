@@ -13,7 +13,7 @@
             <span>Operation - ID: {{ operation.id }}<br></span>
             <span v-if="operation.amount">
               Amount:
-              <span :class="{ info: operation.amount >= 0, error: operation.amount < 0}">
+              <span :class="{ 'text-success': operation.amount >= 0, 'text-danger': operation.amount < 0}">
                 {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
               </span>
               <br>
