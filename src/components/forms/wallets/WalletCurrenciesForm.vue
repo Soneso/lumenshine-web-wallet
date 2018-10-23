@@ -37,17 +37,20 @@
         <small>Balance: <span class="font-weight-600">{{ removeFieldBalance.balance.format() }} {{ removeFieldBalance.type }}</span></small>
         <small v-if="!removeFieldBalance.balance.equal('0')" class="text-danger d-block py-3"><br>Balance is not zero. If you remove this currency, your credits will also be removed.</small>
 
-        <b-form-group label-for="nameInput_1">
+        <b-form-group>
           <b-form-input
             id="nameInput_1"
             :class="{ error: $v.password.$error }"
             :state="!$v.password.$error"
+            :type="password1IsHidden ? 'password' : 'text'"
             v-model="password"
             aria-describedby="inputLiveNameFeedback_1"
-            type="password"
             placeholder="Password"
             required
             @blur="$v.password.$touch()"/>
+
+          <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
           <b-form-invalid-feedback id="inputLiveNameFeedback_1">
             <template v-if="$v.password.$error" class="field-errors">
               <template v-if="!$v.password.required">Password is required <br></template>
@@ -119,17 +122,20 @@
             </b-form-text>
           </b-form-group>
 
-          <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+          <b-form-group v-if="canSignWithPassword">
             <b-form-input
               :id="`passwordInput_${uuid}`"
               :class="{ error: $v.password.$error }"
               :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
               :state="!$v.password.$error"
+              :type="password2IsHidden ? 'password' : 'text'"
               v-model="password"
-              type="password"
               placeholder="Password"
               required
               @blur="$v.password.$touch()"/>
+
+            <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field-errors">
                 <template v-if="!$v.password.required">Password is required! <br></template>
@@ -174,17 +180,20 @@
       </div>  <!--new currencies-->
       <div v-else> <!-- Known currencies -->
         <b-card v-if="openedKnownCurrency" class="flat-card">
-          <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+          <b-form-group v-if="canSignWithPassword">
             <b-form-input
               :id="`passwordInput_${uuid}`"
               :class="{ error: $v.password.$error }"
               :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
               :state="!$v.password.$error"
+              :type="password3IsHidden ? 'password' : 'text'"
               v-model="password"
-              type="password"
               placeholder="Your password"
               required
               @blur="$v.password.$touch()"/>
+
+            <password-assets :password="['password3IsHidden', password3IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field-errors">
                 <template v-if="!$v.password.required">Password is required! <br></template>
@@ -256,10 +265,12 @@ import validators from '@/validators';
 import formMixin from '@/mixins/form';
 import spinner2 from '../../ui/spinner2';
 import copyToClipboard from '@/components/ui/copyToClipboard';
+import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: { spinner2, copyToClipboard },
-  mixins: [ formMixin ],
+  components: { passwordAssets, spinner2, copyToClipboard },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {
       type: Boolean,
@@ -289,7 +300,10 @@ export default {
       openedKnownCurrency: null,
       signer: null,
       signerSeed: '',
-      newCurrency: ''
+      newCurrency: '',
+      password1IsHidden: true,
+      password2IsHidden: true,
+      password3IsHidden: true
     };
   },
   computed: {

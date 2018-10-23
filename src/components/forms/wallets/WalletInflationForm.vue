@@ -46,17 +46,19 @@
             </b-form-text>
           </b-form-group>
 
-          <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+          <b-form-group v-if="canSignWithPassword">
             <b-form-input
               :id="`passwordInput_${uuid}`"
               :class="{ error: $v.password.$error }"
               :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
               :state="!$v.password.$error"
               v-model="password"
-              type="password"
+              :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Your password"
               required
               @blur="$v.password.$touch()"/>
+            <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
                 <template v-if="!$v.password.required">Password is required! <br></template>
@@ -121,17 +123,20 @@
             </b-row>
 
             <div v-if="openedKnownDestination === destination" class="pt-4 pb-1">
-              <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+              <b-form-group v-if="canSignWithPassword">
                 <b-form-input
                   :id="`passwordInput_${uuid}`"
                   :class="{ error: $v.password.$error }"
                   :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
                   :state="!$v.password.$error"
                   v-model="password"
-                  type="password"
+                  :type="password2IsHidden ? 'password' : 'text'"
                   placeholder="Your password"
                   required
                   @blur="$v.password.$touch()"/>
+
+                <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
                 <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
                   <template v-if="$v.password.$error" class="field__errors">
                     <template v-if="!$v.password.required">Password is required! <br></template>
@@ -190,11 +195,13 @@ import formMixin from '@/mixins/form';
 import validators from '@/validators';
 import spinner2 from '@/components/ui/spinner2';
 import copyToClipboard from '@/components/ui/copyToClipboard';
+import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
   name: 'WalletInflationForm',
-  components: { spinner2, copyToClipboard },
-  mixins: [ formMixin ],
+  components: { passwordAssets, spinner2, copyToClipboard },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {
       type: Boolean,
@@ -223,6 +230,8 @@ export default {
 
       signer: null,
       signerSeed: '',
+      password1IsHidden: true,
+      password2IsHidden: true,
     };
   },
   computed: {
