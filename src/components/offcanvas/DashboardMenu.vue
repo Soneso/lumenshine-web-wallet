@@ -68,15 +68,17 @@
         <div class="submenu">
           <ul>
             <li>
-              <router-link to="/change-password">
+              <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
+                 @click.stop.prevent="switchToChangePasswordView">
                 <div>Change Password</div>
-              </router-link>
+              </a>
             </li>
 
             <li>
-              <router-link to="/change-tfa">
+              <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
+                 @click.stop.prevent="switchToChange2faView">
                 <div>Change 2FA Secret</div>
-              </router-link>
+              </a>
             </li>
 
             <li>
@@ -113,7 +115,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 import config from '@/config';
 import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
@@ -122,7 +124,7 @@ export default {
   mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
-    ...mapGetters(['offCanvasMenuOpen', 'userStatus', 'authToken']),
+    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken']),
     toggleText () {
       return {
         opacity: this.offCanvasMenuOpen ? 1 : 0
@@ -131,6 +133,22 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
+    ...mapMutations(['mutateChangePasswordStep', 'mutateChange2faStep']),
+
+    switchToChangePasswordView () {
+      if (this.changePasswordStep !== 'password') {
+        this.mutateChangePasswordStep('password');
+      }
+      this.$router.push({name: 'ChangePassword'});
+    },
+
+    switchToChange2faView () {
+      if (this.change2faStep !== 'password') {
+        this.mutateChange2faStep('password');
+      }
+      this.$router.push({name: 'ChangeTfa'});
+    },
+
     async onLogoutClick () {
       this.$store.commit('mutateOffCanvasMenuOpen', false);
       this.closeMenuAnimation();

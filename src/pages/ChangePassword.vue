@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 import workerCaller from '@/util/workerCaller';
 
@@ -49,9 +49,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'changePasswordStatus']),
+    ...mapGetters(['userAuthData', 'changePasswordStatus', 'changePasswordStep']),
     loading () {
       return this.inProgress || this.changePasswordStatus.loading;
+    }
+  },
+  watch: {
+    changePasswordStep () {
+      if (this.changePasswordStep === 'password') {
+        this.step = 'password';
+      }
+    },
+    step () {
+      if (this.step === 'error' || this.step === 'finish') {
+        this.mutateChangePasswordStep('');
+      }
     }
   },
   async created () {
@@ -67,6 +79,7 @@ export default {
     this.step = 'password';
   },
   methods: {
+    ...mapMutations(['mutateChangePasswordStep']),
     ...mapActions(['getUserAuthData', 'changePassword']),
     async onPasswordSubmitClick (currentPassword, newPassword) {
       this.inProgress = true;
@@ -133,7 +146,7 @@ export default {
       this.inProgress = false;
     },
     onDoneClick () {
-      this.$router.push({ name: 'Dashboard' });
+      this.$router.push({ name: 'Settings' });
     }
   }
 };

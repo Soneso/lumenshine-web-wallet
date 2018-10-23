@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 import workerCaller from '@/util/workerCaller';
 
@@ -50,9 +50,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userAuthData', 'resetTfaStatus', 'tfaData']),
+    ...mapGetters(['userAuthData', 'resetTfaStatus', 'tfaData', 'change2faStep']),
     loading () {
       return this.inProgress || this.resetTfaStatus.loading;
+    }
+  },
+  watch: {
+    change2faStep () {
+      if (this.change2faStep === 'password') {
+        this.step = 'password';
+      }
+    },
+    step () {
+      if (this.step === 'error' || this.step === 'finish') {
+        this.mutateChange2faStep('');
+      }
     }
   },
   async created () {
@@ -68,6 +80,7 @@ export default {
     this.step = 'password';
   },
   methods: {
+    ...mapMutations(['mutateChange2faStep']),
     ...mapActions(['getUserAuthData', 'resetTfa', 'confirmNewTfa']),
     async onPasswordSubmitClick (currentPassword) {
       this.inProgress = true;
@@ -126,7 +139,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
