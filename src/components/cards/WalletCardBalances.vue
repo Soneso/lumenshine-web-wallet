@@ -16,8 +16,8 @@
             <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
 
             <ul v-else>
-              <li v-for="item in balances" :key="'b' + item.type + item.issuer">
-                {{ item.balance }} <small>{{ item.type }}</small>
+              <li v-for="item in balances" :key="'b' + item.type + item.issuer" class="font-weight-300">
+                {{ item.balance }} <small class="font-weight-600">{{ item.type }}</small>
               </li>
             </ul>
 

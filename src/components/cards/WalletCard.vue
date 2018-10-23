@@ -7,8 +7,8 @@
             <span class="font-weight-700">{{ data.wallet_name }}</span>
             <span>WALLET</span>
           </h6>
-          <b-badge v-if="!data.stellar_data" variant="secondary" class="text-white font-weight-700 mb-3 text-uppercase">not funded</b-badge>
-          <b-badge v-else :variant="data.federation_address ? 'warning' : 'secondary'" class="text-white font-weight-700 mb-3">
+          <b-badge v-if="!data.stellar_data" variant="secondary" class="text-white font-weight-700 mb-2 text-uppercase">not funded</b-badge>
+          <b-badge v-else :variant="data.federation_address ? 'warning' : 'secondary'" class="text-white font-weight-700 mb-2">
             {{ data.federation_address || 'no short address' }}
           </b-badge>
         </b-col>
