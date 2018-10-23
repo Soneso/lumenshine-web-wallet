@@ -35,6 +35,7 @@
                   <template v-if="$v.address.$error" class="field__errors">
                     <template v-if="!$v.address.required">Wallet address is required</template>
                     <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
+                    <template v-if="!$v.address.noStar">The character '*' is not allowed</template>
                   </template>
                 </b-form-invalid-feedback>
                 <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
@@ -126,6 +127,8 @@ export default {
   methods: {
     onCancelClick () {
       this.fieldOpen = false;
+      this.address = '';
+      this.$v.$reset();
     },
     onSetAddressClick () {
       this.fieldOpen = true;
@@ -148,6 +151,7 @@ export default {
       address: {
         required,
         uniqueAddress: value => this.backendQuery.address !== value || !this.errors.find(err => err.error_code === 1017),
+        noStar: value => /^[^*]*$/.test(value)
       }
     };
   }
