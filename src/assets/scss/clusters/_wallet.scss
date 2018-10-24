@@ -1,0 +1,58 @@
+.balance-row {
+  @extend .small-gutter;
+}
+
+.balance-line {
+  @extend .no-gutter;
+}
+
+.balance-list {
+  @extend .mb-2;
+
+  &:nth-child(1) {
+    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+      > div {
+        .card-normal & {
+          width: calc(100% - .5rem);
+        }
+        .card-wide & {
+          width: calc(100% - 1rem);
+        }
+      }
+    }
+  }
+
+  &:nth-child(3) {
+    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+      padding-left: 1.25rem !important;
+    }
+  }
+
+  &:nth-child(4) {
+    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+      padding-left: 1.5rem !important;
+    }
+  }
+
+  > div {
+    @extend
+      .rounded-box-md,
+      .p-2,
+      .font-weight-200,
+      .text-uppercase;
+
+    &.bg-success,
+    &.bg-danger {
+      @extend .text-white;
+    }
+  }
+
+  ul, p {
+    small {
+      opacity: .5;
+    }
+  }
+
+  &.current {}
+  &.available {}
+}

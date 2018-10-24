@@ -55,14 +55,13 @@
 @import "molecules/spinner1";
 @import "molecules/spinner2";
 @import "molecules/loading-indicator";
-@import "molecules/add-wallet";
-@import "molecules/balance-list";
+@import "molecules/add-wallet-button";
 
 // clusters
 @import "clusters/app";
 @import "clusters/offcanvas-menu";
 @import "clusters/modal";
-@import "clusters/wallet-details";
+@import "clusters/wallet";
 
 
 // pages
@@ -70,6 +69,6 @@
 
 
 // popups
-@import "popups/details";
+@import "popups/wallet-details";
 
 // responsiveness

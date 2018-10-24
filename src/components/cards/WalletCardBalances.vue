@@ -1,47 +1,50 @@
 <template>
   <b-row class="balance-row">
-    <b-col v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)" cols="12" class="px-4">
+    <b-col v-for="balanceLine in balanceRows" :key="JSON.stringify(balanceLine)" cols="12">
       <b-row class="balance-line">
         <template v-for="balances in balanceLine">
 
-          <b-col :class="data.stellar_data ? 'bg-success' : 'bg-danger'"
-                 :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
+          <b-col :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
                  :cols="data.stellar_data ? 12 : 10"
                  :sm="data.stellar_data ? 6 : 5"
                  :md="data.stellar_data ? (wideCard ? 6 : 12) : 9"
                  :lg="data.stellar_data ? (wideCard ? 3 : 6) : 5"
-                 class="balance-list current mb-2">
+                 class="balance-list current">
 
-            <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
-            <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
+            <div :class="data.stellar_data ? 'bg-success' : 'bg-danger'">
+              <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
+              <p v-if="!data.stellar_data">{{ new Amount('0').format() }} <small>XLM</small></p>
 
-            <ul v-else>
-              <li v-for="item in balances" :key="'b' + item.type + item.issuer" class="font-weight-300">
-                {{ item.balance }} <small class="font-weight-600">{{ item.type }}</small>
-              </li>
-            </ul>
+              <ul v-else>
+                <li v-for="item in balances" :key="'b' + item.type + item.issuer" class="font-weight-300">
+                  {{ item.balance }} <small class="font-weight-600">{{ item.type }}</small>
+                </li>
+              </ul>
+            </div>
 
           </b-col>
 
           <b-col v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
                  :md="wideCard ? 6 : 12"
                  :lg="wideCard ? 3 : 6"
-                 :class="['balance-list', 'available', 'mb-2', {'pl-sm-3 pl-md-2 pl-lg-3': !wideCard, 'pl-sm-3': wideCard}]"
+                 :class="['balance-list', 'available', {'pl-sm-3 pl-md-2 pl-lg-3': !wideCard, 'pl-sm-3': wideCard}]"
                  cols="12"
                  sm="6">
 
-            <h6 class="text-info">Available</h6>
+            <div>
+              <h6 class="text-info">Available</h6>
 
-            <ul>
-              <li v-for="item in balances" :key="'a' + item.type + item.issuer">
-                {{ item.available }} <small>{{ item.type }}</small>
-                <i
-                  v-b-popover.hover.html="() => getAvailablePopup(item)"
-                  v-if="item.available !== item.balance"
-                  :title="`Available ${item.type}`"
-                  class="icon-help"/>
-              </li>
-            </ul>
+              <ul>
+                <li v-for="item in balances" :key="'a' + item.type + item.issuer">
+                  {{ item.available }} <small>{{ item.type }}</small>
+                  <i
+                    v-b-popover.hover.html="() => getAvailablePopup(item)"
+                    v-if="item.available !== item.balance"
+                    :title="`Available ${item.type}`"
+                    class="icon-help"/>
+                </li>
+              </ul>
+            </div>
 
           </b-col>
 
