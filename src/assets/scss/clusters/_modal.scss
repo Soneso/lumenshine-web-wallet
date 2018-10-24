@@ -1,16 +1,3 @@
-.modal {
-  &.show {}
-
-  .modal-dialog {
-    &.modal-sm {}
-
-    &.modal-md {}
-
-    &.modal-lg {}
-
-  }
-}
-
 .modal-header {
   @extend .text-center;
 
@@ -27,10 +14,6 @@
   @extend .text-info, .font-weight-600, .w-100;
   font-size: 1rem
 }
-
-.modal-body {}
-
-.modal-footer {}
 
 .modal-backdrop {
   background: -moz-linear-gradient(top, rgba($white, .5) 0%, rgba($black, .5) 15rem, rgba($black, .5) 100%);
