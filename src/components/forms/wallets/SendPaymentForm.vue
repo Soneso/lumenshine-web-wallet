@@ -186,7 +186,7 @@
             </div>
 
             <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
-              <spinner2 v-if="loading"/>
+              <spinner v-if="loading" message="Sending..."/>
               <span v-else>Send {{ currentAssetCode }}</span>
             </b-button>
           </div>
@@ -238,11 +238,11 @@ import formMixin from '@/mixins/form';
 import balanceMixin from '@/mixins/balance';
 import validators from '@/validators';
 
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 
 export default {
   name: 'SendPaymentForm',
-  components: {spinner2},
+  components: {spinner},
   mixins: [ formMixin, balanceMixin ],
   props: {
     data: {

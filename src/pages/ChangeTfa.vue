@@ -3,9 +3,8 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
         <h3 class="form-headline pb-3 text-center">Change 2FA Secret</h3>
-        <transition v-if="inProgress" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <spinner v-if="inProgress" align="center"/>
+
         <template v-if="step === 'password'" v-show="!loading">
           <change-tfa-password-form :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>
         </template>
@@ -39,9 +38,10 @@ import workerCaller from '@/util/workerCaller';
 
 import changeTfaPasswordForm from '@/components/forms/ChangeTfaPasswordForm';
 import changeTfaForm from '@/components/forms/ChangeTfaForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { changeTfaPasswordForm, changeTfaForm },
+  components: { changeTfaPasswordForm, changeTfaForm, spinner },
   data () {
     return {
       inProgress: false,

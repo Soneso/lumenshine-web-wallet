@@ -14,26 +14,29 @@
           <copy-to-clipboard :text="secretSeed" color="text-info"/>
         </template>
       </span>
-      <spinner2 v-if="loading" color="text-info" message="revealing..." width="100"/>
+      <spinner v-if="loading" message="revealing..." width="100"/>
     </div>
 
     <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
 
     <b-card v-if="fieldOpen && !loading && !secretSeed" class="flat-card">
-      <b-form-group :label-for="`passwordInput_${uuid}`" label="Password">
+      <b-form-group>
         <b-form-input
+          v-model="password"
           :id="`passwordInput_${uuid}`"
           :class="{ error: $v.password.$error }"
           :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
           :state="!$v.password.$error"
-          v-model="password"
-          type="password"
+          :type="passwordIsHidden ? 'password' : 'text'"
           placeholder="Insert password to reveal"
           required
           @blur="$v.password.$touch()"/>
+
+        <password-assets :password="['passwordIsHidden', passwordIsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
         <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
           <template v-if="$v.password.$error" class="field__errors">
-            <template v-if="!$v.password.required">Password is required!</template>
+            <template v-if="!$v.password.required">Password is required! <br></template>
             <template v-if="!$v.password.decryptValid">Wrong password!</template>
           </template>
         </b-form-invalid-feedback>
@@ -56,12 +59,14 @@ import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
 
-import Spinner2 from '@/components/ui/spinner2';
-import CopyToClipboard from '@/components/ui/copyToClipboard';
+import spinner from '@/components/ui/spinner1';
+import copyToClipboard from '@/components/ui/copyToClipboard';
+import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: {Spinner2, CopyToClipboard},
-  mixins: [ formMixin ],
+  components: { passwordAssets, spinner, copyToClipboard },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {
       type: Boolean,
@@ -80,6 +85,7 @@ export default {
     return {
       fieldOpen: false,
       password: '',
+      passwordIsHidden: true
     };
   },
   methods: {

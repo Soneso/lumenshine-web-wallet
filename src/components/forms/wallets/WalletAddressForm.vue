@@ -10,8 +10,12 @@
         <span class="text-danger">none</span><br>
         <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
       </span>
-      <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
-      <spinner2 v-if="loading && removingWallet" color="text-warning"/>
+      <h5 v-else-if="!fieldOpen">
+        <b-badge id="wallet-domain-name" variant="warning" class="text-white">
+          {{ address }}*{{ config.FEDERATION_DOMAIN }}
+        </b-badge>
+      </h5>
+      <spinner v-if="loading && removingWallet" variant="warning"/>
     </div>
 
     <b-card v-if="fieldOpen && !loading" class="flat-card">
@@ -60,7 +64,7 @@
         </li>
         <li v-if="fieldOpen" class="action-btn">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
-            <spinner2 v-if="loading" color="text-info" message="saving..."/>
+            <spinner v-if="loading" message="saving..."/>
             <span v-else class="text-info">save</span>
           </a>
         </li>
@@ -76,7 +80,7 @@ import formMixin from '@/mixins/form';
 
 import config from '@/config';
 
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 
 function stripDomain (text) {
   return text.replace('*' + config.FEDERATION_DOMAIN, '');
@@ -84,7 +88,7 @@ function stripDomain (text) {
 
 export default {
   name: 'WalletAddressForm',
-  components: { spinner2 },
+  components: { spinner },
   mixins: [ formMixin ],
   props: {
     loading: {

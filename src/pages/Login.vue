@@ -2,11 +2,8 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 class="form-headline text-uppercase pl-2">Login</h4>
-        <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
-        <transition v-if="inProgress" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <h4 class="form-headline text-uppercase pl-2 pb-4">Log in</h4>
+        <spinner v-if="inProgress" align="center"/>
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
     </b-col>
@@ -21,13 +18,14 @@ import LoginForm from '@/components/forms/auth/LoginForm';
 import CryptoHelper from '@/helpers/CryptoHelper';
 
 import redirectHandler from '@/util/redirectHandler';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { LoginForm },
+  components: { LoginForm, spinner },
   data () {
     return {
       inProgress: false,
-      decryptError: false,
+      decryptError: false
     };
   },
   computed: {

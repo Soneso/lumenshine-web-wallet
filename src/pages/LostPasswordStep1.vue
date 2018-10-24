@@ -3,9 +3,8 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
         <p class="form-headline pb-3">Lost Password</p>
-        <transition v-if="loading" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <spinner v-if="inProgress" align="center"/>
+
         <template v-if="emailSuccess">
           <small class="text-success">Password lost email sent</small>
           <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>
@@ -26,9 +25,10 @@ import { mapActions, mapGetters } from 'vuex';
 
 import lostPasswordEmailForm from '@/components/forms/auth/LostPasswordEmailForm';
 import confirmEmailForm from '@/components/forms/auth/ConfirmEmailForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { lostPasswordEmailForm, confirmEmailForm },
+  components: { lostPasswordEmailForm, confirmEmailForm, spinner },
   data () {
     return {
       inProgress: false,

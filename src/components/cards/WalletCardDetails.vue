@@ -118,7 +118,7 @@
     <b-row class="pb-2">
       <b-col>
         <h6 class="mb-3">Transactions</h6>
-        <wallet-card-transactions :data="data" @openOperationsModal="data => $emit('openOperationsModal', data)"/>
+        <wallet-card-transactions :data="data"/>
       </b-col>
     </b-row>
   </div>

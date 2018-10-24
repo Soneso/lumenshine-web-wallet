@@ -439,7 +439,7 @@
       </b-form-checkbox>
       <b-button :disabled="agreed !== 'accepted'" :variant="agreed !== 'accepted' ? 'secondary' : 'success'" type="submit" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
       <br>
-      <small class="text-gray-500">Already have an account? Login <router-link to="/login">here</router-link></small>
+      <small class="text-gray-500">Already have an account? Log in <router-link to="/login">here</router-link></small>
     </div>
   </form>
 </template>

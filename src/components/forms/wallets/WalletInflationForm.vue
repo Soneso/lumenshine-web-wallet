@@ -37,7 +37,7 @@
               @blur="$v.destination.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveDestinationFeedback_${uuid}`">
               <template v-if="$v.destination.$error" class="field__errors">
-                <template v-if="!$v.destination.required">Wallet destination is required</template>
+                <template v-if="!$v.destination.required">Wallet destination is required <br></template>
                 <template v-if="!$v.destination.publicKey">Not valid public key!</template>
               </template>
             </b-form-invalid-feedback>
@@ -46,20 +46,22 @@
             </b-form-text>
           </b-form-group>
 
-          <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+          <b-form-group v-if="canSignWithPassword">
             <b-form-input
               :id="`passwordInput_${uuid}`"
               :class="{ error: $v.password.$error }"
               :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
               :state="!$v.password.$error"
               v-model="password"
-              type="password"
+              :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Your password"
               required
               @blur="$v.password.$touch()"/>
+            <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
-                <template v-if="!$v.password.required">Password is required!</template>
+                <template v-if="!$v.password.required">Password is required! <br></template>
                 <template v-if="!$v.password.decryptValid">Wrong password!</template>
               </template>
             </b-form-invalid-feedback>
@@ -81,7 +83,7 @@
               @blur="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field__errors">
-                <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
                 <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
               </template>
             </b-form-invalid-feedback>
@@ -95,7 +97,7 @@
             <template v-else>
               <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
               <a href="#" class="text-info px-2" @click.prevent="onSubmitClick">
-                <spinner2 v-if="loading" color="text-info" message="settings inflation..."/>
+                <spinner v-if="loading" width="140" message="settings inflation..."/>
                 <span v-else>submit</span>
               </a>
             </template>
@@ -121,20 +123,23 @@
             </b-row>
 
             <div v-if="openedKnownDestination === destination" class="pt-4 pb-1">
-              <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+              <b-form-group v-if="canSignWithPassword">
                 <b-form-input
                   :id="`passwordInput_${uuid}`"
                   :class="{ error: $v.password.$error }"
                   :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
                   :state="!$v.password.$error"
                   v-model="password"
-                  type="password"
+                  :type="password2IsHidden ? 'password' : 'text'"
                   placeholder="Your password"
                   required
                   @blur="$v.password.$touch()"/>
+
+                <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
                 <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
                   <template v-if="$v.password.$error" class="field__errors">
-                    <template v-if="!$v.password.required">Password is required!</template>
+                    <template v-if="!$v.password.required">Password is required! <br></template>
                     <template v-if="!$v.password.decryptValid">Wrong password!</template>
                   </template>
                 </b-form-invalid-feedback>
@@ -156,7 +161,7 @@
                   @blur="$v.signerSeed.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
                   <template v-if="$v.signerSeed.$error" class="field__errors">
-                    <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                    <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
                     <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
                   </template>
                 </b-form-invalid-feedback>
@@ -167,7 +172,7 @@
 
               <small class="d-block mb-3 font-italic">Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</small>
               <div>
-                <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
+                <spinner v-if="loading" message="adding..." width="90"/>
                 <div v-else>
                   <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
                   <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
@@ -178,7 +183,7 @@
         </b-list-group>
       </div>
     </div>
-    <spinner2 v-if="loading" color="text-info"/>
+    <spinner v-if="loading"/>
     <br>
   </b-form>
 </template>
@@ -188,13 +193,15 @@ import { required } from 'vuelidate/lib/validators';
 
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 import copyToClipboard from '@/components/ui/copyToClipboard';
+import passwordAssets from '@/components/ui/passwordAssets';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
   name: 'WalletInflationForm',
-  components: { spinner2, copyToClipboard },
-  mixins: [ formMixin ],
+  components: { passwordAssets, spinner, copyToClipboard },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {
       type: Boolean,
@@ -223,6 +230,8 @@ export default {
 
       signer: null,
       signerSeed: '',
+      password1IsHidden: true,
+      password2IsHidden: true,
     };
   },
   computed: {

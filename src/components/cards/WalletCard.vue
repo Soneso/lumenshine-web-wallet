@@ -65,14 +65,8 @@
         @setInflationDestination="onSetInflationDestination"
         @addCurrency="onAddCurrency"
         @removeCurrency="onRemoveCurrency"
-        @openOperationsModal="data => {operationDetailsModalData = data, operationDetailsModalVisible = true}"
+        @openOperationDetails="data => {operationDetailsModalData = data}"
         @close="detailsModalVisible = false"/>
-    </b-modal>
-
-    <b-modal v-model="operationDetailsModalVisible" title="Operation details">
-      <pre>
-        {{ JSON.stringify(operationDetailsModalData, null, 2) }}
-      </pre>
     </b-modal>
 
     <b-modal v-model="fundWalletModalVisible" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" size="sm" hide-footer>
@@ -167,9 +161,6 @@ export default {
       receiveModalVisible: false,
       sendModalVisible: false,
       detailsModalVisible: false,
-      operationDetailsModalVisible: false,
-
-      operationDetailsModalData: null,
 
       config
     };

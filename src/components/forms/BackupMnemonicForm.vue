@@ -5,7 +5,7 @@
         <span class="font-weight-500">Your Secret (24 words mnemonic)</span>
         <a v-if="!fieldOpen && !mnemonic" href="#" @click.prevent="onRevealClick">reveal</a>
         <a v-if="fieldOpen && !mnemonic" href="#" class="text-secondary" @click.prevent="onCancelClick">
-          <spinner2 v-if="loading" color="text-secondary"/>
+          <spinner v-if="loading" variant="secondary"/>
           <template v-else>cancel</template>
         </a>
         <a v-if="!!mnemonic" href="#" @click.prevent="onHideClick">hide</a>
@@ -51,7 +51,7 @@
         </b-form-group>
 
         <b-button v-if="fieldOpen && !mnemonic" variant="info" class="text-uppercase btn-rounded" @click.prevent="onSubmitClick">
-          <spinner2 v-if="loading" color="text-info" width="100" message="Revealing..."/>
+          <spinner v-if="loading" width="100" message="Revealing..."/>
           <span v-else>reveal</span>
         </b-button>
       </b-col>
@@ -65,12 +65,12 @@ import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityStat
 
 import { required } from 'vuelidate/lib/validators';
 
-import spinner2 from '@/components/ui/spinner2.vue';
+import spinner from '@/components/ui/spinner1.vue';
 import passwordAssets from '@/components/ui/passwordAssets';
 
 export default {
   name: 'BackupMnemonicForm',
-  components: { passwordAssets, spinner2 },
+  components: { passwordAssets, spinner },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {

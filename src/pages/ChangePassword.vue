@@ -3,9 +3,8 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
         <h4 :class="['form-headline', 'text-uppercase', {'text-center': step === 'finish' || step === 'error'}]">Change Password</h4>
-        <transition v-if="inProgress" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <spinner v-if="inProgress" align="center"/>
+
         <template v-if="step === 'password'">
           <change-password-form v-show="!loading" :loading="loading" :errors="changePasswordStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>
         </template>
@@ -37,10 +36,11 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 import workerCaller from '@/util/workerCaller';
 
 import changePasswordForm from '@/components/forms/ChangePasswordForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
   name: 'ChangePassword',
-  components: { changePasswordForm },
+  components: { changePasswordForm, spinner },
   data () {
     return {
       inProgress: false,

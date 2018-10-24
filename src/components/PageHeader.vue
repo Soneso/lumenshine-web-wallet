@@ -14,12 +14,11 @@
             <div class="logo">
               <img id="logo" src="../assets/images/ui/logo.svg">
             </div>
-            <div class="text pl-3 pt-3 mt-2  d-none d-sm-block">
-              <h1>{{ config.APP_TITLE }}</h1>
-              <h2 :class="['mb-1', {'text-uppercase': registrationComplete}]">{{ config.APP_SUBTITLE }}</h2>
+            <div class="text">
+              <h1 class="title">{{ config.APP_TITLE }}</h1>
+              <h2 class="subtitle">{{ config.APP_SUBTITLE }}</h2>
               <div v-if="registrationComplete">
                 <currency-ticker/>
-                <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
               </div>
             </div>
             <div v-if="$route.name === 'Wallets'" class="add-wallet">

@@ -1,8 +1,6 @@
 <template>
   <section>
-    <transition v-if="wallets.loading" name="fade">
-      <div class="loading-indicator">Loading...</div>
-    </transition>
+    <spinner v-if="wallets.loading" align="center"/>
 
     <b-row align-h="start" class="equal-heights">
       <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
@@ -22,11 +20,12 @@ import config from '@/config';
 
 import WalletCard from '@/components/cards/WalletCard';
 import AddWalletForm from '@/components/forms/wallets/AddWalletForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { WalletCard, AddWalletForm },
+  components: { WalletCard, AddWalletForm, spinner },
   data () {
     return {
       nextFreePublicKey: null,

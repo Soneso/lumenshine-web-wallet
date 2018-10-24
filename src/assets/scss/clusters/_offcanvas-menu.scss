@@ -89,7 +89,7 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     }
 
     &:not(.user-section) {
-      @extend %offcanvas-hoverings;
+      @extend %link-hoverings;
 
       &:hover {
         background: rgba($white, .1)
@@ -141,13 +141,14 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
   }
 
   a {
-    @extend .d-flex, .px-3, .py-2;
-    font-weight: 200;
-    color: $white;
+    @extend .d-flex, .px-3, .py-2, .text-uppercase;
+    font-weight: 600;
+    font-size: .8rem;
+    color: rgba($white, .75);
 
     &:hover,
     &:focus {
-      color: $gray-100
+      color: $white
     }
   }
 

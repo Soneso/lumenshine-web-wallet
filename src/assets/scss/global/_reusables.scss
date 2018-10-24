@@ -1,16 +1,8 @@
 %link-hoverings {
-  transition: all .7s ease;
+  transition: all .5s ease;
 
   &:hover {
-    transition: all .35s ease
-  }
-}
-
-%offcanvas-hoverings {
-  transition: all .75s ease;
-
-  &:hover {
-    transition: all .25s ease
+    transition: all .15s ease
   }
 }
 

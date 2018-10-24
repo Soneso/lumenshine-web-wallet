@@ -1,6 +1,6 @@
 <template>
   <span>
-    <a v-clipboard:copy="text" v-b-tooltip="message" :id="`tooltip-${now}`" @click.prevent="showTooltip">
+    <a v-clipboard:copy="text" v-b-tooltip="message" :id="tooltipId" @click.prevent="showTooltip(tooltipId)">
       <i :class="['icon-copy', color]"/>
     </a>
   </span>
@@ -23,20 +23,41 @@ export default {
       type: String,
       required: false,
       default: 'text-info'
+    },
+    tuneWith: {
+      type: String,
+      required: false
     }
   },
-  data () {
-    return {
-      now: new Date().getTime()
-    };
+  computed: {
+    tooltipId () {
+      let id = `tooltip-${new Date().getTime()}`;
+      if (this.tuneWith) {
+        id += `-${this.tuneWith}`;
+      }
+      return id;
+    }
   },
   mounted () {
-    this.$root.$emit('bv::disable::tooltip', `tooltip-${this.now}`);
+    this.disableTooltips();
+  },
+  destroyed () {
+    this.disableTooltips();
   },
   methods: {
-    showTooltip () {
-      this.$root.$emit('bv::enable::tooltip', `tooltip-${this.now}`);
-      this.$root.$emit('bv::show::tooltip', `tooltip-${this.now}`);
+    showTooltip (id) {
+      this.disableTooltips();
+      this.$root.$emit('bv::enable::tooltip', id);
+      this.$root.$emit('bv::show::tooltip', id);
+      setTimeout(() => { this.disableTooltip(id); }, 3e3);
+    },
+    disableTooltip (id) {
+      this.$root.$emit('bv::disable::tooltip', id);
+      this.$root.$emit('bv::hide::tooltip', id);
+    },
+    disableTooltips () {
+      this.$root.$emit('bv::disable::tooltip');
+      this.$root.$emit('bv::hide::tooltip');
     }
   }
 };
