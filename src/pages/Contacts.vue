@@ -31,6 +31,7 @@
             <hr class="divider">
           </b-col>
         </b-row>
+        <p v-if="filteredContacts.length === 0">No results</p>
 
         <b-modal v-model="addModalVisible" hide-footer size="sm" title="New contact">
           <edit-contact-form
