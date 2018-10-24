@@ -24,7 +24,7 @@
             <b-row>
               <b-col class="text-right">
                 <b-button variant="outline-info" size="sm" class="btn-rounded" @click="() => onEditClick(contact.id)">Edit</b-button>
-                <b-button variant="outline-info" size="sm" class="btn-rounded" @click="() => onSendPaymentClick(contact.id)">Send Payment</b-button>
+                <b-button variant="outline-info" size="sm" class="btn-rounded" @click="() => onOpenSendPaymentClick(contact.id)">Send Payment</b-button>
               </b-col>
             </b-row>
 
@@ -32,7 +32,7 @@
           </b-col>
         </b-row>
 
-        <b-modal v-model="addModalVisible" hide-footer title="New contact">
+        <b-modal v-model="addModalVisible" hide-footer size="sm" title="New contact">
           <edit-contact-form
             v-if="addModalVisible"
             :loading="addContactStatus.loading"
@@ -40,7 +40,7 @@
             @close="addModalVisible = false"/>
         </b-modal>
 
-        <b-modal v-model="editModalVisible" hide-footer title="Edit contact">
+        <b-modal v-model="editModalVisible" hide-footer size="sm" title="Edit contact">
           <edit-contact-form
             v-if="editModalVisible"
             :contact="contacts.res.find(c => c.id === editingContact)"
@@ -48,6 +48,22 @@
             @edit="onEditContact"
             @remove="onRemoveContact"
             @close="editModalVisible = false"/>
+        </b-modal>
+
+        <b-modal v-model="sendModalVisible" hide-footer size="sm" title="Send">
+          <send-payment-form
+            v-if="sendModalVisible && availableWallets.length > 0"
+            :result="sendPaymentStatus.res"
+            :loading="sendPaymentStatus.loading || decryptedWallet.loading"
+            :errors="sendPaymentStatus.err"
+            :exchanges="exchanges"
+            :transaction="sendPaymentTransaction"
+            :available-wallets="availableWallets"
+            :contact="contacts.res.find(c => c.id === selectedContact)"
+            @reset="resetSendPayment"
+            @close="sendModalVisible = false"
+            @submit="onSendPaymentClick"/>
+          <span v-else-if="sendModalVisible && availableWallets.length === 0">Can not send payment, please fund your wallet first.</span>
         </b-modal>
 
       </b-card>
@@ -59,22 +75,26 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import EditContactForm from '@/components/forms/contacts/EditContactForm';
+import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import validators from '@/validators';
 
 export default {
   name: 'Contacts',
-  components: { EditContactForm },
+  components: { EditContactForm, SendPaymentForm },
   data () {
     return {
       addModalVisible: false,
       editModalVisible: false,
+      sendModalVisible: false,
 
       editingContact: null,
       searchField: '',
+
+      selectedContact: null,
     };
   },
   computed: {
-    ...mapGetters(['contacts', 'addContactStatus', 'editContactStatus', 'removeContactStatus']),
+    ...mapGetters(['contacts', 'addContactStatus', 'editContactStatus', 'removeContactStatus', 'wallets', 'exchanges', 'sendPaymentStatus', 'decryptedWallet', 'transactions']),
 
     filteredContacts () {
       if (this.searchField === '') {
@@ -82,12 +102,26 @@ export default {
       }
       return this.contacts.res.filter(contact => contact.contact_name.includes(this.searchField) || contact.stellar_address.includes(this.searchField) || contact.public_key.includes(this.searchField));
     },
+
+    availableWallets () {
+      return this.wallets.res.filter(wallet => {
+        if (!wallet.stellar_data) return false;
+        return true;
+      });
+    },
+
+    sendPaymentTransaction () {
+      if (!this.sendPaymentStatus.res) return;
+      const transactionId = this.sendPaymentStatus.res.transactionId;
+      return this.transactions.find(tr => tr.id === transactionId);
+    },
   },
-  async created () {
-    await this.getContacts();
+  created () {
+    this.getContacts();
+    this.getWallets();
   },
   methods: {
-    ...mapActions(['getContacts', 'addContact', 'editContact', 'removeContact']),
+    ...mapActions(['getContacts', 'addContact', 'editContact', 'removeContact', 'getWallets', 'sendPayment', 'resetSendPayment']),
 
     async onAddContact ({ contactName, address }) {
       const hasFederationAddress = validators.federationAddress().federationAddress(address);
@@ -126,7 +160,13 @@ export default {
       }
     },
 
-    onSendPaymentClick () {
+    onOpenSendPaymentClick (contactId) {
+      this.selectedContact = contactId;
+      this.sendModalVisible = true;
+    },
+
+    async onSendPaymentClick (data) {
+      await this.sendPayment(data);
     },
   }
 };

@@ -43,7 +43,6 @@
     <b-modal v-model="sendModalVisible" hide-footer size="sm" title="Send">
       <send-payment-form
         v-if="sendModalVisible && data && balances"
-        :balances="balances"
         :result="sendPaymentStatus.res"
         :loading="sendPaymentStatus.loading || decryptedWallet.loading"
         :data="data"
@@ -127,6 +126,7 @@ import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
 
 import Amount from '@/util/Amount';
+import balanceMixin from '@/mixins/balance';
 import ReceivePaymentForm from '@/components/forms/wallets/ReceivePaymentForm';
 import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
@@ -142,6 +142,7 @@ export default {
     WalletCardDetails,
     WalletCardBalances,
   },
+  mixins: [ balanceMixin ],
   props: {
     data: {
       type: Object,
@@ -178,33 +179,8 @@ export default {
     wideCard () {
       return this.balances.length > 3;
     },
-    minXLMBalance () {
-      if (!this.data.stellar_data) return new Amount('0');
-      const entryCount = this.data.stellar_data.subentry_count;
-      const baseReserve = 0.5;
-      const reserved = new Amount(`${(2 + entryCount) * baseReserve}`);
-      const xlmBalance = this.data.stellar_data.balances.find(b => b.asset_type === 'native');
-      const minBalance = xlmBalance.selling_liabilities ? reserved.minus(xlmBalance.selling_liabilities) : reserved;
-      return minBalance;
-    },
-    balances () {
-      if (!this.data.stellar_data) return [];
-      const balances = this.data.stellar_data.balances;
-      const xlmBalanceObject = balances.find(b => b.asset_type === 'native');
-      const xlmBalance = new Amount(xlmBalanceObject.balance);
-      const xlmAvailble = new Amount(xlmBalance).minus(this.minXLMBalance);
-
-      const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [
-        { balance: xlmBalance.format(), available: xlmAvailble.format(), type: 'XLM', sellingLiabilities: xlmBalanceObject.selling_liabilities },
-        ...otherBalances.map(bal => ({
-          balance: new Amount(bal.balance).format(),
-          available: bal.selling_liabilities ? new Amount(bal.balance).minus(bal.selling_liabilities).format() : new Amount(bal.balance).format(),
-          type: bal.asset_code,
-          issuer: bal.asset_issuer,
-          sellingLiabilities: bal.selling_liabilities,
-        }))
-      ];
+    currentWallet () {
+      return this.data;
     },
     sendPaymentTransaction () {
       if (!this.sendPaymentStatus.res) return;
@@ -239,7 +215,7 @@ export default {
       }, 2e3);
     },
     async onSendPaymentClick (data) {
-      await this.sendPayment({ ...data, publicKey: this.data.public_key_0 });
+      await this.sendPayment(data);
     },
     async onSetInflationDestination (data) {
       this.setInflationDestLoading = true;

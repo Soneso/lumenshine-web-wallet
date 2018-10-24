@@ -3,6 +3,14 @@
     <b-row align-h="center">
       <b-col cols="9">
         <div v-if="!result">
+          <template v-if="availableWallets.length > 1">
+            <b-form-group :label-for="`walletInput_${uuid}`" label="Wallet:">
+              <b-form-select :id="`walletInput_${uuid}`" v-model="selectedWallet" :options="walletOptions" required/>
+            </b-form-group>
+
+            <hr class="divider">
+          </template>
+
           <b-form-group :label-for="`assetCodeInput_${uuid}`" label="Currency:">
             <b-form-select :id="`assetCodeInput_${uuid}`" v-model="assetCode" :options="assetCodeOptions" required/>
             <small v-if="availableAmountToSend !== null">You have {{ availableAmountToSend }} {{ assetCode }} available</small>
@@ -183,6 +191,7 @@
             </b-button>
           </div>
         </div>
+
         <div v-else-if="result">
           <p><strong>Transaction result</strong></p>
           <p class="small">
@@ -214,6 +223,7 @@
             </b-button-group>
           </div>
         </div>
+
       </b-col>
     </b-row>
   </form>
@@ -225,6 +235,7 @@ import { required, decimal, maxLength } from 'vuelidate/lib/validators';
 import Amount from '@/util/Amount';
 
 import formMixin from '@/mixins/form';
+import balanceMixin from '@/mixins/balance';
 import validators from '@/validators';
 
 import spinner2 from '@/components/ui/spinner2';
@@ -232,19 +243,15 @@ import spinner2 from '@/components/ui/spinner2';
 export default {
   name: 'SendPaymentForm',
   components: {spinner2},
-  mixins: [ formMixin ],
+  mixins: [ formMixin, balanceMixin ],
   props: {
     data: {
       type: Object,
-      required: true,
+      default: null,
     },
     result: {
       type: Object,
       default: null,
-    },
-    balances: {
-      type: Array,
-      required: true,
     },
     loading: {
       type: Boolean,
@@ -257,6 +264,14 @@ export default {
     transaction: {
       type: Object,
       default: null,
+    },
+    availableWallets: { // used in contacts form when users needs to select one wallet
+      type: Array,
+      default: () => [],
+    },
+    contact: { // used to prefill forms with contact data
+      type: Object,
+      default: null,
     }
   },
   data () {
@@ -264,7 +279,7 @@ export default {
       showCopiedText: false,
       assetCode: 'XLM',
       customAssetCode: '',
-      recipient: '',
+      recipient: this.contact ? this.contact.stellar_address || this.contact.public_key : '',
       memo: '',
       memoType: 'MEMO_TEXT',
       amount: '',
@@ -279,10 +294,15 @@ export default {
 
       memoTypeOptions: [
         'MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN'
-      ]
+      ],
+
+      selectedWallet: 0, // used for contacts, where wallet should be selected on this form
     };
   },
   computed: {
+    currentWallet () {
+      return this.data || this.availableWallets[this.selectedWallet];
+    },
     memoPlaceholder () {
       switch (this.memoType) {
         case 'MEMO_TEXT':
@@ -303,9 +323,9 @@ export default {
       return this.assetCode === '_other' ? this.customAssetCode : this.assetCode;
     },
     uniqueCurrencies () {
-      if (!this.data.stellar_data) return [];
+      if (!this.currentWallet.stellar_data) return [];
       const obj = {};
-      this.data.stellar_data.balances.forEach(bal => {
+      this.currentWallet.stellar_data.balances.forEach(bal => {
         obj[bal.asset_code || 'XLM'] = true;
       });
       return Object.keys(obj);
@@ -315,13 +335,13 @@ export default {
       return this.balances.filter(b => b.type === this.assetCode);
     },
     signers () {
-      if (!this.data.stellar_data) return [];
-      const stellarData = this.data.stellar_data;
+      if (!this.currentWallet.stellar_data) return [];
+      const stellarData = this.currentWallet.stellar_data;
       const threshold = stellarData.thresholds.med_threshold;
       return stellarData.signers.filter(signer => signer.weight >= threshold);
     },
     canSignWithPassword () {
-      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
+      return !!this.signers.find(signer => signer.public_key === this.currentWallet.public_key_0);
     },
     assetCodeOptions () {
       return [
@@ -331,6 +351,9 @@ export default {
     },
     issuerOptions () {
       return this.currentAssetCodeBalances.map(bal => bal.asset_issuer);
+    },
+    walletOptions () {
+      return this.availableWallets.map((wallet, key) => ({ value: key, text: wallet.wallet_name }));
     },
     availableAmountToSend () {
       if (this.currentAssetCodeBalances.length === 0) {
@@ -352,9 +375,12 @@ export default {
   },
   watch: {
     assetCode (val) {
-      if (!this.data.stellar_data) return;
-      const balance = this.data.stellar_data.balances.find(b => b.asset_code === val);
+      if (!this.currentWallet.stellar_data) return;
+      const balance = this.currentWallet.stellar_data.balances.find(b => b.asset_code === val);
       this.issuer = balance ? balance.asset_issuer : '';
+    },
+    selectedWallet () {
+      this.assetCode = 'XLM';
     },
     recipient (recipient) {
       if (!this.exchanges[recipient] || !this.exchanges[recipient].memo) {
@@ -382,7 +408,7 @@ export default {
       if (this.sendItAll && amount !== this.sendItAllAmount) {
         this.sendItAll = false;
       }
-    }
+    },
   },
   created () {
     if (!this.canSignWithPassword) {
@@ -429,6 +455,7 @@ export default {
           signer: this.signer,
           signerSeed: this.signerSeed,
         }),
+        publicKey: this.currentWallet.public_key_0,
       };
       this.backendQuery = data;
 
