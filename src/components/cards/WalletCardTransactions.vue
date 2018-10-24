@@ -9,17 +9,20 @@
             <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
           </b-col>
           <b-col>
-            <span>Operation - Type: {{ operation.type }}<br></span>
-            <span>Operation - ID: {{ operation.id }}<br></span>
-            <span v-if="operation.amount">
+            <div>Operation - Type: {{ operation.type }}<br></div>
+            <div>Operation - ID:  <a href="#" @click.prevent="onDetailsClick(operation)">{{ operation.id }}</a><br></div>
+            <div v-if="operation.amount">
               Amount:
               <span :class="{ 'text-success': operation.amount >= 0, 'text-danger': operation.amount < 0}">
                 {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
               </span>
               <br>
-            </span>
-            <br>
-            <a href="#" @click.prevent="onDetailsClick(operation)">Details</a>
+            </div>
+            <div :id="`operation-${operation.id}-details`" class="d-none btn-rounded-lg">
+              <pre style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">
+                {{ operation }}
+              </pre>
+            </div>
           </b-col>
         </b-row>
         <hr class="divider">
@@ -85,7 +88,9 @@ export default {
       this.loading = false;
     },
     onDetailsClick (operation) {
-      this.$emit('openOperationsModal', operation);
+      const el = document.getElementById(`operation-${operation.id}-details`);
+      el.classList[el.classList.contains('d-none') ? 'remove' : 'add']('d-none');
+      el.classList[el.classList.contains('d-block') ? 'remove' : 'add']('d-block');
     },
     dayjs
   },
