@@ -9,9 +9,8 @@
           <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
         </template>
         <template v-else-if="userStatus.res">
-          <transition v-if="inProgress" name="fade">
-            <div class="loading-indicator">Loading...</div>
-          </transition>
+          <spinner v-if="inProgress" align="center"/>
+
           <template v-if="userStatus.res.tfa_confirmed === false">
             <template v-if="userStatus.res.mnemonic_confirmed === true">
               <p class="text-danger">Error - 002</p>
@@ -55,9 +54,10 @@ import CryptoHelper from '@/helpers/CryptoHelper';
 
 import lostTfaForm from '@/components/forms/auth/LostTfaForm';
 import lostTfaPasswordForm from '@/components/forms/auth/LostTfaPasswordForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { lostTfaPasswordForm, lostTfaForm },
+  components: { lostTfaPasswordForm, lostTfaForm, spinner },
   data () {
     return {
       inProgress: false,

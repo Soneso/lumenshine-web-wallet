@@ -3,9 +3,8 @@
     <b-row align-h="center" align-v="center">
       <b-col>
         <b-container fluid>
-          <transition v-if="wallets.loading" name="fade">
-            <div class="loading-indicator">Loading...</div>
-          </transition>
+          <spinner v-if="wallets.loading" align="center"/>
+
           <b-row align-h="start" class="equal-heights">
             <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
           </b-row>
@@ -18,9 +17,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import WalletCard from '@/components/cards/WalletCard';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { WalletCard },
+  components: { WalletCard, spinner },
   computed: {
     ...mapGetters(['wallets']),
     homescreenWallets () {

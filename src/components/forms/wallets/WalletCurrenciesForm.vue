@@ -61,7 +61,7 @@
 
         <div class="form-buttons">
           <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
-            <spinner2 v-if="loading" color="text-info" message="removing..."/>
+            <spinner v-if="loading" message="removing..."/>
             <span v-else-if="!removeFieldBalance.balance.equal('0')">remove & abandon credits</span>
             <span v-else>remove</span>
           </a>
@@ -172,7 +172,7 @@
           <div class="py-3">
             <a v-if="!loading" href="#" class="text-warning mr-2" @click.prevent="addCurrency = false">cancel</a>
             <a href="#" @click.prevent="onAddClick">
-              <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
+              <spinner v-if="loading" message="adding..." width="100"/>
               <span v-else>add</span>
             </a>
           </div>
@@ -227,7 +227,7 @@
             </b-form-text>
           </b-form-group>
           <div class="mt-3 mb-2">
-            <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
+            <spinner v-if="loading" message="adding..." width="100"/>
             <div v-else>
               <a href="#" class="text-warning mr-2" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
               <a href="#" class="text-info" @click.prevent="onAddClick">add</a>
@@ -263,13 +263,13 @@ import Amount from '@/util/Amount';
 import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
-import spinner2 from '../../ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: { passwordAssets, spinner2, copyToClipboard },
+  components: { passwordAssets, spinner, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {

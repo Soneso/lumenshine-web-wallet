@@ -19,7 +19,6 @@
               <h2 :class="['mb-1', {'text-uppercase': registrationComplete}]">{{ config.APP_SUBTITLE }}</h2>
               <div v-if="registrationComplete">
                 <currency-ticker/>
-                <!--<p>{{ $route.meta ? $route.meta.pageName : '' }}</p>-->
               </div>
             </div>
             <div v-if="$route.name === 'Wallets'" class="add-wallet">

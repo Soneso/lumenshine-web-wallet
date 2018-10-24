@@ -4,9 +4,7 @@
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2">Join Lumenshine</h4>
         <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
-        <transition v-if="loading" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <spinner v-if="inProgress" align="center"/>
         <registration-form v-show="!loading && !registrationStatus.res" :loading="loading" :errors="registrationStatus.err" @submit="onRegisterSubmit"/>
       </b-card>
     </b-col>
@@ -20,9 +18,10 @@ import registrationForm from '@/components/forms/auth/RegistrationForm';
 import workerCaller from '@/util/workerCaller';
 
 import redirectHandler from '@/util/redirectHandler';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { registrationForm },
+  components: { registrationForm, spinner },
   data () {
     return {
       inProgress: false,

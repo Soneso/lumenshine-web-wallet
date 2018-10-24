@@ -14,7 +14,7 @@
           <copy-to-clipboard :text="secretSeed" color="text-info"/>
         </template>
       </span>
-      <spinner2 v-if="loading" color="text-info" message="revealing..." width="100"/>
+      <spinner v-if="loading" message="revealing..." width="100"/>
     </div>
 
     <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
@@ -59,13 +59,13 @@ import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
 
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: { passwordAssets, spinner2, copyToClipboard },
+  components: { passwordAssets, spinner, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {

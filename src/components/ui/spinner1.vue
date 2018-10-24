@@ -16,7 +16,7 @@ export default {
     },
     message: {
       type: [String, Boolean],
-      default: 'Loading...'
+      default: ''
     },
     status: {
       type: Boolean,

@@ -3,9 +3,8 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
         <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
-        <transition v-if="inProgress" name="fade">
-          <div class="loading-indicator">Loading...</div>
-        </transition>
+        <spinner v-if="inProgress" align="center"/>
+
         <template v-if="emailSuccess">
           <small class="text-success">Lost 2FA Secret lost email sent</small>
           <p>For resetting your 2FA Secret, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your 2FA Secret.</p>
@@ -28,9 +27,10 @@ import lostTfaForm from '@/components/forms/auth/LostTfaForm';
 import lostTfaEmailForm from '@/components/forms/auth/LostTfaEmailForm';
 import lostTfaPasswordForm from '@/components/forms/auth/LostTfaPasswordForm';
 import confirmEmailForm from '@/components/forms/auth/ConfirmEmailForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { lostTfaEmailForm, lostTfaPasswordForm, lostTfaForm, confirmEmailForm },
+  components: { lostTfaEmailForm, lostTfaPasswordForm, lostTfaForm, confirmEmailForm, spinner },
   data () {
     return {
       inProgress: false,

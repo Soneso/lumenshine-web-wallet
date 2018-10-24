@@ -4,7 +4,7 @@
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2">Login</h4>
         <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
-        <spinner v-if="!inProgress"/>
+        <spinner v-if="inProgress" align="center"/>
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
     </b-col>

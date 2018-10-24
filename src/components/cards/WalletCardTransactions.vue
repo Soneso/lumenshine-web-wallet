@@ -28,7 +28,7 @@
     <b-row align-h="center">
       <b-col cols="6" md="4" class="text-center">
         <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
-        <spinner2 v-else color="text-info" width="200" message="Loading transactions..."/>
+        <spinner v-else width="200" message="Loading transactions..."/>
       </b-col>
     </b-row>
   </b-form>
@@ -40,12 +40,12 @@ import dayjs from 'dayjs';
 
 import config from '@/config';
 
-import spinner2 from '@/components/ui/spinner2.vue';
+import spinner from '@/components/ui/spinner1.vue';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { spinner2 },
+  components: { spinner },
   props: {
     data: {
       type: Object,

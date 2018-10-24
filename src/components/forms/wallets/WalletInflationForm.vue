@@ -97,7 +97,7 @@
             <template v-else>
               <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
               <a href="#" class="text-info px-2" @click.prevent="onSubmitClick">
-                <spinner2 v-if="loading" color="text-info" message="settings inflation..."/>
+                <spinner v-if="loading" width="140" message="settings inflation..."/>
                 <span v-else>submit</span>
               </a>
             </template>
@@ -172,7 +172,7 @@
 
               <small class="d-block mb-3 font-italic">Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</small>
               <div>
-                <spinner2 v-if="loading" color="text-info" message="adding..." width="100"/>
+                <spinner v-if="loading" message="adding..." width="90"/>
                 <div v-else>
                   <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
                   <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
@@ -183,7 +183,7 @@
         </b-list-group>
       </div>
     </div>
-    <spinner2 v-if="loading" color="text-info"/>
+    <spinner v-if="loading"/>
     <br>
   </b-form>
 </template>
@@ -193,14 +193,14 @@ import { required } from 'vuelidate/lib/validators';
 
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
   name: 'WalletInflationForm',
-  components: { passwordAssets, spinner2, copyToClipboard },
+  components: { passwordAssets, spinner, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {

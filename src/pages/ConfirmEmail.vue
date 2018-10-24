@@ -6,9 +6,8 @@
           <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
           <h6 class="text-danger py-3">Email confirmation required</h6>
           <p>In order to be able continue the setup process, you need to confirm your email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions from the received mail to confirm your email address.</p>
-          <transition v-if="inProgress" name="fade">
-            <div class="loading-indicator">Loading...</div>
-          </transition>
+          <spinner v-if="inProgress" align="center"/>
+
           <template v-else>
             <div class="py-3">
               <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onCheckConfirmation">Continue</b-button>
@@ -59,9 +58,10 @@ import LoginForm from '@/components/forms/auth/LoginForm';
 import CryptoHelper from '@/helpers/CryptoHelper';
 
 import redirectHandler from '@/util/redirectHandler';
+import spinner from '@/components/ui/spinner1.vue';
 
 export default {
-  components: { LoginForm },
+  components: { LoginForm, spinner },
   data () {
     return {
       emailResent: false,
