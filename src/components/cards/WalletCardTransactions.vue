@@ -13,8 +13,9 @@
             <div>Operation - ID:  <a href="#" @click.prevent="onDetailsClick(operation)">{{ operation.id }}</a><br></div>
             <div v-if="operation.amount">
               Amount:
-              <span :class="{ 'text-success': operation.amount >= 0, 'text-danger': operation.amount < 0}">
-                {{ operation.amount }} {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
+              <span :class="data.public_key_0 === operation.to ? 'text-success' : 'text-danger'">
+                {{ data.public_key_0 === operation.to ? '' : '-' }}{{ operation.amount }}
+                {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
               </span>
               <br>
             </div>
