@@ -9,22 +9,24 @@
 
 #logo-group {
   @include clearfix;
-  @extend .py-4;
+  @extend .py-4, .text-uppercase;
   position: relative;
 
   .narrow & {
     margin-left: calc(50% - 3rem);
   }
 
-  h1 {
-    @extend .text-uppercase, .pt-2, .my-0;
+  .title {
+    @extend .pt-2, .my-0;
     font-size: 1.0625rem;
     color: $blue
   }
 
-  h2 {
-    font-size: .85rem;
-    font-weight: 300;
+  .subtitle {
+    @extend .mb-1;
+    font-size: .8rem;
+    font-weight: 400;
+    width: 11rem;
   }
 
   @include media-breakpoint-up(sm) {
@@ -39,6 +41,7 @@
   }
 
   .text {
+    @extend .pl-3, .pt-3, .mt-2, .d-none, .d-sm-block;
     color: $gray-500;
 
     .narrow & {
