@@ -91,7 +91,7 @@
 
     <!-- submit action -->
     <div class="text-center">
-      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">{{ shouldContinue ? 'Continue' : 'Login' }}</b-button>
+      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">{{ shouldContinue ? 'Continue' : 'Log in' }}</b-button>
       <br v-if="!shouldContinue">
       <small v-if="!shouldContinue" class="text-gray-500">Don't have an account? Sign up <router-link to="/register">here</router-link></small>
     </div>

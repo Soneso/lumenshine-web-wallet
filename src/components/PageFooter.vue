@@ -14,7 +14,7 @@
           <template v-if="!authToken" class="menu">
             <router-link to="/about">About</router-link>
             <router-link to="/help">Help</router-link>
-            <router-link to="/login">Login</router-link>
+            <router-link to="/login">Log in</router-link>
             <router-link to="/register">Sign up</router-link>
             <router-link to="/impressum">Impressum</router-link>
             <a href="https://soneso.com" target="_blank">Soneso</a>
