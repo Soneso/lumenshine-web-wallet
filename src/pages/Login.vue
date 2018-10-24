@@ -2,7 +2,7 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 class="form-headline text-uppercase pl-2">Login</h4>
+        <h4 class="form-headline text-uppercase pl-2 pb-4">Log in</h4>
         <spinner v-if="inProgress" align="center"/>
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
