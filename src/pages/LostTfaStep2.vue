@@ -103,7 +103,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded']),
+    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded', 'clearAuthToken']),
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
       if (!this.userAuthData) {
@@ -122,6 +122,7 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 
@@ -146,6 +147,7 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 
@@ -157,6 +159,7 @@ export default {
       } catch (err) {
         this.decryptError = true;
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 

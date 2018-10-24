@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys']),
+    ...mapActions(['loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'clearAuthToken']),
     async onLoginSubmit (email, pass, tfaCode) {
       this.inProgress = true;
       this.decryptError = false;
@@ -57,6 +57,7 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 
@@ -66,6 +67,7 @@ export default {
         await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
       } catch (err) {
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 

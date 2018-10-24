@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail']),
+    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail', 'clearAuthToken']),
 
     async onResendEmail () {
       this.inProgress = true;
@@ -147,6 +147,7 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 
@@ -156,6 +157,7 @@ export default {
         await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
       } catch (err) {
         this.inProgress = false;
+        await this.clearAuthToken();
         return;
       }
 
