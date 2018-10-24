@@ -1,17 +1,11 @@
 <template>
-  <b-container fluid class="px-3">
-    <b-row align-h="center" align-v="center">
-      <b-col>
-        <b-container fluid>
-          <spinner v-if="wallets.loading" align="center"/>
+  <section>
+    <spinner v-if="wallets.loading" align="center"/>
 
-          <b-row align-h="start" class="equal-heights">
-            <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
-          </b-row>
-        </b-container>
-      </b-col>
+    <b-row align-h="start" class="equal-heights">
+      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
     </b-row>
-  </b-container>
+  </section>
 </template>
 
 <script>
