@@ -10,7 +10,11 @@
         <span class="text-danger">none</span><br>
         <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
       </span>
-      <span v-else-if="!fieldOpen">{{ address }}*{{ config.FEDERATION_DOMAIN }}</span>
+      <h5 v-else-if="!fieldOpen">
+        <b-badge id="wallet-domain-name" variant="warning" class="text-white">
+          {{ address }}*{{ config.FEDERATION_DOMAIN }}
+        </b-badge>
+      </h5>
       <spinner v-if="loading && removingWallet" variant="warning"/>
     </div>
 
