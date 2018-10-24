@@ -22,6 +22,19 @@
     }
   }
 
+  &:nth-child(2) {
+    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+      > div {
+        .card-normal & {
+          //width: calc(100% - .5rem);
+        }
+        .card-wide & {
+          padding-left: 0 !important;
+        }
+      }
+    }
+  }
+
   &:nth-child(3) {
     @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
       padding-left: 1.25rem !important;
