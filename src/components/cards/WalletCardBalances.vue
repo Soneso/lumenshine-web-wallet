@@ -38,7 +38,7 @@
                 <li v-for="item in balances" :key="'a' + item.type + item.issuer">
                   {{ item.available }} <small>{{ item.type }}</small>
                   <i
-                    v-b-popover.hover.html="() => getAvailablePopup(item)"
+                    v-b-popover.hover.html="getAvailablePopup(item)"
                     v-if="item.available !== item.balance"
                     :title="`Available ${item.type}`"
                     class="icon-help"/>

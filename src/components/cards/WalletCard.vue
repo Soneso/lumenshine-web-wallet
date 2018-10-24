@@ -77,9 +77,7 @@
         <br>
         <div class="break-word with-hyphens">
           {{ data.public_key_0 }}
-          <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
-            <i class="icon-copy text-info" />
-          </a>
+          <copy-to-clipboard :text="data.public_key_0"/>
           <small v-if="accountIDCopied" class="text-info">Copied to clipboard<br></small>
         </div>
 
@@ -94,11 +92,12 @@
       </div>
       <div v-else class="text-center pt-3">
         <small>This client operates on the test net. Do not send real Stellar Lumens from the main/public net. To fund your wallet for testing purposes we can kindly ask Friendbot to send you some test lumens. Please press the button below to receive the test net lumens from Freindbot.</small>
+        <br>
         <b-button v-if="!fundWalletLoading" variant="primary" class="btn-rounded my-3" @click.prevent="fundWithFriendbot">
           Fund with test lumens
         </b-button>
         <b-button v-else variant="primary" class="btn-rounded my-3">
-          <i class="fa fa-spinner fa-spin fa-fw"/>
+          <spinner :size="24" variant="white" message="funding..." width="90"/>
         </b-button>
       </div>
     </b-modal>
@@ -128,6 +127,9 @@ import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedFor
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
 import WalletCardBalances from '@/components/cards/WalletCardBalances';
 
+import spinner from '@/components/ui/spinner1.vue';
+import copyToClipboard from '@/components/ui/copyToClipboard.vue';
+
 export default {
   components: {
     ReceivePaymentForm,
@@ -135,6 +137,8 @@ export default {
     WalletSecretSeedForm,
     WalletCardDetails,
     WalletCardBalances,
+    spinner,
+    copyToClipboard
   },
   mixins: [ balanceMixin ],
   props: {
