@@ -100,7 +100,10 @@ export default {
       if (this.searchField === '') {
         return this.contacts.res;
       }
-      return this.contacts.res.filter(contact => contact.contact_name.includes(this.searchField) || contact.stellar_address.includes(this.searchField) || contact.public_key.includes(this.searchField));
+      return this.contacts.res.filter(contact => {
+        const str = this.searchField.toLowerCase();
+        return [contact.contact_name, contact.stellar_address, contact.public_key].map(x => x.toLowerCase()).some(x => x.includes(str));
+      });
     },
 
     availableWallets () {
