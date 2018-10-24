@@ -10,7 +10,7 @@
   }
 
   .action-btn {
-    @media screen and ( min-width: map-get($grid-breakpoints, 'sm') ) {
+    @include media-breakpoint-up(sm) {
       position: absolute;
       right: 3rem;
       top: 2rem;
@@ -19,7 +19,7 @@
 }
 
 #wallet-domain-name {
-  @media screen and ( min-width: map-get($grid-breakpoints, 'sm') ) {
+  @include media-breakpoint-up(sm) {
     position: absolute;
     top: 2rem;
   }

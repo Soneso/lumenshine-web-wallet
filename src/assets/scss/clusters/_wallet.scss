@@ -10,7 +10,7 @@
   @extend .mb-2;
 
   &:nth-child(1) {
-    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+    @include media-breakpoint-up(lg) {
       > div {
         .card-normal & {
           width: calc(100% - .5rem);
@@ -23,11 +23,9 @@
   }
 
   &:nth-child(2) {
-    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+    @include media-breakpoint-up(lg) {
       > div {
-        .card-normal & {
-          //width: calc(100% - .5rem);
-        }
+        .card-normal & {}
         .card-wide & {
           padding-left: 0 !important;
         }
@@ -36,13 +34,13 @@
   }
 
   &:nth-child(3) {
-    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+   @include media-breakpoint-up(lg) {
       padding-left: 1.25rem !important;
     }
   }
 
   &:nth-child(4) {
-    @media screen and ( min-width: map-get($grid-breakpoints, 'lg')) {
+    @include media-breakpoint-up(lg) {
       padding-left: 1.5rem !important;
     }
   }
