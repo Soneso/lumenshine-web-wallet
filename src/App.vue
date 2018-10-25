@@ -113,7 +113,7 @@ export default {
       }
       const now = new Date().getTime();
       const diffSeconds = (now - lastInteraction) / 1000;
-      if (diffSeconds > 5) {
+      if (diffSeconds > 5 * 60) {
         this.clearInteraction();
         await this.refreshAuthToken();
       }
