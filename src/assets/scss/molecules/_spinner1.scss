@@ -1,4 +1,10 @@
 #spinner1 {
+  .equal-heights & {
+    position: absolute;
+    top: 5rem;
+    left: calc(50% - 1rem);
+  }
+
   .spinner {
     @extend .float-left, .mr-2;
     border-radius: 50%;

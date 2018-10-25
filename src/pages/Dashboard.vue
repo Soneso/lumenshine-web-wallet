@@ -1,9 +1,8 @@
 <template>
   <section>
-    <spinner v-if="wallets.loading" align="center"/>
-
     <b-row align-h="start" class="equal-heights">
-      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key_0" :data="wallet"/>
+      <spinner v-if="wallets.loading" align="center"/>
+      <wallet-card v-for="wallet in homescreenWallets" v-else :key="wallet.public_key_0" :data="wallet"/>
     </b-row>
   </section>
 </template>
