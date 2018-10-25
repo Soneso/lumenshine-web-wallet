@@ -33,4 +33,6 @@ export default {
   HORIZON_URL: 'https://demohorizon.lumenshine.com',
   // HORIZON_URL: 'https://horizon-testnet.stellar.org',
   IS_TEST_NETWORK: true,
+
+  SERVER_PUBLIC_KEY: 'GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV',
 };

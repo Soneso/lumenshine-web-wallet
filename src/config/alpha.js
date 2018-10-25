@@ -30,4 +30,6 @@ export default {
 
   HORIZON_URL: 'https://alphahorizon.lumenshine.com',
   IS_TEST_NETWORK: false,
+
+  SERVER_PUBLIC_KEY: 'GBGXAY3HDXMUWAUDATBZ5SVGLFUC5GKJC4BNN5MEPVLWKCOMBXQUIUWM',
 };
