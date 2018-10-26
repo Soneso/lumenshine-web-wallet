@@ -178,8 +178,17 @@ export default {
       console.error(err);
       if (err.message === 'Issuer is invalid') {
         commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER' }]);
+      }
+      if (err.response && err.response.data && err.response.data.extras) {
+        const extras = err.response.data.extras;
+        if (extras.result_codes && extras.result_codes.operations && extras.result_codes.operations[0]) {
+          const op = extras.result_codes.operations[0];
+          if (op === 'op_no_issuer') {
+            return commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
+          }
+        }
       } else {
-        commit('ADD_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR' }]);
+        return commit('ADD_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }
     }
     commit('ADD_CURRENCY_LOADING', false);

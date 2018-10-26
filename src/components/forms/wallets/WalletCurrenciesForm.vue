@@ -271,6 +271,7 @@ import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityStat
 export default {
   components: { passwordAssets, spinner, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
+
   props: {
     loading: {
       type: Boolean,
@@ -289,6 +290,7 @@ export default {
       required: true,
     },
   },
+
   data () {
     return {
       removeFieldBalance: null,
@@ -306,6 +308,7 @@ export default {
       password3IsHidden: true
     };
   },
+
   computed: {
     balances () {
       if (!this.data.stellar_data) return [];
@@ -325,6 +328,7 @@ export default {
       return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
     },
   },
+
   watch: {
     loading (loading) {
       if (!loading && !this.decryptionError && this.errors.length === 0) {
@@ -347,11 +351,13 @@ export default {
       }
     }
   },
+
   mounted () {
     this.$on('add', (v) => {
       this.newCurrencyId = v.assetCode + v.issuer;
     });
   },
+
   methods: {
     onTabChange (val) {
       this.addCurrencyFormType = val;
@@ -433,6 +439,7 @@ export default {
       this.newCurrencyId = '';
     }
   },
+
   validations () {
     const signerValidators = this.canSignWithPassword ? {
       password: {
