@@ -15,6 +15,8 @@ const localStorage = {
   authTokenType: replaceNull(Vue.localStorage.get('authTokenType', null)),
 
   userEmail: replaceNull(Vue.localStorage.get('userEmail', null)),
+
+  sep10Challenge: replaceNull(Vue.localStorage.get('sep10Challenge', null)),
 };
 
 function getInitialState (clearAuthToken = false) {
@@ -27,6 +29,7 @@ function getInitialState (clearAuthToken = false) {
     tfaData: null, // storing 2FA secret + qr code after login / registration
     mnemonic: null,
     encryptedServerData: null, // for storing ecrypted mnemonic / masterkey on login
+    sep10Challenge: config.KEEP_LOGGED_IN && !clearAuthToken ? localStorage.sep10Challenge : null,
 
     registrationErrors: [],
     registrationLoading: false,
@@ -85,6 +88,7 @@ export default {
       Vue.localStorage.remove('authToken');
       Vue.localStorage.remove('authTokenType');
       Vue.localStorage.remove('userEmail');
+      Vue.localStorage.remove('sep10Challenge');
     }
   },
   getters,

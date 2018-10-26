@@ -29,17 +29,20 @@ import offCanvasMenu from '@/components/offcanvas/OffCanvasMenu';
 
 export default {
   name: 'App',
+
   components: {
     pageHeader,
     pageFooter,
     dashboardMenu,
     offCanvasMenu
   },
+
   data () {
     return {
       refreshInterval: null
     };
   },
+
   computed: {
     ...mapGetters([
       'userStatus',
@@ -53,11 +56,13 @@ export default {
       return ['settings', 'change-password', 'change-tfa', 'backup-mnemonic'].includes(nakedRoute);
     }
   },
+
   watch: {
     $route () {
       this.interactionHandler();
     },
   },
+
   async created () {
     if (this.authTokenType) {
       await this.getUserStatus();
@@ -74,6 +79,7 @@ export default {
       }
     }
   },
+
   mounted () {
     this.$store.watch(state => state, () => this.interactionHandler(), {
       deep: true,
@@ -86,12 +92,14 @@ export default {
       this.mutateMq();
     }, true);
   },
+
   beforeDestroy () {
     if (this.refreshInterval !== null) {
       clearInterval(this.refreshInterval);
       this.refreshInterval = null;
     }
   },
+
   methods: {
     ...mapActions([
       'getUserStatus',

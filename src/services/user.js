@@ -78,8 +78,8 @@ export default {
     return response;
   },
 
-  async getTfaSecret (key188) {
-    const response = await apiBase.post('/portal/dashboard/tfa_secret', key188);
+  async getTfaSecret (challenge) {
+    const response = await apiBase.post('/portal/dashboard/tfa_secret', challenge);
     return response;
   },
 
@@ -113,8 +113,8 @@ export default {
     return response;
   },
 
-  async getNewTfaSecret (key188, isPartialAuth = true) {
-    const response = await apiBase.post(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/new_2fa_secret`, { public_key_188: key188 });
+  async getNewTfaSecret (challenge, isPartialAuth = true) {
+    const response = await apiBase.post(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/new_2fa_secret`, { sep10_transaction: challenge, public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase() }); // TODO remove
     return response;
   },
 

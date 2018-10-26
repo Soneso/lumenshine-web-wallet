@@ -15,6 +15,7 @@ export default {
   resetTfaStatus: state => ({ err: state.resetTfaErrors, loading: state.resetTfaLoading }),
   mnemonic: state => state.mnemonic,
   tfaData: state => state.tfaData,
+  sep10Challenge: state => state.sep10Challenge,
   encryptedServerData: state => state.encryptedServerData,
   registrationComplete: state => state.userStatusResult && state.userStatusResult.mail_confirmed && state.userStatusResult.mnemonic_confirmed && state.userStatusResult.tfa_confirmed,
   checkPasswordNeeded: state => state.checkPasswordNeeded,
