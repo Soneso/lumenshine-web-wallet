@@ -4,6 +4,7 @@
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2">Join Lumenshine</h4>
         <div class="pb-4 pl-2"><small>Please fill in the form below</small></div>
+        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
         <spinner v-if="inProgress" align="center"/>
         <registration-form v-show="!loading && !registrationStatus.res" :loading="loading" :errors="registrationStatus.err" @submit="onRegisterSubmit"/>
       </b-card>
@@ -14,77 +15,59 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import registrationForm from '@/components/forms/auth/RegistrationForm';
 import workerCaller from '@/util/workerCaller';
-
 import redirectHandler from '@/util/redirectHandler';
+
+import CryptoHelper from '@/helpers/CryptoHelper';
+
+import registrationForm from '@/components/forms/auth/RegistrationForm';
 import spinner from '@/components/ui/spinner1.vue';
 
 export default {
   components: { registrationForm, spinner },
+
   data () {
     return {
       inProgress: false,
+      hasUnknownError: false,
     };
   },
+
   computed: {
-    ...mapGetters(['registrationStatus', 'userStatus', 'tfaData']),
+    ...mapGetters(['registrationStatus', 'userStatus', 'tfaData', 'sep10Challenge']),
     loading () {
       return this.inProgress || this.registrationStatus.loading;
     }
   },
+
   methods: {
-    ...mapActions(['registerUser', 'loginStep2', 'setMnemonic', 'setPublicKeys']),
-    async onRegisterSubmit (formData, pass) {
+    ...mapActions(['registerUser', 'setMnemonic', 'setPublicKeys']),
+    async onRegisterSubmit (formData, password) {
       this.inProgress = true;
 
-      const [ kdfSalt, wordlistMasterKey, wordlistMasterKeyIV, mnemonicMasterKey, mnemonicMasterKeyIV, mnemonic, mnemonicIV, wordlist, wordlistIV ] =
-        await Promise.all([
-          workerCaller('generateSalt'),
-          workerCaller('generateMasterKey'),
-          workerCaller('generateIV'),
-          workerCaller('generateMasterKey'),
-          workerCaller('generateIV'),
-          workerCaller('generateMnemonic'),
-          workerCaller('generateIV'),
-          workerCaller('generateWordlist'),
-          workerCaller('generateIV')
-        ]);
-
-      const [ publicKey0, publicKey188, kdfPass, encryptedWordlist, mnemonicIndices ] =
-        await Promise.all([
-          workerCaller('getPublicKey', mnemonic, 0),
-          workerCaller('getPublicKey', mnemonic, 188),
-          workerCaller('derivePassword', pass, kdfSalt),
-          workerCaller('cryptWordlist', wordlistMasterKey, wordlistIV, wordlist),
-          workerCaller('mnemonicToIndices', mnemonic, wordlist),
-        ]);
-
-      const [ encryptedMnemonicMasterKey, encryptedWordlistMasterKey, mnemonicEncrypted ] =
-        await Promise.all([
-          workerCaller('cryptMasterKey', kdfPass, mnemonicMasterKeyIV, mnemonicMasterKey),
-          workerCaller('cryptMasterKey', kdfPass, wordlistMasterKeyIV, wordlistMasterKey),
-          workerCaller('cryptMnemonic', mnemonicMasterKey, mnemonicIV, mnemonicIndices),
-        ]);
+      const securityData = await CryptoHelper.generateSecurityData(password);
 
       const registrationParams = {
         ...formData,
-        kdf_salt: kdfSalt,
-        mnemonic_master_key: encryptedMnemonicMasterKey,
-        mnemonic_master_iv: mnemonicMasterKeyIV,
-        wordlist_master_key: encryptedWordlistMasterKey,
-        wordlist_master_iv: wordlistMasterKeyIV,
-        mnemonic: mnemonicEncrypted,
-        mnemonic_iv: mnemonicIV,
-        wordlist: encryptedWordlist,
-        wordlist_iv: wordlistIV,
-        public_key_0: publicKey0,
-        public_key_188: publicKey188,
+
+        kdf_salt: securityData.kdf_salt,
+        mnemonic_master_key: securityData.mnemonic_master_key,
+        mnemonic_master_iv: securityData.mnemonic_master_iv,
+        wordlist_master_key: securityData.wordlist_master_key,
+        wordlist_master_iv: securityData.wordlist_master_iv,
+        mnemonic: securityData.encrypted_mnemonic,
+        mnemonic_iv: securityData.encryption_mnemonic_iv,
+        wordlist: securityData.encrypted_wordlist,
+        wordlist_iv: securityData.encryption_wordlist_iv,
+        public_key_0: securityData.public_key_0,
+
+        public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase(), // TODO remove
       };
+
       await this.registerUser(registrationParams);
 
-      await this.setMnemonic(mnemonic);
-      const publicKeys = await workerCaller('getPublicKeys', mnemonic);
+      await this.setMnemonic(securityData.mnemonic);
+      const publicKeys = await workerCaller('getPublicKeys', securityData.mnemonic);
       this.setPublicKeys(publicKeys);
 
       this.inProgress = false;
@@ -101,6 +84,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

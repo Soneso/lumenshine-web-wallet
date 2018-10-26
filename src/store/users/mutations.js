@@ -82,7 +82,26 @@ export default {
   },
 
   SET_ENCRYPTED_SERVER_DATA (state, msg) {
-    state.encryptedServerData = msg;
+    // filtering out unnecessary fields
+    state.encryptedServerData = {
+      kdf_password_salt: msg.kdf_password_salt,
+      encrypted_mnemonic_master_key: msg.encrypted_mnemonic_master_key,
+      mnemonic_master_key_encryption_iv: msg.mnemonic_master_key_encryption_iv,
+      encrypted_mnemonic: msg.encrypted_mnemonic,
+      mnemonic_encryption_iv: msg.mnemonic_encryption_iv,
+      encrypted_wordlist_master_key: msg.encrypted_wordlist_master_key,
+      wordlist_master_key_encryption_iv: msg.wordlist_master_key_encryption_iv,
+      encrypted_wordlist: msg.encrypted_wordlist,
+      wordlist_encryption_iv: msg.wordlist_encryption_iv,
+      public_key_index0: msg.public_key_index0,
+    };
+  },
+
+  SET_SEP10_CHALLENGE (state, challenge) {
+    state.sep10Challenge = challenge;
+    if (config.KEEP_LOGGED_IN) {
+      Vue.localStorage.set('sep10Challenge', challenge);
+    }
   },
 
   SET_MNEMONIC (state, mnemonic) {

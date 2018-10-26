@@ -3,6 +3,7 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
         <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
+        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
         <template v-if="confirmEmailStatus.err.length > 0">
           <small v-if="tokenNotFound" class="text-danger d-block">Token could not be found in the database.</small>
           <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
@@ -58,16 +59,19 @@ import spinner from '@/components/ui/spinner1.vue';
 
 export default {
   components: { lostTfaPasswordForm, lostTfaForm, spinner },
+
   data () {
     return {
       inProgress: false,
       decryptError: false,
       step: 'password',
-      config
+
+      hasUnknownError: false,
     };
   },
+
   computed: {
-    ...mapGetters(['lostTfaStatus', 'confirmEmailStatus', 'userAuthData', 'resetTfaStatus', 'tfaData', 'registration2FAStatus', 'userStatus', 'checkPasswordNeeded']),
+    ...mapGetters(['lostTfaStatus', 'confirmEmailStatus', 'userAuthData', 'resetTfaStatus', 'tfaData', 'registration2FAStatus', 'userStatus', 'checkPasswordNeeded', 'sep10Challenge']),
     loading () {
       return this.inProgress || this.lostTfaStatus.loading;
     },
@@ -81,12 +85,15 @@ export default {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1008));
     }
   },
+
   mounted () {
     this.decryptError = false;
     this.inProgress = false;
     this.step = 'password';
   },
+
   async created () {
+    this.config = config;
     if (this.$route.params.token) {
       this.inProgress = true;
       await this.confirmEmail(this.$route.params.token);
@@ -102,6 +109,7 @@ export default {
       this.inProgress = false;
     }
   },
+
   methods: {
     ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded', 'clearAuthToken']),
     async onPasswordSubmitClick (password) {
@@ -126,7 +134,15 @@ export default {
         return;
       }
 
-      await this.resetTfa(decryptedServerData.publicKeys[188]);
+      const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.hasUnknownError = true;
+        this.inProgress = false;
+        await this.clearAuthToken();
+        return;
+      }
+
+      await this.resetTfa(signedTransaction);
 
       this.inProgress = false;
 
@@ -151,17 +167,25 @@ export default {
         return;
       }
 
-      this.setMnemonic(decryptedServerData.mnemonic);
-      this.setPublicKeys(decryptedServerData.publicKeys);
-
-      try {
-        await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
-      } catch (err) {
-        this.decryptError = true;
+      const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.hasUnknownError = true;
         this.inProgress = false;
         await this.clearAuthToken();
         return;
       }
+
+      try {
+        await this.loginStep2({ sep10_transaction: signedTransaction });
+      } catch (err) {
+        this.hasUnknownError = true;
+        this.inProgress = false;
+        await this.clearAuthToken();
+        return;
+      }
+
+      this.setMnemonic(decryptedServerData.mnemonic);
+      this.setPublicKeys(decryptedServerData.publicKeys);
 
       this.inProgress = false;
       this.$router.push({ name: 'ConfirmTfa' });

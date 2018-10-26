@@ -6,6 +6,7 @@ export default {
   },
 
   async refreshAuthToken ({ commit, getters, state }) {
+    if (!getters.authToken) return;
     try {
       const res = await UserService.refreshToken(getters.authTokenType);
       commit('SET_AUTH_TOKEN', { token: res.token, type: state.authTokenType });
@@ -19,12 +20,13 @@ export default {
     commit('SET_REGISTRATION_ERROR', []);
     try {
       const res = await UserService.registerUser(params);
-      commit('SET_TFA_DATA', res.data);
+      commit('SET_TFA_DATA', { tfa_qr_image: res.data.tfa_qr_image, tfa_secret: res.data.tfa_secret });
       commit('SET_USER_STATUS', {
         mail_confirmed: false,
         mnemonic_confirmed: false,
         tfa_confirmed: false
       });
+      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       commit('SET_USER_EMAIL', params.email);
       commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
     } catch (err) {
@@ -98,11 +100,11 @@ export default {
     commit('SET_LOST_TFA_LOADING', false);
   },
 
-  async resetTfa ({ commit, getters }, pk188) {
+  async resetTfa ({ commit, getters }, signedTransaction) {
     commit('SET_RESET_TFA_LOADING', true);
     commit('SET_RESET_TFA_ERROR', []);
     try {
-      const res = await UserService.getNewTfaSecret(pk188, getters.authTokenType === 'partial');
+      const res = await UserService.getNewTfaSecret(signedTransaction, getters.authTokenType === 'partial');
       commit('SET_TFA_DATA', res.data);
     } catch (err) {
       commit('SET_RESET_TFA_ERROR', err.data);
@@ -127,7 +129,11 @@ export default {
     commit('SET_CONFIRM_EMAIL_ERROR', []);
     try {
       const res = await UserService.confirmEmail(token);
-      commit('SET_CONFIRM_EMAIL_RESULT', res.data);
+      commit('SET_CONFIRM_EMAIL_RESULT', {
+        email: res.data.email,
+        token_already_confirmed: res.data.token_already_confirmed,
+      });
+      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       if (res.headers.authorization) {
         commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
       } else {
@@ -185,6 +191,7 @@ export default {
       const res = await UserService.loginStep1(params);
       commit('SET_ENCRYPTED_SERVER_DATA', res.data);
       commit('SET_USER_EMAIL', params.email);
+      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
     } catch (err) {
       commit('SET_LOGIN_ERROR', err.data);

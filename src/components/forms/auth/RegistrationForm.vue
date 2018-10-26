@@ -24,6 +24,7 @@
                 <template v-if="!$v.email.required">Email is required! <br></template>
                 <template v-if="!$v.email.email">Not valid email! <br></template>
                 <template v-if="!$v.email.backendHasUser">Email already exists!</template>
+                <template v-if="!$v.email.validBackendEmail">Not valid email!</template>
               </template>
             </b-form-invalid-feedback>
             <b-form-text id="inputLiveEmailHelp">
@@ -556,7 +557,8 @@ export default {
     return {
       email: {
         ...validators.email.call(this),
-        backendHasUser: value => this.backendQuery.email !== value || !this.errors.find(err => err.error_code === 1001)
+        backendHasUser: value => this.backendQuery.email !== value || !this.errors.find(err => err.error_code === 1001),
+        validBackendEmail: value => this.backendQuery.email !== value || !this.errors.find(err => err.error_code === 1000 && err.parameter_name === 'email'),
       },
       password: validators.password.call(this),
       passwordConfirm: {

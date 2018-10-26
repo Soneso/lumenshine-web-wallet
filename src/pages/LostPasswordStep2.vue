@@ -3,6 +3,7 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
         <h4 class="form-headline pb-3">Lost Password</h4>
+        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
         <template v-if="confirmEmailStatus.err.length > 0">
           <small v-if="tokenNotFound" class="text-danger d-block">Could not find this token in the database.</small>
           <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
@@ -66,6 +67,7 @@ import spinner from '@/components/ui/spinner1.vue';
 
 export default {
   components: { lostPasswordTfaForm, lostPasswordMnemonicForm, lostPasswordForm, spinner },
+
   data () {
     return {
       inProgress: false,
@@ -74,9 +76,11 @@ export default {
       mnemonicError: false,
       mnemonic: null,
       lastTfaCode: null,
-      config
+
+      hasUnknownError: false,
     };
   },
+
   computed: {
     ...mapGetters(['lostPasswordStatus', 'confirmEmailStatus', 'userStatus']),
     loading () {
@@ -92,7 +96,9 @@ export default {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1008));
     }
   },
+
   async created () {
+    this.config = config;
     if (this.$route.params.token) {
       this.inProgress = true;
       await this.confirmEmail(this.$route.params.token);
@@ -100,6 +106,7 @@ export default {
       this.inProgress = false;
     }
   },
+
   mounted () {
     this.mnemonicError = false;
     this.inProgress = false;
@@ -108,12 +115,14 @@ export default {
     this.lastTfaCode = null;
     this.step = 'tfa';
   },
+
   methods: {
     ...mapActions(['getUserStatus', 'confirmEmail', 'setLostPasswordTfa', 'lostPasswordUpdate', 'updateSecurityData', 'setMnemonic', 'setPublicKeys', 'resetTfa', 'logout', 'loginStep2']),
     async onTfaSubmitClick (tfaCode) {
       this.inProgress = true;
       await this.setLostPasswordTfa(tfaCode);
       this.lastTfaCode = tfaCode;
+
       if (this.lostPasswordStatus.err.length === 0) {
         if (this.userStatus.res.mnemonic_confirmed === false) {
           this.step = 'password';
@@ -121,6 +130,7 @@ export default {
           this.step = 'mnemonic';
         }
       }
+
       this.inProgress = false;
     },
 
@@ -129,17 +139,20 @@ export default {
       this.mnemonicError = false;
       const pk0 = this.lostPasswordStatus.res.public_key_0;
       const isValidMnemonic = await workerCaller('validateMnemonic', mnemonic);
+
       if (!isValidMnemonic) {
         this.mnemonicError = true;
         this.inProgress = false;
         return;
       }
+
       const pk0Mnemonic = await workerCaller('getPublicKey', mnemonic, 0);
       if (pk0 !== pk0Mnemonic) {
         this.mnemonicError = true;
         this.inProgress = false;
         return;
       }
+
       this.mnemonic = mnemonic;
       this.step = 'password';
       this.inProgress = false;
@@ -147,20 +160,43 @@ export default {
 
     async onGenerateNewData (password) {
       this.inProgress = true;
+
       const newMnemonic = await workerCaller('generateMnemonic');
       this.setMnemonic(newMnemonic);
-      const params = await CryptoHelper.generateSecurityData(password, newMnemonic);
 
-      await this.updateSecurityData({ ...params, tfa_code: this.lastTfaCode });
+      const securityData = await CryptoHelper.generateSecurityData(password, newMnemonic);
+
+      await this.updateSecurityData({
+        kdf_salt: securityData.kdfSalt,
+        mnemonic_master_key: securityData.mnemonic_master_key,
+        mnemonic_master_iv: securityData.mnemonic_master_iv,
+        wordlist_master_key: securityData.wordlist_master_key,
+        wordlist_master_iv: securityData.wordlist_master_iv,
+        mnemonic: securityData.encrypted_mnemonic,
+        mnemonic_iv: securityData.encryption_mnemonic_iv,
+        wordlist: securityData.encryptedWordlist,
+        wordlist_iv: securityData.encryption_wordlist_iv,
+        public_key_0: securityData.public_key_0,
+
+        tfa_code: this.lastTfaCode,
+      });
+
+      const signedTransaction = await CryptoHelper.signSep10Challenge(securityData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.hasUnknownError = true;
+        this.inProgress = false;
+        await this.clearAuthToken();
+        return;
+      }
 
       // generate new tfa secret, needed by next screen (setup screen)
-      await this.resetTfa(params.public_key_188);
+      await this.resetTfa(signedTransaction);
       await this.getUserStatus();
 
       const publicKeys = await workerCaller('getPublicKeys', newMnemonic);
       this.setPublicKeys(publicKeys);
 
-      await this.loginStep2({ key: publicKeys[188] });
+      await this.loginStep2({ sep10_transaction: signedTransaction });
 
       if (this.lostPasswordStatus.err.length > 0) {
         this.step = 'error';
@@ -174,9 +210,23 @@ export default {
 
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
-      const params = await CryptoHelper.generateSecurityData(password, this.mnemonic);
+      const securityData = await CryptoHelper.generateSecurityData(password, this.mnemonic);
 
-      await this.lostPasswordUpdate(params);
+      await this.lostPasswordUpdate({
+        encrypted_mnemonic: securityData.encrypted_mnemonic,
+        encrypted_wordlist: securityData.encrypted_wordlist,
+        encryption_mnemonic_iv: securityData.encryption_mnemonic_iv,
+        encryption_wordlist_iv: securityData.encryption_wordlist_iv,
+        kdf_salt: securityData.kdf_salt,
+        mnemonic: securityData.mnemonic,
+        mnemonic_master_iv: securityData.mnemonic_master_iv,
+        mnemonic_master_key: securityData.mnemonic_master_key,
+        public_key_0: securityData.public_key_0,
+        wordlist_master_iv: securityData.wordlist_master_iv,
+        wordlist_master_key: securityData.wordlist_master_key,
+
+        public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase(), // TODO remove
+      });
 
       if (this.lostPasswordStatus.err.length > 0) {
         this.step = 'error';

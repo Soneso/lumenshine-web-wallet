@@ -3,6 +3,7 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
         <h3 class="form-headline pb-3 text-center">Change 2FA Secret</h3>
+        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
         <spinner v-if="inProgress" align="center"/>
 
         <template v-if="step === 'password'" v-show="!loading">
@@ -34,27 +35,31 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 
-import workerCaller from '@/util/workerCaller';
-
 import changeTfaPasswordForm from '@/components/forms/ChangeTfaPasswordForm';
 import changeTfaForm from '@/components/forms/ChangeTfaForm';
 import spinner from '@/components/ui/spinner1.vue';
 
+import CryptoHelper from '@/helpers/CryptoHelper';
+
 export default {
   components: { changeTfaPasswordForm, changeTfaForm, spinner },
+
   data () {
     return {
       inProgress: false,
       decryptError: false,
       step: 'password',
+      hasUnknownError: false,
     };
   },
+
   computed: {
-    ...mapGetters(['userAuthData', 'resetTfaStatus', 'tfaData', 'change2faStep']),
+    ...mapGetters(['userAuthData', 'resetTfaStatus', 'tfaData', 'change2faStep', 'sep10Challenge']),
     loading () {
       return this.inProgress || this.resetTfaStatus.loading;
     }
   },
+
   watch: {
     change2faStep () {
       if (this.change2faStep === 'password') {
@@ -67,6 +72,7 @@ export default {
       }
     }
   },
+
   async created () {
     this.inProgress = true;
     if (!this.userAuthData.res) {
@@ -74,41 +80,38 @@ export default {
     }
     this.inProgress = false;
   },
+
   mounted () {
     this.decryptError = false;
     this.inProgress = false;
     this.step = 'password';
   },
+
   methods: {
     ...mapMutations(['mutateChange2faStep']),
     ...mapActions(['getUserAuthData', 'resetTfa', 'confirmNewTfa']),
+
     async onPasswordSubmitClick (currentPassword) {
       this.inProgress = true;
 
       const authData = this.userAuthData.res;
 
-      const oldKdfPass = await workerCaller('derivePassword', currentPassword, authData.kdf_password_salt);
-      const [ mnemonicMasterKey, wordlistMasterKey ] = await Promise.all([
-        workerCaller('decryptMasterKey', oldKdfPass, authData.mnemonic_master_key_encryption_iv, authData.encrypted_mnemonic_master_key),
-        workerCaller('decryptMasterKey', oldKdfPass, authData.wordlist_master_key_encryption_iv, authData.encrypted_wordlist_master_key)
-      ]);
+      const decryptedOldServerData = await CryptoHelper.decryptServerData(currentPassword, authData);
 
-      const [ oldMnemonicIndices, oldWordlist ] = await Promise.all([
-        workerCaller('decryptMnemonic', mnemonicMasterKey, authData.mnemonic_encryption_iv, authData.encrypted_mnemonic),
-        workerCaller('decryptWordlist', wordlistMasterKey, authData.wordlist_encryption_iv, authData.encrypted_wordlist)
-      ]);
-
-      const isValidWordlist = !!(oldWordlist.toString().match(/^([a-z,]{3,25}\s?)+$/));
-      if (!isValidWordlist) {
+      if (!decryptedOldServerData) {
         this.decryptError = true;
         this.inProgress = false;
         return;
       }
 
-      const mnemonic = await workerCaller('indicesToMnemonic', oldMnemonicIndices, oldWordlist);
-      const publicKey188 = await workerCaller('getPublicKey', mnemonic, 188);
+      const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedOldServerData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.hasUnknownError = true;
+        this.inProgress = false;
+        return;
+      }
 
-      await this.resetTfa(publicKey188);
+      await this.resetTfa(signedTransaction);
 
       this.inProgress = false;
 

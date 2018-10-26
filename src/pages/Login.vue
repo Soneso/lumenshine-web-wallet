@@ -3,6 +3,7 @@
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
         <h4 class="form-headline text-uppercase pl-2 pb-4">Log in</h4>
+        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
         <spinner v-if="inProgress" align="center" message="Logging you in..." width="150" />
         <login-form v-show="decryptError || (!loading && !loginStatus.res)" :loading="loading" :errors="loginStatus.err" :decrypt-error="decryptError" @submit="onLoginSubmit"/>
       </b-card>
@@ -14,29 +15,35 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import LoginForm from '@/components/forms/auth/LoginForm';
+import spinner from '@/components/ui/spinner1.vue';
 
 import CryptoHelper from '@/helpers/CryptoHelper';
 
 import redirectHandler from '@/util/redirectHandler';
-import spinner from '@/components/ui/spinner1.vue';
 
 export default {
   components: { LoginForm, spinner },
+
   data () {
     return {
       inProgress: false,
-      decryptError: false
+      decryptError: false,
+
+      hasUnknownError: false,
     };
   },
+
   computed: {
-    ...mapGetters(['loginStatus', 'encryptedServerData', 'userStatus']),
+    ...mapGetters(['loginStatus', 'encryptedServerData', 'userStatus', 'sep10Challenge']),
     loading () {
       return this.inProgress || this.loginStatus.loading;
     }
   },
+
   methods: {
     ...mapActions(['loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'clearAuthToken']),
     async onLoginSubmit (email, pass, tfaCode) {
+      this.hasUnknownError = false;
       this.inProgress = true;
       this.decryptError = false;
 
@@ -61,11 +68,20 @@ export default {
         return;
       }
 
+      const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.hasUnknownError = true;
+        this.inProgress = false;
+        await this.clearAuthToken();
+        return;
+      }
+
       this.setPublicKeys(decryptedServerData.publicKeys);
 
       try {
-        await this.loginStep2({ key: decryptedServerData.publicKeys[188] });
+        await this.loginStep2({ sep10_transaction: signedTransaction });
       } catch (err) {
+        this.hasUnknownError = true;
         this.inProgress = false;
         await this.clearAuthToken();
         return;
@@ -80,6 +96,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
