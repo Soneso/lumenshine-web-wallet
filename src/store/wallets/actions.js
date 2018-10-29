@@ -7,6 +7,8 @@ import validators from '@/validators';
 
 import WalletService from '@/services/wallet';
 
+import StellarErrorParser from '@/util/StellarErrorParser';
+
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 if (config.IS_TEST_NETWORK) {
   StellarSdk.Network.useTestNetwork();
@@ -129,6 +131,11 @@ export default {
     commit('EDIT_WALLET_LOADING', false);
   },
 
+  async resetInflationDestinationActions ({ commit }) {
+    commit('SET_INFLATION_DEST_LOADING', false);
+    commit('SET_INFLATION_DEST_ERROR', []);
+  },
+
   async setInflationDestination ({ commit, dispatch }, { publicKey, secretSeed, destination }) {
     commit('SET_INFLATION_DEST_LOADING', true);
     commit('SET_INFLATION_DEST_ERROR', []);
@@ -150,9 +157,21 @@ export default {
       await dispatch('updateWallets', [ publicKey ]);
     } catch (err) {
       console.error(err);
-      commit('SET_INFLATION_DEST_ERROR', [{ error_message: 'Cannot update data, try again later.' }]);
+      const errorCode = StellarErrorParser(err);
+      if (errorCode === 'op_invalid_inflation') {
+        commit('SET_INFLATION_DEST_ERROR', [{ error_code: 'INVALID_DESTINATION', err }]);
+      } else {
+        commit('SET_INFLATION_DEST_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
+      }
     }
     commit('SET_INFLATION_DEST_LOADING', false);
+  },
+
+  async resetCurrencyActions ({ commit }) {
+    commit('ADD_CURRENCY_LOADING', false);
+    commit('ADD_CURRENCY_ERROR', []);
+    commit('REMOVE_CURRENCY_LOADING', false);
+    commit('REMOVE_CURRENCY_ERROR', []);
   },
 
   async addCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
@@ -176,19 +195,13 @@ export default {
       await dispatch('updateWallets', [ publicKey ]);
     } catch (err) {
       console.error(err);
+      const errorCode = StellarErrorParser(err);
       if (err.message === 'Issuer is invalid') {
-        commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER' }]);
-      }
-      if (err.response && err.response.data && err.response.data.extras) {
-        const extras = err.response.data.extras;
-        if (extras.result_codes && extras.result_codes.operations && extras.result_codes.operations[0]) {
-          const op = extras.result_codes.operations[0];
-          if (op === 'op_no_issuer') {
-            return commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
-          }
-        }
+        commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
+      } else if (errorCode === 'op_no_issuer') {
+        commit('ADD_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
       } else {
-        return commit('ADD_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
+        commit('ADD_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }
     }
     commit('ADD_CURRENCY_LOADING', false);
@@ -216,10 +229,13 @@ export default {
       await dispatch('updateWallets', [ publicKey ]);
     } catch (err) {
       console.error(err);
+      const errorCode = StellarErrorParser(err);
       if (err.message === 'Issuer is invalid') {
-        commit('REMOVE_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER' }]);
+        commit('REMOVE_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
+      } else if (errorCode === 'op_no_issuer') {
+        commit('REMOVE_CURRENCY_ERROR', [{ error_code: 'INVALID_ISSUER', err }]);
       } else {
-        commit('REMOVE_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR' }]);
+        commit('REMOVE_CURRENCY_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }
     }
     commit('REMOVE_CURRENCY_LOADING', false);
@@ -441,18 +457,13 @@ export default {
       // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
       commit('SET_SEND_PAYMENT_LOADING', false);
-      if (err.response && err.response.data && err.response.data.extras) {
-        const extras = err.response.data.extras;
-        if (extras.result_codes && extras.result_codes.operations && extras.result_codes.operations[0]) {
-          const op = extras.result_codes.operations[0];
-          if (op === 'op_no_trust') {
-            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NOT_TRUSTED', err }]);
-          } else if (op === 'op_underfunded') {
-            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNDERFUNDED', err }]);
-          } else if (op === 'op_no_destination') {
-            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION', err }]);
-          }
-        }
+      const errorCode = StellarErrorParser(err);
+      if (errorCode === 'op_no_trust') {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NOT_TRUSTED', err }]);
+      } else if (errorCode === 'op_underfunded') {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNDERFUNDED', err }]);
+      } else if (errorCode === 'op_no_destination') {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION', err }]);
       } else {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }

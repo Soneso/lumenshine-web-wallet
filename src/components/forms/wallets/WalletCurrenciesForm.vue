@@ -58,7 +58,7 @@
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
-
+        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
         <div class="form-buttons">
           <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
             <spinner v-if="loading" message="removing..."/>
@@ -169,6 +169,7 @@
               Your secret seed for selected signer.
             </b-form-text>
           </b-form-group>
+          <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
           <div class="py-3">
             <a v-if="!loading" href="#" class="text-warning mr-2" @click.prevent="addCurrency = false">cancel</a>
             <a href="#" @click.prevent="onAddClick">
@@ -226,6 +227,7 @@
               Your secret seed for selected signer.
             </b-form-text>
           </b-form-group>
+          <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
           <div class="mt-3 mb-2">
             <spinner v-if="loading" message="adding..." width="100"/>
             <div v-else>
@@ -349,6 +351,16 @@ export default {
       if (this.newCurrencyId) {
         this.emphasise(this.newCurrencyId);
       }
+    },
+    removeFieldBalance (newVal) {
+      if (!newVal) {
+        this.resetForms();
+      }
+    },
+    addCurrency (visible) {
+      if (!visible) {
+        this.resetForms();
+      }
     }
   },
 
@@ -375,6 +387,8 @@ export default {
       this.issuer = '';
       this.signer = null;
       this.signerSeed = '';
+      this.newCurrency = '';
+      this.$emit('reset');
     },
     openAddCurrency () {
       this.addCurrency = true;

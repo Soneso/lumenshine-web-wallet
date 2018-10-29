@@ -43,12 +43,14 @@
     <b-row class="pb-2">
       <b-col>
         <wallet-inflation-form
-          v-if="knownDestinations && data"
+          v-if="knownDestinations && data && data.stellar_data"
+          :errors="addInflationDestinationStatus.err"
           :loading="inflationDestinationLoading"
           :decryption-error="decryptedWallet.err"
           :known-destinations="knownDestinations"
           :data="data"
-          @submit="onSetInflationDestination"/>
+          @submit="onSetInflationDestination"
+          @reset="resetInflationDestination"/>
       </b-col>
     </b-row>
     <hr class="divider">
@@ -56,14 +58,15 @@
     <b-row class="pb-2">
       <b-col>
         <wallet-currencies-form
-          v-if="knownCurrencies && data"
+          v-if="knownCurrencies && data && data.stellar_data"
           :loading="walletDetailsLoading"
           :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
           :decryption-error="decryptedWallet.err"
           :known-currencies="knownCurrencies"
           :data="data"
           @remove="onRemoveCurrency"
-          @add="onAddCurrency"/>
+          @add="onAddCurrency"
+          @reset="resetCurrencies"/>
       </b-col>
     </b-row>
     <hr class="divider">
@@ -148,6 +151,7 @@ export default {
     WalletInflationForm,
     CopyToClipboard
   },
+
   props: {
     data: {
       type: Object,
@@ -166,6 +170,7 @@ export default {
       required: true,
     }
   },
+
   data () {
     return {
       sendingPaymentLoading: false,
@@ -180,9 +185,11 @@ export default {
       config
     };
   },
+
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet', 'knownDestinationsStatus', 'knownCurrenciesStatus', 'knownDestinations', 'knownCurrencies']),
+    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet', 'knownDestinationsStatus', 'knownCurrenciesStatus', 'knownDestinations', 'knownCurrencies', 'addInflationDestinationStatus']),
   },
+
   watch: {
     async homescreen (val) {
       this.saveWalletLoading = true;
@@ -193,6 +200,7 @@ export default {
       this.saveWalletLoading = false;
     }
   },
+
   created () {
     if (this.knownDestinationsStatus.shouldLoad) {
       this.getKnownDestinations();
@@ -201,8 +209,9 @@ export default {
       this.getKnownCurrencies();
     }
   },
+
   methods: {
-    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies']),
+    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies', 'resetCurrencyActions', 'resetInflationDestinationActions']),
     async onDecryptWallet (password) {
       await this.decryptWallet({ publicKey: this.data.public_key_0, password });
       // setTimeout(() => {
@@ -240,7 +249,13 @@ export default {
     },
     async onRemoveCurrency (params) {
       this.$emit('removeCurrency', params);
-    }
+    },
+    async resetCurrencies () {
+      await this.resetCurrencyActions();
+    },
+    async resetInflationDestination () {
+      await this.resetInflationDestinationActions();
+    },
   }
 };
 </script>

@@ -4,6 +4,7 @@ export default {
   addWalletStatus: state => ({ err: state.addWalletErrors, loading: state.addWalletLoading, res: state.addWalletResult }),
   editWalletStatus: state => ({ err: state.editWalletErrors, loading: state.editWalletLoading }),
   addCurrencyStatus: state => ({ err: state.addCurrencyErrors, loading: state.addCurrencyLoading }),
+  addInflationDestinationStatus: state => ({ err: state.inflationDestErrors, loading: state.inflationDestLoading }),
   removeCurrencyStatus: state => ({ err: state.removeCurrencyErrors, loading: state.removeCurrencyLoading }),
   fundWithFriendbotStatus: state => ({ err: state.fundWithFriendbotErrors, loading: state.fundWithFriendbotLoading }),
   publicKeys: state => state.publicKeys,

@@ -4,11 +4,11 @@
     <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
     <a v-if="fieldOpen && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
     <br>
-    <div v-if="!data.stellar_data.inflation_destination">
+    <div v-if="!data.stellar_data.inflation_destination || data.stellar_data.inflation_destination === data.public_key_0">
       <span class="left text-danger">none</span><br>
       <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
     </div>
-    <div v-else="" class="break-word with-hyphens">
+    <div v-else class="break-word with-hyphens">
       {{ data.stellar_data.inflation_destination }}
       <copy-to-clipboard :text="data.stellar_data.inflation_destination" color="text-info"/>
       <br>
@@ -16,13 +16,13 @@
 
     <h6 v-if="hasUnknownError" class="text-danger">Unknown backend error!</h6>
 
-    <div v-if="fieldOpen && !loading">
+    <div v-if="fieldOpen">
       <b-button-group size="sm" class="my-3">
         <b-button :class="formType === 'known' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Destinations</b-button>
         <b-button :class="formType === 'fields' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Destination Data</b-button>
       </b-button-group>
 
-      <div v-if="formType === 'fields'" class="tab-page"><!-- new destination -->
+      <div v-if="formType === 'fields'" class="tab-page"> <!-- new destination -->
         <b-card class="flat-card">
           <b-form-group :label-for="`destinationInput_${uuid}`">
             <b-form-input
@@ -39,6 +39,7 @@
               <template v-if="$v.destination.$error" class="field__errors">
                 <template v-if="!$v.destination.required">Wallet destination is required <br></template>
                 <template v-if="!$v.destination.publicKey">Not valid public key!</template>
+                <template v-if="!$v.destination.validDestination">Invalid destination!</template>
               </template>
             </b-form-invalid-feedback>
             <b-form-text :id="`inputLiveDestinationHelp_${uuid}`">
@@ -93,17 +94,18 @@
           </b-form-group>
 
           <div>
-            <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
-            <template v-else>
+            <template>
+              <spinner v-if="loading" width="140" message="settings inflation..."/>
               <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
-              <a href="#" class="text-info px-2" @click.prevent="onSubmitClick">
-                <spinner v-if="loading" width="140" message="settings inflation..."/>
-                <span v-else>submit</span>
+              <a v-if="removingExistingDestination" href="#" class="text-danger px-2" @click.prevent="onSubmitClick">remove</a>
+              <a v-else href="#" class="text-info px-2" @click.prevent="onSubmitClick">
+                <span>submit</span>
               </a>
             </template>
           </div>
         </b-card>
       </div>
+
       <div v-else> <!-- Known destinations -->
         <b-list-group class="flat-card">
           <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
@@ -117,12 +119,17 @@
                 <small class="d-block break-word with-hyphens">Public key: {{ destination.issuer_public_key }}</small>
               </b-col>
               <b-col cols="2" class="text-right">
-                <input :id="`currencyCheckbox${destination.issuer_public_key}`" :checked="destination.issuer_public_key === data.stellar_data.inflation_destination" type="checkbox" class="switch" @input.prevent="e => { openedKnownDestination = e.target.checked ? destination : null }">
+                <input
+                  :id="`currencyCheckbox${destination.issuer_public_key}`"
+                  :checked="destination.issuer_public_key === data.stellar_data.inflation_destination"
+                  type="checkbox"
+                  class="switch"
+                  @input.prevent="e => onToggleCurrency(e, destination)">
                 <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
               </b-col>
             </b-row>
 
-            <div v-if="openedKnownDestination === destination" class="pt-4 pb-1">
+            <div v-if="openedKnownDestination === destination || removingDestination" class="pt-4 pb-1">
               <b-form-group v-if="canSignWithPassword">
                 <b-form-input
                   :id="`passwordInput_${uuid}`"
@@ -170,12 +177,13 @@
                 </b-form-text>
               </b-form-group>
 
-              <small class="d-block mb-3 font-italic">Password required to {{ data.stellar_data.inflation_destination === openedKnownDestination.issuer_public_key ? 'add' : 'remove' }} destination</small>
+              <small class="d-block mb-3 font-italic">Password required to {{ removingDestination ? 'remove' : 'add' }} destination</small>
               <div>
-                <spinner v-if="loading" message="adding..." width="90"/>
+                <spinner v-if="loading" :message="removingDestination ? 'removing...' : 'adding...'" width="90"/>
                 <div v-else>
                   <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
-                  <a href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
+                  <a v-if="removingDestination" href="#" class="text-danger" @click.prevent="onSubmitClick">remove</a>
+                  <a v-else href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
                 </div>
               </div>
             </div>
@@ -183,7 +191,6 @@
         </b-list-group>
       </div>
     </div>
-    <spinner v-if="loading"/>
     <br>
   </b-form>
 </template>
@@ -202,6 +209,7 @@ export default {
   name: 'WalletInflationForm',
   components: { passwordAssets, spinner, copyToClipboard },
   mixins: [ formMixin, updatePasswordVisibilityState ],
+
   props: {
     loading: {
       type: Boolean,
@@ -220,13 +228,16 @@ export default {
       required: true,
     },
   },
+
   data () {
+    const currentDestination = this.data.stellar_data.inflation_destination || '';
     return {
       fieldOpen: false,
-      destination: this.inflationDestination,
+      destination: currentDestination === this.data.public_key_0 ? '' : currentDestination,
       password: '',
       formType: 'known',
       openedKnownDestination: null,
+      removingDestination: false,
 
       signer: null,
       signerSeed: '',
@@ -234,6 +245,7 @@ export default {
       password2IsHidden: true,
     };
   },
+
   computed: {
     signers () {
       if (!this.data.stellar_data) return [];
@@ -244,26 +256,44 @@ export default {
     canSignWithPassword () {
       return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
     },
+    removingExistingDestination () {
+      const existing = this.data.stellar_data ? this.data.stellar_data.inflation_destination || '' : '';
+      return this.destination === existing;
+    }
   },
+
   watch: {
     loading (loading) {
       if (!loading && !this.decryptionError && this.errors.length === 0) {
         this.fieldOpen = false;
         this.openedKnownDestination = null;
+        if (this.removingDestination) {
+          this.removingDestination = false;
+        }
+      }
+    },
+    fieldOpen (visible) {
+      if (!visible) {
+        this.resetForms();
       }
     }
   },
+
   methods: {
     onTabChange (val) {
       this.formType = val;
       this.resetForms();
     },
     resetForms () {
+      const currentDestination = this.data.stellar_data.inflation_destination || '';
       this.password = '';
-      this.destination = '';
+      this.destination = currentDestination === this.data.public_key_0 ? '' : currentDestination;
       this.signer = null;
       this.signerSeed = '';
+      this.openedKnownDestination = null;
+      this.removingDestination = false;
       this.$v.$reset();
+      this.$emit('reset');
     },
     onCancelClick () {
       this.fieldOpen = false;
@@ -275,14 +305,30 @@ export default {
       this.openedKnownDestination = val;
       this.resetForms();
     },
+    onToggleCurrency (e, destination) {
+      if (e.target.checked) {
+        this.openedKnownDestination = destination;
+        this.removingDestination = false;
+      } else {
+        this.openedKnownDestination = null;
+        this.removingDestination = true;
+      }
+    },
     async onSubmitClick () {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
 
+      let destination = this.destination;
+      if (this.removingDestination || this.removingExistingDestination) {
+        destination = this.data.public_key_0;
+      } else if (this.openedKnownDestination) {
+        destination = this.openedKnownDestination.issuer_public_key;
+      }
+
       this.backendQuery = {
-        destination: this.openedKnownDestination ? this.openedKnownDestination.issuer_public_key : this.destination,
+        destination,
         ...(this.canSignWithPassword ? {
           password: this.password,
         } : {
@@ -292,8 +338,9 @@ export default {
       };
 
       this.$emit('submit', this.backendQuery);
-    }
+    },
   },
+
   validations () {
     const signerValidators = this.canSignWithPassword ? {
       password: {
@@ -312,6 +359,7 @@ export default {
         destination: {
           required,
           ...validators.publicKey.call(this),
+          validDestination: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
         },
       }),
       ...signerValidators

@@ -188,7 +188,7 @@ export default {
       if (!visible) {
         this.resetDecryptedWallet(); // clear revealed secret seed after closing modal
       }
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -212,6 +212,7 @@ export default {
     async onSendPaymentClick (data) {
       await this.sendPayment(data);
     },
+
     async onSetInflationDestination (data) {
       this.setInflationDestLoading = true;
       let secretSeed;
@@ -234,6 +235,7 @@ export default {
       });
       this.setInflationDestLoading = false;
     },
+
     async onAddCurrency (data) {
       this.walletDetailsLoading = true;
       let secretSeed;
@@ -257,6 +259,7 @@ export default {
       });
       this.walletDetailsLoading = false;
     },
+
     async onRemoveCurrency (data) {
       this.walletDetailsLoading = true;
       let secretSeed;
