@@ -41,14 +41,12 @@
           Your password.
         </b-form-text>
       </b-form-group>
-
-      <a v-if="fieldOpen && !secretSeed" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="onCancelClick">cancel</a>
-      <a v-if="secretSeed" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="onHideClick">hide</a>
-      <a v-if="fieldOpen && !secretSeed" href="#" class="d-inline-block" @click.prevent="onSubmitClick">
-        <span v-if="!loading">reveal</span>
-        <spinner v-else message="revealing..." width="100" size="21"/>
-      </a>
     </b-card>
+
+    <a v-if="fieldOpen && !secretSeed" href="#" class="mx-3 mt-3 d-inline-block" @click.prevent="onSubmitClick">
+      <span v-if="!loading">reveal</span>
+      <spinner v-else :size="21" message="revealing..." width="100"/>
+    </a>
   </b-form>
 </template>
 
