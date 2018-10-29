@@ -84,6 +84,16 @@ export default {
       passwordIsHidden: true
     };
   },
+  watch: {
+    loading (loading) {
+      if (!loading && !this.decryptionError && this.errors.length === 0) {
+        this.fieldOpen = false;
+        if (this.password !== '') {
+          this.password = '';
+        }
+      }
+    }
+  },
   methods: {
     onCancelClick () {
       this.fieldOpen = false;
@@ -103,7 +113,6 @@ export default {
       }
       this.backendQuery = { password: this.password };
       this.$emit('reveal', this.password);
-      this.password = '';
     }
   },
   validations () {

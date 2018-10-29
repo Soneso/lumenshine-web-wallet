@@ -187,7 +187,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['addCurrencyStatus', 'removeCurrencyStatus', 'editWalletStatus', 'decryptedWallet', 'knownDestinationsStatus', 'knownCurrenciesStatus', 'knownDestinations', 'knownCurrencies', 'addInflationDestinationStatus']),
+    ...mapGetters([
+      'addCurrencyStatus',
+      'removeCurrencyStatus',
+      'editWalletStatus',
+      'decryptedWallet',
+      'knownDestinationsStatus',
+      'knownCurrenciesStatus',
+      'knownDestinations',
+      'knownCurrencies',
+      'addInflationDestinationStatus'
+    ]),
   },
 
   watch: {
@@ -211,12 +221,18 @@ export default {
   },
 
   methods: {
-    ...mapActions(['editWallet', 'removeWalletAddress', 'decryptWallet', 'resetDecryptedWallet', 'getKnownDestinations', 'getKnownCurrencies', 'resetCurrencyActions', 'resetInflationDestinationActions']),
+    ...mapActions([
+      'editWallet',
+      'removeWalletAddress',
+      'decryptWallet',
+      'resetDecryptedWallet',
+      'getKnownDestinations',
+      'getKnownCurrencies',
+      'resetCurrencyActions',
+      'resetInflationDestinationActions'
+    ]),
     async onDecryptWallet (password) {
       await this.decryptWallet({ publicKey: this.data.public_key_0, password });
-      // setTimeout(() => {
-      //   this.resetDecryptedWallet();
-      // }, 5000);
     },
     async onSaveWalletName ({ name }) {
       this.saveWalletLoading = true;
