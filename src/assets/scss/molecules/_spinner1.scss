@@ -5,6 +5,13 @@
     left: calc(50% - 1rem);
   }
 
+  &.inline-spinner,
+  .modal & {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
   .spinner {
     @extend .float-left, .mr-2;
     border-radius: 50%;

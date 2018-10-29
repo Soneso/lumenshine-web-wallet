@@ -2,9 +2,7 @@
   <b-form class="form" @submit.prevent="onSubmitClick">
     <div>
       <span class="font-weight-600">Secret seed / Private key</span>
-      <a v-if="!fieldOpen && !secretSeed" href="#" @click.prevent="onRevealClick">
-        <template v-if="!loading">reveal</template>
-      </a>
+      <a v-if="!fieldOpen && !secretSeed" href="#" @click.prevent="onRevealClick">reveal</a>
       <a v-if="fieldOpen && !secretSeed && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
       <a v-if="secretSeed && !loading" href="#" class="text-warning" @click.prevent="onHideClick">hide</a>
       <br>
@@ -14,7 +12,6 @@
           <copy-to-clipboard :text="secretSeed" color="text-info"/>
         </template>
       </span>
-      <spinner v-if="loading" message="revealing..." width="100"/>
     </div>
 
     <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
@@ -45,10 +42,11 @@
         </b-form-text>
       </b-form-group>
 
-      <a v-if="fieldOpen && !secretSeed" href="#" class="text-warning mr-3" @click.prevent="onCancelClick">cancel</a>
-      <a v-if="secretSeed" href="#" class="text-warning mr-3" @click.prevent="onHideClick">hide</a>
-      <a v-if="fieldOpen && !secretSeed" href="#" @click.prevent="onSubmitClick">
+      <a v-if="fieldOpen && !secretSeed" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="onCancelClick">cancel</a>
+      <a v-if="secretSeed" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="onHideClick">hide</a>
+      <a v-if="fieldOpen && !secretSeed" href="#" class="d-inline-block" @click.prevent="onSubmitClick">
         <span v-if="!loading">reveal</span>
+        <spinner v-else message="revealing..." width="100" size="21"/>
       </a>
     </b-card>
   </b-form>

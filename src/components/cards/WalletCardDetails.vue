@@ -9,7 +9,7 @@
           :wallet-name="data.wallet_name"
           @submit="onSaveWalletName"/>
       </b-col>
-
+      <!-- show on home -->
       <b-col cols="12" sm="5">
         <div class="card-checkbox float-right px-sm-3">
           <input id="homeScreenCheckbox" v-model="homescreen" type="checkbox" class="switch">

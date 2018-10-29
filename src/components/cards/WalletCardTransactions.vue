@@ -32,7 +32,7 @@
     <b-row align-h="center">
       <b-col cols="6" md="4" class="text-center">
         <a v-if="!loading" href="#" @click.prevent="onLoadMore">Load more</a>
-        <spinner v-else width="200" message="Loading transactions..."/>
+        <spinner v-else width="180" message="Loading transactions..." size="21"/>
       </b-col>
     </b-row>
   </b-form>
