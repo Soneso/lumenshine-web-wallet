@@ -39,12 +39,12 @@
       </a>
     </li>
 
-    <li>
-      <a href="#">
-        <i class="icon-fa"/>
-        <div :style="toggleText">Currencies</div>
-      </a>
-    </li>
+    <!--<li>-->
+    <!--<a href="#">-->
+    <!--<i class="icon-fa"/>-->
+    <!--<div :style="toggleText">Currencies</div>-->
+    <!--</a>-->
+    <!--</li>-->
 
     <li>
       <router-link to="/contacts">
@@ -53,12 +53,12 @@
       </router-link>
     </li>
 
-    <li>
-      <a href="#">
-        <i class="icon-star"/>
-        <div :style="toggleText">Extras</div>
-      </a>
-    </li>
+    <!--<li>-->
+    <!--<a href="#">-->
+    <!--<i class="icon-star"/>-->
+    <!--<div :style="toggleText">Extras</div>-->
+    <!--</a>-->
+    <!--</li>-->
 
     <li class="has-submenu">
       <router-link to="/settings">
