@@ -61,7 +61,7 @@
         <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
         <div class="form-buttons">
           <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
-            <spinner v-if="loading" message="removing..."/>
+            <spinner v-if="loading" message="removing..." size="21"/>
             <span v-else-if="!removeFieldBalance.balance.equal('0')">remove & abandon credits</span>
             <span v-else>remove</span>
           </a>
@@ -75,7 +75,7 @@
         <b-button :class="addCurrencyFormType === 'fields' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Currency Data</b-button>
       </b-button-group>
 
-      <div v-if="addCurrencyFormType === 'fields'" class="tab-page">
+      <div v-if="addCurrencyFormType === 'fields'" class="tab-page">  <!-- New currencies -->
         <b-card class="flat-card">
           <b-form-group :label-for="`assetCodeInput_${uuid}`" label="Asset code">
             <b-form-input
@@ -171,14 +171,15 @@
           </b-form-group>
           <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
           <div class="py-3">
-            <a v-if="!loading" href="#" class="text-warning mr-2" @click.prevent="addCurrency = false">cancel</a>
-            <a href="#" @click.prevent="onAddClick">
-              <spinner v-if="loading" message="adding..." width="100"/>
-              <span v-else>add</span>
+            <a href="#" class="text-warning mr-2 d-inline-block" @click.prevent="addCurrency = false">cancel</a>
+            <a href="#" class="d-inline-block" @click.prevent="onAddClick">
+              <spinner v-if="loading" message="adding..." width="100" size="21"/>
+              <template v-else>add</template>
             </a>
           </div>
         </b-card>
-      </div>  <!--new currencies-->
+      </div>
+
       <div v-else> <!-- Known currencies -->
         <b-card v-if="openedKnownCurrency" class="flat-card">
           <b-form-group v-if="canSignWithPassword">
@@ -229,10 +230,12 @@
           </b-form-group>
           <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
           <div class="mt-3 mb-2">
-            <spinner v-if="loading" message="adding..." width="100"/>
-            <div v-else>
-              <a href="#" class="text-warning mr-2" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
-              <a href="#" class="text-info" @click.prevent="onAddClick">add</a>
+            <div>
+              <a href="#" class="text-warning mr-2 d-inline-block" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
+              <a href="#" class="text-info d-inline-block" @click.prevent="onAddClick">
+                <template v-if="loading">add</template>
+                <spinner v-else message="adding..." width="100" size="21"/>
+              </a>
             </div>
           </div>
         </b-card>

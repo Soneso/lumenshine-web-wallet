@@ -64,7 +64,7 @@
         </li>
         <li v-if="fieldOpen" class="action-btn">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
-            <spinner v-if="loading" message="saving..."/>
+            <spinner v-if="loading" message="saving..." size="21"/>
             <span v-else class="text-info">save</span>
           </a>
         </li>

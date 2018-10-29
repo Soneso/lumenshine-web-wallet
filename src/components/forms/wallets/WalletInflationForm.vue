@@ -94,12 +94,16 @@
           </b-form-group>
 
           <div>
-            <template>
-              <spinner v-if="loading" width="140" message="settings inflation..."/>
-              <a href="#" class="text-warning px-2" @click.prevent="onCancelClick">cancel</a>
-              <a v-if="removingExistingDestination" href="#" class="text-danger px-2" @click.prevent="onSubmitClick">remove</a>
-              <a v-else href="#" class="text-info px-2" @click.prevent="onSubmitClick">
-                <span>submit</span>
+            <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
+            <template v-else>
+              <a href="#" class="text-warning px-2 d-inline-block" @click.prevent="onCancelClick">cancel</a>
+              <a v-if="removingExistingDestination" href="#" class="text-danger px-2 d-inline-block" @click.prevent="onSubmitClick">
+                <spinner v-if="loading" width="150" size="21" message="setting inflation..."/>
+                <span v-else>remove</span>
+              </a>
+              <a href="#" class="text-info px-2 d-inline-block" @click.prevent="onSubmitClick">
+                <spinner v-if="loading" width="150" size="21" message="setting inflation..."/>
+                <span v-else>submit</span>
               </a>
             </template>
           </div>
@@ -179,18 +183,22 @@
 
               <small class="d-block mb-3 font-italic">Password required to {{ removingDestination ? 'remove' : 'add' }} destination</small>
               <div>
-                <spinner v-if="loading" :message="removingDestination ? 'removing...' : 'adding...'" width="90"/>
-                <div v-else>
-                  <a href="#" class="text-warning mr-3" @click.prevent="openKnownDestination(null)">cancel</a>
-                  <a v-if="removingDestination" href="#" class="text-danger" @click.prevent="onSubmitClick">remove</a>
-                  <a v-else href="#" class="text-info" @click.prevent="onSubmitClick">add</a>
-                </div>
+                <a href="#" class="text-warning mr-3 d-inline-block" @click.prevent="openKnownDestination(null)">cancel</a>
+                <a v-if="removingDestination" href="#" class="text-danger d-inline-block" @click.prevent="onSubmitClick">
+                  <spinner v-if="loading" message="removing..." width="90" size="21"/>
+                  <template v-else>remove</template>
+                </a>
+                <a v-else href="#" class="text-info d-inline-block" @click.prevent="onSubmitClick">
+                  <spinner v-if="loading" message="adding..." width="90" size="21"/>
+                  <template v-else>add</template>
+                </a>
               </div>
             </div>
           </b-list-group-item>
         </b-list-group>
       </div>
     </div>
+    <spinner v-if="loading" size="21" class="my-2 mx-3"/>
     <br>
   </b-form>
 </template>
@@ -359,7 +367,7 @@ export default {
         destination: {
           required,
           ...validators.publicKey.call(this),
-          validDestination: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
+          validDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
         },
       }),
       ...signerValidators
