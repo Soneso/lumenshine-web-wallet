@@ -233,7 +233,7 @@
             <div>
               <a href="#" class="text-warning mr-2 d-inline-block" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
               <a href="#" class="text-info d-inline-block" @click.prevent="onAddClick">
-                <template v-if="loading">add</template>
+                <template v-if="!loading">add</template>
                 <spinner v-else message="adding..." width="100" size="21"/>
               </a>
             </div>
