@@ -4,8 +4,8 @@
       <b-card class="p-4 text-center single-card">
         <template v-if="!hasToken">
           <h4 class="form-headline text-uppercase pl-2">Setup Wallet</h4>
-          <h6 class="text-danger py-3">Email confirmation required</h6>
-          <p>In order to be able continue the setup process, you need to confirm your email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions from the received mail to confirm your email address.</p>
+          <h6 class="text-danger py-3">VERIFY YOUR EMAIL ADDRESS</h6>
+          <p>We sent a verification message to {{ userStatus.email }}. Click the link to verify your email address.</p>
           <spinner v-if="inProgress" align="center"/>
 
           <template v-else>
@@ -14,7 +14,7 @@
               <div v-if="alreadyConfirmedFailed" class="text-danger pt-2">Please confirm your email address first.</div>
             </div>
             <br>
-            <b-button type="submit" variant="primary" class="btn-rounded text-uppercase" @click="onResendEmail">Resend confirmation email</b-button>
+            <b-button type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onResendEmail">RESEND VERIFICATION LINK</b-button>
             <div v-if="emailResent && resendEmailStatus.err.length > 0" class="text-danger pt-2">An error happened during email resend</div>
             <div v-else-if="emailResent" class="text-success pt-2">Resent confirmation mail</div>
           </template>
