@@ -137,7 +137,7 @@ export default {
     async onMnemonicSubmitClick (mnemonic) {
       this.inProgress = true;
       this.mnemonicError = false;
-      const pk0 = this.lostPasswordStatus.res.public_key_0;
+      const pk0 = this.lostPasswordStatus.res.public_key;
       const isValidMnemonic = await workerCaller('validateMnemonic', mnemonic);
 
       if (!isValidMnemonic) {
@@ -176,7 +176,7 @@ export default {
         mnemonic_iv: securityData.encryption_mnemonic_iv,
         wordlist: securityData.encryptedWordlist,
         wordlist_iv: securityData.encryption_wordlist_iv,
-        public_key_0: securityData.public_key_0,
+        public_key: securityData.public_key,
 
         tfa_code: this.lastTfaCode,
       });
@@ -221,7 +221,7 @@ export default {
         mnemonic: securityData.mnemonic,
         mnemonic_master_iv: securityData.mnemonic_master_iv,
         mnemonic_master_key: securityData.mnemonic_master_key,
-        public_key_0: securityData.public_key_0,
+        public_key: securityData.public_key,
         wordlist_master_iv: securityData.wordlist_master_iv,
         wordlist_master_key: securityData.wordlist_master_key,
 

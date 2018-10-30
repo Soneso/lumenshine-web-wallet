@@ -23,22 +23,22 @@ export default {
       const backendRes = await WalletService.getWallets();
       const stellarRes = await Promise.all(
         backendRes.map(account =>
-          StellarAPI.loadAccount(account.public_key_0).catch(err => err)
+          StellarAPI.loadAccount(account.public_key).catch(err => err)
         )
       );
       const extended = backendRes.map(account => {
-        const stellarData = stellarRes.find(acc => acc.id === account.public_key_0);
+        const stellarData = stellarRes.find(acc => acc.id === account.public_key);
         return { ...account, stellar_data: stellarData };
       });
       extended.forEach(async acc => {
         if (acc.stellar_data) {
           const lastTransaction = await StellarAPI.transactions()
-            .forAccount(acc.public_key_0)
+            .forAccount(acc.public_key)
             .order('desc')
             .limit(1)
             .call();
           StellarAPI.transactions()
-            .forAccount(acc.public_key_0)
+            .forAccount(acc.public_key)
             .cursor(lastTransaction.records[0].paging_token)
             .stream({
               onmessage: async tx => {
@@ -47,7 +47,7 @@ export default {
                   tx.operation = operations.records[0];
                   commit('RESOLVE_TRANSACTION', tx);
                 }
-                dispatch('updateWallets', [acc.public_key_0]);
+                dispatch('updateWallets', [acc.public_key]);
               }
             });
         }
@@ -69,17 +69,17 @@ export default {
         if (Number.isInteger(k)) {
           return k;
         }
-        const wallet = getters.wallets.res.find(w => w.public_key_0 === k);
+        const wallet = getters.wallets.res.find(w => w.public_key === k);
         return wallet ? wallet.id : null;
       }).filter(k => k);
       const backendRes = (await WalletService.getWallets()).filter(wallet => ids.includes(wallet.id));
       const stellarRes = await Promise.all(
         backendRes.map(account =>
-          StellarAPI.loadAccount(account.public_key_0).catch(err => err)
+          StellarAPI.loadAccount(account.public_key).catch(err => err)
         )
       );
       const extended = backendRes.map(account => {
-        const stellarData = stellarRes.find(acc => acc.id === account.public_key_0);
+        const stellarData = stellarRes.find(acc => acc.id === account.public_key);
         return { ...account, stellar_data: stellarData };
       });
       commit('UPDATE_WALLETS', extended);

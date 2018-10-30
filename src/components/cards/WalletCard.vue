@@ -76,8 +76,8 @@
         <div v-else class="font-weight-600">Stellar test net public key</div>
         <br>
         <div class="break-word with-hyphens">
-          {{ data.public_key_0 }}
-          <copy-to-clipboard :text="data.public_key_0"/>
+          {{ data.public_key }}
+          <copy-to-clipboard :text="data.public_key"/>
           <small v-if="accountIDCopied" class="text-info">Copied to clipboard<br></small>
         </div>
 
@@ -86,7 +86,7 @@
         <p>In order to prevent people from making a huge number of unnecessary accounts, each account in the stellar blockchain must have a minimum balance of 1 XLM (Stellar Lumen). Please send your Stellar Lumens (XLM) to the above displayed Account ID / Public key. At least 1 XLM is needed to fund your wallet in the stellar blockchain. We recommend a minimum of 2 XLM.</p>
         <p>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?</p>
         <p> A: You can pay an exchange that sells lumens in order to fund your wallet. <a href="http://coinmarketcap.com/currencies/stellar/#markets" target="_blank">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens withdraw them from the exchange to your wallet by sending them to the above displayed Account ID / Public key in order to fund your wallet.</p>
-        <a id="changellyButton" :href="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" target="_blank" @click.prevent="changellyModalVisible = true, fundWalletModalVisible = false">
+        <a id="changellyButton" :href="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" target="_blank" @click.prevent="changellyModalVisible = true, fundWalletModalVisible = false">
           <img src="https://changelly.com/pay_button_pay_with.png">
         </a>
       </div>
@@ -105,7 +105,7 @@
     <div v-if="!config.IS_TEST_NETWORK" id="changellyModal" :style="{display: changellyModalVisible ? 'block' : 'none'}">
       <div class="changellyModal-content">
         <span class="changellyModal-close" @click="changellyModalVisible = false">x</span>
-        <iframe :src="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key_0}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none">
+        <iframe :src="`https://changelly.com/widget/v1?auth=email&from=USD&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key}&amount=100&ref_id=dcaa3ae0e64f&color=00cf70`" width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none">
           Can't load widget
         </iframe>
       </div>
@@ -217,7 +217,7 @@ export default {
       this.setInflationDestLoading = true;
       let secretSeed;
       if (data.password) {
-        await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+        await this.decryptWallet({ publicKey: this.data.public_key, password: data.password });
 
         if (this.decryptedWallet.err) {
           this.setInflationDestLoading = false;
@@ -229,7 +229,7 @@ export default {
         secretSeed = data.signerSeed;
       }
       await this.setInflationDestination({
-        publicKey: this.data.public_key_0,
+        publicKey: this.data.public_key,
         secretSeed,
         destination: data.destination,
       });
@@ -240,7 +240,7 @@ export default {
       this.walletDetailsLoading = true;
       let secretSeed;
       if (data.password) {
-        await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+        await this.decryptWallet({ publicKey: this.data.public_key, password: data.password });
 
         if (this.decryptedWallet.err) {
           this.walletDetailsLoading = false;
@@ -252,7 +252,7 @@ export default {
         secretSeed = data.signerSeed;
       }
       await this.addCurrency({
-        publicKey: this.data.public_key_0,
+        publicKey: this.data.public_key,
         secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
@@ -264,7 +264,7 @@ export default {
       this.walletDetailsLoading = true;
       let secretSeed;
       if (data.password) {
-        await this.decryptWallet({ publicKey: this.data.public_key_0, password: data.password });
+        await this.decryptWallet({ publicKey: this.data.public_key, password: data.password });
 
         if (this.decryptedWallet.err) {
           this.walletDetailsLoading = false;
@@ -277,7 +277,7 @@ export default {
         secretSeed = data.signerSeed;
       }
       await this.removeCurrency({
-        publicKey: this.data.public_key_0,
+        publicKey: this.data.public_key,
         secretSeed,
         assetCode: data.assetCode,
         issuer: data.issuer,
@@ -286,7 +286,7 @@ export default {
     },
     async fundWithFriendbot () {
       this.fundWalletLoading = true;
-      await this.fundAccountWithFriendbot(this.data.public_key_0);
+      await this.fundAccountWithFriendbot(this.data.public_key);
       this.fundWalletLoading = false;
       this.fundWalletModalVisible = false;
     },

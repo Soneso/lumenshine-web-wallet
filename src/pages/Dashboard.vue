@@ -2,7 +2,7 @@
   <section>
     <b-row align-h="start" class="equal-heights">
       <spinner v-if="wallets.loading" align="center"/>
-      <wallet-card v-for="wallet in homescreenWallets" v-else :key="wallet.public_key_0" :data="wallet"/>
+      <wallet-card v-for="wallet in homescreenWallets" v-else :key="wallet.public_key" :data="wallet"/>
     </b-row>
   </section>
 </template>

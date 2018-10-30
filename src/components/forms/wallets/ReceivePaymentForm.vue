@@ -8,8 +8,8 @@
           <div :class="['pt-3', {'pb-4': data.federation_address}]">
             <span class="font-weight-600">Receive public key</span>
             <br>
-            <small class="break-word with-hyphens">{{ data.public_key_0 }}</small>
-            <a v-clipboard:copy="data.public_key_0" v-clipboard:success="onCopy" class="wallet-link">
+            <small class="break-word with-hyphens">{{ data.public_key }}</small>
+            <a v-clipboard:copy="data.public_key" v-clipboard:success="onCopy" class="wallet-link">
               <i class="icon-copy text-info"/>
             </a>
             <small v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></small>
@@ -89,7 +89,7 @@ export default {
   computed: {
     emailBody () {
       return `QR code\n
-      Public key: ${this.data.public_key_0}\n
+      Public key: ${this.data.public_key}\n
       Currency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\n
       Issuer: ${this.issuer}\n
       Amount: ${this.amount}`;

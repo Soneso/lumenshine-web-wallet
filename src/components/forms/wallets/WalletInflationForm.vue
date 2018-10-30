@@ -4,7 +4,7 @@
     <a v-if="!fieldOpen" href="#" @click.prevent="onSetDestinationClick">set inflation destination</a>
     <a v-if="fieldOpen && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
     <br>
-    <div v-if="!data.stellar_data.inflation_destination || data.stellar_data.inflation_destination === data.public_key_0">
+    <div v-if="!data.stellar_data.inflation_destination || data.stellar_data.inflation_destination === data.public_key">
       <span class="left text-danger">none</span><br>
       <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
     </div>
@@ -241,7 +241,7 @@ export default {
     const currentDestination = this.data.stellar_data.inflation_destination || '';
     return {
       fieldOpen: false,
-      destination: currentDestination === this.data.public_key_0 ? '' : currentDestination,
+      destination: currentDestination === this.data.public_key ? '' : currentDestination,
       password: '',
       formType: 'known',
       openedKnownDestination: null,
@@ -262,7 +262,7 @@ export default {
       return stellarData.signers.filter(signer => signer.weight >= threshold);
     },
     canSignWithPassword () {
-      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
+      return !!this.signers.find(signer => signer.public_key === this.data.public_key);
     },
     removingExistingDestination () {
       const existing = this.data.stellar_data ? this.data.stellar_data.inflation_destination || '' : '';
@@ -295,7 +295,7 @@ export default {
     resetForms () {
       const currentDestination = this.data.stellar_data.inflation_destination || '';
       this.password = '';
-      this.destination = currentDestination === this.data.public_key_0 ? '' : currentDestination;
+      this.destination = currentDestination === this.data.public_key ? '' : currentDestination;
       this.signer = null;
       this.signerSeed = '';
       this.openedKnownDestination = null;
@@ -330,7 +330,7 @@ export default {
 
       let destination = this.destination;
       if (this.removingDestination || this.removingExistingDestination) {
-        destination = this.data.public_key_0;
+        destination = this.data.public_key;
       } else if (this.openedKnownDestination) {
         destination = this.openedKnownDestination.issuer_public_key;
       }

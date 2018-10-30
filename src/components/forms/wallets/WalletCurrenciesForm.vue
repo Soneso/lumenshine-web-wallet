@@ -330,7 +330,7 @@ export default {
       return stellarData.signers.filter(signer => signer.weight >= threshold);
     },
     canSignWithPassword () {
-      return !!this.signers.find(signer => signer.public_key === this.data.public_key_0);
+      return !!this.signers.find(signer => signer.public_key === this.data.public_key);
     },
   },
 

@@ -13,8 +13,8 @@
             <div>Operation - ID:  <a href="#" @click.prevent="onDetailsClick(operation)">{{ operation.id }}</a><br></div>
             <div v-if="operation.amount">
               Amount:
-              <span :class="data.public_key_0 === operation.to ? 'text-success' : 'text-danger'">
-                {{ data.public_key_0 === operation.to ? '' : '-' }}{{ operation.amount }}
+              <span :class="data.public_key === operation.to ? 'text-success' : 'text-danger'">
+                {{ data.public_key === operation.to ? '' : '-' }}{{ operation.amount }}
                 {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
               </span>
               <br>
@@ -65,7 +65,7 @@ export default {
   async created () {
     this.loading = true;
     this.transactionQuery = await StellarAPI.transactions()
-      .forAccount(this.data.public_key_0)
+      .forAccount(this.data.public_key)
       .order('desc')
       .limit(3)
       .call();

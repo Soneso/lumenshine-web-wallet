@@ -136,7 +136,7 @@ const cryptoHelper = {
       encryption_mnemonic_iv: mnemonicIV,
       encrypted_wordlist: encryptedWordlist,
       encryption_wordlist_iv: wordlistIV,
-      public_key_0: publicKey0,
+      public_key: publicKey0,
 
       secretSeed,
       mnemonic,

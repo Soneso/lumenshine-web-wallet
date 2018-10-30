@@ -2,7 +2,7 @@
   <section>
     <b-row align-h="start" class="equal-heights">
       <spinner v-if="wallets.loading" align="center"/>
-      <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key_0" :data="wallet"/>
+      <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key" :data="wallet"/>
     </b-row>
 
     <b-modal v-model="addWalletModalShown" size="sm" hide-footer title="ADD NEW WALLET">
@@ -59,7 +59,7 @@ export default {
       this.nextFreePublicKey = null;
       const wallets = this.wallets.res;
       for (const pk of this.publicKeys) {
-        if (wallets.find(w => w.public_key_0 === pk)) continue;
+        if (wallets.find(w => w.public_key === pk)) continue;
         try {
           await StellarAPI.loadAccount(pk);
         } catch (err) {
@@ -74,7 +74,7 @@ export default {
     async onSubmitNewWallet ({ walletName, onHomescreen }) {
       this.inProgress = true;
       await this.addWallet({
-        public_key_0: this.nextFreePublicKey,
+        public_key: this.nextFreePublicKey,
         wallet_name: walletName,
       });
       if (this.addWalletStatus.err.length > 0) {

@@ -341,7 +341,7 @@ export default {
       return stellarData.signers.filter(signer => signer.weight >= threshold);
     },
     canSignWithPassword () {
-      return !!this.signers.find(signer => signer.public_key === this.currentWallet.public_key_0);
+      return !!this.signers.find(signer => signer.public_key === this.currentWallet.public_key);
     },
     assetCodeOptions () {
       return [
@@ -455,7 +455,7 @@ export default {
           signer: this.signer,
           signerSeed: this.signerSeed,
         }),
-        publicKey: this.currentWallet.public_key_0,
+        publicKey: this.currentWallet.public_key,
       };
       this.backendQuery = data;
 

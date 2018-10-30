@@ -22,8 +22,8 @@
     <b-row class="pb-2">
       <b-col>
         <div class="font-weight-600">Stellar public key</div>
-        <span class="break-word with-hyphens">{{ data.public_key_0 }}</span>
-        <copy-to-clipboard :text="data.public_key_0" color="text-info"/>
+        <span class="break-word with-hyphens">{{ data.public_key }}</span>
+        <copy-to-clipboard :text="data.public_key" color="text-info"/>
       </b-col>
     </b-row>
     <hr class="divider">
@@ -232,7 +232,7 @@ export default {
       'resetInflationDestinationActions'
     ]),
     async onDecryptWallet (password) {
-      await this.decryptWallet({ publicKey: this.data.public_key_0, password });
+      await this.decryptWallet({ publicKey: this.data.public_key, password });
     },
     async onSaveWalletName ({ name }) {
       this.saveWalletLoading = true;
