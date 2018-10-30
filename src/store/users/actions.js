@@ -1,5 +1,4 @@
 import UserService from '@/services/user';
-import CryptoHelper from '@/helpers/CryptoHelper';
 
 export default {
   async clearAuthToken ({ commit }) {
@@ -27,7 +26,6 @@ export default {
         mnemonic_confirmed: false,
         tfa_confirmed: false
       });
-      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       commit('SET_USER_EMAIL', params.email);
       commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
     } catch (err) {
@@ -134,7 +132,6 @@ export default {
         email: res.data.email,
         token_already_confirmed: res.data.token_already_confirmed,
       });
-      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       if (res.headers.authorization) {
         commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
       } else {
@@ -283,14 +280,13 @@ export default {
     commit('SET_CHECK_PASSWORD_LOADING', false);
   },
 
-  async updateSep10IfNeeded ({ commit, getters }) {
-    if (!getters.sep10Challenge || CryptoHelper.isSep10ChallengeExpired(getters.sep10Challenge)) {
-      try {
-        const res = await UserService.getSEP10Challenge(getters.authTokenType === 'partial');
-        commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction);
-      } catch (err) {
-        console.error('Error updating SEP10 challenge', err);
-      }
+  async updateSep10 ({ commit, getters }) {
+    try {
+      const res = await UserService.getSEP10Challenge(getters.authTokenType === 'partial');
+      if (!res.data || !res.data.sep10_transaction) throw Error('Invalid response');
+      commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction);
+    } catch (err) {
+      console.error('Error updating SEP10 challenge', err);
     }
   },
 };

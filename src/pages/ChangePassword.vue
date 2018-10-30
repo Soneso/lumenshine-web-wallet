@@ -89,7 +89,7 @@ export default {
 
   methods: {
     ...mapMutations(['mutateChangePasswordStep']),
-    ...mapActions(['getUserAuthData', 'changePassword', 'updateSep10IfNeeded']),
+    ...mapActions(['getUserAuthData', 'changePassword', 'updateSep10']),
 
     async onPasswordSubmitClick (currentPassword, newPassword) {
       this.inProgress = true;
@@ -123,7 +123,7 @@ export default {
           workerCaller('cryptMasterKey', kdfPass, wordlistMasterKeyIV, decryptedOldServerData.wordlistMasterKey),
         ]);
 
-      await this.updateSep10IfNeeded();
+      await this.updateSep10();
       const signedTransaction = await CryptoHelper.signSep10Challenge(secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;

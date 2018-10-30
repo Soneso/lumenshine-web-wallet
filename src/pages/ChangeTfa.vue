@@ -89,7 +89,7 @@ export default {
 
   methods: {
     ...mapMutations(['mutateChange2faStep']),
-    ...mapActions(['getUserAuthData', 'resetTfa', 'confirmNewTfa', 'updateSep10IfNeeded']),
+    ...mapActions(['getUserAuthData', 'resetTfa', 'confirmNewTfa', 'updateSep10']),
 
     async onPasswordSubmitClick (currentPassword) {
       this.inProgress = true;
@@ -104,7 +104,7 @@ export default {
         return;
       }
 
-      await this.updateSep10IfNeeded();
+      await this.updateSep10();
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedOldServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;

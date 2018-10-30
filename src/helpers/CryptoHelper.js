@@ -44,20 +44,8 @@ const cryptoHelper = {
     };
   },
 
-  isSep10ChallengeExpired (challenge) {
-    const transaction = new StellarSdk.Transaction(challenge);
-
-    const now = Date.now() / 1000;
-    return transaction.timeBounds.minTime > now || transaction.timeBounds.maxTime < now;
-  },
-
   async signSep10Challenge (localSecret, challenge) {
     const transaction = new StellarSdk.Transaction(challenge);
-
-    const now = Date.now() / 1000;
-    if (transaction.timeBounds.minTime > now || transaction.timeBounds.maxTime < now) {
-      return null;
-    }
 
     if (transaction.sequence !== '0') {
       return null;
