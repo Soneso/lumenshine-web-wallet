@@ -34,12 +34,12 @@
         </template>
 
         <template v-if="step === 'finish'">
-          <p class="info">Your 2FA Secret has been reset successfully.</p>
+          <p class="text-success">Your 2FA Secret has been reset successfully.</p>
           <b-button variant="info" class="btn-rounded text-uppercase" @click="$router.push({ name: 'Login' })">Login</b-button>
         </template>
 
-        <div v-if="step === 'error'">
-          <small class="text-danger d-block">Cannot update 2FA, please try again later.</small>
+        <div v-if="step == 'error'">
+          <p class="text-danger">Cannot update 2FA, please try again later.</p>
         </div>
       </b-card>
     </b-col>

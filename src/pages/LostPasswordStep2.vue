@@ -39,12 +39,12 @@
         </template>
 
         <template v-else-if="step === 'finish'">
-          <small class="d-block text-center text-success pb-4">Your password has been reset successfully</small>
+          <div class="text-center text-success pb-4">Your password has been reset successfully</div>
           <b-button variant="info" class="btn-rounded text-uppercase" @click="$router.push({ name: 'Login' })">Login</b-button>
         </template>
 
         <template v-else-if="step === 'error'">
-          <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Cannot change password, please try again later.</small>
+          <div v-if="emailAlreadyConfirmed" class="text-center text-danger pb-4">Cannot change password, please try again later.</div>
         </template>
       </b-card>
     </b-col>

@@ -53,7 +53,6 @@ export default {
     ]),
     isSingleCard () {
       const nakedRoute = this.$route.path.substr(1).split('/')[0];
-      console.debug(nakedRoute);
       const routes = ['', 'settings', 'change-password', 'change-tfa', 'backup-mnemonic', 'lost-password', 'lost-tfa'];
       return routes.includes(nakedRoute);
     }

@@ -2,11 +2,11 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card text-center">
-        <p class="form-headline pb-3">Lost Password</p>
+        <h3 class="form-headline">Lost Password</h3>
         <spinner v-if="inProgress" align="center"/>
 
         <template v-if="emailSuccess">
-          <small class="text-success">Password lost email sent</small>
+          <div class="text-success py-3">Password lost email sent</div>
           <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>
           <b-button variant="warning" class="text-uppercase btn-rounded" @click="onEmailLostPasswordResendClick">Resend email</b-button>
           <br>

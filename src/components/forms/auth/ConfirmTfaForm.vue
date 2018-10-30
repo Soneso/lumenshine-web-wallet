@@ -3,11 +3,12 @@
     <template v-if="!loading && tfaData">
       <p>1. Download a two-factor authenticator app (like Google Authenticator)</p>
       <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
-      <h6 v-if="tfaData" class="font-weight-600">
+      <h6 v-if="tfaData" class="text-center pt-2">
         Your 2FA Secret: {{ tfaData.tfa_secret }}
-        <i v-clipboard:copy="tfaData.tfa_secret" v-b-tooltip="'2FA secret copied to clipboard!'" class="icon-copy clipboard"/>
+        <copy-to-clipboard :text="tfaData.tfa_secret" message="2FA secret copied to clipboard" color="text-info"/>
+        <br>
+        <img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img">
       </h6>
-      <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img"></p>
       <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
       <template v-if="hasUnknownError" class="error">Unknown backend error!<br></template>
       <p class="w-50 pt-4 m-auto">
@@ -50,8 +51,10 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import tfaValidator from '@/validators/twoFactorCode';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
+  components: { copyToClipboard },
   mixins: [ formMixin ],
   props: {
     tfaData: {
@@ -74,7 +77,7 @@ export default {
       this.$emit('submit', this.tfaCode);
     },
     onTwoFactorCodeInput () {
-      this.tfaCode = this.tfaCode.replace(/(\d)\s+(?=\d)/g, '');
+      this.tfaCode = this.tfaCode.split(' ').join('');
     },
     onTwoFactorCodeBlur () {
       this.$v.tfaCode.$touch();

@@ -3,7 +3,7 @@
     <b-row v-if="!loading">
       <b-col cols="12 pb-4 mb-3 text-center">
         <small>To change your 2FA Secret please insert your password.</small>
-        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+        <small v-if="hasUnknownError" class="text-danger d-block">Unknown backend error!</small>
       </b-col>
 
       <b-col cols="12">

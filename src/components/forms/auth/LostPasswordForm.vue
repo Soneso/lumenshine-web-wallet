@@ -1,7 +1,7 @@
 <template>
   <form class="form" @submit.prevent="onSaveClick">
     <div v-if="!loading">
-      <p>Reset password: Please insert your new password below. </p>
+      <p class="text-gray-600 pb-3">Reset password: Please insert your new password below. </p>
       <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
       <b-row>
         <b-col cols="12">
