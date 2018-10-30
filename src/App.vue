@@ -52,8 +52,10 @@ export default {
       'offCanvasMenuOpen'
     ]),
     isSingleCard () {
-      const nakedRoute = this.$route.path.substr(1);
-      return ['', 'settings', 'change-password', 'change-tfa', 'backup-mnemonic'].includes(nakedRoute);
+      const nakedRoute = this.$route.path.substr(1).split('/')[0];
+      console.debug(nakedRoute);
+      const routes = ['', 'settings', 'change-password', 'change-tfa', 'backup-mnemonic', 'lost-password', 'lost-tfa'];
+      return routes.includes(nakedRoute);
     }
   },
 
