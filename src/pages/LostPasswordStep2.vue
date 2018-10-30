@@ -117,7 +117,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'setLostPasswordTfa', 'lostPasswordUpdate', 'updateSecurityData', 'setMnemonic', 'setPublicKeys', 'resetTfa', 'logout', 'loginStep2']),
+    ...mapActions(['getUserStatus', 'confirmEmail', 'setLostPasswordTfa', 'lostPasswordUpdate', 'updateSecurityData', 'setMnemonic', 'setPublicKeys', 'resetTfa', 'logout', 'loginStep2', 'updateSep10IfNeeded']),
     async onTfaSubmitClick (tfaCode) {
       this.inProgress = true;
       await this.setLostPasswordTfa(tfaCode);
@@ -181,6 +181,7 @@ export default {
         tfa_code: this.lastTfaCode,
       });
 
+      await this.updateSep10IfNeeded();
       const signedTransaction = await CryptoHelper.signSep10Challenge(securityData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;

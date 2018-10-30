@@ -128,6 +128,11 @@ export default {
     return response;
   },
 
+  async getSEP10Challenge (isPartialAuth = true) {
+    const response = await apiBase.get(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/get_sep10_challange`, { timestamp: Date.now() });
+    return response;
+  },
+
   async getStellarTransactions () {
     const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now() });
     return response.data;

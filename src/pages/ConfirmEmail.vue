@@ -98,7 +98,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail', 'clearAuthToken']),
+    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail', 'clearAuthToken', 'updateSep10IfNeeded']),
 
     async onResendEmail () {
       this.inProgress = true;
@@ -158,6 +158,7 @@ export default {
         return;
       }
 
+      await this.updateSep10IfNeeded();
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;

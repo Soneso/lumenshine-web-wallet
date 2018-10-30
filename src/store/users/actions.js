@@ -1,4 +1,5 @@
 import UserService from '@/services/user';
+import CryptoHelper from '@/helpers/CryptoHelper';
 
 export default {
   async clearAuthToken ({ commit }) {
@@ -280,5 +281,16 @@ export default {
       commit('SET_CHECK_PASSWORD_ERROR', err.data);
     }
     commit('SET_CHECK_PASSWORD_LOADING', false);
+  },
+
+  async updateSep10IfNeeded ({ commit, getters }) {
+    if (!getters.sep10Challenge || CryptoHelper.isSep10ChallengeExpired(getters.sep10Challenge)) {
+      try {
+        const res = await UserService.getSEP10Challenge(getters.authTokenType === 'partial');
+        commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction);
+      } catch (err) {
+        console.error('Error updating SEP10 challenge', err);
+      }
+    }
   },
 };

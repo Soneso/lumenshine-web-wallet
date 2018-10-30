@@ -111,7 +111,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded', 'clearAuthToken']),
+    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded', 'clearAuthToken', 'updateSep10IfNeeded']),
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
       if (!this.userAuthData) {
@@ -134,6 +134,7 @@ export default {
         return;
       }
 
+      await this.updateSep10IfNeeded();
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;
@@ -167,6 +168,7 @@ export default {
         return;
       }
 
+      await this.updateSep10IfNeeded();
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;
