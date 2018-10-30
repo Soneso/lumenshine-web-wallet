@@ -59,7 +59,7 @@ export default {
         mnemonic_iv: securityData.encryption_mnemonic_iv,
         wordlist: securityData.encrypted_wordlist,
         wordlist_iv: securityData.encryption_wordlist_iv,
-        public_key: securityData.public_key,
+        public_key_0: securityData.public_key,
 
         public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase(), // TODO remove
       };
