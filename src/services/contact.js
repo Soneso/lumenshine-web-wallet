@@ -2,7 +2,7 @@ import apiBase from './apiBase';
 
 export default {
   async getContacts () {
-    const response = await apiBase.get('/portal/user/dashboard/contact_list');
+    const response = await apiBase.get('/portal/user/dashboard/contact_list', { timestamp: Date.now() });
     return response.data;
   },
 
