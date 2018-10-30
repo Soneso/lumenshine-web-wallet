@@ -127,4 +127,9 @@ export default {
     const response = await apiBase.get('/portal/user/auth/need_2fa_reset_pwd');
     return response;
   },
+
+  async getStellarTransactions () {
+    const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now() });
+    return response.data;
+  },
 };
