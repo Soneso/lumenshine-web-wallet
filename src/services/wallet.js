@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default {
   async getWallets () {
-    const response = await apiBase.get('/portal/user/dashboard/get_user_wallets');
+    const response = await apiBase.get('/portal/user/dashboard/get_user_wallets', { timestamp: Date.now() });
     return response.data;
   },
 
@@ -33,7 +33,7 @@ export default {
   },
 
   async getCurrencyPairs () {
-    const response = await apiBase.get('/portal/chart/chart_currency_pairs');
+    const response = await apiBase.get('/portal/chart/chart_currency_pairs', { timestamp: Date.now() });
     return response.data;
   },
 

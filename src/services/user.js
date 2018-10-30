@@ -34,7 +34,7 @@ export default {
   // },
 
   async getUserStatus (isPartialAuth = true) {
-    const response = await apiBase.get(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/get_user_registration_status`);
+    const response = await apiBase.get(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/get_user_registration_status`, { timestamp: Date.now() });
     return response.data;
   },
 
@@ -99,7 +99,7 @@ export default {
   },
 
   async getAuthData (isPartialAuth = true) {
-    const response = await apiBase.get(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/user_auth_data`);
+    const response = await apiBase.get(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/user_auth_data`, { timestamp: Date.now() });
     return response;
   },
 
@@ -124,7 +124,7 @@ export default {
   },
 
   async isResetPasswordNeeded () {
-    const response = await apiBase.get('/portal/user/auth/need_2fa_reset_pwd');
+    const response = await apiBase.get('/portal/user/auth/need_2fa_reset_pwd', { timestamp: Date.now() });
     return response;
   },
 
