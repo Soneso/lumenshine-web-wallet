@@ -3,7 +3,7 @@
     <template v-if="!loading">
       <b-row>
         <b-col cols="12">
-          <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+          <small v-if="hasUnknownError" class="d-block pl-2 pb-3 text-danger">Unknown backend error!</small>
         </b-col>
         <b-col cols="12">
           <!--Email field-->
