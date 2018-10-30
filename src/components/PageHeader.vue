@@ -12,7 +12,9 @@
         <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete || singleCardPage}]">
           <div id="logo-group">
             <div class="logo">
-              <img id="logo" src="../assets/images/ui/logo.svg">
+              <router-link to="/">
+                <img id="logo" src="../assets/images/ui/logo.svg">
+              </router-link>
             </div>
             <div class="text">
               <h1 class="title">{{ config.APP_TITLE }}</h1>

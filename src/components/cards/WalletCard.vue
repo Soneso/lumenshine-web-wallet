@@ -205,9 +205,7 @@ export default {
     ]),
     onCopy () {
       this.accountIDCopied = true;
-      setTimeout(() => {
-        this.accountIDCopied = false;
-      }, 2e3);
+      setTimeout(() => { this.accountIDCopied = false; }, 2e3);
     },
     async onSendPaymentClick (data) {
       await this.sendPayment(data);
