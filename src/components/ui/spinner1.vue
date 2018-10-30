@@ -48,7 +48,7 @@ export default {
     },
     width: {
       type: String,
-      default: '110'
+      default: '32'
     }
   },
   data () {
