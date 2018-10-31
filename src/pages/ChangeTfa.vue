@@ -2,9 +2,12 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h3 class="form-headline pb-3 text-center">Change 2FA Secret</h3>
-        <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
-        <spinner v-if="inProgress" align="center"/>
+        <h3 :class="['form-headline', 'pb-3', {'text-center': inProgress}]">Change 2FA Secret</h3>
+        <div v-if="hasUnknownError" class="text-danger pb-2">Unknown error, please try again later!</div>
+
+        <div class="clearfix my-4">
+          <spinner v-if="inProgress" align="center"/>
+        </div>
 
         <template v-if="step === 'password'" v-show="!loading">
           <change-tfa-password-form :loading="loading" :errors="resetTfaStatus.err" :decrypt-error="decryptError" @submit="onPasswordSubmitClick"/>

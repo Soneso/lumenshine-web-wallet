@@ -24,7 +24,7 @@
           <p v-if="confirmEmailStatus.loading" class="text-info py-5">
             Confirming email address. Loading...
           </p>
-          <div v-else class="pt-4 pb-1">
+          <div v-else="" class="pt-4 pb-1">
             <div v-if="confirmEmailStatus.err.length > 0" class="text-danger">
               <div v-for="err in confirmEmailStatus.err" :key="err.error_code" class="pb-2">Error: {{ err.error_message }}</div>
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1000)" class="pb-2">Invalid confirmation URL!</div>
@@ -32,8 +32,8 @@
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1008)" class="pb-2">Email already confirmed!</div>
             </div>
             <div v-else>
-              <small class="text-success pb-5 d-block">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</small>
-              <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
+              <div class="text-success pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
+              <div v-if="hasUnknownError" class="text-danger text-center pb-2">Unknown error, please try again later!</div>
               <login-form
                 v-show="decryptError || (!loading && !loginStatus.res)"
                 :loading="loading"

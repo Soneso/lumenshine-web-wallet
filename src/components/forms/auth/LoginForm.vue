@@ -74,7 +74,6 @@
         aria-describedby="inputLive2faHelp inputLive2faFeedback"
         autocomplete="false"
         required
-        @input="onTwoFactorCodeInput(twoFactorCode)"
         @blur="onTwoFactorCodeBlur(twoFactorCode)"/>
       <b-form-invalid-feedback id="inputLive2faFeedback">
         <template v-if="$v.twoFactorCode.$error" class="field__errors">
@@ -139,6 +138,11 @@ export default {
       return this.email.length > 2;
     }
   },
+  watch: {
+    tfaCode () {
+      this.tfaCode = this.tfaCode.split(' ').join('');
+    }
+  },
   methods: {
     onLoginClick () {
       this.$v.$touch();
@@ -153,9 +157,6 @@ export default {
     },
     onLostTfaClick () {
       this.$router.push({ name: 'LostTfaStep1' });
-    },
-    onTwoFactorCodeInput () {
-      this.twoFactorCode = this.twoFactorCode.replace(/(\d)\s+(?=\d)/g, '');
     },
     onTwoFactorCodeBlur () {
       this.$v.twoFactorCode.$touch();

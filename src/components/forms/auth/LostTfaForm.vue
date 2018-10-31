@@ -24,7 +24,6 @@
             type="text"
             placeholder="2FA code"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
-            @input="onTwoFactorCodeInput"
             @blur="onTwoFactorCodeBlur"/>
 
           <b-form-invalid-feedback id="inputLive2FACodeFeedback">
@@ -66,6 +65,11 @@ export default {
       showCopiedText: false,
     };
   },
+  watch: {
+    tfaCode () {
+      this.tfaCode = this.tfaCode.split(' ').join('');
+    }
+  },
   methods: {
     onRecoverClick () {
       this.$v.$touch();
@@ -77,9 +81,6 @@ export default {
     },
     onCopy () {
       this.showCopiedText = true;
-    },
-    onTwoFactorCodeInput () {
-      this.tfaCode = this.tfaCode.replace(/(\d)\s+(?=\d)/g, '');
     },
     onTwoFactorCodeBlur () {
       this.$v.tfaCode.$touch();

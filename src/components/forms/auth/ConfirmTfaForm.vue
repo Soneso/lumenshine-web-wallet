@@ -24,7 +24,6 @@
             tabindex="1"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
             required
-            @input="onTwoFactorCodeInput"
             @blur="onTwoFactorCodeBlur"/>
 
           <b-form-invalid-feedback id="inputLive2FACodeFeedback">
@@ -67,6 +66,11 @@ export default {
       tfaCode: '',
     };
   },
+  watch: {
+    tfaCode () {
+      this.tfaCode = this.tfaCode.split(' ').join('');
+    }
+  },
   methods: {
     onSubmitClick () {
       this.$v.$touch();
@@ -75,9 +79,6 @@ export default {
       }
       this.backendQuery = { tfaCode: this.tfaCode };
       this.$emit('submit', this.tfaCode);
-    },
-    onTwoFactorCodeInput () {
-      this.tfaCode = this.tfaCode.split(' ').join('');
     },
     onTwoFactorCodeBlur () {
       this.$v.tfaCode.$touch();

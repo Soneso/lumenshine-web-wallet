@@ -2,7 +2,7 @@
   <b-form class="form" @submit.prevent="onSaveClick">
     <b-row v-if="!loading">
       <b-col cols="12 pb-4 mb-3">
-        <small>To change your password please provide current and new password.</small>
+        <div class="mt-2">To change your password please provide current and new password.</div>
         <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
       </b-col>
 
