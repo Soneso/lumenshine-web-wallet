@@ -1,7 +1,7 @@
 <template>
   <section>
     <b-row align-h="start" class="equal-heights">
-      <spinner v-if="wallets.loading" align="center"/>
+      <card-spinner :loading="wallets.loading"/>
       <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key" :data="wallet"/>
     </b-row>
   </section>
@@ -10,10 +10,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import WalletCard from '@/components/cards/WalletCard';
-import spinner from '@/components/ui/spinner1.vue';
+import cardSpinner from '@/components/ui/cardSpinner.vue';
 
 export default {
-  components: { WalletCard, spinner },
+  components: { WalletCard, cardSpinner },
   computed: {
     ...mapGetters(['wallets']),
     homescreenWallets () {

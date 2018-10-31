@@ -1,10 +1,4 @@
 #spinner1 {
-  .equal-heights & {
-    position: absolute;
-    top: 5rem;
-    left: calc(50% - 1rem);
-  }
-
   &.inline-spinner,
   .modal & {
     position: relative;
@@ -12,8 +6,24 @@
     left: 0;
   }
 
+  &.two-lines-spinner {
+    .spinner {
+      @extend .mx-auto
+    }
+  }
+
+  &:not(.two-lines-spinner) {
+    .spinner {
+      @extend .float-left;
+    }
+
+    .message {
+      @extend .clearfix;
+      text-indent: .5rem
+    }
+  }
+
   .spinner {
-    @extend .float-left;
     border-radius: 50%;
     border-style: solid;
 
@@ -26,10 +36,8 @@
   }
 
   .message {
-    @extend .clearfix;
     font-size: 14px;
     font-weight: 500;
-    text-indent: .5rem
   }
 }
 
