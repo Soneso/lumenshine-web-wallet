@@ -61,7 +61,7 @@
         <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
         <div class="form-buttons">
           <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
-            <spinner v-if="loading" message="removing..." size="21"/>
+            <spinner v-if="loading" :size="21" message="removing..." width="100"/>
             <span v-else-if="!removeFieldBalance.balance.equal('0')">remove & abandon credits</span>
             <span v-else>remove</span>
           </a>

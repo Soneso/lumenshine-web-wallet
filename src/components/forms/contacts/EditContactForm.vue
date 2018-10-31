@@ -1,74 +1,72 @@
 <template>
-  <form class="form" @submit.prevent>
-    <div class="text-center">
-      <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+  <b-form @submit.prevent>
+    <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
 
-      <b-form-group :label-for="`contactNameInput_${uuid}`">
-        <b-form-input
-          :id="`contactNameInput_${uuid}`"
-          :class="{ error: $v.contactName.$error }"
-          :state="!$v.contactName.$error"
-          :aria-describedby="`inputLiveContactNameFeedback_${uuid}`"
-          v-model="contactName"
-          placeholder="Contact name"
-          type="text"
-          required
-          @blur="$v.contactName.$touch()"/>
-        <b-form-invalid-feedback :id="`inputLiveContactNameFeedback_${uuid}`">
-          <template v-if="$v.contactName.$error" class="field__errors">
-            <template v-if="!$v.contactName.required">Contact name is required</template>
-          </template>
-        </b-form-invalid-feedback>
-      </b-form-group>
+    <b-form-group :label-for="`contactNameInput_${uuid}`">
+      <b-form-input
+        :id="`contactNameInput_${uuid}`"
+        :class="{ error: $v.contactName.$error }"
+        :state="!$v.contactName.$error"
+        :aria-describedby="`inputLiveContactNameFeedback_${uuid}`"
+        v-model="contactName"
+        placeholder="Contact name"
+        type="text"
+        required
+        @blur="$v.contactName.$touch()"/>
+      <b-form-invalid-feedback :id="`inputLiveContactNameFeedback_${uuid}`">
+        <template v-if="$v.contactName.$error" class="field__errors">
+          <template v-if="!$v.contactName.required">Contact name is required</template>
+        </template>
+      </b-form-invalid-feedback>
+    </b-form-group>
 
-      <hr class="divider">
+    <hr class="divider">
 
-      <b-form-group :label-for="`contactAddressInput_${uuid}`">
-        <b-form-input
-          :id="`contactAddressInput_${uuid}`"
-          :class="{ error: $v.address.$error || isInvalidAddress }"
-          :state="!($v.address.$error || isInvalidAddress)"
-          :aria-describedby="`inputLiveContactAddressHelp_${uuid} inputLiveContactAddressFeedback_${uuid}`"
-          v-model="address"
-          placeholder="Stellar address or public key"
-          type="text"
-          required
-          @blur="$v.address.$touch()"/>
-        <b-form-invalid-feedback :id="`inputLiveContactAddressFeedback_${uuid}`">
-          <template v-if="$v.address.$error || isInvalidAddress" class="field__errors">
-            <template v-if="!$v.address.required">Address is required</template>
-            <template v-if="!$v.address.validRecipient">Not valid recipient!</template>
-            <template v-if="isInvalidAddress">Address does not exists!</template>
-          </template>
-        </b-form-invalid-feedback>
-        <b-form-text :id="`inputLiveContactAddressHelp_${uuid}`">
-          Example: max*lumenshine.com or GBXQ42QBCADBS235DA...
-        </b-form-text>
-      </b-form-group>
+    <b-form-group :label-for="`contactAddressInput_${uuid}`">
+      <b-form-input
+        :id="`contactAddressInput_${uuid}`"
+        :class="{ error: $v.address.$error || isInvalidAddress }"
+        :state="!($v.address.$error || isInvalidAddress)"
+        :aria-describedby="`inputLiveContactAddressHelp_${uuid} inputLiveContactAddressFeedback_${uuid}`"
+        v-model="address"
+        placeholder="Stellar address or public key"
+        type="text"
+        required
+        @blur="$v.address.$touch()"/>
+      <b-form-invalid-feedback :id="`inputLiveContactAddressFeedback_${uuid}`">
+        <template v-if="$v.address.$error || isInvalidAddress" class="field__errors">
+          <template v-if="!$v.address.required">Address is required</template>
+          <template v-if="!$v.address.validRecipient">Not valid recipient!</template>
+          <template v-if="isInvalidAddress">Address does not exists!</template>
+        </template>
+      </b-form-invalid-feedback>
+      <b-form-text :id="`inputLiveContactAddressHelp_${uuid}`">
+        Example: max*lumenshine.com or GBXQ42QBCADBS235DA...
+      </b-form-text>
+    </b-form-group>
 
-      <b-row v-if="isAdd">
-        <b-col class="text-right">
+    <b-row>
+      <b-col class="text-center">
+        <template v-if="isAdd">
           <b-button variant="info" class="btn-rounded" @click="onAddClick">
-            <spinner2 v-if="loading || pendingValidation"/>
-            <span v-else>Add</span>
+            <spinner v-if="loading || pendingValidation" :size="21" variant="white" message="Adding..." width="100"/>
+            <template v-else>Add</template>
           </b-button>
-        </b-col>
-      </b-row>
+        </template>
 
-      <template v-else>
-        <b-button v-if="!loading || !removeClicked" variant="info" class="btn-rounded" @click="onUpdateClick">
-          <spinner2 v-if="loading || pendingValidation"/>
-          <span v-else>Update</span>
-        </b-button>
-
-        <b-button v-if="!loading || removeClicked" variant="danger" class="btn-rounded" @click="onRemoveClick">
-          <spinner2 v-if="loading"/>
-          <span v-else>Remove</span>
-        </b-button>
-      </template>
-
-    </div>
-  </form>
+        <template v-else>
+          <b-button v-if="!loading || !removeClicked" variant="info" class="btn-rounded" @click="onUpdateClick">
+            <spinner v-if="loading || pendingValidation" :size="21" variant="white" message="Updating..." width="100"/>
+            <template v-else>Update</template>
+          </b-button>
+          <b-button v-if="!loading || removeClicked" variant="danger" class="btn-rounded" @click="onRemoveClick">
+            <spinner v-if="loading" :size="21" variant="white" message="Removing..." width="100"/>
+            <template v-else>Remove</template>
+          </b-button>
+        </template>
+      </b-col>
+    </b-row>
+  </b-form>
 </template>
 
 <script>
@@ -77,10 +75,10 @@ import StellarSdk from 'stellar-sdk';
 
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
-import spinner2 from '@/components/ui/spinner2';
+import spinner from '@/components/ui/spinner1';
 
 export default {
-  components: { spinner2 },
+  components: { spinner },
   mixins: [ formMixin ],
   props: {
     loading: {
