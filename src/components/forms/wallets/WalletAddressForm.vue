@@ -2,7 +2,10 @@
   <b-form id="wallet-address-form" @submit.prevent="onSubmitClick">
     <div class="mb-3">
       <span class="font-weight-600">Short stellar address</span>
-      <a v-if="!fieldOpen && address" href="#" class="text-danger" @click.prevent="onRemoveAddressClick">remove address</a>
+      <a v-if="!fieldOpen && address" href="#" class="text-danger d-inline-block" @click.prevent="onRemoveAddressClick">
+        <spinner v-if="loading && removingWallet" variant="warning" size="18" top="3"/>
+        <template v-else>remove address</template>
+      </a>
       <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
       <a v-if="fieldOpen && !loading" href="#" class="text-warning" @click.prevent="onCancelClick">cancel</a>
       <br>
@@ -15,7 +18,6 @@
           {{ address }}*{{ config.FEDERATION_DOMAIN }}
         </b-badge>
       </h5>
-      <spinner v-if="loading && removingWallet" variant="warning"/>
     </div>
 
     <b-card v-if="fieldOpen && !loading" class="flat-card">

@@ -1,5 +1,5 @@
 <template>
-  <div id="spinner1" :style="spinnerContainerWidth" :class="spinnerContainerClass">
+  <div id="spinner1" :style="spinnerContainerStyle" :class="spinnerContainerClass">
     <div v-show="status" :style="spinnerStyle" class="spinner"/>
     <div v-if="message" :class="['message', `text-${variant}`]" :style="textPadding">{{ message }}</div>
   </div>
@@ -49,6 +49,12 @@ export default {
     width: {
       type: String,
       default: '32'
+    },
+    top: {
+      type: String
+    },
+    left: {
+      type: String
     }
   },
   data () {
@@ -62,10 +68,20 @@ export default {
     selectedColor () {
       return this.colors[this.variant];
     },
-    spinnerContainerWidth () {
-      return {
+    spinnerContainerStyle () {
+      let styles = {
         width: this.width + this.sizeUnits
       };
+
+      if (this.top) {
+        styles.top = this.top + this.sizeUnits;
+      }
+
+      if (this.left) {
+        styles.left = this.left + this.sizeUnits;
+      }
+
+      return styles;
     },
     spinnerContainerClass () {
       switch (this.align) {
