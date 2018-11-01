@@ -6,7 +6,7 @@
       </b-col>
 
       <b-col cols="12" role="tablist">
-        <b-card no-body class="mb-1">
+        <b-card no-body class="flat-card mt-3">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn v-b-toggle.personal-data-accordion-my-data block href="#" variant="default">My Data</b-btn>
           </b-card-header>
@@ -187,11 +187,12 @@
                 </b-form-text>
               </b-form-group>
 
-              <b-form-group>
-                <div class="datepicker-wrapper">
-                  <datepicker v-model="birthDate" format="yyyy-MM-dd" placeholder="Birth date" class="py-3"/>
+              <b-form-group label-for="personal-data-birth-date" class="mx-2">
+                <div class="datepicker-wrapper p-0">
+                  <datepicker id="personal-data-birth-date" v-model="birthDate" format="yyyy-MM-dd" placeholder="Birth date" class="py-1"/>
                   <i class="icon-calendar"/>
                 </div>
+                <small class="form-text text-muted">Birth date</small>
               </b-form-group>
 
               <b-form-group label-for="personal-data-birth-place">
@@ -224,7 +225,7 @@
           </b-collapse>
         </b-card>
 
-        <b-card no-body class="mb-1">
+        <b-card no-body class="flat-card mt-3">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn v-b-toggle.personal-data-accordion-my-occupation block href="#" variant="default">My Occupation</b-btn>
           </b-card-header>
@@ -278,7 +279,7 @@
           </b-collapse>
         </b-card>
 
-        <b-card no-body class="mb-1">
+        <b-card no-body class="flat-card mt-3">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn v-b-toggle.personal-data-accordion-my-bank block href="#" variant="default">My Bank account</b-btn>
           </b-card-header>
@@ -339,7 +340,7 @@
           </b-collapse>
         </b-card>
 
-        <b-card no-body class="mb-1">
+        <b-card no-body class="flat-card mt-3">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn v-b-toggle.personal-data-accordion-my-tax block href="#" variant="default">My Tax info</b-btn>
           </b-card-header>

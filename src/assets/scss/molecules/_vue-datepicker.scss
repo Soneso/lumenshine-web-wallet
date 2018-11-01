@@ -3,6 +3,7 @@
     width: 100%;
     border-width: 0 0 1px 0;
     position: relative;
+    color: $gray-600;
 
     &:focus {
       outline: 0
@@ -10,11 +11,11 @@
   }
 
   i {
-    @extend .m-3;
+    @extend .m-1;
     pointer-events: none;
     position: absolute;
     top: 0;
     right: 0;
-    color: $gray-400
+    color: $gray-400;
   }
 }

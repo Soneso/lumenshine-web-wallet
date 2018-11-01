@@ -2,8 +2,8 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h4 :class="['form-headline', 'text-uppercase', 'text-center']">Personal Data</h4>
-        <spinner v-if="inProgress" align="center"/>
+        <h4 class="form-headline text-uppercase text-center">Personal Data</h4>
+        <spinner v-if="inProgress" align="center" class="mt-3"/>
         <personal-data-form
           v-if="!loading"
           :data="userData.res"
