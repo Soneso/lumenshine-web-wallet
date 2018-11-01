@@ -35,7 +35,7 @@
             autocomplete="off"
             aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
             required
-            @blur="$v.password.$touch()"/>
+            @blur.native="$v.password.$touch()"/>
 
           <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 

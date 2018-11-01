@@ -31,7 +31,7 @@
             autocomplete="off"
             aria-describedby="inputLive2faHelp inputLive2faFeedback"
             required
-            @blur="$v.tfaCode.$touch()"/>
+            @blur.native="$v.tfaCode.$touch()"/>
 
           <b-form-invalid-feedback id="inputLive2faFeedback">
             <template v-if="$v.tfaCode.$error" class="field__errors">

@@ -35,7 +35,7 @@
                   type="text"
                   placeholder="Wallet address"
                   required
-                  @blur="$v.address.$touch()"/>
+                  @blur.native="$v.address.$touch()"/>
 
                 <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
                   <template v-if="$v.address.$error" class="field__errors">

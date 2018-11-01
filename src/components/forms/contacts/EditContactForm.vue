@@ -12,7 +12,7 @@
         placeholder="Contact name"
         type="text"
         required
-        @blur="$v.contactName.$touch()"/>
+        @blur.native="$v.contactName.$touch()"/>
       <b-form-invalid-feedback :id="`inputLiveContactNameFeedback_${uuid}`">
         <template v-if="$v.contactName.$error" class="field__errors">
           <template v-if="!$v.contactName.required">Contact name is required</template>
@@ -32,7 +32,7 @@
         placeholder="Stellar address or public key"
         type="text"
         required
-        @blur="$v.address.$touch()"/>
+        @blur.native="$v.address.$touch()"/>
       <b-form-invalid-feedback :id="`inputLiveContactAddressFeedback_${uuid}`">
         <template v-if="$v.address.$error || isInvalidAddress" class="field__errors">
           <template v-if="!$v.address.required">Address is required</template>

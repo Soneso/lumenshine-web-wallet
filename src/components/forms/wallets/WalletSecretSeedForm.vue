@@ -27,7 +27,7 @@
           :type="passwordIsHidden ? 'password' : 'text'"
           placeholder="Insert password to reveal"
           required
-          @blur="$v.password.$touch()"/>
+          @blur.native="$v.password.$touch()"/>
 
         <password-assets :password="['passwordIsHidden', passwordIsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 

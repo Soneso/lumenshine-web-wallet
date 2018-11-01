@@ -18,7 +18,7 @@
               tabindex="1"
               aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
               required
-              @blur="$v.email.$touch()"/>
+              @blur.native="$v.email.$touch()"/>
             <b-form-invalid-feedback id="inputLiveEmailFeedback">
               <template v-if="$v.email.$error" class="field-errors">
                 <template v-if="!$v.email.required">Email is required! <br></template>
@@ -46,7 +46,7 @@
               autocomplete="off"
               aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
 
             <password-assets
               :password="['password1IsHidden', password1IsHidden]"
@@ -82,7 +82,7 @@
               autocomplete="off"
               aria-describedby="inputLivePasswordConfirmHelp inputLivePasswordConfirmFeedback"
               required
-              @blur="$v.passwordConfirm.$touch()"/>
+              @blur.native="$v.passwordConfirm.$touch()"/>
 
             <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -110,7 +110,7 @@
                 placeholder="Fore name"
                 tabindex="4"
                 aria-describedby="inputLiveForenameHelp inputLiveForenameFeedback"
-                @blur="$v.forename.$touch()"/>
+                @blur.native="$v.forename.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveForenameFeedback">
                 <template v-if="$v.forename.$error" class="field-errors">
@@ -137,7 +137,7 @@
                 placeholder="Last name"
                 tabindex="5"
                 aria-describedby="inputLiveLastnameHelp inputLiveLastnameFeedback"
-                @blur="$v.lastname.$touch()"/>
+                @blur.native="$v.lastname.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveLastnameFeedback">
                 <template v-if="$v.lastname.$error" class="field-errors">
@@ -164,7 +164,7 @@
                 placeholder="Company name"
                 tabindex="6"
                 aria-describedby="inputLiveCompanynameHelp inputLiveCompanynameFeedback"
-                @blur="$v.companyName.$touch()"/>
+                @blur.native="$v.companyName.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveCompanynameFeedback">
                 <template v-if="$v.companyName.$error" class="field-errors">
@@ -200,7 +200,7 @@
                 placeholder="Title"
                 tabindex="8"
                 aria-describedby="inputLiveTitleHelp inputLiveTitleFeedback"
-                @blur="$v.title.$touch()"/>
+                @blur.native="$v.title.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveTitleFeedback">
                 <template v-if="$v.title.$error" class="field-errors">
@@ -227,7 +227,7 @@
                 placeholder="Street address"
                 tabindex="9"
                 aria-describedby="inputLiveStreetAddressHelp inputLiveStreetAddressFeedback"
-                @blur="$v.streetAddress.$touch()"/>
+                @blur.native="$v.streetAddress.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveStreetAddressFeedback">
                 <template v-if="$v.streetAddress.$error" class="field-errors">
@@ -254,7 +254,7 @@
                 placeholder="Street number"
                 tabindex="10"
                 aria-describedby="inputLiveStreetNumberHelp inputLiveStreetNumberFeedback"
-                @blur="$v.streetNumber.$touch()"/>
+                @blur.native="$v.streetNumber.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveStreetNumberFeedback">
                 <template v-if="$v.streetNumber.$error" class="field-errors">
@@ -281,7 +281,7 @@
                 placeholder="Zip code"
                 tabindex="11"
                 aria-describedby="inputLiveZipCodeHelp inputLiveZipCodeFeedback"
-                @blur="$v.zipCode.$touch()"/>
+                @blur.native="$v.zipCode.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveZipCodeFeedback">
                 <template v-if="$v.zipCode.$error" class="field-errors">
@@ -307,7 +307,7 @@
                 placeholder="State"
                 tabindex="12"
                 aria-describedby="inputLiveStateHelp inputLiveStateFeedback"
-                @blur="$v.state.$touch()"/>
+                @blur.native="$v.state.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveStateFeedback">
                 <template v-if="$v.state.$error" class="field-errors">
@@ -334,7 +334,7 @@
                 placeholder="City"
                 tabindex="13"
                 aria-describedby="inputLiveCityHelp inputLiveCityFeedback"
-                @blur="$v.city.$touch()"/>
+                @blur.native="$v.city.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveCityFeedback">
                 <template v-if="$v.city.$error" class="field-errors">
@@ -361,7 +361,7 @@
                 placeholder="Mobile phone"
                 tabindex="14"
                 aria-describedby="inputLiveMobilePhoneHelp inputLiveMobilePhoneFeedback"
-                @blur="$v.strippedMobilePhone.$touch()"/>
+                @blur.native="$v.strippedMobilePhone.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveMobilePhoneFeedback">
                 <template v-if="$v.strippedMobilePhone.$error" class="field-errors">
@@ -405,7 +405,7 @@
                 placeholder="Birth place"
                 tabindex="17"
                 aria-describedby="inputLiveBirthPlaceHelp inputLiveBirthPlaceFeedback"
-                @blur="$v.birthPlace.$touch()"/>
+                @blur.native="$v.birthPlace.$touch()"/>
 
               <b-form-invalid-feedback id="inputLiveBirthPlaceFeedback">
                 <template v-if="$v.birthPlace.$error" class="field-errors">

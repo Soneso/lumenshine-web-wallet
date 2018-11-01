@@ -17,7 +17,7 @@
               tabindex="1"
               aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
 
             <!-- a special row that flows over the input field providing contextual actions -->
             <b-row class="floating-icons align-right two-items">
@@ -58,7 +58,7 @@
               tabindex="3"
               aria-describedby="inputLivePasswordConfirmHelp inputLivePasswordConfirmFeedback"
               required
-              @blur="$v.passwordConfirm.$touch()"/>
+              @blur.native="$v.passwordConfirm.$touch()"/>
 
             <!-- a special row that flows over the input field providing contextual actions -->
             <b-row class="floating-icons align-right one-item">

@@ -24,7 +24,7 @@
             tabindex="1"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
             required
-            @blur="onTwoFactorCodeBlur"/>
+            @blur.native="onTwoFactorCodeBlur"/>
 
           <b-form-invalid-feedback id="inputLive2FACodeFeedback">
             <template v-if="$v.tfaCode.$error" class="field__errors">

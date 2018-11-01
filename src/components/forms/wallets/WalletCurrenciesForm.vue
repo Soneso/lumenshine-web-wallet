@@ -47,7 +47,7 @@
             aria-describedby="inputLiveNameFeedback_1"
             placeholder="Password"
             required
-            @blur="$v.password.$touch()"/>
+            @blur.native="$v.password.$touch()"/>
 
           <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -87,7 +87,7 @@
               type="text"
               placeholder="Currency/asset code, e.g. MOBI"
               required
-              @blur="$v.assetCode.$touch()"/>
+              @blur.native="$v.assetCode.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveAssetCodeFeedback_${uuid}`">
               <template v-if="$v.assetCode.$error" class="field-errors">
                 <template v-if="!$v.assetCode.required">Asset code is required <br></template>
@@ -109,7 +109,7 @@
               type="text"
               placeholder="Public key of currency issuer"
               required
-              @blur="$v.issuer.$touch()"/>
+              @blur.native="$v.issuer.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveIssuerFeedback_${uuid}`">
               <template v-if="$v.issuer.$error" class="field-errors">
                 <template v-if="!$v.issuer.required">Issuer is required <br></template>
@@ -132,7 +132,7 @@
               v-model="password"
               placeholder="Password"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
 
             <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -158,7 +158,7 @@
               type="text"
               placeholder="Seed for selected signer"
               required
-              @blur="$v.signerSeed.$touch()"/>
+              @blur.native="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field-errors">
                 <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
@@ -192,7 +192,7 @@
               v-model="password"
               placeholder="Your password"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
 
             <password-assets :password="['password3IsHidden', password3IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -217,7 +217,7 @@
               type="text"
               placeholder="Seed for selected signer"
               required
-              @blur="$v.signerSeed.$touch()"/>
+              @blur.native="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field-errors">
                 <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>

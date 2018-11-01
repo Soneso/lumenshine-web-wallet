@@ -17,7 +17,7 @@
                 :tabindex="+index + 1"
                 placeholder="word"
                 type="text"
-                @blur="item.$touch()"/>
+                @blur.native="item.$touch()"/>
               <template v-if="item.$error">
                 <small v-if="!item.required" class="text-danger d-block text-left pl-2">Mandatory</small>
               </template>

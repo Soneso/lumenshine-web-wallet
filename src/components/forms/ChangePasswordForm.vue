@@ -20,7 +20,7 @@
             autocomplete="off"
             aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
             required
-            @blur="$v.password.$touch()"/>
+            @blur.native="$v.password.$touch()"/>
 
           <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -50,7 +50,7 @@
             autocomplete="off"
             aria-describedby="inputLiveNewPasswordHelp inputLiveNewPasswordFeedback"
             required
-            @blur="$v.newPassword.$touch()"/>
+            @blur.native="$v.newPassword.$touch()"/>
 
           <password-assets
             :password="['password2IsHidden', password2IsHidden]"
@@ -87,7 +87,7 @@
             autocomplete="off"
             aria-describedby="inputLiveConfimNewPasswordHelp inputLiveConfimNewPasswordFeedback"
             required
-            @blur="$v.passwordConfirm.$touch()"/>
+            @blur.native="$v.passwordConfirm.$touch()"/>
 
           <password-assets :password="['password3IsHidden', password3IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 

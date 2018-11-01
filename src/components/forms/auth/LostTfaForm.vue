@@ -24,7 +24,7 @@
             type="text"
             placeholder="2FA code"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
-            @blur="onTwoFactorCodeBlur"/>
+            @blur.native="onTwoFactorCodeBlur"/>
 
           <b-form-invalid-feedback id="inputLive2FACodeFeedback">
             <template v-if="$v.tfaCode.$error" class="field-errors">

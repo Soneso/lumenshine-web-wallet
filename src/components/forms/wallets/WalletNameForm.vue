@@ -21,7 +21,7 @@
               type="text"
               placeholder="Wallet name"
               required
-              @blur="$v.name.$touch()"/>
+              @blur.native="$v.name.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveNameFeedback_${uuid}`">
               <template v-if="$v.name.$error" class="field__errors">
                 <template v-if="!$v.name.required">Wallet name is required</template>

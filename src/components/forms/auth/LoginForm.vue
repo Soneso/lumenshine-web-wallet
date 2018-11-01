@@ -15,7 +15,7 @@
         aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
         autocomplete="false"
         required
-        @blur="$v.email.$touch()"/>
+        @blur.native="$v.email.$touch()"/>
       <b-form-invalid-feedback id="inputLiveEmailFeedback">
         <template v-if="$v.email.$error" class="field__errors">
           <template v-if="!$v.email.required">Email is required!</template>
@@ -41,7 +41,7 @@
         aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
         autocomplete="false"
         required
-        @blur="$v.password.$touch()"/>
+        @blur.native="$v.password.$touch()"/>
 
       <!-- a special row that flows over the input field providing contextual actions -->
       <b-row class="floating-icons align-right one-item">
@@ -74,7 +74,7 @@
         aria-describedby="inputLive2faHelp inputLive2faFeedback"
         autocomplete="false"
         required
-        @blur="onTwoFactorCodeBlur(twoFactorCode)"/>
+        @blur.native="onTwoFactorCodeBlur(twoFactorCode)"/>
       <b-form-invalid-feedback id="inputLive2faFeedback">
         <template v-if="$v.twoFactorCode.$error" class="field__errors">
           <template v-if="!$v.twoFactorCode.numeric">2FA code should be numeric!</template>

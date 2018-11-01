@@ -15,7 +15,7 @@
             tabindex="1"
             aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
             required
-            @blur="$v.email.$touch()"/>
+            @blur.native="$v.email.$touch()"/>
           <b-form-invalid-feedback id="inputLiveEmailFeedback">
             <template v-if="$v.email.$error" class="field-errors">
               <template v-if="!$v.email.required">Email is required! <br></template>

@@ -13,7 +13,7 @@
           placeholder="Password"
           aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
           required
-          @blur="$v.password.$touch()"/>
+          @blur.native="$v.password.$touch()"/>
         <!-- a special row that flows over the input field providing contextual actions -->
         <b-row class="floating-icons align-right one-item">
           <b-col>

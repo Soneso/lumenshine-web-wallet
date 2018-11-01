@@ -29,7 +29,7 @@
               placeholder="Asset code"
               tabindex="1"
               required
-              @blur="$v.customAssetCode.$touch()"/>
+              @blur.native="$v.customAssetCode.$touch()"/>
             <b-form-invalid-feedback :id="`inputAssetCodeFeedback_${uuid}`">
               <template v-if="$v.customAssetCode.$error" class="field__errors">
                 <template v-if="!$v.customAssetCode.required">Asset code is required!</template>
@@ -53,7 +53,7 @@
               placeholder="Recepient's public key or address"
               tabindex="2"
               required
-              @blur="$v.recipient.$touch()"/>
+              @blur.native="$v.recipient.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveRecipientFeedback_${uuid}`">
               <template v-if="$v.recipient.$error" class="field__errors">
                 <template v-if="!$v.recipient.required">Recipient is required!</template>
@@ -88,7 +88,7 @@
                   placeholder="Amount to send"
                   tabindex="3"
                   required
-                  @blur="$v.amount.$touch()"/>
+                  @blur.native="$v.amount.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
                   <template v-if="$v.amount.$error" class="field__errors">
                     <template v-if="!$v.amount.required">Amount is required!</template>
@@ -123,7 +123,7 @@
               type="text"
               tabindex="4"
               required
-              @blur="$v.memo.$touch()"/>
+              @blur.native="$v.memo.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
               <template v-if="$v.memo.$error" class="field__errors">
                 <template v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</template>
@@ -146,7 +146,7 @@
               placeholder="Your password"
               tabindex="5"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
                 <template v-if="!$v.password.required">Password is required!</template>
@@ -166,7 +166,7 @@
               placeholder="Seed for selected signer"
               tabindex="6"
               required
-              @blur="$v.signerSeed.$touch()"/>
+              @blur.native="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field__errors">
                 <template v-if="!$v.signerSeed.required">Secret seed is required!</template>

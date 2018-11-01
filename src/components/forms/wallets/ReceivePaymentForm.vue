@@ -41,7 +41,7 @@
             placeholder="Amount to receive"
             type="text"
             required
-            @blur="$v.amount.$touch()"/>
+            @blur.native="$v.amount.$touch()"/>
           <b-form-invalid-feedback :id="`inputAmountFeedback_${uuid}`">
             <template v-if="$v.amount.$error" class="field__errors">
               <template v-if="!$v.amount.required">Amount is required</template>

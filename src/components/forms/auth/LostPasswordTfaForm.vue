@@ -13,7 +13,7 @@
           placeholder="2FA code"
           tabindex="1"
           aria-describedby="inputLiveTwoFactorCodeHelp inputLiveTwoFactorCodeFeedback"
-          @blur="$v.twoFactorCode.$touch()"/>
+          @blur.native="$v.twoFactorCode.$touch()"/>
         <b-form-invalid-feedback id="inputLiveTwoFactorCodeFeedback">
           <template v-if="$v.twoFactorCode.$error" class="field-errors">
             <template v-if="!$v.twoFactorCode.numeric">2FA code should be numeric! <br></template>

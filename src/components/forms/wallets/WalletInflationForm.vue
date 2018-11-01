@@ -34,7 +34,7 @@
               type="text"
               placeholder="Public key of destination account"
               required
-              @blur="$v.destination.$touch()"/>
+              @blur.native="$v.destination.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveDestinationFeedback_${uuid}`">
               <template v-if="$v.destination.$error" class="field__errors">
                 <template v-if="!$v.destination.required">Wallet destination is required <br></template>
@@ -57,7 +57,7 @@
               :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Your password"
               required
-              @blur="$v.password.$touch()"/>
+              @blur.native="$v.password.$touch()"/>
             <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
@@ -81,7 +81,7 @@
               type="text"
               placeholder="Seed for selected signer"
               required
-              @blur="$v.signerSeed.$touch()"/>
+              @blur.native="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
               <template v-if="$v.signerSeed.$error" class="field__errors">
                 <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
@@ -144,7 +144,7 @@
                   :type="password2IsHidden ? 'password' : 'text'"
                   placeholder="Your password"
                   required
-                  @blur="$v.password.$touch()"/>
+                  @blur.native="$v.password.$touch()"/>
 
                 <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
@@ -169,7 +169,7 @@
                   type="text"
                   placeholder="Seed for selected signer"
                   required
-                  @blur="$v.signerSeed.$touch()"/>
+                  @blur.native="$v.signerSeed.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
                   <template v-if="$v.signerSeed.$error" class="field__errors">
                     <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
