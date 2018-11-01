@@ -130,7 +130,6 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
-        await this.clearAuthToken();
         return;
       }
 

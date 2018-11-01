@@ -9,9 +9,10 @@
           id="lost-2fa-password"
           :class="{ error: $v.password.$error }"
           v-model="password"
+          :state="!$v.password.$error"
           :type="passwordIsHidden ? 'password' : 'text'"
           placeholder="Password"
-          aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
+          aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
           required
           @blur.native="$v.password.$touch()"/>
         <!-- a special row that flows over the input field providing contextual actions -->
@@ -21,13 +22,13 @@
           </b-col>
         </b-row>
 
-        <b-form-invalid-feedback id="inputLiveEmailFeedback">
+        <b-form-invalid-feedback id="inputLivePasswordFeedback">
           <template v-if="$v.password.$error" class="field-errors">
             <template v-if="!$v.password.required">Password is required! <br></template>
             <template v-if="!$v.password.decryptValid">Invalid Password <br></template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text id="inputLiveEmailHelp">
+        <b-form-text id="inputLivePasswordHelp">
           Your password
         </b-form-text>
       </b-form-group>

@@ -20,6 +20,7 @@
           <b-form-input
             id="tfa-code"
             :class="{ error: $v.tfaCode.$error }"
+            :state="!$v.tfaCode.$error"
             v-model="tfaCode"
             type="text"
             placeholder="2FA code"
