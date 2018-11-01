@@ -257,6 +257,28 @@ export default {
     commit('SET_USER_AUTH_LOADING', false);
   },
 
+  async getUserData ({ commit, getters }) {
+    commit('SET_USER_DATA_LOADING', true);
+    try {
+      const res = await UserService.getUserData();
+      commit('SET_USER_DATA', res.data);
+    } catch (err) {
+      commit('SET_USER_DATA_ERROR', err.data);
+    }
+    commit('SET_USER_DATA_LOADING', false);
+  },
+
+  async updateUserData ({ commit }, params) {
+    commit('SET_UPDATE_USER_DATA_LOADING', true);
+    commit('SET_UPDATE_USER_DATA_ERROR', []);
+    try {
+      await UserService.updateUserData(params);
+    } catch (err) {
+      commit('SET_UPDATE_USER_DATA_ERROR', err.data);
+    }
+    commit('SET_UPDATE_USER_DATA_LOADING', false);
+  },
+
   async changePassword ({ commit }, params) {
     commit('SET_CHANGE_PASSWORD_LOADING', true);
     commit('SET_CHANGE_PASSWORD_ERROR', []);

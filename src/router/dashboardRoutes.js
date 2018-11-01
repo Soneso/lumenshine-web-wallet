@@ -63,4 +63,13 @@ export default [
       pageName: 'Contacts',
     }
   },
+  {
+    path: '/personal-data',
+    name: 'Personal data',
+    component: require('@/pages/PersonalData').default,
+    meta: {
+      authNeeded: true,
+      pageName: 'Personal data',
+    }
+  },
 ];

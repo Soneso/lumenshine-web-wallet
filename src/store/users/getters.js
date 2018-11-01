@@ -4,6 +4,8 @@ export default {
   userStatus: state => ({ err: state.userStatusErrors, loading: state.userStatusLoading, res: state.userStatusResult, email: state.userEmail }),
   changePasswordStatus: state => ({ err: state.changePasswordErrors, loading: state.changePasswordLoading }),
   userAuthData: state => ({ err: state.userAuthErrors, loading: state.userAuthLoading, res: state.userAuthData }),
+  userData: state => ({ err: state.userErrors, loading: state.userLoading, res: state.userData }),
+  updateUserDataStatus: state => ({ err: state.updateUserDataErrors, loading: state.updateUserDataLoading }),
   registrationStatus: state => ({ err: state.registrationErrors, loading: state.registrationLoading }),
   registration2FAStatus: state => ({ err: state.registration2FAErrors, loading: state.registrationLoading, res: state.registration2FAResult }),
   confirmEmailStatus: state => ({ err: state.confirmEmailErrors, loading: state.confirmEmailLoading, res: state.confirmEmailResult }),

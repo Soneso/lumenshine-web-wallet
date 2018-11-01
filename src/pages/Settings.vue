@@ -13,6 +13,9 @@
           <li>
             <router-link to="/backup-mnemonic" class="py-1 d-block text-gray-500 font-weight-500">Backup Secret/Mnemonic</router-link>
           </li>
+          <li>
+            <router-link to="/personal-data" class="py-1 d-block text-gray-500 font-weight-500">Personal data</router-link>
+          </li>
         </ul>
       </b-card>
     </b-col>

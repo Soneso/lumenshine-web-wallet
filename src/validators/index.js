@@ -1,4 +1,5 @@
 export default {
+  additionalName: require('./additionalName').default,
   assetCode: require('./assetCode').default,
   birthday: require('./birthday').default,
   birthPlace: require('./birthPlace').default,
@@ -6,6 +7,8 @@ export default {
   companyName: require('./companyName').default,
   domain: require('./domain').default,
   email: require('./email').default,
+  employerAddress: require('./employerAddress').default,
+  employerName: require('./employerName').default,
   forename: require('./forename').default,
   lastname: require('./lastname').default,
   federationAddress: require('./federationAddress').default,

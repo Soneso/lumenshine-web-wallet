@@ -24,7 +24,7 @@ import {
   ButtonGroup,
   Card,
   // Carousel,
-  // Collapse,
+  Collapse,
   Dropdown,
   // Embed,
   Form,
@@ -88,7 +88,7 @@ Vue.use(ButtonToolbar);
 Vue.use(ButtonGroup);
 Vue.use(Card);
 // Vue.use(Carousel);
-// Vue.use(Collapse);
+Vue.use(Collapse);
 Vue.use(Dropdown);
 // Vue.use(Embed);
 Vue.use(Form);

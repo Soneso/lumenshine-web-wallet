@@ -146,6 +146,25 @@ export default {
     state.userAuthData = null;
   },
 
+  SET_USER_DATA (state, msg) {
+    state.userData = msg;
+    state.userDataErrors = [];
+  },
+  SET_USER_DATA_LOADING (state, msg) {
+    state.userDataLoading = msg;
+  },
+  SET_USER_DATA_ERROR (state, msg) {
+    state.userDataErrors = msg;
+    state.userData = null;
+  },
+
+  SET_UPDATE_USER_DATA_LOADING (state, msg) {
+    state.updateUserDataLoading = msg;
+  },
+  SET_UPDATE_USER_DATA_ERROR (state, msg) {
+    state.updateUserDataErrors = msg;
+  },
+
   SET_CHANGE_PASSWORD_LOADING (state, msg) {
     state.changePasswordLoading = msg;
   },

@@ -71,6 +71,13 @@ function getInitialState (clearAuthToken = false) {
     userAuthData: null,
     userAuthLoading: false,
     userAuthErrors: [],
+
+    userData: null,
+    userDataLoading: false,
+    userDataErrors: [],
+
+    updateUserDataLoading: false,
+    updateUserDataErrors: [],
   };
 }
 

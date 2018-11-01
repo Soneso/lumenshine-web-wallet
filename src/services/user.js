@@ -28,6 +28,16 @@ export default {
     return response.data.countries;
   },
 
+  async getOccupationList () {
+    const response = await apiBase.get('/portal/user/occupation_list');
+    return response.data.occupations;
+  },
+
+  async getLanguageList () {
+    const response = await apiBase.get('/portal/user/language_list');
+    return response.data.languages;
+  },
+
   // async getRegistrationStatus () {
   //   const response = await apiBase.get('/portal/user/auth/get_user_registration_status');
   //   return response.data;
@@ -133,8 +143,18 @@ export default {
     return response;
   },
 
+  async getUserData () {
+    const response = await apiBase.get('/portal/user/dashboard/get_user_data', { timestamp: Date.now() });
+    return response;
+  },
+
+  async updateUserData (params) {
+    const response = await apiBase.post('/portal/user/dashboard/update_user_data', params);
+    return response;
+  },
+
   async getStellarTransactions () {
     const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now() });
-    return response.data;
+    return response;
   },
 };

@@ -86,6 +86,12 @@
                 <div>Backup Secret/Mnemonic</div>
               </router-link>
             </li>
+
+            <li>
+              <router-link to="/personal-data">
+                <div>Personal data</div>
+              </router-link>
+            </li>
           </ul>
         </div>
       </router-link>
