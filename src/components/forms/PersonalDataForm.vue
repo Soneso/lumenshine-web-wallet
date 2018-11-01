@@ -232,7 +232,9 @@
             <b-card-body>
 
               <b-form-group :label-for="`personal-data-occupation`" label="Occupation">
-                <b-form-select :id="`personal-data-occupation`" v-model="occupation" :options="occupationOptions"/>
+                <div class="select-wrapper">
+                  <v-select :input-id="`personal-data-occupation`" :value="occupation" :options="occupationOptions" :loading="loadingOccupations" :on-search="onOccupationSearch" :on-change="onChangeOccupation"/>
+                </div>
               </b-form-group>
 
               <b-form-group label-for="personal-data-employer-name">
@@ -385,6 +387,7 @@
 import formMixin from '@/mixins/form';
 
 import validators from '@/validators';
+import UserService from '@/services/user';
 
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
@@ -401,10 +404,6 @@ export default {
       required: true,
     },
     languages: {
-      type: Array,
-      required: true,
-    },
-    occupations: {
       type: Array,
       required: true,
     },
@@ -434,7 +433,9 @@ export default {
       birthDate: this.data.birth_day || '',
       birthPlace: this.data.birth_place,
       birthCountry: this.data.birth_country_code,
-      occupation: `${this.data.occupation_code08}_${this.data.occupation_code88}`,
+      occupation: this.data.occupation_name, // `${this.data.occupation_code08}_${this.data.occupation_code88}`,
+      occupationCode08: this.data.occupation_code08,
+      occupationCode88: this.data.occupation_code88,
       employerName: this.data.employer_name,
       employerAddress: this.data.employer_address,
       bankAccountNumber: this.data.bank_account_number ? `****${this.data.bank_account_number}` : '',
@@ -444,6 +445,10 @@ export default {
       taxIdName: this.data.tax_id_name,
 
       updatingBankData: false,
+
+      loadingOccupations: false,
+
+      occupations: [],
     };
   },
 
@@ -455,7 +460,7 @@ export default {
       return this.languages.map(l => ({ value: l.lang_code, text: l.lang_name }));
     },
     occupationOptions () {
-      return this.occupations.map(o => ({ value: `${o.code08}_${o.code88}`, text: o.name }));
+      return this.occupations.map(o => ({ value: `${o.code08}_${o.code88}`, label: o.name }));
     },
     countryOptions () {
       return this.countries.map(c => ({ value: c.code, text: c.name }));
@@ -468,7 +473,28 @@ export default {
     },
   },
 
+  created () {
+    this.onOccupationSearch('');
+  },
+
   methods: {
+    async onOccupationSearch (search) {
+      this.loadingOccupations = true;
+      this.occupations = await UserService.getOccupationList({ name: search });
+      this.loadingOccupations = false;
+    },
+    onChangeOccupation (val) {
+      if (!val) {
+        this.occupationCode08 = '';
+        this.occupationCode88 = '';
+        this.occupation = '';
+      } else if (typeof val !== 'string') {
+        const splitted = val.value.split('_');
+        this.occupationCode08 = splitted[0];
+        this.occupationCode88 = splitted[1];
+        this.occupation = val.label;
+      }
+    },
     onUpdateBankData () {
       if (this.updatingBankData) return;
       this.updatingBankData = true;
@@ -520,9 +546,9 @@ export default {
         } : {}),
         tax_id: this.taxId,
         tax_id_name: this.taxIdName,
-        // occupation_name: this.occupation ? this.occupations.find(o => `${o.code08}_${o.code88}` === this.occupation).name : '',
-        occupation_code08: this.occupation ? this.occupation.split('_')[1] : '',
-        occupation_code88: this.occupation ? this.occupation.split('_')[0] : '',
+        occupation_name: this.occupation,
+        occupation_code08: this.occupationCode08,
+        occupation_code88: this.occupationCode88,
         employer_name: this.employerName,
         employer_address: this.employerAddress,
         language_code: this.language,

@@ -8,7 +8,6 @@
           v-if="!loading"
           :data="userData.res"
           :languages="languages"
-          :occupations="occupations"
           :countries="countries"
           :salutations="salutations"
           :loading="loading"
@@ -36,7 +35,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['userAuthData', 'languages', 'occupations', 'countries', 'salutations', 'userData']),
+    ...mapGetters(['userAuthData', 'languages', 'countries', 'salutations', 'userData']),
     loading () {
       return this.inProgress || this.userData.loading;
     }

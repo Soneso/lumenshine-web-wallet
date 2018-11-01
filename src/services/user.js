@@ -28,8 +28,8 @@ export default {
     return response.data.countries;
   },
 
-  async getOccupationList () {
-    const response = await apiBase.get('/portal/user/occupation_list');
+  async getOccupationList (params) {
+    const response = await apiBase.get('/portal/user/occupation_list', params);
     return response.data.occupations;
   },
 

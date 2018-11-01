@@ -67,12 +67,14 @@ import {
 
 import i18n from './plugins/i18n/i18n';
 import Meta from 'vue-meta';
+import vSelect from 'vue-select';
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
+Vue.component('v-select', vSelect);
 
 Vue.use(VueAwesomeSwiper);
 

@@ -19,7 +19,6 @@ export default new Vuex.Store({
   state: {
     lastInteraction: null,
     staticDataLoaded: false,
-    occupationList: [],
     countryList: [],
     salutationList: [],
     languageList: [],
@@ -27,7 +26,6 @@ export default new Vuex.Store({
 
   getters: {
     languages: state => state.languageList,
-    occupations: state => state.occupationList,
     countries: state => state.countryList,
     salutations: state => state.salutationList,
   },
@@ -49,8 +47,8 @@ export default new Vuex.Store({
         return;
       }
       try {
-        const [ salutations, countries, occupations, languages ] = await Promise.all([UserService.getSalutationList(), UserService.getCountryList(), UserService.getOccupationList(), UserService.getLanguageList()]);
-        const data = { salutations, countries, occupations, languages };
+        const [ salutations, countries, languages ] = await Promise.all([UserService.getSalutationList(), UserService.getCountryList(), UserService.getLanguageList()]);
+        const data = { salutations, countries, languages };
         commit('SET_STATIC_DATA', data);
       } catch (err) {
         commit('SET_STATIC_DATA', null);
@@ -68,7 +66,6 @@ export default new Vuex.Store({
         return;
       }
       state.languageList = data.languages;
-      state.occupationList = data.occupations;
       state.countryList = data.countries;
       state.salutationList = data.salutations;
       state.staticDataLoaded = true;
