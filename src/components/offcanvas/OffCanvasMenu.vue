@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
 export default {

@@ -53,7 +53,7 @@ export default {
     onSaveClick () {
       // maybe we want to paste all mnemonic in the first input field; then...
       const submittedMnemonic = this.mnemonic[0].word.split(' ');
-      if (submittedMnemonic.length === 24) this.mnemonic = submittedMnemonic.map(w => ({word: w}));
+      if (submittedMnemonic.length === 24) this.mnemonic = submittedMnemonic.map(w => ({ word: w }));
 
       this.mnemonic = [ ...this.mnemonic.map(m => ({ word: m.word.trim() })) ];
       this.$v.$touch();

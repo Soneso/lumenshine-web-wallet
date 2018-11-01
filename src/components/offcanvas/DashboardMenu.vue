@@ -145,14 +145,14 @@ export default {
       if (this.changePasswordStep !== 'password') {
         this.mutateChangePasswordStep('password');
       }
-      this.$router.push({name: 'ChangePassword'});
+      this.$router.push({ name: 'ChangePassword' });
     },
 
     switchToChange2faView () {
       if (this.change2faStep !== 'password') {
         this.mutateChange2faStep('password');
       }
-      this.$router.push({name: 'ChangeTfa'});
+      this.$router.push({ name: 'ChangeTfa' });
     },
 
     async onLogoutClick () {

@@ -33,7 +33,7 @@ function decodeAndRemovePadding (data) {
 function cryptAES (key, iv, data) {
   const cipher = forge.cipher.createCipher('AES-CBC', forge.util.decode64(key));
   cipher.mode.pad = false;
-  cipher.start({iv: forge.util.decode64(iv)});
+  cipher.start({ iv: forge.util.decode64(iv) });
   cipher.update(forge.util.createBuffer(forge.util.decode64(data)));
   if (!cipher.finish()) {
     return null;
@@ -44,7 +44,7 @@ function cryptAES (key, iv, data) {
 function decryptAES (key, iv, data) {
   const decipher = forge.cipher.createDecipher('AES-CBC', forge.util.decode64(key));
   decipher.mode.unpad = false;
-  decipher.start({iv: forge.util.decode64(iv)});
+  decipher.start({ iv: forge.util.decode64(iv) });
   decipher.update(forge.util.createBuffer(forge.util.decode64(data)));
   if (!decipher.finish()) {
     return null;

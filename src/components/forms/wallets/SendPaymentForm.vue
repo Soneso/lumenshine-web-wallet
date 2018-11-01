@@ -242,7 +242,7 @@ import spinner from '@/components/ui/spinner1';
 
 export default {
   name: 'SendPaymentForm',
-  components: {spinner},
+  components: { spinner },
   mixins: [ formMixin, balanceMixin ],
   props: {
     data: {
