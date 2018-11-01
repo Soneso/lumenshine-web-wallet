@@ -1,4 +1,4 @@
-const mobileRegex = /^[+]?[0-9]{11,16}$/;
+const mobileRegex = /^\+?[1-9]\d{1,14}$/;
 
 export default function () {
   return {
