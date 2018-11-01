@@ -351,8 +351,7 @@
                   type="text"
                   placeholder="Tax ID"
                   aria-describedby="inputLiveTaxIdHelp"
-                  required
-                  @blur.native="$v.taxId.$touch()"/>
+                  required/>
                 <b-form-text id="inputLiveTaxIdHelp">
                   Tax ID
                 </b-form-text>
@@ -365,8 +364,7 @@
                   type="text"
                   placeholder="Tax ID Name"
                   aria-describedby="inputLiveTaxIdNameHelp"
-                  required
-                  @blur.native="$v.taxIdName.$touch()"/>
+                  required/>
                 <b-form-text id="inputLiveTaxIdNameHelp">
                   Tax ID Name
                 </b-form-text>
