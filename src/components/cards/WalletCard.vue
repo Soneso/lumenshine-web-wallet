@@ -14,9 +14,10 @@
         </b-col>
       </b-row>
 
-      <wallet-card-balances :wide-card="wideCard" :balances="balances" :data="data"/>
+      <spinner v-if="walletLoading(data.id)" align="center" class="pt-4 pb-5"/>
+      <wallet-card-balances v-else="" :wide-card="wideCard" :balances="balances" :data="data"/>
 
-      <b-row slot="footer">
+      <b-row slot="footer" :class="{'invisible': walletLoading(data.id)}">
         <b-col>
           <template v-if="!data.stellar_data">
             <div class="mx-2 py-2 text-right">
@@ -170,7 +171,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges', 'transactions']),
+    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges', 'transactions', 'walletLoading']),
     wideCard () {
       return this.balances.length > 3;
     },
