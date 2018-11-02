@@ -33,7 +33,7 @@
         </b-form-text>
       </b-form-group>
       <b-button variant="info" class="text-uppercase btn-rounded my-3" @click.prevent="onRecoverClick">Next</b-button>
-      <a href="#" class="d-block" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost password?</a>
+      <a href="/lost-password-and-tfa" target="_blank" class="d-block">Lost password?</a>
     </template>
   </form>
 </template>

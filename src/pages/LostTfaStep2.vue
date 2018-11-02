@@ -4,11 +4,17 @@
       <b-card class="p-4 single-card text-center">
         <h3 class="form-headline pb-3">Lost 2FA Secret</h3>
         <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
+
         <template v-if="confirmEmailStatus.err.length > 0">
           <small v-if="tokenNotFound" class="text-danger d-block">Token could not be found in the database.</small>
           <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
-          <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
         </template>
+
+        <template v-else-if="tokenUsed">
+          <small class="text-danger d-block">Token was already used. Please request a new one.</small>
+          <b-button variant="info" class="btn-rounded text-uppercase mt-4" @click="$router.push({ name: 'LostTfaStep1' })">Request new one</b-button>
+        </template>
+
         <template v-else-if="userStatus.res">
           <spinner v-if="inProgress" align="center"/>
 
@@ -78,12 +84,13 @@ export default {
     tokenNotFound () {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1000));
     },
+    tokenUsed () {
+      if (!this.confirmEmailStatus.res) return false;
+      return !!(this.confirmEmailStatus.res.token_already_confirmed);
+    },
     tokenExpired () {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1006));
     },
-    emailAlreadyConfirmed () {
-      return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1008));
-    }
   },
 
   mounted () {

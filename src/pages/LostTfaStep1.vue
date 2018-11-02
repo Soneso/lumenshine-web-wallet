@@ -41,6 +41,7 @@ export default {
       emailLostTfaResent: false,
     };
   },
+
   computed: {
     ...mapGetters(['lostTfaStatus', 'resendEmailStatus']),
     loading () {
@@ -50,6 +51,7 @@ export default {
       return !!(this.lostTfaStatus.err.find(err => err.error_code === 1010));
     }
   },
+
   methods: {
     ...mapActions(['initLostTfa', 'resendConfirmationEmail']),
     async onEmailSubmitClick (email) {
@@ -64,6 +66,7 @@ export default {
       }
       this.inProgress = false;
     },
+
     async onEmailRecheckClick () {
       const email = this.lastEmail;
       this.alreadyConfirmedFailed = false;
@@ -76,6 +79,7 @@ export default {
       }
       this.inProgress = false;
     },
+
     async onEmailResendClick (email) {
       email = email || this.lastEmail;
       this.inProgress = true;
@@ -86,9 +90,11 @@ export default {
       }
       this.inProgress = false;
     },
+
     onDoneClick () {
       this.$router.push({ name: 'Login' });
     },
+
     async onEmailLostTfaResendClick () {
       await this.onEmailSubmitClick();
       this.emailLostTfaResent = true;

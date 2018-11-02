@@ -13,6 +13,7 @@
           <small v-if="emailLostPasswordResent" class="d-block pt-2 text-success">Resent email</small>
           <b-button variant="info" class="mt-4 text-uppercase btn-rounded" @click="onDoneClick">Done</b-button>
         </template>
+
         <lost-password-email-form v-else v-show="!loading && !lostPasswordStatus.res" :loading="loading" :errors="lostPasswordStatus.err" @submit="onEmailSubmitClick"/>
         <confirm-email-form v-if="emailNotConfirmed" :email-resent="emailResent" :already-confirmed-failed="alreadyConfirmedFailed" @recheck="onEmailRecheckClick" @resend="onEmailResendClick"/>
       </b-card>

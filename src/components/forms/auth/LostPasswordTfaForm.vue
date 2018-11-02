@@ -23,7 +23,7 @@
           </template>
         </b-form-invalid-feedback>
         <b-form-text id="inputLiveTwoFactorCodeHelp">
-          <a href="#" @click="$router.push({ name: 'LostPasswordAndTfa' })">Lost 2FA Secret?</a>
+          <a href="/lost-password-and-tfa" target="_blank">Lost 2FA Secret?</a>
         </b-form-text>
       </b-form-group>
     </template>

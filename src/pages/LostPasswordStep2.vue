@@ -4,11 +4,17 @@
       <b-card class="p-4 single-card text-center">
         <h4 class="form-headline pb-3">Lost Password</h4>
         <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown error, please try again later!</small>
+
         <template v-if="confirmEmailStatus.err.length > 0">
           <small v-if="tokenNotFound" class="text-danger d-block">Could not find this token in the database.</small>
           <small v-if="tokenExpired" class="text-danger d-block">Token expired.</small>
-          <small v-if="emailAlreadyConfirmed" class="text-danger d-block">Email address already confirmed.</small>
         </template>
+
+        <template v-else-if="tokenUsed">
+          <small class="text-danger d-block">Token was already used. Please request a new one.</small>
+          <b-button variant="info" class="btn-rounded text-uppercase mt-4" @click="$router.push({ name: 'LostPasswordStep1' })">Request new one</b-button>
+        </template>
+
         <template v-else-if="userStatus.res">
           <spinner v-if="inProgress" align="center"/>
 
@@ -82,9 +88,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['lostPasswordStatus', 'confirmEmailStatus', 'userStatus']),
+    ...mapGetters(['lostPasswordStatus', 'confirmEmailStatus', 'userStatus', 'sep10Challenge']),
     loading () {
       return this.inProgress || this.lostPasswordStatus.loading || this.userStatus.loading;
+    },
+    tokenUsed () {
+      if (!this.confirmEmailStatus.res) return false;
+      return !!(this.confirmEmailStatus.res.token_already_confirmed);
     },
     tokenNotFound () {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1000));
@@ -92,9 +102,6 @@ export default {
     tokenExpired () {
       return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1006));
     },
-    emailAlreadyConfirmed () {
-      return !!(this.confirmEmailStatus.err.find(err => err.error_code === 1008));
-    }
   },
 
   async created () {
@@ -120,6 +127,9 @@ export default {
     ...mapActions(['getUserStatus', 'confirmEmail', 'setLostPasswordTfa', 'lostPasswordUpdate', 'updateSecurityData', 'setMnemonic', 'setPublicKeys', 'resetTfa', 'logout', 'loginStep2', 'updateSep10']),
     async onTfaSubmitClick (tfaCode) {
       this.inProgress = true;
+      // need to update SEP10 here, because setLostPasswordTfa will give another JWT which does not works with SEP10 endpoint
+      await this.updateSep10();
+
       await this.setLostPasswordTfa(tfaCode);
       this.lastTfaCode = tfaCode;
 
@@ -137,7 +147,7 @@ export default {
     async onMnemonicSubmitClick (mnemonic) {
       this.inProgress = true;
       this.mnemonicError = false;
-      const pk0 = this.lostPasswordStatus.res.public_key;
+      const pk0 = this.lostPasswordStatus.res.public_key_0;
       const isValidMnemonic = await workerCaller('validateMnemonic', mnemonic);
 
       if (!isValidMnemonic) {
@@ -176,12 +186,12 @@ export default {
         mnemonic_iv: securityData.encryption_mnemonic_iv,
         wordlist: securityData.encryptedWordlist,
         wordlist_iv: securityData.encryption_wordlist_iv,
-        public_key: securityData.public_key,
+        public_key_0: securityData.public_key,
+        public_key_188: securityData.public_key188, // TODO remove
 
         tfa_code: this.lastTfaCode,
       });
 
-      await this.updateSep10();
       const signedTransaction = await CryptoHelper.signSep10Challenge(securityData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;
@@ -213,6 +223,13 @@ export default {
       this.inProgress = true;
       const securityData = await CryptoHelper.generateSecurityData(password, this.mnemonic);
 
+      const signedTransaction = await CryptoHelper.signSep10Challenge(securityData.secretSeed, this.sep10Challenge);
+      if (!signedTransaction) {
+        this.step = 'error';
+        this.inProgress = false;
+        return;
+      }
+
       await this.lostPasswordUpdate({
         encrypted_mnemonic: securityData.encrypted_mnemonic,
         encrypted_wordlist: securityData.encrypted_wordlist,
@@ -222,11 +239,12 @@ export default {
         mnemonic: securityData.mnemonic,
         mnemonic_master_iv: securityData.mnemonic_master_iv,
         mnemonic_master_key: securityData.mnemonic_master_key,
-        public_key: securityData.public_key,
+        public_key_0: securityData.public_key,
         wordlist_master_iv: securityData.wordlist_master_iv,
         wordlist_master_key: securityData.wordlist_master_key,
 
-        public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase(), // TODO remove
+        public_key_188: securityData.public_key188, // TODO remove
+        sep10_transaction: signedTransaction,
       });
 
       if (this.lostPasswordStatus.err.length > 0) {
