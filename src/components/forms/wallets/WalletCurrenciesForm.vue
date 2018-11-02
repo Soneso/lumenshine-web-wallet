@@ -268,7 +268,7 @@ import Amount from '@/util/Amount';
 import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';

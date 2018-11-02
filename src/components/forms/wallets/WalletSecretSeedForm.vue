@@ -55,7 +55,7 @@ import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
 
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 import copyToClipboard from '@/components/ui/copyToClipboard';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';

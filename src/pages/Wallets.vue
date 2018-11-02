@@ -1,7 +1,6 @@
 <template>
   <section>
     <b-row align-h="start" class="equal-heights">
-      <card-spinner :loading="wallets.loading"/>
       <wallet-card v-for="wallet in wallets.res" :key="wallet.public_key" :data="wallet"/>
     </b-row>
 
@@ -19,12 +18,11 @@ import config from '@/config';
 
 import WalletCard from '@/components/cards/WalletCard';
 import AddWalletForm from '@/components/forms/wallets/AddWalletForm';
-import cardSpinner from '@/components/ui/cardSpinner.vue';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { WalletCard, AddWalletForm, cardSpinner },
+  components: { WalletCard, AddWalletForm },
   data () {
     return {
       nextFreePublicKey: null,

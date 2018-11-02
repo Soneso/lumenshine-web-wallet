@@ -40,7 +40,7 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 import changeTfaPasswordForm from '@/components/forms/ChangeTfaPasswordForm';
 import changeTfaForm from '@/components/forms/ChangeTfaForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 import CryptoHelper from '@/helpers/CryptoHelper';
 

@@ -15,7 +15,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import LoginForm from '@/components/forms/auth/LoginForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 import CryptoHelper from '@/helpers/CryptoHelper';
 

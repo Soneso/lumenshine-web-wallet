@@ -75,7 +75,7 @@ import StellarSdk from 'stellar-sdk';
 
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { spinner },

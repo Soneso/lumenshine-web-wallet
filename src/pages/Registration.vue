@@ -21,7 +21,7 @@ import redirectHandler from '@/util/redirectHandler';
 import CryptoHelper from '@/helpers/CryptoHelper';
 
 import registrationForm from '@/components/forms/auth/RegistrationForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { registrationForm, spinner },

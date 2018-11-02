@@ -56,7 +56,7 @@ import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 import Datepicker from 'vuejs-datepicker';
 
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner.vue';
 import Amount from '@/util/Amount';
 
 const OperationType = {

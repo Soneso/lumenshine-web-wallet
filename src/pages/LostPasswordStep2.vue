@@ -69,7 +69,7 @@ import CryptoHelper from '@/helpers/CryptoHelper';
 import lostPasswordTfaForm from '@/components/forms/auth/LostPasswordTfaForm';
 import lostPasswordMnemonicForm from '@/components/forms/auth/LostPasswordMnemonicForm';
 import lostPasswordForm from '@/components/forms/auth/LostPasswordForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { lostPasswordTfaForm, lostPasswordMnemonicForm, lostPasswordForm, spinner },

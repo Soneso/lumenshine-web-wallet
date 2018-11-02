@@ -238,7 +238,7 @@ import formMixin from '@/mixins/form';
 import balanceMixin from '@/mixins/balance';
 import validators from '@/validators';
 
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 
 export default {
   name: 'SendPaymentForm',

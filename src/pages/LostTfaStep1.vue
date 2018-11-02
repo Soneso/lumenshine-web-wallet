@@ -27,7 +27,7 @@ import lostTfaForm from '@/components/forms/auth/LostTfaForm';
 import lostTfaEmailForm from '@/components/forms/auth/LostTfaEmailForm';
 import lostTfaPasswordForm from '@/components/forms/auth/LostTfaPasswordForm';
 import confirmEmailForm from '@/components/forms/auth/ConfirmEmailForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { lostTfaEmailForm, lostTfaPasswordForm, lostTfaForm, confirmEmailForm, spinner },
