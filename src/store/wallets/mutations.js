@@ -28,8 +28,14 @@ export default {
     state.walletsResult = wallets;
     state.walletsErrors = [];
   },
-  SET_WALLETS_LOADING (state, msg) {
-    state.walletsLoading = msg;
+  SET_WALLETS_LOADING (state, payload) {
+    const turningOff = !!state.walletsLoading.find(item => item.id === payload.id);
+    if (turningOff) {
+      const itemIndex = state.walletsLoading.findIndex(item => item.id === payload.id);
+      state.walletsLoading.splice(itemIndex, 1, payload);
+    } else {
+      state.walletsLoading.push(payload);
+    }
   },
   SET_WALLETS_ERROR (state, msg) {
     state.walletsErrors = msg;

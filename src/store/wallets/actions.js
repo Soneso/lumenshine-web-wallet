@@ -18,7 +18,6 @@ if (config.IS_TEST_NETWORK) {
 
 export default {
   async getWallets ({ commit, getters, dispatch }) {
-    commit('SET_WALLETS_LOADING', true);
     try {
       const backendRes = await WalletService.getWallets();
       const stellarRes = await Promise.all(
@@ -31,6 +30,7 @@ export default {
         return { ...account, stellar_data: stellarData };
       });
       extended.forEach(async acc => {
+        commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
         if (acc.stellar_data) {
           const lastTransaction = await StellarAPI.transactions()
             .forAccount(acc.public_key)
@@ -51,12 +51,12 @@ export default {
               }
             });
         }
+        commit('SET_WALLETS_LOADING', { id: acc.id, loading: false });
       });
       commit('SET_WALLETS', extended);
     } catch (err) {
       commit('SET_WALLETS_ERROR', err.data);
     }
-    commit('SET_WALLETS_LOADING', false);
   },
 
   async updateWallets ({ commit, getters }, keywords) {
