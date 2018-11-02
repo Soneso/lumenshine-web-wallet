@@ -72,4 +72,13 @@ export default [
       pageName: 'Personal data',
     }
   },
+  {
+    path: '/transactions',
+    name: 'Transactions',
+    component: require('@/pages/Transactions').default,
+    meta: {
+      authNeeded: true,
+      pageName: 'Transactions',
+    }
+  },
 ];

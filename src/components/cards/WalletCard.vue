@@ -170,7 +170,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges', 'transactions']),
+    ...mapGetters(['publicKeys', 'sendPaymentStatus', 'decryptedWallet', 'exchanges', 'finishedTransactions']),
     wideCard () {
       return this.balances.length > 3;
     },
@@ -180,7 +180,7 @@ export default {
     sendPaymentTransaction () {
       if (!this.sendPaymentStatus.res) return;
       const transactionId = this.sendPaymentStatus.res.transactionId;
-      return this.transactions.find(tr => tr.id === transactionId);
+      return this.finishedTransactions.find(tr => tr.id === transactionId);
     }
   },
   watch: {

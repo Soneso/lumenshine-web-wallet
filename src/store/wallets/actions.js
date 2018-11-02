@@ -246,6 +246,17 @@ export default {
     commit('SET_PUBLIC_KEYS', publicKeys);
   },
 
+  async loadTransactions ({ commit }, params) {
+    commit('SET_TRANSACTIONS_LOADING', true);
+    try {
+      const transactions = await WalletService.getStellarTransactions(params);
+      commit('SET_TRANSACTIONS', transactions);
+    } catch (err) {
+      commit('SET_TRANSACTIONS_ERROR', err.data);
+    }
+    commit('SET_TRANSACTIONS_LOADING', false);
+  },
+
   async getCurrencyPairs ({ commit }) {
     commit('SET_CURRENCY_PAIRS_LOADING', true);
     try {

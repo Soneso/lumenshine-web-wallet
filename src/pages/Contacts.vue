@@ -95,7 +95,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['contacts', 'addContactStatus', 'editContactStatus', 'removeContactStatus', 'wallets', 'exchanges', 'sendPaymentStatus', 'decryptedWallet', 'transactions']),
+    ...mapGetters(['contacts', 'addContactStatus', 'editContactStatus', 'removeContactStatus', 'wallets', 'exchanges', 'sendPaymentStatus', 'decryptedWallet', 'finishedTransactions']),
 
     filteredContacts () {
       if (this.searchField === '') {
@@ -117,7 +117,7 @@ export default {
     sendPaymentTransaction () {
       if (!this.sendPaymentStatus.res) return;
       const transactionId = this.sendPaymentStatus.res.transactionId;
-      return this.transactions.find(tr => tr.id === transactionId);
+      return this.finishedTransactions.find(tr => tr.id === transactionId);
     },
   },
   created () {

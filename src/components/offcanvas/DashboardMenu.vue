@@ -33,10 +33,10 @@
     </li>
 
     <li>
-      <a href="#">
+      <router-link to="/transactions">
         <i class="icon-transaction"/>
         <div :style="toggleText">Transactions</div>
-      </a>
+      </router-link>
     </li>
 
     <!--<li>-->

@@ -56,4 +56,9 @@ export default {
     const response = await apiBase.post('/portal/user/dashboard/get_known_inflation_destinations', params);
     return response.data;
   },
+
+  async getStellarTransactions (params) {
+    const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now(), ...params });
+    return response.data;
+  },
 };

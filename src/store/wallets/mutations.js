@@ -95,6 +95,21 @@ export default {
     state.removeCurrencyErrors = msg;
   },
 
+  SET_TRANSACTIONS (state, msg) {
+    state.transactionResult = msg;
+    state.transactionErrors = [];
+  },
+  SET_TRANSACTIONS_LOADING (state, msg) {
+    state.transactionLoading = msg;
+    if (msg) {
+      state.transactionResult = null;
+    }
+  },
+  SET_TRANSACTIONS_ERROR (state, msg) {
+    state.transactionErrors = msg;
+    state.transactionResult = null;
+  },
+
   SET_CURRENCY_PAIRS (state, msg) {
     state.currencyPairsResult = msg;
     state.currencyPairsErrors = [];

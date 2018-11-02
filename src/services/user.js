@@ -152,9 +152,4 @@ export default {
     const response = await apiBase.post('/portal/user/dashboard/update_user_data', params);
     return response;
   },
-
-  async getStellarTransactions () {
-    const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now() });
-    return response;
-  },
 };

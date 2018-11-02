@@ -43,6 +43,10 @@ function getInitialState (clearAuthToken = false) {
     removeCurrencyErrors: [],
     removeCurrencyLoading: false,
 
+    transactionErrors: [],
+    transactionLoading: false,
+    transactionResult: null,
+
     currencyPairsErrors: [],
     currencyPairsLoading: false,
     currencyPairsResult: null,
