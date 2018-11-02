@@ -8,13 +8,8 @@ import getters from './getters';
 
 import exchanges from '@/config/exchanges.json';
 
-function replaceNull (value) {
-  return value === 'null' ? null : value;
-}
-
-function parsePublicKeys (pk) {
-  return pk ? pk.split(',') : pk;
-}
+const replaceNull = value => value === 'null' ? null : value;
+const parsePublicKeys = pk => pk ? pk.split(',') : pk;
 
 function getInitialState (clearAuthToken = false) {
   return {
