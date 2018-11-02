@@ -127,7 +127,7 @@ import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedFor
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
 import WalletCardBalances from '@/components/cards/WalletCardBalances';
 
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 import copyToClipboard from '@/components/ui/copyToClipboard.vue';
 
 export default {

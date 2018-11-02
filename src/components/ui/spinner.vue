@@ -1,5 +1,5 @@
 <template>
-  <div id="spinner1" :style="spinnerContainerStyle" :class="spinnerContainerClass">
+  <div id="spinner" :style="spinnerContainerStyle" :class="spinnerContainerClass">
     <div v-show="status" :style="spinnerStyle" class="spinner"/>
     <div v-if="message" :class="['message', `text-${variant}`]" :style="textPadding">{{ message }}</div>
   </div>

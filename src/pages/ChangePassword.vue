@@ -40,7 +40,7 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 import workerCaller from '@/util/workerCaller';
 
 import changePasswordForm from '@/components/forms/ChangePasswordForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 import CryptoHelper from '@/helpers/CryptoHelper';
 

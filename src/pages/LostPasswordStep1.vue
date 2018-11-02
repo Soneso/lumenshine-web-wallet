@@ -25,7 +25,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import lostPasswordEmailForm from '@/components/forms/auth/LostPasswordEmailForm';
 import confirmEmailForm from '@/components/forms/auth/ConfirmEmailForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { lostPasswordEmailForm, confirmEmailForm, spinner },

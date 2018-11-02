@@ -82,7 +82,7 @@ import formMixin from '@/mixins/form';
 
 import config from '@/config';
 
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 
 function stripDomain (text) {
   return text.replace('*' + config.FEDERATION_DOMAIN, '');

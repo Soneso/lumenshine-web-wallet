@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   name: 'CardSpinner',

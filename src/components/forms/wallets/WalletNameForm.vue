@@ -45,7 +45,7 @@
 import formMixin from '@/mixins/form';
 
 import { required } from 'vuelidate/lib/validators';
-import spinner from '@/components/ui/spinner1';
+import spinner from '@/components/ui/spinner';
 
 export default {
   name: 'WalletNameForm',

@@ -44,7 +44,7 @@ import dayjs from 'dayjs';
 
 import config from '@/config';
 
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 

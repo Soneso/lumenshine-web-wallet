@@ -65,7 +65,7 @@ import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityStat
 
 import { required } from 'vuelidate/lib/validators';
 
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 import passwordAssets from '@/components/ui/passwordAssets';
 
 export default {

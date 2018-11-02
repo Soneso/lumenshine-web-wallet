@@ -59,7 +59,7 @@ import LoginForm from '@/components/forms/auth/LoginForm';
 import CryptoHelper from '@/helpers/CryptoHelper';
 
 import redirectHandler from '@/util/redirectHandler';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   components: { LoginForm, spinner },
