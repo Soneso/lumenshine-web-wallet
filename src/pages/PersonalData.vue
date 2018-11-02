@@ -22,7 +22,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 import PersonalDataForm from '@/components/forms/PersonalDataForm';
-import spinner from '@/components/ui/spinner1.vue';
+import spinner from '@/components/ui/spinner';
 
 export default {
   name: 'PersonalData',
