@@ -481,10 +481,11 @@ export default {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNDERFUNDED', err }]);
       } else if (errorCode === 'op_no_destination') {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION', err }]);
+      } else if (errorCode === 'tx_bad_seq') {
+        return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'BAD_SEQUENCE', err }]);
       } else {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }
     }
   }
-
 };

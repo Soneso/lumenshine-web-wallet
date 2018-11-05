@@ -180,11 +180,15 @@
 
           <hr class="divider">
 
-          <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
-
           <div class="text-center">
             <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
               <span class="text-danger">Warning: Recipient account does not exist or is not funded. Send Anyway?</span>
+            </div>
+            <div v-else-if="errors.find(err => err.error_code === 'BAD_SEQUENCE')">
+              <span class="text-danger">Could not send payment. Wrong sequence number.</span>
+            </div>
+            <div v-else-if="hasUnknownError">
+              <span class="text-danger">Unknown backend error.</span>
             </div>
 
             <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
