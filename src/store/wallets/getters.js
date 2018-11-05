@@ -1,7 +1,7 @@
 export default {
   decryptedWallet: state => ({ err: state.decryptionError, publicKey: state.decryptedPublicKey, secretSeed: state.decryptedSecret, loading: state.decryptionLoading }),
   wallets: state => ({ err: state.walletsErrors, res: state.walletsResult }),
-  walletLoading: state => id => state.walletsLoading.find(item => item.id === id),
+  walletLoading: state => id => state.walletsLoading[id] !== undefined ? state.walletsLoading[id] : true,
   addWalletStatus: state => ({ err: state.addWalletErrors, loading: state.addWalletLoading, res: state.addWalletResult }),
   editWalletStatus: state => ({ err: state.editWalletErrors, loading: state.editWalletLoading }),
   addCurrencyStatus: state => ({ err: state.addCurrencyErrors, loading: state.addCurrencyLoading }),

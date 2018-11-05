@@ -13,10 +13,10 @@
           </b-badge>
         </b-col>
       </b-row>
-      <spinner v-if="walletLoading(data.id).loading" align="center" class="pt-4 pb-5"/>
+      <spinner v-if="walletLoading(data.id)" align="center" class="pt-4 pb-5"/>
       <wallet-card-balances v-else="" :wide-card="wideCard" :balances="balances" :data="data"/>
 
-      <b-row slot="footer" :class="{'invisible': walletLoading(data.id).loading}">
+      <b-row slot="footer" :class="{'invisible': walletLoading(data.id)}">
         <b-col>
           <template v-if="!data.stellar_data">
             <div class="mx-2 py-2 text-right">

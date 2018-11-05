@@ -29,13 +29,15 @@ export default {
     state.walletsErrors = [];
   },
   SET_WALLETS_LOADING (state, payload) {
-    const turningOff = !!state.walletsLoading.find(item => item.id === payload.id);
-    if (turningOff) {
-      const itemIndex = state.walletsLoading.findIndex(item => item.id === payload.id);
-      state.walletsLoading.splice(itemIndex, 1, payload);
-    } else {
-      state.walletsLoading.push(payload);
+    if (payload.id === undefined) { // set all to loading
+      state.walletsLoading = {};
+      return;
     }
+    if (Array.isArray(payload.id)) {
+      payload.id.forEach(id => Vue.set(state.walletsLoading, id, payload.loading));
+      return;
+    }
+    Vue.set(state.walletsLoading, payload.id, payload.loading);
   },
   SET_WALLETS_ERROR (state, msg) {
     state.walletsErrors = msg;
@@ -52,9 +54,6 @@ export default {
     }
     state.walletsResult = newResult;
     state.walletsErrors = [];
-  },
-  UPDATE_WALLETS_LOADING (state, msg) {
-    state.walletsLoading = msg;
   },
   UPDATE_WALLETS_ERROR (state, msg) {
     state.walletsErrors = msg;

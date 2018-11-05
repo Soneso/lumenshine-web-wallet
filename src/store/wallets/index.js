@@ -21,7 +21,7 @@ function getInitialState (clearAuthToken = false) {
     walletsErrors: [],
     walletsResult: null,
 
-    walletsLoading: [],
+    walletsLoading: {},
 
     addWalletErrors: [],
     addWalletResult: null,

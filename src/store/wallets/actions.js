@@ -19,6 +19,7 @@ if (config.IS_TEST_NETWORK) {
 export default {
   async getWallets ({ commit, getters, dispatch }) {
     try {
+      commit('SET_WALLETS_LOADING', { loading: true }); // set all to loading
       const backendRes = await WalletService.getWallets();
       const stellarRes = await Promise.all(
         backendRes.map(account =>
@@ -30,7 +31,6 @@ export default {
         return { ...account, stellar_data: stellarData };
       });
       extended.forEach(async acc => {
-        commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
         if (acc.stellar_data) {
           const lastTransaction = await StellarAPI.transactions()
             .forAccount(acc.public_key)
@@ -42,6 +42,7 @@ export default {
             .cursor(lastTransaction.records[0].paging_token)
             .stream({
               onmessage: async tx => {
+                commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
                 if (getters.pendingTransactions.find(t => t === tx.id)) {
                   const operations = await tx.operations();
                   tx.operation = operations.records[0];
@@ -51,31 +52,35 @@ export default {
               }
             });
         }
-        commit('SET_WALLETS_LOADING', { id: acc.id, loading: false });
       });
       commit('SET_WALLETS', extended);
+      commit('SET_WALLETS_LOADING', { id: extended.map(acc => acc.id), loading: false });
     } catch (err) {
       commit('SET_WALLETS_ERROR', err.data);
     }
   },
 
   async updateWallets ({ commit, getters }, keywords) {
-    commit('UPDATE_WALLETS_LOADING', true);
+    // transform public keys to wallet ids
+    const ids = keywords.map(k => {
+      if (Number.isInteger(k)) {
+        return k;
+      }
+      const wallet = getters.wallets.res.find(w => w.public_key === k);
+      return wallet ? wallet.id : null;
+    }).filter(k => k);
+    commit('SET_WALLETS_LOADING', { id: ids, loading: true });
+
     try {
       // TODO: add backend interface for querying one wallet
 
-      // transform public keys to wallet ids
-      const ids = keywords.map(k => {
-        if (Number.isInteger(k)) {
-          return k;
-        }
-        const wallet = getters.wallets.res.find(w => w.public_key === k);
-        return wallet ? wallet.id : null;
-      }).filter(k => k);
       const backendRes = (await WalletService.getWallets()).filter(wallet => ids.includes(wallet.id));
       const stellarRes = await Promise.all(
         backendRes.map(account =>
-          StellarAPI.loadAccount(account.public_key).catch(err => err)
+          new Promise(async resolve => {
+            const stellarData = await StellarAPI.loadAccount(account.public_key).catch(err => err);
+            resolve(stellarData);
+          })
         )
       );
       const extended = backendRes.map(account => {
@@ -86,7 +91,7 @@ export default {
     } catch (err) {
       commit('UPDATE_WALLETS_ERROR', err.data);
     }
-    commit('UPDATE_WALLETS_LOADING', false);
+    commit('SET_WALLETS_LOADING', { id: ids, loading: false });
   },
 
   async addWallet ({ commit, dispatch }, params) {
@@ -467,6 +472,7 @@ export default {
       commit('SET_SEND_PAYMENT_RESULT', res);
       // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
+      console.error(err);
       commit('SET_SEND_PAYMENT_LOADING', false);
       const errorCode = StellarErrorParser(err);
       if (errorCode === 'op_no_trust') {
