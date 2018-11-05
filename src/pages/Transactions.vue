@@ -36,8 +36,8 @@
             <th>Fee</th>
             <th>Details</th>
           </tr>
-          <tr v-for="item in operations" :key="item.transaction.transaction_hash">
-            <td>{{ formatDate(item.transaction.created_at) }}</td>
+          <tr v-for="item in operations" :key="item.tx_transaction_hash">
+            <td>{{ formatDate(item.tx_created_at) }}</td>
             <td>{{ getOperationName(item) }}</td>
             <td v-html="getAmount(item)"/>
             <td>-</td>
@@ -112,11 +112,8 @@ export default {
       if (!this.transactions.res) return [];
       this.transactions.res.forEach(tr => {
         const transactionBase = { ...tr };
-        delete transactionBase.operations;
-        tr.operations.forEach(op => {
-          op.details = JSON.parse(op.details);
-          ops.push({ transaction: transactionBase, operation: op });
-        });
+        transactionBase.op_details = JSON.parse(transactionBase.op_details);
+        ops.push(transactionBase);
       });
       console.log('operations', ops);
       return ops;
@@ -154,11 +151,11 @@ export default {
   methods: {
     ...mapActions(['loadTransactions', 'getWallets']),
     getOperationName (item) {
-      switch (item.operation.type) {
+      switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
           return 'create account';
         case OperationType.PAYMENT:
-          return item.operation.details.from === this.selectedWallet ? 'payment sent' : 'payment received';
+          return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
       };
       return 'unkn';
     },
@@ -172,13 +169,13 @@ export default {
         OperationType.CREATE_PASSIVE_OFFER,
         OperationType.ACCOUNT_MERGE
       ];
-      if (!allowedTypes.includes(item.operation.type)) return '';
+      if (!allowedTypes.includes(item.op_type)) return '';
 
-      switch (item.operation.type) {
+      switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
           return 'xxx';
         case OperationType.PAYMENT:
-          return (item.operation.details.from === this.selectedWallet ? '-' : '') + new Amount(item.operation.details.amount).format();
+          return (item.op_details.from === this.selectedWallet ? '-' : '') + new Amount(item.op_details.amount).format();
       }
       return '';
     },
