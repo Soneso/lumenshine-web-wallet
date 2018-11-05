@@ -114,6 +114,7 @@
               <template v-if="$v.issuer.$error" class="field-errors">
                 <template v-if="!$v.issuer.required">Issuer is required <br></template>
                 <template v-if="!$v.issuer.publicKey">Invalid issuer <br></template>
+                <template v-if="!$v.issuer.notThisWallet">Issuer cannot have the same public key as the wallet<br></template>
                 <template v-if="!$v.issuer.validIssuer">Issuer does not exists</template>
               </template>
             </b-form-invalid-feedback>
@@ -479,6 +480,7 @@ export default {
         issuer: {
           required,
           ...validators.publicKey.call(this),
+          notThisWallet: value => value !== this.data.public_key,
           validIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_ISSUER'),
         },
       }),
