@@ -102,6 +102,7 @@ export default {
 
     async onResendEmail () {
       this.inProgress = true;
+      this.alreadyConfirmedFailed = false;
       await this.resendConfirmationEmail(this.userStatus.email);
       this.inProgress = false;
       if (this.resendEmailStatus.err.length === 0) {
