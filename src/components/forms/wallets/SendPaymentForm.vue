@@ -180,6 +180,8 @@
 
           <hr class="divider">
 
+          <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+
           <div class="text-center">
             <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
               <span class="text-danger">Warning: Recipient account does not exist or is not funded. Send Anyway?</span>

@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     hasUnknownError () {
-      if (Object.keys(this.backendQuery).some(key => this.backendQuery[key] !== this[key])) { // fields were changed
+      if (Object.keys(this.backendQuery).some(key => this[key] !== undefined && this.backendQuery[key] !== this[key])) { // fields were changed
         return false;
       }
       return !this.$v.$invalid && this.errors.length > 0;
