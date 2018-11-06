@@ -38,11 +38,11 @@
           </tr>
           <tr v-for="item in operations" :key="item.tx_transaction_hash">
             <td>{{ formatDate(item.tx_created_at) }}</td>
-            <td>{{ getOperationName(item) }}</td>
+            <td v-html="getOperationName(item)"/>
             <td v-html="getAmount(item)"/>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
+            <td v-html="getCurrency(item)"/>
+            <td v-html="getFee(item)"/>
+            <td v-html="getDetails(item)"/>
           </tr>
         </table>
       </b-card>
@@ -155,9 +155,29 @@ export default {
         case OperationType.CREATE_ACCOUNT:
           return 'create account';
         case OperationType.PAYMENT:
-          return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
+          return item.op_details.from === this.selectedWallet ? '<span class="text-danger">payment sent</span>' : '<span class="text-success">payment received</span>';
+        case OperationType.PATH_PAYMENT:
+          return 'path payment';
+        case OperationType.MANAGE_OFFER:
+          return 'manage offer';
+        case OperationType.CREATE_PASSIVE_OFFER:
+          return 'create passive offer';
+        case OperationType.SET_OPTIONS:
+          return 'set options';
+        case OperationType.CHANGE_TRUST:
+          return 'change trust';
+        case OperationType.ALLOW_TRUST:
+          return 'allow trust';
+        case OperationType.ACCOUNT_MERGE:
+          return 'account merge';
+        case OperationType.INFLATION:
+          return 'inflation';
+        case OperationType.MANAGE_DATA:
+          return 'manage data';
+        case OperationType.BUMP_SEQUENCE:
+          return 'bump sequence';
       };
-      return 'unkn';
+      return OperationType[item.op_type];
     },
 
     getAmount (item) {
@@ -173,11 +193,58 @@ export default {
 
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
-          return 'xxx';
+          return new Amount(item.op_details.starting_balance).format();
         case OperationType.PAYMENT:
           return (item.op_details.from === this.selectedWallet ? '-' : '') + new Amount(item.op_details.amount).format();
       }
       return '';
+    },
+
+    getCurrency (item) {
+      switch (item.op_type) {
+        case OperationType.CREATE_ACCOUNT:
+          return 'XLM';
+        case OperationType.PAYMENT:
+          return item.op_details.asset_type === 'native' ? 'XLM' : item.op_details.asset_code;
+        case OperationType.CHANGE_TRUST:
+          return item.op_details.asset_code;
+      }
+      return '-';
+    },
+
+    getFee (item) {
+      if (this.selectedWallet === item.tx_source_account) {
+        return item.tx_fee_paid / item.tx_operation_count;
+      }
+      return 0;
+    },
+
+    getDetails (item) {
+      const lines = [`Operation ID: ${item.op_id}`];
+      switch (item.op_type) {
+        case OperationType.CHANGE_TRUST:
+          lines.push(`Type: add`); // TODO
+          lines.push(`Asset: ${item.op_details.asset_code}`);
+          lines.push(`Issuer: ${item.op_details.asset_issuer}`);
+          lines.push(`Trust limit: ${new Amount(item.op_details.limit).format()}`);
+          break;
+        case OperationType.SET_OPTIONS:
+          item.op_details.inflation_dest && lines.push(`Inflation destination: ${item.op_details.inflation_dest}`);
+          // item.op_details.inflation_dest && lines.push(`Set flags: ${item.op_details.inflation_dest}`);
+          // item.op_details.inflation_dest && lines.push(`Clear flags: ${item.op_details.inflation_dest}`);
+          item.op_details.master_key_weight && lines.push(`Master weight: ${item.op_details.master_key_weight}`);
+          item.op_details.low_threshold && lines.push(`Low threshold: ${item.op_details.low_threshold}`);
+          item.op_details.med_threshold && lines.push(`Medium threshold: ${item.op_details.med_threshold}`);
+          item.op_details.high_threshold && lines.push(`High threshold: ${item.op_details.high_threshold}`);
+          // item.op_details.inflation_dest && lines.push(`Signer added: ${item.op_details.inflation_dest}`);
+          // item.op_details.inflation_dest && lines.push(`Signer removed: ${item.op_details.inflation_dest}`);
+          // item.op_details.inflation_dest && lines.push(`Signer type: ${item.op_details.inflation_dest}`);
+          // item.op_details.inflation_dest && lines.push(`Signer weight: ${item.op_details.inflation_dest}`);
+          item.op_details.home_domain && lines.push(`Home domain: ${item.op_details.home_domain}`);
+          break;
+      }
+      false && lines.push(`Source account: `);
+      return lines.join('<br>');
     },
 
     formatDate (date) {
