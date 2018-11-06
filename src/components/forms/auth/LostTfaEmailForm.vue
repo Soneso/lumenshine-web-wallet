@@ -6,7 +6,6 @@
       <template v-else>
         <b-form-group class="py-4">
           <b-form-input
-            id="lost-password-email"
             :class="{ error: $v.email.$error }"
             v-model="email"
             :state="!$v.email.$error"
@@ -41,11 +40,13 @@ import emailValidator from '@/validators/email';
 
 export default {
   mixins: [ formMixin ],
+
   data () {
     return {
       email: '',
     };
   },
+
   methods: {
     onRecoverClick () {
       if (!this.$v.email.backendEmailConfirmed) {
@@ -59,6 +60,7 @@ export default {
       this.$emit('submit', this.email);
     }
   },
+
   validations () {
     return {
       email: {

@@ -18,7 +18,6 @@
         <!--tfaCode field-->
         <b-form-group>
           <b-form-input
-            id="tfa-code"
             :class="{ error: $v.tfaCode.$error }"
             :state="!$v.tfaCode.$error"
             v-model="tfaCode"
@@ -60,17 +59,20 @@ export default {
       required: true,
     }
   },
+
   data () {
     return {
       tfaCode: '',
       showCopiedText: false,
     };
   },
+
   watch: {
     tfaCode () {
       this.tfaCode = this.tfaCode.split(' ').join('');
     }
   },
+
   methods: {
     onRecoverClick () {
       this.$v.$touch();
@@ -87,6 +89,7 @@ export default {
       this.$v.tfaCode.$touch();
     }
   },
+
   validations () {
     return {
       tfaCode: {

@@ -4,9 +4,9 @@
       <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
       <div v-if="!$v.email.backendEmailConfirmed" class="text-danger text-center py-2">Verify your email address.</div>
       <template v-else>
+
         <b-form-group class="py-4">
           <b-form-input
-            id="lost-password-email"
             :class="{ error: $v.email.$error }"
             v-model="email"
             :state="!$v.email.$error"
@@ -41,11 +41,13 @@ import emailValidator from '@/validators/email';
 
 export default {
   mixins: [ formMixin ],
+
   data () {
     return {
       email: ''
     };
   },
+
   methods: {
     onRecoverClick () {
       if (!this.$v.email.backendEmailConfirmed) {
@@ -59,6 +61,7 @@ export default {
       this.$emit('submit', this.email);
     }
   },
+
   validations () {
     return {
       email: {

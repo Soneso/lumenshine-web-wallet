@@ -6,7 +6,6 @@
 
       <b-form-group class="my-4">
         <b-form-input
-          id="lost-2fa-password"
           :class="{ error: $v.password.$error }"
           v-model="password"
           :state="!$v.password.$error"
@@ -45,18 +44,21 @@ import { required } from 'vuelidate/lib/validators';
 
 export default {
   mixins: [ formMixin ],
+
   props: {
     decryptError: {
       type: Boolean,
       required: true
     },
   },
+
   data () {
     return {
       password: '',
       passwordIsHidden: true
     };
   },
+
   methods: {
     onRecoverClick () {
       this.$v.$touch();
@@ -67,6 +69,7 @@ export default {
       this.$emit('submit', this.password);
     }
   },
+
   validations () {
     return {
       password: {

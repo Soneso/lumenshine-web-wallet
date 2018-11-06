@@ -29,14 +29,14 @@
             </template>
           </template>
           <template v-else> <!-- userStatus.res.tfa_confirmed === true -->
-            <template v-if="step === 'tfa'">
+            <template v-if="step === 'tfa' && userStatus.res.mnemonic_confirmed === false"> <!-- When need to reset mnemonic -->
+              <lost-password-form v-show="!loading" :loading="loading" :errors="lostPasswordStatus.err" :update-error="updateError" ask-for-tfa @submit="onGenerateNewData"/>
+            </template>
+            <template v-else-if="step === 'tfa'">
               <lost-password-tfa-form v-show="!loading && !lostPasswordStatus.res" :loading="loading" :errors="lostPasswordStatus.err" @submit="onTfaSubmitClick"/>
             </template>
             <template v-else-if="step === 'mnemonic'">
               <lost-password-mnemonic-form v-show="!loading" :loading="loading" :errors="lostPasswordStatus.err" :mnemonic-error="mnemonicError" @submit="onMnemonicSubmitClick"/>
-            </template>
-            <template v-else-if="step === 'password' && userStatus.res.mnemonic_confirmed === false"> <!-- When need to reset mnemonic -->
-              <lost-password-form v-show="!loading" :loading="loading" :errors="lostPasswordStatus.err" :update-error="updateError" @submit="onGenerateNewData"/>
             </template>
             <template v-else-if="step === 'password'">
               <lost-password-form v-show="!loading" :loading="loading" :errors="lostPasswordStatus.err" :update-error="updateError" @submit="onPasswordSubmitClick"/>
@@ -81,7 +81,6 @@ export default {
       step: 'tfa',
       mnemonicError: false,
       mnemonic: null,
-      lastTfaCode: null,
 
       hasUnknownError: false,
     };
@@ -119,7 +118,6 @@ export default {
     this.inProgress = false;
     this.emailSuccess = false;
     this.updateError = false;
-    this.lastTfaCode = null;
     this.step = 'tfa';
   },
 
@@ -131,7 +129,6 @@ export default {
       await this.updateSep10();
 
       await this.setLostPasswordTfa(tfaCode);
-      this.lastTfaCode = tfaCode;
 
       if (this.lostPasswordStatus.err.length === 0) {
         if (this.userStatus.res.mnemonic_confirmed === false) {
@@ -168,7 +165,7 @@ export default {
       this.inProgress = false;
     },
 
-    async onGenerateNewData (password) {
+    async onGenerateNewData ({ password, twoFactorCode }) {
       this.inProgress = true;
 
       const newMnemonic = await workerCaller('generateMnemonic');
@@ -177,49 +174,36 @@ export default {
       const securityData = await CryptoHelper.generateSecurityData(password, newMnemonic);
 
       await this.updateSecurityData({
-        kdf_salt: securityData.kdfSalt,
+        kdf_salt: securityData.kdf_salt,
         mnemonic_master_key: securityData.mnemonic_master_key,
         mnemonic_master_iv: securityData.mnemonic_master_iv,
         wordlist_master_key: securityData.wordlist_master_key,
         wordlist_master_iv: securityData.wordlist_master_iv,
         mnemonic: securityData.encrypted_mnemonic,
         mnemonic_iv: securityData.encryption_mnemonic_iv,
-        wordlist: securityData.encryptedWordlist,
+        wordlist: securityData.encrypted_wordlist,
         wordlist_iv: securityData.encryption_wordlist_iv,
         public_key_0: securityData.public_key,
         public_key_188: securityData.public_key188, // TODO remove
 
-        tfa_code: this.lastTfaCode,
+        tfa_code: twoFactorCode,
       });
 
-      const signedTransaction = await CryptoHelper.signSep10Challenge(securityData.secretSeed, this.sep10Challenge);
-      if (!signedTransaction) {
-        this.hasUnknownError = true;
+      if (this.lostPasswordStatus.err.length > 0 && this.lostPasswordStatus.err.find(err => err.error_code === 1000)) {
         this.inProgress = false;
-        await this.clearAuthToken();
         return;
-      }
-
-      // generate new tfa secret, needed by next screen (setup screen)
-      await this.resetTfa(signedTransaction);
-      await this.getUserStatus();
-
-      const publicKeys = await workerCaller('getPublicKeys', newMnemonic);
-      this.setPublicKeys(publicKeys);
-
-      await this.loginStep2({ sep10_transaction: signedTransaction });
-
-      if (this.lostPasswordStatus.err.length > 0) {
+      } else if (this.lostPasswordStatus.err.length > 0) {
         this.step = 'error';
         this.inProgress = false;
         return;
       }
 
+      this.step = 'finish';
+      await this.logout();
       this.inProgress = false;
-      this.$router.push({ name: 'ConfirmTfa' });
     },
 
-    async onPasswordSubmitClick (password) {
+    async onPasswordSubmitClick ({ password }) {
       this.inProgress = true;
       const securityData = await CryptoHelper.generateSecurityData(password, this.mnemonic);
 

@@ -3,9 +3,9 @@
     <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your current 2FA code from the authenticator app and press "Next"</p>
       <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+
       <b-form-group class="py-4">
         <b-form-input
-          id="lost-password-email"
           :class="{ 'error': $v.twoFactorCode.$error }"
           v-model="twoFactorCode"
           :state="!$v.twoFactorCode.$error"
@@ -26,6 +26,7 @@
           <a href="/lost-password-and-tfa" target="_blank">Lost 2FA Secret?</a>
         </b-form-text>
       </b-form-group>
+
     </template>
     <b-button variant="info" class="btn-rounded" @click.prevent="onSaveClick">Next</b-button>
   </b-form>
@@ -39,11 +40,13 @@ import tfaValidator from '@/validators/twoFactorCode';
 
 export default {
   mixins: [ formMixin ],
+
   data () {
     return {
       twoFactorCode: '',
     };
   },
+
   methods: {
     onSaveClick () {
       this.$v.$touch();
@@ -54,6 +57,7 @@ export default {
       this.$emit('submit', this.twoFactorCode);
     }
   },
+
   validations () {
     return {
       twoFactorCode: {
