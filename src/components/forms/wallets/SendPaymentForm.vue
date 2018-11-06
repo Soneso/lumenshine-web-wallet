@@ -73,12 +73,12 @@
               <b-col cols="10" class="pb-3">
                 <b-button-group size="sm">
                   <b-button :class="!sendItAll ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click.prevent="sendItAll = false">Amount</b-button>
-                  <b-button :class="sendItAll ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click.prevent="sendItAll = true">Send it all</b-button>
+                  <b-button :disabled="assetCode === '_other'" :class="sendItAll ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click.prevent="sendItAll = true">Send it all</b-button>
                 </b-button-group>
               </b-col>
             </b-row>
             <b-row align-v="center">
-              <b-col cols="10">
+              <b-col>
                 <b-form-input
                   :id="`amountInput_${uuid}`"
                   :class="{ error: $v.amount.$error }"
@@ -98,7 +98,7 @@
                   </template>
                 </b-form-invalid-feedback>
               </b-col>
-              <b-col cols="2">
+              <b-col cols="auto">
                 <small>{{ currentAssetCode }}</small>
               </b-col>
             </b-row>
