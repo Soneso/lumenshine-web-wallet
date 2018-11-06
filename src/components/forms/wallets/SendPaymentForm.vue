@@ -23,12 +23,13 @@
               :id="`customAssetCodeInput_${uuid}`"
               :class="{ error: $v.customAssetCode.$error }"
               :aria-describedby="`inputAssetCodeFeedback_${uuid}`"
-              v-model="customAssetCode"
+              :value="customAssetCode"
               :state="!$v.customAssetCode.$error"
               type="text"
               placeholder="Asset code"
               tabindex="1"
               required
+              @input.prevent.native="onCustomCodeInput"
               @blur.native="$v.customAssetCode.$touch()"/>
             <b-form-invalid-feedback :id="`inputAssetCodeFeedback_${uuid}`">
               <template v-if="$v.customAssetCode.$error" class="field__errors">
@@ -466,6 +467,12 @@ export default {
       this.backendQuery = data;
 
       this.$emit('submit', data);
+    },
+    onCustomCodeInput (e) {
+      if (e.target.value.length > 12) {
+        e.target.value = this.customAssetCode;
+      }
+      this.customAssetCode = e.target.value;
     }
   },
   validations () {
