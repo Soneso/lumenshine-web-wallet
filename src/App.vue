@@ -52,7 +52,7 @@ export default {
       'offCanvasMenuOpen'
     ]),
     isSingleCard () {
-      const nakedRoute = this.$route.path.substr(1).split('/')[0];
+      const nakedRoute = this.$route.path.split('/')[1];
       const routes = ['',
         'settings',
         'change-password',
