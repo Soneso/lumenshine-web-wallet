@@ -8,7 +8,7 @@
 
         <b-form-group label-for="transaction-date-start" class="mx-2">
           <div class="datepicker-wrapper p-0">
-            <datepicker id="transaction-date-start" v-model="dateFrom" format="yyyy.MM.dd" placeholder="Date from" class="py-1"/>
+            <datepicker id="transaction-date-start" v-model="dateFrom" :disabled-dates="dateStartDisabled" format="yyyy.MM.dd" placeholder="Date from" class="py-1"/>
             <i class="icon-calendar"/>
           </div>
           <small class="form-text text-muted">Date from</small>
@@ -16,35 +16,59 @@
 
         <b-form-group label-for="transaction-date-end" class="mx-2">
           <div class="datepicker-wrapper p-0">
-            <datepicker id="transaction-date-end" v-model="dateTo" format="yyyy.MM.dd" placeholder="Date to" class="py-1"/>
+            <datepicker id="transaction-date-end" v-model="dateTo" :disabled-dates="dateEndDisabled" format="yyyy.MM.dd" placeholder="Date to" class="py-1"/>
             <i class="icon-calendar"/>
           </div>
           <small class="form-text text-muted">Date to</small>
+        </b-form-group>
+
+        <b-form-group label-for="transaction-memo" class="mx-2" label="Memo">
+          <b-form-input
+            id="transaction-memo"
+            v-model="filterMemo"
+            type="text"
+            placeholder="Memo"/>
+        </b-form-group>
+
+        <hr class="separator">
+
+        <b-form-checkbox v-model="showPayment">Payment</b-form-checkbox>
+
+        <b-form-group v-if="showPayment">
+          <b-form-checkbox-group id="filter-payment-types" v-model="showPaymentTypes">
+            <b-form-checkbox value="RECEIVED">Received</b-form-checkbox>
+            <b-form-checkbox value="SENT">Sent</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+
+        <hr class="separator">
+
+        <b-form-checkbox v-model="showOffers">Offers</b-form-checkbox>
+        <hr class="separator">
+        <b-form-checkbox v-model="showOther">Other</b-form-checkbox>
+
+        <b-form-group v-if="showOther">
+          <b-form-checkbox-group id="filter-other-types" v-model="showOtherTypes">
+            <b-form-checkbox value="SET_OPTIONS">Set options</b-form-checkbox>
+            <b-form-checkbox value="TRUST">Trust</b-form-checkbox>
+            <b-form-checkbox value="ACCOUNT_MERGE">Account merge</b-form-checkbox>
+            <b-form-checkbox value="MANAGE_DATA">Manage data</b-form-checkbox>
+            <b-form-checkbox value="BUMP_SEQUENCE">Bump sequence</b-form-checkbox>
+          </b-form-checkbox-group>
         </b-form-group>
       </b-card>
     </b-col>
     <b-col cols="6" md="12">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
+        <br>
         <spinner v-if="inProgress" align="center" class="mt-3"/>
-        <table>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Fee</th>
-            <th>Details</th>
-          </tr>
-          <tr v-for="item in operations" :key="item.tx_transaction_hash">
-            <td>{{ formatDate(item.tx_created_at) }}</td>
-            <td v-html="getOperationName(item)"/>
-            <td v-html="getAmount(item)"/>
-            <td v-html="getCurrency(item)"/>
-            <td v-html="getFee(item)"/>
-            <td v-html="getDetails(item)"/>
-          </tr>
-        </table>
+        <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" bordered head-variant="dark">
+          <template v-for="field in fields" slot-scope="row" :slot="field.key">
+            <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
+            <span v-else :key="field.key" v-html="row.item[field.key]"/>
+          </template>
+        </b-table>
       </b-card>
     </b-col>
   </b-row>
@@ -96,7 +120,27 @@ export default {
 
       selectedWallet: null,
 
-      dateFrom: dayjs().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss'),
+      filterMemo: '',
+      showPayment: true,
+      showOffers: true,
+      showOther: true,
+
+      showOtherTypes: ['SET_OPTIONS', 'TRUST', 'ACCOUNT_MERGE', 'MANAGE_DATA', 'BUMP_SEQUENCE'],
+      showPaymentTypes: ['RECEIVED', 'SENT'],
+
+      fields: [
+        { key: 'date', sortable: true },
+        { key: 'type', sortable: true },
+        { key: 'amount', sortable: true },
+        { key: 'currency', sortable: true },
+        { key: 'fee', sortable: false },
+        { key: 'details', sortable: false },
+      ],
+
+      sortBy: 'date',
+      sortDesc: false,
+
+      dateFrom: dayjs().subtract(2, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
       dateTo: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
   },
@@ -107,6 +151,19 @@ export default {
       return this.inProgress;
     },
 
+    dateStartDisabled () {
+      return {
+        from: new Date(),
+      };
+    },
+
+    dateEndDisabled () {
+      return {
+        from: new Date(Math.min(dayjs(this.dateFrom).add(2, 'weeks').toDate(), new Date())),
+        to: dayjs(this.dateFrom).toDate(),
+      };
+    },
+
     operations () {
       const ops = [];
       if (!this.transactions.res) return [];
@@ -115,8 +172,70 @@ export default {
         transactionBase.op_details = JSON.parse(transactionBase.op_details);
         ops.push(transactionBase);
       });
-      console.log('operations', ops);
       return ops;
+    },
+
+    filteredItems () {
+      const filtered = this.operations.filter(op => {
+        if (this.filterMemo !== '') {
+          if (op.tx_memo.toLowerCase().indexOf(this.filterMemo.toLowerCase()) === -1) {
+            return false;
+          }
+        }
+
+        switch (op.op_type) {
+          case OperationType.CREATE_ACCOUNT:
+            if (!this.showPayment) return false;
+            if (!this.showPaymentTypes.includes('RECEIVED')) return false;
+            break;
+          case OperationType.PAYMENT:
+          case OperationType.PATH_PAYMENT:
+            if (!this.showPayment) return false;
+            if (!this.showPaymentTypes.includes('RECEIVED') && op.op_details.to === this.selectedWallet) return false;
+            if (!this.showPaymentTypes.includes('SENT') && op.op_details.from === this.selectedWallet) return false;
+            break;
+          case OperationType.MANAGE_OFFER:
+          case OperationType.CREATE_PASSIVE_OFFER:
+            if (!this.showOffers) return false;
+            break;
+          case OperationType.SET_OPTIONS:
+            if (!this.showOther) return false;
+            if (!this.showOtherTypes.includes('SET_OPTIONS')) return false;
+            break;
+          case OperationType.CHANGE_TRUST:
+          case OperationType.ALLOW_TRUST:
+            if (!this.showOther) return false;
+            if (!this.showOtherTypes.includes('TRUST')) return false;
+            break;
+          case OperationType.ACCOUNT_MERGE:
+            if (!this.showOther) return false;
+            if (!this.showOtherTypes.includes('ACCOUNT_MERGE')) return false;
+            break;
+          case OperationType.INFLATION:
+          case OperationType.MANAGE_DATA:
+            if (!this.showOther) return false;
+            if (!this.showOtherTypes.includes('MANAGE_DATA')) return false;
+            break;
+          case OperationType.BUMP_SEQUENCE:
+            if (!this.showOther) return false;
+            if (!this.showOtherTypes.includes('BUMP_SEQUENCE')) return false;
+            break;
+        }
+        return true;
+      });
+      console.log('operations', filtered);
+      return filtered;
+    },
+
+    tableItems () {
+      return this.filteredItems.map(item => ({
+        date: dayjs(item.tx_created_at),
+        type: this.getOperationName(item),
+        amount: this.getAmount(item),
+        currency: this.getCurrency(item),
+        fee: this.getFee(item),
+        details: this.getDetails(item),
+      }));
     },
 
     walletOptions () {
@@ -132,7 +251,13 @@ export default {
     selectedWallet () {
       this.reloadTransactions();
     },
-    dateFrom () {
+    dateFrom (val) {
+      const fromDate = dayjs(val);
+      if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
+        this.dateTo = fromDate.add(2, 'weeks').format('YYYY-MM-DD HH:mm:ss');
+      } else if (dayjs(this.dateTo).isBefore(fromDate)) {
+        this.dateTo = fromDate.format('YYYY-MM-DD HH:mm:ss');
+      }
       this.reloadTransactions();
     },
     dateTo () {
@@ -196,6 +321,8 @@ export default {
           return new Amount(item.op_details.starting_balance).format();
         case OperationType.PAYMENT:
           return (item.op_details.from === this.selectedWallet ? '-' : '') + new Amount(item.op_details.amount).format();
+        case OperationType.MANAGE_OFFER:
+          return new Amount(item.op_details.amount).format();
       }
       return '';
     },
@@ -208,6 +335,8 @@ export default {
           return item.op_details.asset_type === 'native' ? 'XLM' : item.op_details.asset_code;
         case OperationType.CHANGE_TRUST:
           return item.op_details.asset_code;
+        case OperationType.MANAGE_OFFER:
+          return item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code;
       }
       return '-';
     },
@@ -223,28 +352,72 @@ export default {
       const lines = [`Operation ID: ${item.op_id}`];
       switch (item.op_type) {
         case OperationType.CHANGE_TRUST:
-          lines.push(`Type: add`); // TODO
+          lines.push(`Type: ${item.op_details.limit === '0.0000000' ? 'remove' : 'add'}`);
           lines.push(`Asset: ${item.op_details.asset_code}`);
           lines.push(`Issuer: ${item.op_details.asset_issuer}`);
           lines.push(`Trust limit: ${new Amount(item.op_details.limit).format()}`);
           break;
+        case OperationType.MANAGE_OFFER:
+          lines.push(`Offer ID: ${item.op_details.offer_id}`);
+          lines.push(`Buying: ${item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code}`);
+          lines.push(`Selling:  ${new Amount(item.op_details.amount).format()} ${item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code}`);
+          lines.push(`Price for 1 unit of asset for sale: ${new Amount(item.op_details.price).format()} ${item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code}`);
+          break;
         case OperationType.SET_OPTIONS:
           item.op_details.inflation_dest && lines.push(`Inflation destination: ${item.op_details.inflation_dest}`);
-          // item.op_details.inflation_dest && lines.push(`Set flags: ${item.op_details.inflation_dest}`);
-          // item.op_details.inflation_dest && lines.push(`Clear flags: ${item.op_details.inflation_dest}`);
+          item.op_details.set_flags_s && lines.push(`Set flags: ${item.op_details.set_flags_s.map(f => this.formatFlagName(f)).join(', ')}`);
+          item.op_details.clear_flags_s && lines.push(`Clear flags: ${item.op_details.clear_flags_s.map(f => this.formatFlagName(f)).join(', ')}`);
           item.op_details.master_key_weight && lines.push(`Master weight: ${item.op_details.master_key_weight}`);
           item.op_details.low_threshold && lines.push(`Low threshold: ${item.op_details.low_threshold}`);
           item.op_details.med_threshold && lines.push(`Medium threshold: ${item.op_details.med_threshold}`);
           item.op_details.high_threshold && lines.push(`High threshold: ${item.op_details.high_threshold}`);
-          // item.op_details.inflation_dest && lines.push(`Signer added: ${item.op_details.inflation_dest}`);
-          // item.op_details.inflation_dest && lines.push(`Signer removed: ${item.op_details.inflation_dest}`);
-          // item.op_details.inflation_dest && lines.push(`Signer type: ${item.op_details.inflation_dest}`);
-          // item.op_details.inflation_dest && lines.push(`Signer weight: ${item.op_details.inflation_dest}`);
+          item.op_details.signer_weight === 0 && lines.push(`Signer removed: ${item.op_details.signer_key}`);
+          item.op_details.signer_weight > 0 && lines.push(`Signer added: ${item.op_details.signer_key}`);
+          item.op_details.signer_weight !== undefined && lines.push(`Signer type: ${this.getSignerType(item.op_details.signer_key)}`);
+          item.op_details.signer_weight > 0 && lines.push(`Signer weight: ${item.op_details.signer_weight}`);
           item.op_details.home_domain && lines.push(`Home domain: ${item.op_details.home_domain}`);
           break;
+        case OperationType.ACCOUNT_MERGE:
+          lines.push(`Merged account: ${item.op_details.account}`);
+          break;
+        case OperationType.INFLATION:
+          lines.push(`Destination: ${1}`); // TODO
+          break;
+        case OperationType.MANAGE_DATA:
+          lines.push(`Entry name: ${item.op_details.name}`);
+          lines.push(`Entry value: ${item.op_details.value === null ? 'deleted' : item.op_details.value}`);
+          break;
+        case OperationType.BUMP_SEQUENCE:
+          // lines.push(`Bumped from: ${1}`); // Not present in operation details
+          lines.push(`Bumped to: ${item.op_details.bump_to}`);
+          break;
       }
-      false && lines.push(`Source account: `);
+      item.tx_source_account !== this.selectedWallet && lines.push(`Source account: ${item.tx_source_account}`);
       return lines.join('<br>');
+    },
+
+    formatFlagName (flag) {
+      switch (flag) {
+        case 'auth_required':
+          return 'Authorization required';
+        case 'auth_revocable':
+          return 'Authorization revocable';
+        case 'auth_immutable':
+          return 'Authorization immutable';
+      }
+      return '';
+    },
+
+    getSignerType (signerKey) {
+      switch (signerKey.charAt(0)) {
+        case 'G':
+          return 'Ed25519 Public Key';
+        case 'X':
+          return 'sha256 Hash';
+        case 'T':
+          return 'Pre-authorized Transaction Hash';
+      }
+      return '';
     },
 
     formatDate (date) {

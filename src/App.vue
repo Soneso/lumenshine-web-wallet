@@ -76,10 +76,10 @@ export default {
   async created () {
     if (this.authTokenType) {
       await this.getUserStatus();
-    }
-    if (this.userStatus.err.length > 0) { // clear invalid token
-      this.clearAuthToken();
-      return;
+      if (this.userStatus.err !== undefined && this.userStatus.err.length > 0) { // clear invalid token
+        this.clearAuthToken();
+        return;
+      }
     }
 
     if (this.$route.meta.authNeeded) {

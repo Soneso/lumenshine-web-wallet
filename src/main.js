@@ -49,7 +49,7 @@ import {
   // PaginationNav,
   Popover as PopoverComponent,
   Progress,
-  // Table,
+  Table,
   // Tabs,
   // Tooltip
 } from 'bootstrap-vue/es/components';
@@ -115,7 +115,7 @@ Vue.use(Modal);
 // Vue.use(PaginationNav);
 Vue.use(Popover);
 Vue.use(Progress);
-// Vue.use(Table);
+Vue.use(Table);
 // Vue.use(Tabs);
 Vue.use(Tooltip);
 
