@@ -66,6 +66,9 @@
         <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" bordered head-variant="dark">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
+            <span v-else-if="field.key === 'details'" :key="field.key">
+              <transaction-details :item="row.item['details']" :selected-wallet="selectedWallet"/>
+            </span>
             <span v-else :key="field.key" v-html="row.item[field.key]"/>
           </template>
         </b-table>
@@ -83,36 +86,13 @@ import Datepicker from 'vuejs-datepicker';
 import spinner from '@/components/ui/spinner.vue';
 import Amount from '@/util/Amount';
 
-const OperationType = {
-  0: 'CREATE_ACCOUNT',
-  CREATE_ACCOUNT: 0,
-  1: 'PAYMENT',
-  PAYMENT: 1,
-  2: 'PATH_PAYMENT',
-  PATH_PAYMENT: 2,
-  3: 'MANAGE_OFFER',
-  MANAGE_OFFER: 3,
-  4: 'CREATE_PASSIVE_OFFER',
-  CREATE_PASSIVE_OFFER: 4,
-  5: 'SET_OPTIONS',
-  SET_OPTIONS: 5,
-  6: 'CHANGE_TRUST',
-  CHANGE_TRUST: 6,
-  7: 'ALLOW_TRUST',
-  ALLOW_TRUST: 7,
-  8: 'ACCOUNT_MERGE',
-  ACCOUNT_MERGE: 8,
-  9: 'INFLATION',
-  INFLATION: 9,
-  10: 'MANAGE_DATA',
-  MANAGE_DATA: 10,
-  11: 'BUMP_SEQUENCE',
-  BUMP_SEQUENCE: 11,
-};
+import OperationType from '@/util/OperationType';
+
+import TransactionDetails from '@/components/TransactionDetails';
 
 export default {
   name: 'Transactions',
-  components: { spinner, Datepicker },
+  components: { spinner, Datepicker, TransactionDetails },
 
   data () {
     return {
@@ -223,7 +203,6 @@ export default {
         }
         return true;
       });
-      console.log('operations', filtered);
       return filtered;
     },
 
@@ -234,7 +213,7 @@ export default {
         amount: this.getAmount(item),
         currency: this.getCurrency(item),
         fee: this.getFee(item),
-        details: this.getDetails(item),
+        details: item,
       }));
     },
 
@@ -280,13 +259,14 @@ export default {
         case OperationType.CREATE_ACCOUNT:
           return 'create account';
         case OperationType.PAYMENT:
-          return item.op_details.from === this.selectedWallet ? '<span class="text-danger">payment sent</span>' : '<span class="text-success">payment received</span>';
         case OperationType.PATH_PAYMENT:
-          return 'path payment';
+          return item.op_details.from === this.selectedWallet ? '<span class="text-danger">payment sent</span>' : '<span class="text-success">payment received</span>';
         case OperationType.MANAGE_OFFER:
-          return 'manage offer';
+          if (item.op_details.amount === '0.0000000') return 'offer removed';
+          if (item.op_details.offer_id === 0) return 'offer created';
+          return 'offer updated';
         case OperationType.CREATE_PASSIVE_OFFER:
-          return 'create passive offer';
+          return 'passive offer created';
         case OperationType.SET_OPTIONS:
           return 'set options';
         case OperationType.CHANGE_TRUST:
@@ -321,7 +301,12 @@ export default {
           return new Amount(item.op_details.starting_balance).format();
         case OperationType.PAYMENT:
           return (item.op_details.from === this.selectedWallet ? '-' : '') + new Amount(item.op_details.amount).format();
+        case OperationType.PATH_PAYMENT:
+          if (item.op_details.from === this.selectedWallet) return '-' + new Amount(item.op_details.source_amount).format(); // sending
+          return new Amount(item.op_details.amount).format(); // receiving
         case OperationType.MANAGE_OFFER:
+          return new Amount(item.op_details.amount).format();
+        case OperationType.CREATE_PASSIVE_OFFER:
           return new Amount(item.op_details.amount).format();
       }
       return '';
@@ -333,9 +318,14 @@ export default {
           return 'XLM';
         case OperationType.PAYMENT:
           return item.op_details.asset_type === 'native' ? 'XLM' : item.op_details.asset_code;
+        case OperationType.PATH_PAYMENT:
+          if (item.op_details.from === this.selectedWallet) return item.op_details.source_asset_type === 'native' ? 'XLM' : item.op_details.source_asset_code; // sending
+          return item.op_details.asset_type === 'native' ? 'XLM' : item.op_details.asset_code; // receiving
         case OperationType.CHANGE_TRUST:
           return item.op_details.asset_code;
         case OperationType.MANAGE_OFFER:
+          return item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code;
+        case OperationType.CREATE_PASSIVE_OFFER:
           return item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code;
       }
       return '-';
@@ -346,78 +336,6 @@ export default {
         return item.tx_fee_paid / item.tx_operation_count;
       }
       return 0;
-    },
-
-    getDetails (item) {
-      const lines = [`Operation ID: ${item.op_id}`];
-      switch (item.op_type) {
-        case OperationType.CHANGE_TRUST:
-          lines.push(`Type: ${item.op_details.limit === '0.0000000' ? 'remove' : 'add'}`);
-          lines.push(`Asset: ${item.op_details.asset_code}`);
-          lines.push(`Issuer: ${item.op_details.asset_issuer}`);
-          lines.push(`Trust limit: ${new Amount(item.op_details.limit).format()}`);
-          break;
-        case OperationType.MANAGE_OFFER:
-          lines.push(`Offer ID: ${item.op_details.offer_id}`);
-          lines.push(`Buying: ${item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code}`);
-          lines.push(`Selling:  ${new Amount(item.op_details.amount).format()} ${item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code}`);
-          lines.push(`Price for 1 unit of asset for sale: ${new Amount(item.op_details.price).format()} ${item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code}`);
-          break;
-        case OperationType.SET_OPTIONS:
-          item.op_details.inflation_dest && lines.push(`Inflation destination: ${item.op_details.inflation_dest}`);
-          item.op_details.set_flags_s && lines.push(`Set flags: ${item.op_details.set_flags_s.map(f => this.formatFlagName(f)).join(', ')}`);
-          item.op_details.clear_flags_s && lines.push(`Clear flags: ${item.op_details.clear_flags_s.map(f => this.formatFlagName(f)).join(', ')}`);
-          item.op_details.master_key_weight && lines.push(`Master weight: ${item.op_details.master_key_weight}`);
-          item.op_details.low_threshold && lines.push(`Low threshold: ${item.op_details.low_threshold}`);
-          item.op_details.med_threshold && lines.push(`Medium threshold: ${item.op_details.med_threshold}`);
-          item.op_details.high_threshold && lines.push(`High threshold: ${item.op_details.high_threshold}`);
-          item.op_details.signer_weight === 0 && lines.push(`Signer removed: ${item.op_details.signer_key}`);
-          item.op_details.signer_weight > 0 && lines.push(`Signer added: ${item.op_details.signer_key}`);
-          item.op_details.signer_weight !== undefined && lines.push(`Signer type: ${this.getSignerType(item.op_details.signer_key)}`);
-          item.op_details.signer_weight > 0 && lines.push(`Signer weight: ${item.op_details.signer_weight}`);
-          item.op_details.home_domain && lines.push(`Home domain: ${item.op_details.home_domain}`);
-          break;
-        case OperationType.ACCOUNT_MERGE:
-          lines.push(`Merged account: ${item.op_details.account}`);
-          break;
-        case OperationType.INFLATION:
-          lines.push(`Destination: ${1}`); // TODO
-          break;
-        case OperationType.MANAGE_DATA:
-          lines.push(`Entry name: ${item.op_details.name}`);
-          lines.push(`Entry value: ${item.op_details.value === null ? 'deleted' : item.op_details.value}`);
-          break;
-        case OperationType.BUMP_SEQUENCE:
-          // lines.push(`Bumped from: ${1}`); // Not present in operation details
-          lines.push(`Bumped to: ${item.op_details.bump_to}`);
-          break;
-      }
-      item.tx_source_account !== this.selectedWallet && lines.push(`Source account: ${item.tx_source_account}`);
-      return lines.join('<br>');
-    },
-
-    formatFlagName (flag) {
-      switch (flag) {
-        case 'auth_required':
-          return 'Authorization required';
-        case 'auth_revocable':
-          return 'Authorization revocable';
-        case 'auth_immutable':
-          return 'Authorization immutable';
-      }
-      return '';
-    },
-
-    getSignerType (signerKey) {
-      switch (signerKey.charAt(0)) {
-        case 'G':
-          return 'Ed25519 Public Key';
-        case 'X':
-          return 'sha256 Hash';
-        case 'T':
-          return 'Pre-authorized Transaction Hash';
-      }
-      return '';
     },
 
     formatDate (date) {
