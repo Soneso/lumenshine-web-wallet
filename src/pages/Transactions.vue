@@ -530,6 +530,8 @@ export default {
           return item.op_details.asset_type === 'native' ? 'XLM' : item.op_details.asset_code; // receiving
         case OperationType.CHANGE_TRUST:
           return item.op_details.asset_code;
+        case OperationType.ALLOW_TRUST:
+          return item.op_details.asset_code;
         case OperationType.MANAGE_OFFER:
           return item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code;
         case OperationType.CREATE_PASSIVE_OFFER:

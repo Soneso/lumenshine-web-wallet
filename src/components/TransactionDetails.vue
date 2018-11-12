@@ -35,6 +35,12 @@
       Trust limit: {{ new Amount(item.op_details.limit).format() }}<br>
     </template>
 
+    <template v-else-if="item.op_type === OperationType.ALLOW_TRUST">
+      Trustor: {{ item.op_details.trustor.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.trustor"/><br>
+      Asset code: {{ item.op_details.asset_code || 'XLM' }}<br>
+      Authorize: {{ item.op_details.authorize ? 'true' : 'false' }}<br>
+    </template>
+
     <template v-else-if="item.op_type === OperationType.CREATE_PASSIVE_OFFER">
       Offer ID: <spinner v-if="!offerId" :size="15" inline/><template v-else>{{ offerId }}</template><br>
       Buying: {{ item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code }}<br>
