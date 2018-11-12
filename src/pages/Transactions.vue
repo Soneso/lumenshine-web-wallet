@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col cols="4">
+    <b-col cols="4" xl="4" md="12" class="my-2">
       <b-card class="p-4">
         <b-form-group label-for="transaction-wallet" label="Wallet">
           <b-form-select id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
@@ -175,7 +175,7 @@
         </template>
       </b-card>
     </b-col>
-    <b-col cols="8">
+    <b-col cols="8" xl="8" md="12" class="my-2">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <br>
