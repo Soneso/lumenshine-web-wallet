@@ -1,5 +1,8 @@
-#spinner {
-  &.inline-spinner,
+.spinner-wrapper {
+  &.inline-spinner {
+    display: inline-block;
+  }
+
   .modal & {
     position: relative;
     top: 0;

@@ -36,14 +36,14 @@
     </template>
 
     <template v-else-if="item.op_type === OperationType.CREATE_PASSIVE_OFFER">
-      Offer ID: {{ offerId }}<br>
+      Offer ID: <spinner v-if="!offerId" :size="15" inline/><template v-else>{{ offerId }}</template><br>
       Buying: {{ item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code }}<br>
       Selling: {{ new Amount(item.op_details.amount).format() }} {{ item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code }}<br>
       Price for 1 unit of asset for sale: {{ new Amount(item.op_details.price).format() }} {{ item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code }}<br>
     </template>
 
     <template v-else-if="item.op_type === OperationType.MANAGE_OFFER">
-      Offer ID: {{ offerId }}<br>
+      Offer ID:  <spinner v-if="!offerId" :size="15" inline/><template v-else>{{ offerId }}</template><br>
       Buying: {{ item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code }}<br>
       Selling: {{ new Amount(item.op_details.amount).format() }} {{ item.op_details.selling_asset_type === 'native' ? 'XLM' : item.op_details.selling_asset_code }}<br>
       Price for 1 unit of asset for sale: {{ new Amount(item.op_details.price).format() }} {{ item.op_details.buying_asset_type === 'native' ? 'XLM' : item.op_details.buying_asset_code }}<br>
