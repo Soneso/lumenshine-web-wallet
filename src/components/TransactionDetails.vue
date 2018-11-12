@@ -1,28 +1,29 @@
 <template>
   <span>
-    Operation ID: <a href="#" @click.prevent="modalVisible = true">{{ item.op_id }}</a><br>
+    Operation ID: <a href="#" @click.prevent="openModal">{{ item.op_id }}</a><br>
     <b-modal v-model="modalVisible" hide-footer title="Operation details" size="md">
-      <pre>{{ item.op_details }}</pre>
+      <spinner v-if="operationDetails === null" message="Loading operation..." width="200"/>
+      <pre v-else>{{ operationDetails }}</pre>
     </b-modal>
     <template v-if="item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
 
     <template v-if="item.op_type === OperationType.PAYMENT">
       <template v-if="item.op_details.from === selectedWallet">
-        Recipient: {{ item.op_details.to }} <copy-to-clipboard :text="item.op_details.to"/><br>
+        Recipient: {{ item.op_details.to.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.to"/><br>
       </template>
       <template v-else>
-        Sender: {{ item.op_details.from }} <copy-to-clipboard :text="item.op_details.from"/><br>
+        Sender: {{ item.op_details.from.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.from"/><br>
       </template>
     </template>
 
     <template v-if="item.op_type === OperationType.PATH_PAYMENT">
       <template v-if="item.op_details.from === selectedWallet"> <!-- sending -->
         Maximum send amount: {{ new Amount(item.op_details.source_max).format() }}<br>
-        Recipient: {{ item.op_details.to }} <copy-to-clipboard :text="item.op_details.to"/><br>
+        Recipient: {{ item.op_details.to.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.to"/><br>
         Received amount: {{ new Amount(item.op_details.amount).format() }} {{ item.op_details.asset_code }}<br>
       </template>
       <template v-else> <!-- receiving -->
-        Sender: {{ item.op_details.from }} <copy-to-clipboard :text="item.op_details.from"/><br>
+        Sender: {{ item.op_details.from.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.from"/><br>
       </template>
       Payment path: {{ paymentPath }}<br>
     </template>
@@ -30,7 +31,7 @@
     <template v-else-if="item.op_type === OperationType.CHANGE_TRUST">
       Type: {{ item.op_details.limit === '0.0000000' ? 'remove' : 'add' }}<br>
       Asset: {{ item.op_details.asset_code }}<br>
-      Issuer: {{ item.op_details.asset_issuer }} <copy-to-clipboard :text="item.op_details.asset_issuer"/><br>
+      Issuer: {{ item.op_details.asset_issuer.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.asset_issuer"/><br>
       Trust limit: {{ new Amount(item.op_details.limit).format() }}<br>
     </template>
 
@@ -49,22 +50,22 @@
     </template>
 
     <template v-else-if="item.op_type === OperationType.SET_OPTIONS">
-      <template v-if="item.op_details.inflation_dest">Inflation destination: {{ item.op_details.inflation_dest }} <copy-to-clipboard :text="item.op_details.inflation_dest"/><br></template>
+      <template v-if="item.op_details.inflation_dest">Inflation destination: {{ item.op_details.inflation_dest.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.inflation_dest"/><br></template>
       <template v-if="item.op_details.set_flags_s">Set flags: {{ item.op_details.set_flags_s.map(f => formatFlagName(f)).join(', ') }}<br></template>
       <template v-if="item.op_details.clear_flags_s">Clear flags: {{ item.op_details.clear_flags_s.map(f => formatFlagName(f)).join(', ') }}<br></template>
       <template v-if="item.op_details.master_key_weight">Master weight: {{ item.op_details.master_key_weight }}<br></template>
       <template v-if="item.op_details.low_threshold">Low threshold: {{ item.op_details.low_threshold }}<br></template>
       <template v-if="item.op_details.med_threshold">Medium threshold: {{ item.op_details.med_threshold }}<br></template>
       <template v-if="item.op_details.high_threshold">High threshold: {{ item.op_details.high_threshold }}<br></template>
-      <template v-if="item.op_details.signer_weight === 0">Signer removed: {{ item.op_details.signer_key }} <copy-to-clipboard :text="item.op_details.signer_key"/><br></template>
-      <template v-if="item.op_details.signer_weight > 0">Signer added: {{ item.op_details.signer_key }} <copy-to-clipboard :text="item.op_details.signer_key"/><br></template>
+      <template v-if="item.op_details.signer_weight === 0">Signer removed: {{ item.op_details.signer_key.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.signer_key"/><br></template>
+      <template v-if="item.op_details.signer_weight > 0">Signer added: {{ item.op_details.signer_key.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.signer_key"/><br></template>
       <template v-if="item.op_details.signer_weight !== undefined">Signer type: {{ getSignerType(item.op_details.signer_key) }}<br></template>
       <template v-if="item.op_details.signer_weight > 0">Signer weight: {{ item.op_details.signer_weight }}<br></template>
       <template v-if="item.op_details.home_domain">Home domain: {{ item.op_details.home_domain }}<br></template>
     </template>
 
     <template v-else-if="item.op_type === OperationType.ACCOUNT_MERGE">
-      Merged account: {{ item.op_details.account }} <copy-to-clipboard :text="item.op_details.account"/><br>
+      Merged account: {{ item.op_details.account.slice(0, 20) }}... <copy-to-clipboard :text="item.op_details.account"/><br>
     </template>
 
     <template v-else-if="item.op_type === OperationType.MANAGE_DATA">
@@ -77,7 +78,7 @@
     </template>
 
     <template v-if="item.tx_source_account !== selectedWallet">
-      Source account: {{ item.tx_source_account }} <copy-to-clipboard :text="item.tx_source_account"/>
+      Source account: {{ item.tx_source_account.slice(0, 20) }}... <copy-to-clipboard :text="item.tx_source_account"/>
     </template>
   </span>
 </template>
@@ -90,11 +91,12 @@ import copyToClipboard from '@/components/ui/copyToClipboard';
 import StellarSdk from 'stellar-sdk';
 
 import config from '@/config';
+import spinner from '@/components/ui/spinner';
 
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { copyToClipboard },
+  components: { copyToClipboard, spinner },
 
   props: {
     item: {
@@ -112,6 +114,8 @@ export default {
       modalVisible: false,
 
       transactionDataXDR: null,
+
+      operationDetails: null,
     };
   },
 
@@ -152,6 +156,13 @@ export default {
   },
 
   methods: {
+    async openModal () {
+      this.modalVisible = true;
+      this.operationDetails = await StellarAPI.operations()
+        .operation(this.item.op_id + '')
+        .call();
+    },
+
     tryDecodeData (data) {
       try {
         const decoded = atob(data);
@@ -161,6 +172,7 @@ export default {
       } catch (err) {}
       return data;
     },
+
     formatFlagName (flag) {
       switch (flag) {
         case 'auth_required':
