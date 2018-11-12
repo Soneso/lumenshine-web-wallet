@@ -1,7 +1,7 @@
 <template>
-  <b-row align-h="center">
-    <b-col cols="6" md="12">
-      <b-card class="p-4 my-4">
+  <b-row>
+    <b-col cols="4">
+      <b-card class="p-4">
         <b-form-group label-for="transaction-wallet" label="Wallet">
           <b-form-select id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
         </b-form-group>
@@ -22,48 +22,165 @@
           <small class="form-text text-muted">Date to</small>
         </b-form-group>
 
-        <b-form-group label-for="transaction-memo" class="mx-2" label="Memo">
+        <b-form-group label-for="transaction-memo" label="Memo">
           <b-form-input
             id="transaction-memo"
             v-model="filterMemo"
-            type="text"
-            placeholder="Memo"/>
+            type="text"/>
         </b-form-group>
 
-        <hr class="separator">
+        <a v-if="!advancedFiltersOpened" href="#" @click.prevent="advancedFiltersOpened = true">More filters</a>
+        <a v-else href="#" @click.prevent="advancedFiltersOpened = false">Less filters</a>
+        <br>
 
-        <b-form-checkbox v-model="showPayment">Payment</b-form-checkbox>
+        <template v-if="advancedFiltersOpened">
+          <b-form-checkbox v-model="filterPayments" class="my-4">Payments</b-form-checkbox>
 
-        <b-form-group v-if="showPayment">
-          <b-form-checkbox-group id="filter-payment-types" v-model="showPaymentTypes">
-            <b-form-checkbox value="RECEIVED">Received</b-form-checkbox>
-            <b-form-checkbox value="SENT">Sent</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
+          <b-row v-if="filterPayments">
+            <b-col>
+              <b-form-checkbox v-model="filterPaymentReceived">Received</b-form-checkbox>
+            </b-col>
+            <b-col v-if="filterPaymentReceived">
+              <b-form-group label-for="payment-received-from" label="Amount from">
+                <b-form-input
+                  id="payment-received-from"
+                  :class="{ error: $v.filterPaymentReceivedAmountFrom.$error }"
+                  :state="!$v.filterPaymentReceivedAmountFrom.$error"
+                  v-model="filterPaymentReceivedAmountFrom"
+                  aria-describedby="inputLivePaymentReceivedFromFeedback"
+                  type="text"
+                  @blur.native="$v.filterPaymentReceivedAmountFrom.$touch()"/>
+                <b-form-invalid-feedback id="inputLivePaymentReceivedFromFeedback">
+                  <template v-if="$v.filterPaymentReceivedAmountFrom.$error" class="field__errors">
+                    <template v-if="!$v.filterPaymentReceivedAmountFrom.decimal">Amount should be numeric</template>
+                  </template>
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+            <b-col v-if="filterPaymentReceived">
+              <b-form-group label-for="payment-received-to" label="Amount to">
+                <b-form-input
+                  id="payment-received-to"
+                  :class="{ error: $v.filterPaymentReceivedAmountTo.$error }"
+                  :state="!$v.filterPaymentReceivedAmountTo.$error"
+                  v-model="filterPaymentReceivedAmountTo"
+                  aria-describedby="inputLivePaymentReceivedToFeedback"
+                  type="text"
+                  @blur.native="$v.filterPaymentReceivedAmountTo.$touch()"/>
+                <b-form-invalid-feedback id="inputLivePaymentReceivedToFeedback">
+                  <template v-if="$v.filterPaymentReceivedAmountTo.$error" class="field__errors">
+                    <template v-if="!$v.filterPaymentReceivedAmountTo.decimal">Amount should be numeric</template>
+                  </template>
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
 
-        <hr class="separator">
+          <b-row v-if="filterPayments">
+            <b-col>
+              <b-form-checkbox v-model="filterPaymentSent">Sent</b-form-checkbox>
+            </b-col>
+            <b-col v-if="filterPaymentSent">
+              <b-form-group label-for="payment-sent-from" label="Amount from">
+                <b-form-input
+                  id="payment-sent-from"
+                  :class="{ error: $v.filterPaymentSentAmountFrom.$error }"
+                  :state="!$v.filterPaymentSentAmountFrom.$error"
+                  v-model="filterPaymentSentAmountFrom"
+                  aria-describedby="inputLivePaymentSentFromFeedback"
+                  type="text"
+                  @blur.native="$v.filterPaymentSentAmountFrom.$touch()"/>
+                <b-form-invalid-feedback id="inputLivePaymentSentFromFeedback">
+                  <template v-if="$v.filterPaymentSentAmountFrom.$error" class="field__errors">
+                    <template v-if="!$v.filterPaymentSentAmountFrom.decimal">Amount should be numeric</template>
+                  </template>
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+            <b-col v-if="filterPaymentSent">
+              <b-form-group label-for="payment-sent-to" label="Amount to">
+                <b-form-input
+                  id="payment-sent-to"
+                  :class="{ error: $v.filterPaymentSentAmountTo.$error }"
+                  :state="!$v.filterPaymentSentAmountTo.$error"
+                  v-model="filterPaymentSentAmountTo"
+                  aria-describedby="inputLivePaymentSentToFeedback"
+                  type="text"
+                  @blur.native="$v.filterPaymentSentAmountTo.$touch()"/>
+                <b-form-invalid-feedback id="inputLivePaymentSentToFeedback">
+                  <template v-if="$v.filterPaymentSentAmountTo.$error" class="field__errors">
+                    <template v-if="!$v.filterPaymentSentAmountTo.decimal">Amount should be numeric</template>
+                  </template>
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
 
-        <b-form-checkbox v-model="showOffers">Offers</b-form-checkbox>
-        <hr class="separator">
-        <b-form-checkbox v-model="showOther">Other</b-form-checkbox>
+          <b-row v-if="filterPayments">
+            <b-col><b-form-checkbox v-model="filterPaymentCurrency">Currency</b-form-checkbox></b-col>
+            <b-col v-if="filterPaymentCurrency">
+              <b-form-group label-for="payment-currency-from" label="Currency">
+                <b-form-select id="payment-currency-from" v-model="filterPaymentCurrencyType" :options="currencyOptions"/>
+              </b-form-group>
+            </b-col>
+          </b-row>
 
-        <b-form-group v-if="showOther">
-          <b-form-checkbox-group id="filter-other-types" v-model="showOtherTypes">
-            <b-form-checkbox value="SET_OPTIONS">Set options</b-form-checkbox>
-            <b-form-checkbox value="TRUST">Trust</b-form-checkbox>
-            <b-form-checkbox value="ACCOUNT_MERGE">Account merge</b-form-checkbox>
-            <b-form-checkbox value="MANAGE_DATA">Manage data</b-form-checkbox>
-            <b-form-checkbox value="BUMP_SEQUENCE">Bump sequence</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
+          <hr class="separator">
+
+          <b-form-checkbox v-model="filterOffers">Offers</b-form-checkbox>
+          <b-row v-if="filterOffers">
+            <b-col>
+              <b-form-group label-for="offer-selling-currency-from" label="Selling currency">
+                <b-form-select id="offer-selling-currency-from" v-model="filterSellingCurrencyType" :options="offerCurrencyOptions"/>
+              </b-form-group>
+            </b-col>
+            <b-col v-if="filterSellingCurrencyType === 'OTHER'">
+              <b-form-group label-for="offer-selling-currency-asset" label="Asset code">
+                <b-form-input
+                  id="offer-selling-currency-asset"
+                  v-model="filterSellingCurrencyAsset"
+                  type="text"/>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row v-if="filterOffers">
+            <b-col>
+              <b-form-group label-for="offer-buying-currency-from" label="Buying currency">
+                <b-form-select id="offer-buying-currency-from" v-model="filterBuyingCurrencyType" :options="offerCurrencyOptions"/>
+              </b-form-group>
+            </b-col>
+            <b-col v-if="filterBuyingCurrencyType === 'OTHER'">
+              <b-form-group label-for="offer-buying-currency-asset" label="Asset code">
+                <b-form-input
+                  id="offer-buying-currency-asset"
+                  v-model="filterBuyingCurrencyAsset"
+                  type="text"/>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <hr class="separator">
+          <b-form-checkbox v-model="filterOther">Other</b-form-checkbox>
+
+          <b-form-group v-if="filterOther">
+            <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
+              <b-form-checkbox value="SET_OPTIONS">Set options</b-form-checkbox>
+              <b-form-checkbox value="TRUST">Trust</b-form-checkbox>
+              <b-form-checkbox value="ACCOUNT_MERGE">Account merge</b-form-checkbox>
+              <b-form-checkbox value="MANAGE_DATA">Manage data</b-form-checkbox>
+              <b-form-checkbox value="BUMP_SEQUENCE">Bump sequence</b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+        </template>
       </b-card>
     </b-col>
-    <b-col cols="6" md="12">
+    <b-col cols="8">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <br>
         <spinner v-if="inProgress" align="center" class="mt-3"/>
-        <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" bordered head-variant="dark">
+        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" bordered head-variant="dark">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">
@@ -79,6 +196,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { decimal } from 'vuelidate/lib/validators';
 
 import dayjs from 'dayjs';
 import Datepicker from 'vuejs-datepicker';
@@ -100,13 +218,29 @@ export default {
 
       selectedWallet: null,
 
-      filterMemo: '',
-      showPayment: true,
-      showOffers: true,
-      showOther: true,
+      advancedFiltersOpened: false,
 
-      showOtherTypes: ['SET_OPTIONS', 'TRUST', 'ACCOUNT_MERGE', 'MANAGE_DATA', 'BUMP_SEQUENCE'],
-      showPaymentTypes: ['RECEIVED', 'SENT'],
+      filterMemo: '',
+      filterPayments: false,
+      filterOffers: false,
+      filterOther: false,
+
+      filterOtherTypes: [],
+
+      filterPaymentReceived: false,
+      filterPaymentSent: false,
+      filterPaymentCurrency: false,
+
+      filterPaymentReceivedAmountFrom: '',
+      filterPaymentReceivedAmountTo: '',
+      filterPaymentSentAmountFrom: '',
+      filterPaymentSentAmountTo: '',
+      filterPaymentCurrencyType: null,
+
+      filterSellingCurrencyType: 'ALL',
+      filterBuyingCurrencyType: 'ALL',
+      filterSellingCurrencyAsset: '',
+      filterBuyingCurrencyAsset: '',
 
       fields: [
         { key: 'date', sortable: true },
@@ -162,43 +296,58 @@ export default {
             return false;
           }
         }
+        if (!this.filterPayments && !this.filterOffers && !this.filterOther) return true;
 
         switch (op.op_type) {
           case OperationType.CREATE_ACCOUNT:
-            if (!this.showPayment) return false;
-            if (!this.showPaymentTypes.includes('RECEIVED')) return false;
+            if (!this.filterPayments) return false;
+            if (!this.filterPaymentReceived) return false;
             break;
           case OperationType.PAYMENT:
           case OperationType.PATH_PAYMENT:
-            if (!this.showPayment) return false;
-            if (!this.showPaymentTypes.includes('RECEIVED') && op.op_details.to === this.selectedWallet) return false;
-            if (!this.showPaymentTypes.includes('SENT') && op.op_details.from === this.selectedWallet) return false;
+            if (!this.filterPayments) return false;
+            if (this.filterPaymentCurrency && this.filterPaymentCurrencyType !== null && this.getCurrency(op) !== this.filterPaymentCurrencyType) return false;
+            if (!this.filterPaymentReceived && !this.filterPaymentSent) return true;
+            if (!this.filterPaymentReceived && op.op_details.to === this.selectedWallet) return false;
+            if (this.filterPaymentReceived) {
+              if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && op.op_details.amount < this.filterPaymentReceivedAmountFrom) return false;
+              if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && op.op_details.amount > this.filterPaymentReceivedAmountTo) return false;
+            }
+            if (!this.filterPaymentSent && op.op_details.from === this.selectedWallet) return false;
+            if (this.filterPaymentSent) {
+              if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && op.op_details.amount < this.filterPaymentSentAmountFrom) return false;
+              if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && op.op_details.amount > this.filterPaymentSentAmountTo) return false;
+            }
             break;
           case OperationType.MANAGE_OFFER:
           case OperationType.CREATE_PASSIVE_OFFER:
-            if (!this.showOffers) return false;
+            if (!this.filterOffers) return false;
+            const buyingAssetCode = op.op_details.buying_asset_code || 'XLM';
+            if (this.filterBuyingCurrencyType === 'OTHER' && buyingAssetCode.indexOf(this.filterBuyingCurrencyAsset) === -1) return false;
+            const sellingAssetCode = op.op_details.selling_asset_code || 'XLM';
+            if (this.filterSellingCurrencyType === 'OTHER' && sellingAssetCode.indexOf(this.filterSellingCurrencyAsset) === -1) return false;
             break;
           case OperationType.SET_OPTIONS:
-            if (!this.showOther) return false;
-            if (!this.showOtherTypes.includes('SET_OPTIONS')) return false;
+            if (!this.filterOther) return false;
+            if (this.filterOtherTypes.length > 0 && !this.filterOtherTypes.includes('SET_OPTIONS')) return false;
             break;
           case OperationType.CHANGE_TRUST:
           case OperationType.ALLOW_TRUST:
-            if (!this.showOther) return false;
-            if (!this.showOtherTypes.includes('TRUST')) return false;
+            if (!this.filterOther) return false;
+            if (this.filterOtherTypes.length > 0 && !this.filterOtherTypes.includes('TRUST')) return false;
             break;
           case OperationType.ACCOUNT_MERGE:
-            if (!this.showOther) return false;
-            if (!this.showOtherTypes.includes('ACCOUNT_MERGE')) return false;
+            if (!this.filterOther) return false;
+            if (this.filterOtherTypes.length > 0 && !this.filterOtherTypes.includes('ACCOUNT_MERGE')) return false;
             break;
           case OperationType.INFLATION:
           case OperationType.MANAGE_DATA:
-            if (!this.showOther) return false;
-            if (!this.showOtherTypes.includes('MANAGE_DATA')) return false;
+            if (!this.filterOther) return false;
+            if (this.filterOtherTypes.length > 0 && !this.filterOtherTypes.includes('MANAGE_DATA')) return false;
             break;
           case OperationType.BUMP_SEQUENCE:
-            if (!this.showOther) return false;
-            if (!this.showOtherTypes.includes('BUMP_SEQUENCE')) return false;
+            if (!this.filterOther) return false;
+            if (this.filterOtherTypes.length > 0 && !this.filterOtherTypes.includes('BUMP_SEQUENCE')) return false;
             break;
         }
         return true;
@@ -224,6 +373,26 @@ export default {
         text: w.wallet_name,
       }));
     },
+
+    currentWallet () {
+      if (this.selectedWallet) {
+        return this.wallets.res.find(w => w.public_key === this.selectedWallet);
+      }
+      return null;
+    },
+
+    currencyOptions () {
+      if (!this.currentWallet || !this.currentWallet.stellar_data) return [];
+      const balances = this.currentWallet.stellar_data.balances;
+      return [{ value: null, text: 'All' }, { value: 'XLM', text: 'XLM' }, ...balances.filter(b => b.asset_code).map(b => ({ value: b.asset_code, text: b.asset_code }))];
+    },
+
+    offerCurrencyOptions () {
+      return [
+        { value: 'ALL', text: 'All' },
+        { value: 'OTHER', text: 'Other' },
+      ];
+    },
   },
 
   watch: {
@@ -241,7 +410,45 @@ export default {
     },
     dateTo () {
       this.reloadTransactions();
-    }
+    },
+
+    filterPayments (value) {
+      if (!value) {
+        this.filterPaymentReceived = false;
+        this.filterPaymentSent = false;
+        this.filterPaymentCurrency = false;
+      }
+    },
+    filterPaymentReceived (value) {
+      if (!value) {
+        this.filterPaymentReceivedAmountFrom = '';
+        this.filterPaymentReceivedAmountTo = '';
+      }
+    },
+    filterPaymentSent (value) {
+      if (!value) {
+        this.filterPaymentSentAmountFrom = '';
+        this.filterPaymentSentAmountTo = '';
+      }
+    },
+    filterPaymentCurrency (value) {
+      if (!value) {
+        this.filterPaymentCurrencyType = null;
+      }
+    },
+    filterOffers (value) {
+      if (!value) {
+        this.filterSellingCurrencyType = 'ALL';
+        this.filterBuyingCurrencyType = 'ALL';
+        this.filterSellingCurrencyAsset = '';
+        this.filterBuyingCurrencyAsset = '';
+      }
+    },
+    filterOther (value) {
+      if (!value) {
+        this.filterOtherTypes = [];
+      }
+    },
   },
 
   async created () {
@@ -357,6 +564,23 @@ export default {
       await this.loadTransactions();
       this.inProgress = false;
     }
+  },
+
+  validations () {
+    return {
+      filterPaymentReceivedAmountFrom: {
+        decimal
+      },
+      filterPaymentReceivedAmountTo: {
+        decimal
+      },
+      filterPaymentSentAmountFrom: {
+        decimal
+      },
+      filterPaymentSentAmountTo: {
+        decimal
+      },
+    };
   }
 };
 </script>
