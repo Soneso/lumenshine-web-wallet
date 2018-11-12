@@ -6,35 +6,45 @@
           <b-form-select id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
         </b-form-group>
 
-        <b-form-group label-for="transaction-date-start" class="mx-2">
-          <div class="datepicker-wrapper p-0">
-            <datepicker id="transaction-date-start" v-model="dateFrom" :disabled-dates="dateStartDisabled" format="yyyy.MM.dd" placeholder="Date from" class="py-1"/>
-            <i class="icon-calendar"/>
-          </div>
-          <small class="form-text text-muted">Date from</small>
-        </b-form-group>
+        <b-row>
+          <b-col>
+            <b-form-group label-for="transaction-date-start" class="mx-2">
+              <div class="datepicker-wrapper p-0">
+                <datepicker id="transaction-date-start" v-model="dateFrom" :disabled-dates="dateStartDisabled" format="yyyy.MM.dd" placeholder="Date from" class="py-1"/>
+                <i class="icon-calendar"/>
+              </div>
+              <small class="form-text text-muted">Date from</small>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group label-for="transaction-date-end" class="mx-2">
+              <div class="datepicker-wrapper p-0">
+                <datepicker id="transaction-date-end" v-model="dateTo" :disabled-dates="dateEndDisabled" format="yyyy.MM.dd" placeholder="Date to" class="py-1"/>
+                <i class="icon-calendar"/>
+              </div>
+              <small class="form-text text-muted">Date to</small>
+            </b-form-group>
+          </b-col>
+        </b-row>
 
-        <b-form-group label-for="transaction-date-end" class="mx-2">
-          <div class="datepicker-wrapper p-0">
-            <datepicker id="transaction-date-end" v-model="dateTo" :disabled-dates="dateEndDisabled" format="yyyy.MM.dd" placeholder="Date to" class="py-1"/>
-            <i class="icon-calendar"/>
-          </div>
-          <small class="form-text text-muted">Date to</small>
-        </b-form-group>
-
-        <b-form-group label-for="transaction-memo" label="Memo">
-          <b-form-input
-            id="transaction-memo"
-            v-model="filterMemo"
-            type="text"/>
-        </b-form-group>
-
-        <a v-if="!advancedFiltersOpened" href="#" @click.prevent="advancedFiltersOpened = true">More filters</a>
-        <a v-else href="#" @click.prevent="advancedFiltersOpened = false">Less filters</a>
-        <br>
+        <b-row>
+          <b-col>
+            <b-form-group label-for="transaction-memo">
+              <b-form-input
+                id="transaction-memo"
+                v-model="filterMemo"
+                type="text"
+                placeholder="MEMO"/>
+            </b-form-group>
+          </b-col>
+          <b-col class="text-right text-uppercase">
+            <a v-if="!advancedFiltersOpened" href="#" @click.prevent="advancedFiltersOpened = true">More filters</a>
+            <a v-else href="#" @click.prevent="advancedFiltersOpened = false">Less filters</a>
+          </b-col>
+        </b-row>
 
         <template v-if="advancedFiltersOpened">
-          <b-form-checkbox v-model="filterPayments" class="my-4">Payments</b-form-checkbox>
+          <b-form-checkbox v-model="filterPayments" class="my-2">Payments</b-form-checkbox>
 
           <b-row v-if="filterPayments">
             <b-col>
@@ -127,7 +137,7 @@
 
           <hr class="separator">
 
-          <b-form-checkbox v-model="filterOffers">Offers</b-form-checkbox>
+          <b-form-checkbox v-model="filterOffers" class="my-2">Offers</b-form-checkbox>
           <b-row v-if="filterOffers">
             <b-col>
               <b-form-group label-for="offer-selling-currency-from" label="Selling currency">
@@ -161,15 +171,15 @@
           </b-row>
 
           <hr class="separator">
-          <b-form-checkbox v-model="filterOther">Other</b-form-checkbox>
+          <b-form-checkbox v-model="filterOther" class="my-2">Other</b-form-checkbox>
 
           <b-form-group v-if="filterOther">
             <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
-              <b-form-checkbox value="SET_OPTIONS">Set options</b-form-checkbox>
-              <b-form-checkbox value="TRUST">Trust</b-form-checkbox>
-              <b-form-checkbox value="ACCOUNT_MERGE">Account merge</b-form-checkbox>
-              <b-form-checkbox value="MANAGE_DATA">Manage data</b-form-checkbox>
-              <b-form-checkbox value="BUMP_SEQUENCE">Bump sequence</b-form-checkbox>
+              <b-form-checkbox value="SET_OPTIONS" class="my-2">Set options</b-form-checkbox>
+              <b-form-checkbox value="TRUST" class="my-2">Trust</b-form-checkbox>
+              <b-form-checkbox value="ACCOUNT_MERGE" class="my-2">Account merge</b-form-checkbox>
+              <b-form-checkbox value="MANAGE_DATA" class="my-2">Manage data</b-form-checkbox>
+              <b-form-checkbox value="BUMP_SEQUENCE" class="my-2">Bump sequence</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
         </template>
@@ -493,16 +503,6 @@ export default {
     },
 
     getAmount (item) {
-      const allowedTypes = [
-        OperationType.CREATE_ACCOUNT,
-        OperationType.PAYMENT,
-        OperationType.PATH_PAYMENT,
-        OperationType.MANAGE_OFFER,
-        OperationType.CREATE_PASSIVE_OFFER,
-        OperationType.ACCOUNT_MERGE
-      ];
-      if (!allowedTypes.includes(item.op_type)) return '';
-
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
           return new Amount(item.op_details.starting_balance).format();
@@ -516,7 +516,7 @@ export default {
         case OperationType.CREATE_PASSIVE_OFFER:
           return new Amount(item.op_details.amount).format();
       }
-      return '';
+      return '-';
     },
 
     getCurrency (item) {
