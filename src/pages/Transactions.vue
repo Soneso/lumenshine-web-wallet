@@ -190,7 +190,7 @@
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <br>
         <spinner v-if="inProgress" align="center" class="mt-3"/>
-        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields">
+        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">
@@ -373,6 +373,7 @@ export default {
         currency: this.getCurrency(item),
         fee: this.getFee(item),
         details: item,
+        order: item.op_application_order,
       }));
     },
 
@@ -476,6 +477,14 @@ export default {
 
   methods: {
     ...mapActions(['loadTransactions', 'getWallets']),
+    sortCompare (a, b, key) {
+      if (key === 'date') {
+        if (a.date.isSame(b.date)) return a.order < b.order ? -1 : (a.order > b.order ? 1 : 0); // take into consideration operation order when dates are the same
+        return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0);
+      }
+      return null; // use default sort handler for other cases
+    },
+
     getOperationName (item) {
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
