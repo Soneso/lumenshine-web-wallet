@@ -44,7 +44,7 @@
         </b-row>
 
         <template v-if="advancedFiltersOpened">
-          <b-form-checkbox v-model="filterPayments" class="my-2">Payments</b-form-checkbox>
+          <b-form-checkbox v-model="filterPayments" :indeterminate="filterPaymentIndeterminate" class="my-2">Payments</b-form-checkbox>
 
           <b-row v-if="filterPayments">
             <b-col>
@@ -171,7 +171,7 @@
           </b-row>
 
           <hr class="separator">
-          <b-form-checkbox v-model="filterOther" class="my-2">Other</b-form-checkbox>
+          <b-form-checkbox v-model="filterOther" :indeterminate="filterOtherTypes.length > 0 && filterOtherTypes.length < 5" class="my-2">Other</b-form-checkbox>
 
           <b-form-group v-if="filterOther">
             <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
@@ -190,7 +190,7 @@
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <br>
         <spinner v-if="inProgress" align="center" class="mt-3"/>
-        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" bordered head-variant="dark">
+        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">
@@ -403,6 +403,11 @@ export default {
         { value: 'OTHER', text: 'Other' },
       ];
     },
+
+    filterPaymentIndeterminate () {
+      const sum = this.filterPaymentReceived ? 1 : 0 + this.filterPaymentSent ? 1 : 0 + this.filterPaymentCurrency ? 1 : 0;
+      return sum > 0 && sum < 3;
+    }
   },
 
   watch: {
