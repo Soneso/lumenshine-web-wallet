@@ -469,8 +469,8 @@ export default {
 
   async created () {
     await this.getWallets();
-    if (this.wallets.res.length > 0) {
-      this.selectedWallet = this.wallets.res[0].public_key;
+    if (this.walletOptions.length > 0) {
+      this.selectedWallet = this.walletOptions[0].value;
     }
     this.reloadTransactions();
   },
