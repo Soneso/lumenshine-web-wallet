@@ -251,6 +251,7 @@ export default {
   name: 'SendPaymentForm',
   components: { spinner },
   mixins: [ formMixin, balanceMixin ],
+
   props: {
     data: {
       type: Object,
@@ -281,6 +282,7 @@ export default {
       default: null,
     }
   },
+
   data () {
     return {
       showCopiedText: false,
@@ -306,6 +308,7 @@ export default {
       selectedWallet: 0, // used for contacts, where wallet should be selected on this form
     };
   },
+
   computed: {
     currentWallet () {
       return this.data || this.availableWallets[this.selectedWallet];
@@ -353,7 +356,7 @@ export default {
     assetCodeOptions () {
       return [
         ...this.uniqueCurrencies.map(assetCode => ({ text: assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode, value: assetCode })),
-        { text: 'Other', value: '_other' },
+        { text: 'Own token', value: '_other' },
       ];
     },
     issuerOptions () {
@@ -380,6 +383,7 @@ export default {
       return amount.toStellarAmount();
     }
   },
+
   watch: {
     assetCode (val) {
       if (!this.currentWallet.stellar_data) return;
@@ -417,11 +421,13 @@ export default {
       }
     },
   },
+
   created () {
     if (!this.canSignWithPassword) {
       this.signer = this.signers[0] ? this.signers[0].public_key : null;
     }
   },
+
   methods: {
     async reset () {
       this.$v.$reset();
@@ -475,6 +481,7 @@ export default {
       this.customAssetCode = e.target.value;
     }
   },
+
   validations () {
     const isExchange = !!this.exchanges[this.recipient];
     let memoValidators = isExchange ? { required } : {};
