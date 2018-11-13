@@ -379,7 +379,7 @@ export default {
 
     walletOptions () {
       if (!this.wallets.res) return [];
-      return this.wallets.res.map(w => ({
+      return this.wallets.res.filter(w => w.stellar_data).map(w => ({
         value: w.public_key,
         text: w.wallet_name,
       }));
