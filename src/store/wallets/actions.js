@@ -94,6 +94,10 @@ export default {
     commit('SET_WALLETS_LOADING', { id: ids, loading: false });
   },
 
+  resetAddWallet ({ commit }) {
+    commit('ADD_WALLET_ERROR', []);
+  },
+
   async addWallet ({ commit, dispatch }, params) {
     commit('ADD_WALLET_LOADING', true);
     try {
@@ -104,6 +108,10 @@ export default {
       commit('ADD_WALLET_ERROR', err.data);
     }
     commit('ADD_WALLET_LOADING', false);
+  },
+
+  resetEditWallet ({ commit }) {
+    commit('EDIT_WALLET_ERROR', []);
   },
 
   async editWallet ({ commit, dispatch, getters }, params) {
