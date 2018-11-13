@@ -5,6 +5,67 @@
         <b-col cols="12">
           <small v-if="hasUnknownError" class="d-block pl-2 pb-3 text-danger">Unknown backend error!</small>
         </b-col>
+
+        <b-col cols="12">
+          <!--Forename field-->
+          <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('forename')" class="field">
+            <b-form-group>
+              <b-form-input
+                id="signup-forename"
+                :class="{ error: $v.forename.$error }"
+                v-model="forename"
+                :state="!$v.forename.$error"
+                type="text"
+                placeholder="Forename"
+                tabindex="4"
+                aria-describedby="inputLiveForenameHelp inputLiveForenameFeedback"
+                @blur.native="$v.forename.$touch()"/>
+
+              <b-form-invalid-feedback id="inputLiveForenameFeedback">
+                <template v-if="$v.forename.$error" class="field-errors">
+                  <template v-if="!$v.forename.required">Forename is required!</template>
+                  <template v-if="!$v.forename.maxLength">Forename should be shorter than 64 characters!</template>
+                  <template v-if="!$v.forename.minLength">Forename should be at least 2 characters long!</template>
+                  <template v-if="!$v.forename.hasNoNumbers">Forename should not contain numbers!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveForenameHelp">
+                Forename
+              </b-form-text>
+            </b-form-group>
+          </template>
+        </b-col>
+
+        <b-col cols="12">
+          <!--Lastname field-->
+          <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('lastname')" class="field">
+            <b-form-group>
+              <b-form-input
+                id="signup-lastname"
+                :class="{ error: $v.lastname.$error }"
+                v-model="lastname"
+                :state="!$v.lastname.$error"
+                type="text"
+                placeholder="Last name"
+                tabindex="5"
+                aria-describedby="inputLiveLastnameHelp inputLiveLastnameFeedback"
+                @blur.native="$v.lastname.$touch()"/>
+
+              <b-form-invalid-feedback id="inputLiveLastnameFeedback">
+                <template v-if="$v.lastname.$error" class="field-errors">
+                  <template v-if="!$v.lastname.required">Lastname is required!</template>
+                  <template v-if="!$v.lastname.maxLength">Lastname should be shorter than 64 characters!</template>
+                  <template v-if="!$v.lastname.minLength">Lastname should be at least 2 characters long!</template>
+                  <template v-if="!$v.lastname.hasNoNumbers">Lastname should not contain numbers!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text id="inputLiveLastnameHelp">
+                Lastname
+              </b-form-text>
+            </b-form-group>
+          </template>
+        </b-col>
+
         <b-col cols="12">
           <!--Email field-->
           <b-form-group>
@@ -32,6 +93,7 @@
             </b-form-text>
           </b-form-group>
         </b-col>
+
         <b-col cols="12">
           <!--Password field-->
           <b-form-group>
@@ -68,6 +130,7 @@
             </b-form-text>
           </b-form-group>
         </b-col>
+
         <b-col cols="12">
           <!--Password repeat field-->
           <b-form-group>
@@ -97,60 +160,7 @@
             </b-form-text>
           </b-form-group>
         </b-col>
-        <b-col cols="12">
-          <!--forename field-->
-          <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('forename')" class="field">
-            <b-form-group>
-              <b-form-input
-                id="signup-forename"
-                :class="{ error: $v.forename.$error }"
-                v-model="forename"
-                :state="!$v.forename.$error"
-                type="text"
-                placeholder="Fore name"
-                tabindex="4"
-                aria-describedby="inputLiveForenameHelp inputLiveForenameFeedback"
-                @blur.native="$v.forename.$touch()"/>
 
-              <b-form-invalid-feedback id="inputLiveForenameFeedback">
-                <template v-if="$v.forename.$error" class="field-errors">
-                  <template v-if="!$v.forename.maxLength">Forename should be shorter than 64 characters!</template>
-                  <!-- <template v-if="!$v.forename.hasOnlyLetters">Forename should contain only letters!</template> -->
-                </template>
-              </b-form-invalid-feedback>
-              <b-form-text id="inputLiveForenameHelp">
-                Forename
-              </b-form-text>
-            </b-form-group>
-          </template>
-        </b-col>
-        <b-col cols="12">
-          <!--lastname field-->
-          <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('lastname')" class="field">
-            <b-form-group>
-              <b-form-input
-                id="signup-lastname"
-                :class="{ error: $v.lastname.$error }"
-                v-model="lastname"
-                :state="!$v.lastname.$error"
-                type="text"
-                placeholder="Last name"
-                tabindex="5"
-                aria-describedby="inputLiveLastnameHelp inputLiveLastnameFeedback"
-                @blur.native="$v.lastname.$touch()"/>
-
-              <b-form-invalid-feedback id="inputLiveLastnameFeedback">
-                <template v-if="$v.lastname.$error" class="field-errors">
-                  <template v-if="!$v.lastname.maxLength">Lastname should be shorter than 64 characters!</template>
-                  <!-- <template v-if="!$v.lastname.hasOnlyLetters">Lastname should contain only letters!</template> -->
-                </template>
-              </b-form-invalid-feedback>
-              <b-form-text id="inputLiveLastnameHelp">
-                Lastname
-              </b-form-text>
-            </b-form-group>
-          </template>
-        </b-col>
         <b-col cols="12">
           <!-- companyName field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('companyName')" class="field">
@@ -178,6 +188,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- salutation field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('salutation')" class="field">
@@ -214,6 +225,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="12">
           <!-- streetAddress field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('streetAddress')" class="field">
@@ -241,6 +253,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- streetNumber field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('streetNumber')" class="field">
@@ -268,6 +281,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- zipCode field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('zipCode')" class="field">
@@ -294,6 +308,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="12">
           <!-- state field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('state')" class="field">
@@ -321,6 +336,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="12">
           <!-- city field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('city')" class="field">
@@ -348,6 +364,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="12">
           <!-- mobilePhone field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('mobilePhone')" class="field">
@@ -374,6 +391,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- country field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('country')" class="field">
@@ -383,6 +401,7 @@
             </b-form-select>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- nationality field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('nationality')" class="field">
@@ -392,6 +411,7 @@
             </b-form-select>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- birthPlace field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('birthPlace')" class="field">
@@ -419,6 +439,7 @@
             </b-form-group>
           </template>
         </b-col>
+
         <b-col cols="6">
           <!-- birthday field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('birthday')" class="field">

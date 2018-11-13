@@ -6,8 +6,8 @@ export default {
   APP_SUBTITLE: 'A Wallet for the Stellar Network by Soneso',
 
   REGISTRATION_OPTIONAL_FIELDS: [
-    // 'forename',
-    // 'lastname',
+    'forename',
+    'lastname',
     // 'companyName',
     // 'salutation',
     // 'title',

@@ -29,7 +29,10 @@
                   @blur.native="$v.lastName.$touch()"/>
                 <b-form-invalid-feedback id="inputLiveLastNameFeedback">
                   <template v-if="$v.lastName.$error" class="field-errors">
+                    <template v-if="!$v.lastName.required">Lastname is required!</template>
                     <template v-if="!$v.lastName.maxLength">Lastname should be shorter than 64 characters!</template>
+                    <template v-if="!$v.lastName.minLength">Lastname should be at least 2 characters long!</template>
+                    <template v-if="!$v.lastName.hasNoNumbers">Lastname should not contain numbers!</template>
                   </template>
                 </b-form-invalid-feedback>
                 <b-form-text id="inputLiveLastNameHelp">
@@ -50,7 +53,10 @@
                   @blur.native="$v.firstName.$touch()"/>
                 <b-form-invalid-feedback id="inputLiveFirstNameFeedback">
                   <template v-if="$v.firstName.$error" class="field-errors">
+                    <template v-if="!$v.firstName.required">First name is required!</template>
                     <template v-if="!$v.firstName.maxLength">First name should be shorter than 64 characters!</template>
+                    <template v-if="!$v.firstName.minLength">First name should be at least 2 characters long!</template>
+                    <template v-if="!$v.firstName.hasNoNumbers">First name should not contain numbers!</template>
                   </template>
                 </b-form-invalid-feedback>
                 <b-form-text id="inputLiveFirstNameHelp">
