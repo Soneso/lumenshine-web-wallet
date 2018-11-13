@@ -56,22 +56,25 @@ export default {
       required: true,
     },
   },
+
   data () {
     return {
       transactions: [],
       loading: false,
     };
   },
+
   async created () {
     this.loading = true;
     this.transactionQuery = await StellarAPI.transactions()
       .forAccount(this.data.public_key)
       .order('desc')
-      .limit(3)
+      .limit(20)
       .call();
     await this.processTransactionQuery();
     this.loading = false;
   },
+
   methods: {
     async processTransactionQuery () {
       const transactions = this.transactionQuery.records;
