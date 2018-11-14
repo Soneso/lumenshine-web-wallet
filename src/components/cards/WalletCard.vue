@@ -194,6 +194,7 @@ export default {
     detailsModalVisible (visible) {
       if (!visible) {
         this.resetDecryptedWallet(); // clear revealed secret seed after closing modal
+        this.$emit('recheck'); // hide wallet from dashboard screen if "Show wallet on home screen" was unchecked
       }
     },
   },

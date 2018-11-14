@@ -2,7 +2,7 @@
   <section>
     <b-row align-h="start" class="equal-heights">
       <card-spinner :loading="wallets.loading"/>
-      <wallet-card v-for="wallet in homescreenWallets" :key="wallet.public_key" :data="wallet"/>
+      <wallet-card v-for="wallet in dashboardWallets" :key="wallet.public_key" :data="wallet" @recheck="recheckWallets"/>
     </b-row>
   </section>
 </template>
@@ -14,18 +14,31 @@ import cardSpinner from '@/components/ui/cardSpinner.vue';
 
 export default {
   components: { WalletCard, cardSpinner },
+  data () {
+    return {
+      walletIds: [], // needed for the case when details view is open, and user unchecks the "Show wallet on home screen" checkbox. In this case the wallets cannot be filtered using the boolean show_on_homescreen flag. Old card should remain there.
+    };
+  },
   computed: {
     ...mapGetters(['wallets']),
-    homescreenWallets () {
+    dashboardWallets () {
       if (!this.wallets.res) return [];
-      return this.wallets.res.filter(w => w.show_on_homescreen);
+      return this.walletIds.map(wId => this.wallets.res.find(w => w.id === wId));
     }
   },
-  created () {
-    this.getWallets();
+  async created () {
+    await this.getWallets();
+    this.recheckWallets();
   },
   methods: {
-    ...mapActions(['getWallets'])
+    ...mapActions(['getWallets']),
+    recheckWallets () {
+      if (!this.wallets.res) {
+        this.walletIds = [];
+        return;
+      }
+      this.walletIds = this.wallets.res.filter(w => w.show_on_homescreen).map(w => w.id);
+    }
   }
 };
 </script>
