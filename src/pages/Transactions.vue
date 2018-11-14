@@ -188,8 +188,10 @@
     <b-col cols="8" xl="8" md="12" class="my-2">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
+        <div v-if="inProgress" class="mb-3">
+          <br><spinner align="center"/><br>
+        </div>
         <br>
-        <spinner v-if="inProgress" align="center" class="mt-3"/>
         <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
