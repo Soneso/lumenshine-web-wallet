@@ -451,9 +451,11 @@ export default {
     },
     emphasise (id) {
       const el = document.getElementById(id);
-      el.classList.add('shining');
-      el.scrollTop = el.scrollHeight;
-      setTimeout(() => { el.classList.remove('shining'); }, 1e4);
+      if (el) {
+        el.classList.add('shining');
+        el.scrollTop = el.scrollHeight;
+        setTimeout(() => { el.classList.remove('shining'); }, 1e4);
+      }
       this.newCurrencyId = '';
     }
   },
