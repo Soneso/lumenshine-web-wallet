@@ -66,7 +66,7 @@
         @addCurrency="onAddCurrency"
         @removeCurrency="onRemoveCurrency"
         @openOperationDetails="data => {operationDetailsModalData = data}"
-        @close="detailsModalVisible = false"/>
+        @close="onDetailsClose"/>
     </b-modal>
 
     <b-modal v-model="fundWalletModalVisible" :title="!config.IS_TEST_NETWORK ? 'Fund Wallet' : 'Fund Wallet via Friendbot'" size="sm" hide-footer>
@@ -295,6 +295,14 @@ export default {
       await this.fundAccountWithFriendbot(this.data.public_key);
       this.fundWalletLoading = false;
       this.fundWalletModalVisible = false;
+    },
+    onDetailsClose (next) {
+      this.detailsModalVisible = false;
+      if (next === 'send') {
+        this.sendModalVisible = true;
+      } else if (next === 'receive') {
+        this.receiveModalVisible = true;
+      }
     },
     Amount
   }
