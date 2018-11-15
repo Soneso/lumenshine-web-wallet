@@ -27,7 +27,6 @@
               :state="!$v.customAssetCode.$error"
               type="text"
               placeholder="Asset code"
-              tabindex="1"
               required
               @input.prevent.native="onCustomCodeInput"
               @blur.native="$v.customAssetCode.$touch()"/>
@@ -52,7 +51,6 @@
               :state="!$v.recipient.$error"
               type="text"
               placeholder="Recepient's public key or address"
-              tabindex="2"
               required
               @blur.native="$v.recipient.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveRecipientFeedback_${uuid}`">
@@ -87,7 +85,6 @@
                   :state="!$v.amount.$error"
                   type="text"
                   placeholder="Amount to send"
-                  tabindex="3"
                   required
                   @blur.native="$v.amount.$touch()"/>
                 <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
@@ -122,7 +119,6 @@
               :aria-describedby="`inputLiveMemoFeedback_${uuid}`"
               v-model="memo"
               type="text"
-              tabindex="4"
               required
               @blur.native="$v.memo.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
@@ -145,7 +141,6 @@
               v-model="password"
               type="password"
               placeholder="Your password"
-              tabindex="5"
               required
               @blur.native="$v.password.$touch()"/>
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
@@ -165,7 +160,6 @@
               :state="!$v.signerSeed.$error"
               type="text"
               placeholder="Seed for selected signer"
-              tabindex="6"
               required
               @blur.native="$v.signerSeed.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">

@@ -14,7 +14,6 @@
               :state="!$v.twoFactorCode.$error"
               type="text"
               placeholder="2FA code"
-              tabindex="1"
               aria-describedby="inputLiveTwoFactorCodeHelp inputLiveTwoFactorCodeFeedback"
               @blur.native="$v.twoFactorCode.$touch()"/>
             <b-form-invalid-feedback id="inputLiveTwoFactorCodeFeedback">
@@ -41,7 +40,6 @@
               :state="!$v.password.$error"
               :type="password1IsHidden ? 'password' : 'text'"
               placeholder="New Password"
-              tabindex="1"
               aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
               required
               @blur.native="$v.password.$touch()"/>
@@ -83,7 +81,6 @@
               :state="!$v.passwordConfirm.$error"
               :type="password2IsHidden ? 'password' : 'text'"
               placeholder="Repeat new password"
-              tabindex="3"
               aria-describedby="inputLivePasswordConfirmHelp inputLivePasswordConfirmFeedback"
               required
               @blur.native="$v.passwordConfirm.$touch()"/>

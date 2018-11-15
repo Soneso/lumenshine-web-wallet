@@ -11,7 +11,6 @@
           :state="!$v.twoFactorCode.$error"
           type="text"
           placeholder="2FA code"
-          tabindex="1"
           aria-describedby="inputLiveTwoFactorCodeHelp inputLiveTwoFactorCodeFeedback"
           @blur.native="$v.twoFactorCode.$touch()"/>
         <b-form-invalid-feedback id="inputLiveTwoFactorCodeFeedback">

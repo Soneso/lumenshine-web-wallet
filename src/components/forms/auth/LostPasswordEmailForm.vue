@@ -12,7 +12,6 @@
             :state="!$v.email.$error"
             type="text"
             placeholder="Your email address"
-            tabindex="1"
             aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
             required
             @blur.native="$v.email.$touch()"/>

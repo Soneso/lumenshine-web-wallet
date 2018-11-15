@@ -16,7 +16,6 @@
             :state="!$v.password.$error"
             :type="password1IsHidden ? 'password' : 'text'"
             placeholder="Current password"
-            tabindex="1"
             autocomplete="off"
             aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
             required
@@ -46,7 +45,6 @@
             :state="!$v.newPassword.$error"
             :type="password2IsHidden ? 'password' : 'text'"
             placeholder="New Password"
-            tabindex="2"
             autocomplete="off"
             aria-describedby="inputLiveNewPasswordHelp inputLiveNewPasswordFeedback"
             required
@@ -83,7 +81,6 @@
             :state="!$v.passwordConfirm.$error"
             :type="password3IsHidden ? 'password' : 'text'"
             placeholder="Repeat new password"
-            tabindex="2"
             autocomplete="off"
             aria-describedby="inputLiveConfimNewPasswordHelp inputLiveConfimNewPasswordFeedback"
             required

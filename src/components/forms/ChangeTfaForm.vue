@@ -27,7 +27,6 @@
             :state="!$v.tfaCode.$error"
             :type="'text'"
             placeholder="2FA Code"
-            tabindex="1"
             autocomplete="off"
             aria-describedby="inputLive2faHelp inputLive2faFeedback"
             required

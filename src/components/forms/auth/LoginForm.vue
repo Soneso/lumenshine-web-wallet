@@ -11,7 +11,6 @@
         :state="!$v.email.$error"
         type="text"
         placeholder="email"
-        tabindex="1"
         aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
         autocomplete="false"
         required
@@ -37,7 +36,6 @@
         :state="!$v.password.$error"
         :type="passwordIsHidden ? 'password' : 'text'"
         placeholder="password"
-        tabindex="2"
         aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
         autocomplete="false"
         required
@@ -70,7 +68,6 @@
         :state="!$v.twoFactorCode.$error"
         type="text"
         placeholder="2FA CODE"
-        tabindex="3"
         aria-describedby="inputLive2faHelp inputLive2faFeedback"
         autocomplete="false"
         required
@@ -90,7 +87,7 @@
 
     <!-- submit action -->
     <div class="text-center">
-      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onLoginClick">{{ shouldContinue ? 'Continue' : 'Log in' }}</b-button>
+      <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" size="lg" @click.prevent="onLoginClick">{{ shouldContinue ? 'Continue' : 'Log in' }}</b-button>
       <br v-if="!shouldContinue">
       <small v-if="!shouldContinue" class="text-gray-500">Don't have an account? Sign up <router-link to="/register">here</router-link></small>
     </div>

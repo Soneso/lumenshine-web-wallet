@@ -14,7 +14,6 @@
               <b-form-input
                 v-model="item.word.$model"
                 :class="['default-placeholders', { error: item.$error }]"
-                :tabindex="+index + 1"
                 placeholder="word"
                 type="text"
                 @blur.native="item.$touch()"/>

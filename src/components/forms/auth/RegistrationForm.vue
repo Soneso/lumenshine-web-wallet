@@ -17,7 +17,6 @@
                 :state="!$v.forename.$error"
                 type="text"
                 placeholder="Forename"
-                tabindex="4"
                 aria-describedby="inputLiveForenameHelp inputLiveForenameFeedback"
                 @blur.native="$v.forename.$touch()"/>
 
@@ -47,7 +46,6 @@
                 :state="!$v.lastname.$error"
                 type="text"
                 placeholder="Last name"
-                tabindex="5"
                 aria-describedby="inputLiveLastnameHelp inputLiveLastnameFeedback"
                 @blur.native="$v.lastname.$touch()"/>
 
@@ -76,7 +74,6 @@
               :state="!$v.email.$error"
               type="text"
               placeholder="email"
-              tabindex="1"
               aria-describedby="inputLiveEmailHelp inputLiveEmailFeedback"
               required
               @blur.native="$v.email.$touch()"/>
@@ -104,7 +101,6 @@
               :state="!$v.password.$error"
               :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Password"
-              tabindex="2"
               autocomplete="off"
               aria-describedby="inputLivePasswordHelp inputLivePasswordFeedback"
               required
@@ -141,7 +137,6 @@
               :state="!$v.passwordConfirm.$error"
               :type="password2IsHidden ? 'password' : 'text'"
               placeholder="Repeat password"
-              tabindex="3"
               autocomplete="off"
               aria-describedby="inputLivePasswordConfirmHelp inputLivePasswordConfirmFeedback"
               required
@@ -172,7 +167,6 @@
                 :state="!$v.companyName.$error"
                 type="text"
                 placeholder="Company name"
-                tabindex="6"
                 aria-describedby="inputLiveCompanynameHelp inputLiveCompanynameFeedback"
                 @blur.native="$v.companyName.$touch()"/>
 
@@ -192,7 +186,7 @@
         <b-col cols="6">
           <!-- salutation field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('salutation')" class="field">
-            <b-form-select v-model="salutation" tabindex="7" class="mb-4">
+            <b-form-select v-model="salutation" class="mb-4">
               <option value="" disabled selected>Salutation</option>
               <option v-for="(option, index) in salutationOptions" :key="index">{{ option }}</option>
             </b-form-select>
@@ -209,7 +203,6 @@
                 :state="!$v.title.$error"
                 type="text"
                 placeholder="Title"
-                tabindex="8"
                 aria-describedby="inputLiveTitleHelp inputLiveTitleFeedback"
                 @blur.native="$v.title.$touch()"/>
 
@@ -237,7 +230,6 @@
                 :state="!$v.streetAddress.$error"
                 type="text"
                 placeholder="Street address"
-                tabindex="9"
                 aria-describedby="inputLiveStreetAddressHelp inputLiveStreetAddressFeedback"
                 @blur.native="$v.streetAddress.$touch()"/>
 
@@ -265,7 +257,6 @@
                 :state="!$v.streetNumber.$error"
                 type="text"
                 placeholder="Street number"
-                tabindex="10"
                 aria-describedby="inputLiveStreetNumberHelp inputLiveStreetNumberFeedback"
                 @blur.native="$v.streetNumber.$touch()"/>
 
@@ -293,7 +284,6 @@
                 :state="!$v.zipCode.$error"
                 type="text"
                 placeholder="Zip code"
-                tabindex="11"
                 aria-describedby="inputLiveZipCodeHelp inputLiveZipCodeFeedback"
                 @blur.native="$v.zipCode.$touch()"/>
 
@@ -320,7 +310,6 @@
                 :state="!$v.state.$error"
                 type="text"
                 placeholder="State"
-                tabindex="12"
                 aria-describedby="inputLiveStateHelp inputLiveStateFeedback"
                 @blur.native="$v.state.$touch()"/>
 
@@ -348,7 +337,6 @@
                 :state="!$v.city.$error"
                 type="text"
                 placeholder="City"
-                tabindex="13"
                 aria-describedby="inputLiveCityHelp inputLiveCityFeedback"
                 @blur.native="$v.city.$touch()"/>
 
@@ -376,7 +364,6 @@
                 :state="!$v.strippedMobilePhone.$error"
                 type="text"
                 placeholder="Mobile phone"
-                tabindex="14"
                 aria-describedby="inputLiveMobilePhoneHelp inputLiveMobilePhoneFeedback"
                 @blur.native="$v.strippedMobilePhone.$touch()"/>
 
@@ -395,7 +382,7 @@
         <b-col cols="6">
           <!-- country field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('country')" class="field">
-            <b-form-select v-model="country" tabindex="15" class="mb-4">
+            <b-form-select v-model="country" class="mb-4">
               <option value="" disabled selected>Country</option>
               <option v-for="(option, index) in countryOptions" :key="index" :value="option.code">{{ option.name }}</option>
             </b-form-select>
@@ -405,7 +392,7 @@
         <b-col cols="6">
           <!-- nationality field -->
           <template v-if="config.REGISTRATION_OPTIONAL_FIELDS.includes('nationality')" class="field">
-            <b-form-select v-model="nationality" tabindex="16" class="mb-4">
+            <b-form-select v-model="nationality" class="mb-4">
               <option value="" disabled selected>Nationality</option>
               <option v-for="(option, index) in countryOptions" :key="index" :value="option.code">{{ option.name }}</option>
             </b-form-select>
@@ -423,7 +410,6 @@
                 :state="!$v.birthPlace.$error"
                 type="text"
                 placeholder="Birth place"
-                tabindex="17"
                 aria-describedby="inputLiveBirthPlaceHelp inputLiveBirthPlaceFeedback"
                 @blur.native="$v.birthPlace.$touch()"/>
 
@@ -459,7 +445,7 @@
           You agree to abide by Lumenshine's <a href="/terms-of-service" target="_new">terms of service</a>
         </small>
       </b-form-checkbox>
-      <b-button :disabled="agreed !== 'accepted'" :variant="agreed !== 'accepted' ? 'secondary' : 'success'" type="submit" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
+      <b-button :disabled="agreed !== 'accepted'" :variant="agreed !== 'accepted' ? 'secondary' : 'success'" type="submit" class="btn-rounded text-uppercase my-3" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
       <br>
       <small class="text-gray-500">Already have an account? Log in <router-link to="/login">here</router-link></small>
     </div>

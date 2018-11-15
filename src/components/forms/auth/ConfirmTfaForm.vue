@@ -21,7 +21,6 @@
             :state="!$v.tfaCode.$error"
             type="text"
             placeholder="2FA code"
-            tabindex="1"
             aria-describedby="inputLive2FACodeHelp inputLive2FACodeFeedback"
             required
             @blur.native="onTwoFactorCodeBlur"/>
@@ -40,7 +39,7 @@
         </b-form-group>
       </p>
     </template>
-    <b-button type="submit" variant="info" class="btn-rounded text-uppercase my-3" tabindex="4" size="lg" @click.prevent="onSubmitClick">Next</b-button>
+    <b-button type="submit" variant="info" class="btn-rounded text-uppercase my-3" size="lg" @click.prevent="onSubmitClick">Next</b-button>
   </b-form>
 </template>
 
