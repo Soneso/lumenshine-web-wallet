@@ -111,7 +111,7 @@ export default {
   data () {
     return {
       showCopiedText: false,
-      amount: '',
+      amount: '0',
       assetCode: 'XLM',
       issuer: '',
       config,
@@ -238,7 +238,6 @@ export default {
     }
     return {
       amount: {
-        required,
         decimal,
       },
       memo: {
