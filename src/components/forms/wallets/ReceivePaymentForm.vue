@@ -98,7 +98,7 @@ import formMixin from '@/mixins/form';
 
 import config from '@/config';
 
-import { required, decimal, maxLength } from 'vuelidate/lib/validators';
+import { decimal, maxLength } from 'vuelidate/lib/validators';
 
 export default {
   mixins: [formMixin],
