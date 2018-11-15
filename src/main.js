@@ -4,6 +4,7 @@ import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import VueClipboard from 'vue-clipboard2';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
+import VueQrcode from '@chenfengyuan/vue-qrcode';
 
 // require styles
 import './assets/scss/main.scss';
@@ -74,6 +75,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
+Vue.component(VueQrcode.name, VueQrcode);
 Vue.component('v-select', vSelect);
 
 Vue.use(VueAwesomeSwiper);

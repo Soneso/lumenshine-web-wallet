@@ -123,8 +123,8 @@
               @blur.native="$v.memo.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
               <template v-if="$v.memo.$error" class="field__errors">
-                <template v-if="!$v.memo.required">Memo is required when sending payments to exchanges.</template>
-                <template v-if="!$v.memo.maxLength">Max length is 28 characters!</template>
+                <template v-if="$v.memo.required === false">Memo is required when sending payments to exchanges.</template>
+                <template v-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
                 <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
               </template>
             </b-form-invalid-feedback>
