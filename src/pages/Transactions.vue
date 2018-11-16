@@ -188,11 +188,11 @@
     <b-col cols="8" xl="8" md="12" class="my-2">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
-        <div v-if="inProgress" class="mb-3">
+        <div v-if="inProgress" style="min-height: 208px" class="mb-3 d-flex justify-content-center align-items-center">
           <br><spinner align="center"/><br>
         </div>
         <br>
-        <b-table v-if="selectedWallet" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare">
+        <b-table v-if="selectedWallet && tableItems.length > 0" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">
@@ -201,6 +201,9 @@
             <span v-else :key="field.key" v-html="row.item[field.key]"/>
           </template>
         </b-table>
+        <div v-else-if="selectedWallet && !inProgress && tableItems.length === 0" style="min-height: 208px" class="d-flex justify-content-center align-items-center">
+          <p>No transactions found</p>
+        </div>
       </b-card>
     </b-col>
   </b-row>
