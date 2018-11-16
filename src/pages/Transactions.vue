@@ -496,7 +496,7 @@ export default {
           return 'create account';
         case OperationType.PAYMENT:
         case OperationType.PATH_PAYMENT:
-          return item.op_details.from === this.selectedWallet ? '<span class="text-danger">payment sent</span>' : '<span class="text-success">payment received</span>';
+          return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
         case OperationType.MANAGE_OFFER:
           if (item.op_details.amount === '0.0000000') return 'offer removed';
           if (item.op_details.offer_id === 0) return 'offer created';
@@ -526,10 +526,10 @@ export default {
         case OperationType.CREATE_ACCOUNT:
           return new Amount(item.op_details.starting_balance).format();
         case OperationType.PAYMENT:
-          return (item.op_details.from === this.selectedWallet ? '-' : '') + new Amount(item.op_details.amount).format();
+          return (item.op_details.from === this.selectedWallet ? `<span class="text-danger">-${new Amount(item.op_details.amount).format()}</span>` : `<span class="text-success">${new Amount(item.op_details.amount).format()}</span>`);
         case OperationType.PATH_PAYMENT:
-          if (item.op_details.from === this.selectedWallet) return '-' + new Amount(item.op_details.source_amount).format(); // sending
-          return new Amount(item.op_details.amount).format(); // receiving
+          if (item.op_details.from === this.selectedWallet) return `<span class="text-danger">-${new Amount(item.op_details.source_amount).format()}</span>`; // sending
+          return `<span class="text-success">${new Amount(item.op_details.amount).format()}</span>`; // receiving
         case OperationType.MANAGE_OFFER:
           return new Amount(item.op_details.amount).format();
         case OperationType.CREATE_PASSIVE_OFFER:
@@ -561,13 +561,13 @@ export default {
 
     getFee (item) {
       if (this.selectedWallet === item.tx_source_account) {
-        return item.tx_fee_paid / item.tx_operation_count;
+        return new Amount('0.0000001').multiply(item.tx_fee_paid / item.tx_operation_count + '').format() + '<br>XLM';
       }
-      return 0;
+      return '0.00<br>XLM';
     },
 
     formatDate (date) {
-      return dayjs(date).format('DD.MM.YYYY hh:mm:ssA');
+      return dayjs(date).format('DD.MM.YYYY<br>hh:mm:ssA');
     },
 
     async reloadTransactions () {
