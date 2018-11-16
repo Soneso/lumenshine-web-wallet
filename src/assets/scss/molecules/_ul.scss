@@ -7,7 +7,9 @@ ul {
     }
   }
 
-  li {
-    list-style: none;
+  &:not(.has-bullets) {
+    li {
+      list-style: none;
+    }
   }
 }
