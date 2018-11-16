@@ -17,11 +17,6 @@ const router = new Router({
       component: require('@/pages/Home').default
     },
     {
-      path: '/terms-of-service',
-      name: 'TermsOfService',
-      component: require('@/pages/TermsOfService').default
-    },
-    {
       path: '/kitchen-sink',
       name: 'KitchenSink',
       component: require('@/pages/KitchenSink').default
