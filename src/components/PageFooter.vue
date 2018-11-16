@@ -15,6 +15,7 @@
             <router-link to="/about">About</router-link>
             <router-link to="/help">Help</router-link>
             <router-link to="/login">Log in</router-link>
+            <a href="/terms" target="_new">Terms</a>
             <router-link to="/register">Sign up</router-link>
             <router-link to="/impressum">Impressum</router-link>
             <a href="https://soneso.com" target="_blank">Soneso</a>
@@ -25,6 +26,7 @@
             <router-link to="/about">About</router-link>
             <router-link to="/help">Help</router-link>
             <router-link to="/">&nbsp;</router-link>
+            <a href="/terms" target="_new">Terms</a>
             <a href="/login" @click="onLogoutClick">Sign out</a>
             <router-link to="/impressum">Impressum</router-link>
             <a href="https://soneso.com" target="_blank">Soneso</a>
@@ -33,6 +35,7 @@
           <!-- Logged in user -->
           <template v-if="authToken && authTokenType !== 'partial'" class="menu menu--short">
             <a href="https://soneso.com" target="_blank">Developed by Soneso</a>
+            <a href="/terms" target="_new">Terms</a>
             <router-link to="/impressum">Impressum</router-link>
           </template>
         </div>

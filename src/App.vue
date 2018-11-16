@@ -61,7 +61,10 @@ export default {
         'lost-password',
         'lost-tfa',
         'lost-password-and-tfa',
-        'personal-data'
+        'personal-data',
+        'terms',
+        'privacy',
+        'guidelines'
       ];
       return routes.includes(nakedRoute);
     }

@@ -26,6 +26,21 @@ const router = new Router({
     {
       path: '*',
       component: require('@/pages/NotFound').default,
+    },
+    {
+      path: '/terms',
+      name: 'TermsOfService',
+      component: require('@/pages/TermsOfService').default
+    },
+    {
+      path: '/privacy',
+      name: 'PrivacyPolicy',
+      component: require('@/pages/PrivacyPolicy').default
+    },
+    {
+      path: '/guidelines',
+      name: 'WalletGuidelines',
+      component: require('@/pages/WalletGuidelines').default
     }
   ]
 });

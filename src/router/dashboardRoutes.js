@@ -80,32 +80,5 @@ export default [
       authNeeded: true,
       pageName: 'Transactions',
     }
-  },
-  {
-    path: '/terms-of-service',
-    name: 'TermsOfService',
-    component: require('@/pages/TermsOfService').default,
-    meta: {
-      authNeeded: true,
-      pageName: 'TermsOfService',
-    }
-  },
-  {
-    path: '/privacy-policy',
-    name: 'PrivacyPolicy',
-    component: require('@/pages/PrivacyPolicy').default,
-    meta: {
-      authNeeded: true,
-      pageName: 'PrivacyPolicy',
-    }
-  },
-  {
-    path: '/wallet-guidelines',
-    name: 'WalletGuidelines',
-    component: require('@/pages/WalletGuidelines').default,
-    meta: {
-      authNeeded: true,
-      pageName: 'WalletGuidelines',
-    }
-  },
+  }
 ];

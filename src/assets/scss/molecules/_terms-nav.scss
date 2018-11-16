@@ -1,0 +1,9 @@
+.terms-nav {
+  a {
+    @extend .text-uppercase, .font-weight-500, .p-1;
+
+    &.router-link-active {
+      @extend .text-primary
+    }
+  }
+}
