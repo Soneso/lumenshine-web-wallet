@@ -138,11 +138,14 @@
               :class="{ error: $v.password.$error }"
               :aria-describedby="`inputLivePasswordFeedback_${uuid}`"
               :state="!$v.password.$error"
+              :type="passwordIsHidden ? 'password' : 'text'"
               v-model="password"
-              type="password"
               placeholder="Your password"
               required
               @blur.native="$v.password.$touch()"/>
+
+            <password-assets :password="['passwordIsHidden', passwordIsHidden]" class="align-bottom" @passwordUpdated="updatePasswordState($event)"/>
+
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
                 <template v-if="!$v.password.required">Password is required!</template>
@@ -196,17 +199,17 @@
         <div v-else-if="result">
           <p><strong>Transaction result</strong></p>
           <p class="small">
-            <strong>Status: </strong><strong class="text-success">success</strong><br>
-            <strong>Currency: {{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : customAssetCode || assetCode }}</strong>
+            <strong>Status: </strong><strong class="text-success text-uppercase">success</strong><br>
           </p>
           <p class="small">
             <span v-if="currentAssetCodeBalances.length > 1"><strong>Issuer: </strong><small>{{ issuer }}</small><br></span>
-            <strong>Amount: {{ amount }} {{ currentAssetCode }}</strong>
+            <strong>Amount: {{ amount }} {{ currentAssetCode }}</strong><br>
+            <strong>Currency: {{ assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : customAssetCode || assetCode }}</strong>
           </p>
           <p class="small">
             <strong>Recipient: </strong>
             <span v-if="recipient.match(/\*/g)"><strong>{{ recipient }}</strong></span> <!-- federation address -->
-            <span v-else><br><small>{{ recipient }}</small></span>
+            <truncate-in-the-middle v-else :text="recipient" :size="42"/>
           </p>
           <p v-if="memo" class="small">
             <strong>Memo: {{ memo }}</strong><br>
@@ -214,7 +217,7 @@
           </p>
           <p class="small">
             <strong>Operation ID: {{ transaction ? transaction.operation.id : '' }}</strong><br>
-            <strong>Transaction fee: {{ transactionFee.format() }} <small>XLM</small></strong>
+            <strong>Transaction fee: {{ transactionFee.format() }} XLM</strong>
           </p>
           <div class="text-center py-4">
             <b-button-group>
@@ -237,14 +240,17 @@ import Amount from '@/util/Amount';
 
 import formMixin from '@/mixins/form';
 import balanceMixin from '@/mixins/balance';
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 import validators from '@/validators';
 
 import spinner from '@/components/ui/spinner';
+import truncateInTheMiddle from '@/components/ui/truncateInTheMiddle';
+import passwordAssets from '@/components/ui/passwordAssets';
 
 export default {
   name: 'SendPaymentForm',
-  components: { spinner },
-  mixins: [ formMixin, balanceMixin ],
+  components: { spinner, truncateInTheMiddle, passwordAssets },
+  mixins: [ formMixin, balanceMixin, updatePasswordVisibilityState ],
 
   props: {
     data: {
@@ -292,6 +298,7 @@ export default {
 
       issuer: '',
       password: '',
+      passwordIsHidden: true,
 
       sendItAll: false,
 

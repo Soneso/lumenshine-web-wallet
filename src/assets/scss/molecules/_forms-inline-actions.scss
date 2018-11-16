@@ -21,5 +21,10 @@
     &.align-left {
       left: 1rem
     }
+
+    &.align-bottom {
+      top: auto;
+      bottom: .3rem;
+    }
   }
 }
