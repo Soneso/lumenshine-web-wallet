@@ -1,5 +1,26 @@
+.modal-wrapper {
+  @extend %hidden-scroll;
+
+  .slide-left-enter-active,
+  .slide-left-leave-active {
+    @extend %hidden-scroll;
+    transition-duration: 0.3s;
+    transition-property: transform, height;
+    transition-timing-function: ease;
+  }
+
+  .slide-left-enter {
+    transform: translate(100%, 0);
+  }
+
+  .slide-left-leave-active {
+    transform: translate(-100%, 0);
+  }
+}
+
+
 .modal-header {
-  @extend .text-center;
+  @extend .pl-4, .text-center;
 
   .close {
     @extend .text-gray-400;

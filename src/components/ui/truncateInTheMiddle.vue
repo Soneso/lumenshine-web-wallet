@@ -1,5 +1,5 @@
 <template>
-  <div :title="text">{{ cutInTheMiddle }}</div>
+  <div :title="text" :class="{'d-inline': inline}">{{ cutInTheMiddle }}</div>
 </template>
 
 <script>
@@ -13,6 +13,10 @@ export default {
     size: {
       type: Number,
       required: true
+    },
+    inline: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

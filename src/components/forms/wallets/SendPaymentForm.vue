@@ -144,7 +144,7 @@
               required
               @blur.native="$v.password.$touch()"/>
 
-            <password-assets :password="['passwordIsHidden', passwordIsHidden]" class="align-bottom" @passwordUpdated="updatePasswordState($event)"/>
+            <password-assets :password="['passwordIsHidden', passwordIsHidden]" class="has-label" @passwordUpdated="updatePasswordState($event)"/>
 
             <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
               <template v-if="$v.password.$error" class="field__errors">
@@ -209,7 +209,10 @@
           <p class="small">
             <strong>Recipient: </strong>
             <span v-if="recipient.match(/\*/g)"><strong>{{ recipient }}</strong></span> <!-- federation address -->
-            <truncate-in-the-middle v-else :text="recipient" :size="42"/>
+            <strong v-else>
+              <truncate-in-the-middle :text="recipient" :size="40" inline/>
+              <copy-to-clipboard :text="recipient" color="text-info"/>
+            </strong>
           </p>
           <p v-if="memo" class="small">
             <strong>Memo: {{ memo }}</strong><br>
@@ -246,10 +249,11 @@ import validators from '@/validators';
 import spinner from '@/components/ui/spinner';
 import truncateInTheMiddle from '@/components/ui/truncateInTheMiddle';
 import passwordAssets from '@/components/ui/passwordAssets';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
   name: 'SendPaymentForm',
-  components: { spinner, truncateInTheMiddle, passwordAssets },
+  components: { spinner, truncateInTheMiddle, passwordAssets, copyToClipboard },
   mixins: [ formMixin, balanceMixin, updatePasswordVisibilityState ],
 
   props: {

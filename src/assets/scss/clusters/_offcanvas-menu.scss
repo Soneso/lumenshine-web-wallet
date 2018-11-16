@@ -95,6 +95,24 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
         background: rgba($white, .1)
       }
     }
+
+    > a {
+      &.router-link-active {
+        position: relative;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: calc(50% - .3rem);
+          left: -.3rem;
+          width: .6rem;
+          height: .6rem;
+          border-radius: 50%;
+          background: lighten($info, 25%);
+          box-shadow: 0 0 .3rem lighten($info, 25%)
+        }
+      }
+    }
   }
 
   .submenu {
@@ -149,22 +167,6 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     &:hover,
     &:focus {
       color: $white
-    }
-
-    &.router-link-active {
-      position: relative;
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: calc(50% - .3rem);
-        left: -.3rem;
-        width: .6rem;
-        height: .6rem;
-        border-radius: 50%;
-        background: lighten($info, 25%);
-        box-shadow: 0 0 .3rem lighten($info, 25%)
-      }
     }
   }
 
