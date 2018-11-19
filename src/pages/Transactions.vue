@@ -317,7 +317,18 @@ export default {
         switch (op.op_type) {
           case OperationType.CREATE_ACCOUNT:
             if (!this.filterPayments) return false;
-            if (!this.filterPaymentReceived) return false;
+            if (this.filterPaymentCurrency && this.filterPaymentCurrencyType !== null && this.filterPaymentCurrencyType !== 'XLM') return false;
+            if (!this.filterPaymentReceived && !this.filterPaymentSent) return true;
+            if (!this.filterPaymentReceived && op.op_details.account === this.selectedWallet) return false;
+            if (this.filterPaymentReceived) {
+              if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && parseFloat(op.op_details.starting_balance) < this.filterPaymentReceivedAmountFrom) return false;
+              if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && parseFloat(op.op_details.starting_balance) > this.filterPaymentReceivedAmountTo) return false;
+            }
+            if (!this.filterPaymentSent && op.op_details.funder === this.selectedWallet) return false;
+            if (this.filterPaymentSent) {
+              if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && parseFloat(op.op_details.starting_balance) < this.filterPaymentSentAmountFrom) return false;
+              if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && parseFloat(op.op_details.starting_balance) > this.filterPaymentSentAmountTo) return false;
+            }
             break;
           case OperationType.PAYMENT:
           case OperationType.PATH_PAYMENT:
@@ -325,14 +336,15 @@ export default {
             if (this.filterPaymentCurrency && this.filterPaymentCurrencyType !== null && this.getCurrency(op) !== this.filterPaymentCurrencyType) return false;
             if (!this.filterPaymentReceived && !this.filterPaymentSent) return true;
             if (!this.filterPaymentReceived && op.op_details.to === this.selectedWallet) return false;
+            const amount = parseFloat(op.op_type === OperationType.PATH_PAYMENT && op.op_details.from === this.selectedWallet ? op.op_details.source_amount : op.op_details.amount);
             if (this.filterPaymentReceived) {
-              if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && op.op_details.amount < this.filterPaymentReceivedAmountFrom) return false;
-              if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && op.op_details.amount > this.filterPaymentReceivedAmountTo) return false;
+              if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && amount < this.filterPaymentReceivedAmountFrom) return false;
+              if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && amount > this.filterPaymentReceivedAmountTo) return false;
             }
             if (!this.filterPaymentSent && op.op_details.from === this.selectedWallet) return false;
             if (this.filterPaymentSent) {
-              if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && op.op_details.amount < this.filterPaymentSentAmountFrom) return false;
-              if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && op.op_details.amount > this.filterPaymentSentAmountTo) return false;
+              if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && amount < this.filterPaymentSentAmountFrom) return false;
+              if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && amount > this.filterPaymentSentAmountTo) return false;
             }
             break;
           case OperationType.MANAGE_OFFER:
@@ -494,7 +506,7 @@ export default {
     getOperationName (item) {
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
-          return (item.op_details.funder === this.selectedWallet ? `<span class="text-danger">create account</span>` : `<span class="text-success">create account</span>`);
+          return 'create account';
         case OperationType.PAYMENT:
         case OperationType.PATH_PAYMENT:
           return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
