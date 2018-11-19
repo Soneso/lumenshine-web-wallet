@@ -2,12 +2,7 @@
   <b-row align-h="center" align-v="center" class="text-center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h3>Lumenshine</h3>
-        <p>Landing page</p>
-        <p v-if="!authToken">
-          <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" @click.prevent="$router.push({ name: 'Login' })">Login</b-button>
-          <b-button type="submit" variant="success" class="btn-rounded text-uppercase my-3" @click.prevent="$router.push({ name: 'Registration' })">Sign Up</b-button>
-        </p>
+        <strong>Landing page</strong>
       </b-card>
     </b-col>
   </b-row>
@@ -18,7 +13,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['authToken']),
+    ...mapGetters(['authToken'])
   }
 };
 </script>
