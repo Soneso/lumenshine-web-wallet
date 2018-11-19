@@ -6,6 +6,11 @@
       <pre v-else>{{ operationDetails }}</pre>
     </b-modal>
     <template v-if="item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
+    <template v-if="item.op_type === OperationType.CREATE_ACCOUNT">
+      <template v-if="item.op_details.funder === selectedWallet">
+        Account: <public-key :public-key="item.op_details.account"/><br>
+      </template>
+    </template>
 
     <template v-if="item.op_type === OperationType.PAYMENT">
       <template v-if="item.op_details.from === selectedWallet">

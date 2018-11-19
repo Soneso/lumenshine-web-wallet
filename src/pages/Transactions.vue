@@ -198,6 +198,7 @@
             <span v-else-if="field.key === 'details'" :key="field.key">
               <transaction-details :item="row.item['details']" :selected-wallet="selectedWallet"/>
             </span>
+            <strong v-else-if="['currency', 'amount'].includes(field.key)" :key="field.key" v-html="row.item[field.key]"/>
             <span v-else :key="field.key" v-html="row.item[field.key]"/>
           </template>
         </b-table>
@@ -493,7 +494,7 @@ export default {
     getOperationName (item) {
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
-          return 'create account';
+          return (item.op_details.funder === this.selectedWallet ? `<span class="text-danger">create account</span>` : `<span class="text-success">create account</span>`);
         case OperationType.PAYMENT:
         case OperationType.PATH_PAYMENT:
           return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
@@ -524,7 +525,7 @@ export default {
     getAmount (item) {
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
-          return new Amount(item.op_details.starting_balance).format();
+          return (item.op_details.funder === this.selectedWallet ? `<span class="text-danger">-${new Amount(item.op_details.starting_balance).format()}</span>` : `<span class="text-success">${new Amount(item.op_details.starting_balance).format()}</span>`);
         case OperationType.PAYMENT:
           return (item.op_details.from === this.selectedWallet ? `<span class="text-danger">-${new Amount(item.op_details.amount).format()}</span>` : `<span class="text-success">${new Amount(item.op_details.amount).format()}</span>`);
         case OperationType.PATH_PAYMENT:
