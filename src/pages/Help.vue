@@ -20,7 +20,7 @@
             <h5 class="font-weight-600 text-info">FAQ</h5>
             <div role="tablist">
               <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.q1 variant="outline-info" class="font-weight-500">Q 1</b-btn>
+                <b-btn v-b-toggle.q1 block href="#" variant="outline-info" class="font-weight-500">Q 1</b-btn>
               </b-card-header>
               <b-collapse id="q1" accordion="my-accordion" role="tabpanel">
                 <b-card-body>
@@ -33,7 +33,7 @@
                 </b-card-body>
               </b-collapse>
               <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.q2 variant="outline-info" class="font-weight-500">Q 2</b-btn>
+                <b-btn v-b-toggle.q2 block href="#" variant="outline-info" class="font-weight-500">Q 2</b-btn>
               </b-card-header>
               <b-collapse id="q2" accordion="my-accordion" role="tabpanel">
                 <b-card-body>
@@ -43,7 +43,7 @@
                 </b-card-body>
               </b-collapse>
               <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.q3 variant="outline-info" class="font-weight-500">Q 3</b-btn>
+                <b-btn v-b-toggle.q3 block href="#" variant="outline-info" class="font-weight-500">Q 3</b-btn>
               </b-card-header>
               <b-collapse id="q3" accordion="my-accordion" role="tabpanel">
                 <b-card-body>
@@ -126,7 +126,7 @@ export default {
         vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic
         synth nesciunt you probably haven't heard of them accusamus labore VHS.
       `
-    }
+    };
   }
 };
 </script>
