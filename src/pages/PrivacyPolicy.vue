@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col sm="10" md="8">
-      <b-card class="p-2 p-md-4 text-justify">
+      <b-card class="p-2 p-md-4">
         <b-row>
           <terms-nav/>
 

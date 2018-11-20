@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col sm="10" md="7">
-      <b-card class="p-4 text-justify">
+      <b-card class="p-4">
         <b-row>
           <b-col cols="12">
             <h3 class="form-headline text-uppercase pb-4">Help</h3>

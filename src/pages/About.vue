@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col sm="10" md="8">
-      <b-card class="p-4 text-justify">
+      <b-card class="p-4">
         <h3 class="form-headline text-uppercase pb-4">About</h3>
         <p class="lead pb-3">Lumenshine is a Wallet for the public Stellar network. Lumenshine is developed and maintained by Soneso GmbH, Germany. The Stellar network is hosted by numerous distributed nodes world-wide who are not under the control of any single entity or groups of entities. Lumenshine does not control the Stellar network.</p>
         <p class="pb-3">Lumenshine is an interface that can help you to interact with the public Stellar network. You can add multiple Stellar accounts, send and receive payments within the Stellar network, add different currencies from the Stellar network, view, search and filter the transaction history of your accounts, set inflation destination, add a short Stellar (federation) address and much more.</p>
