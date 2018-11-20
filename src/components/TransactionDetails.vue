@@ -140,11 +140,14 @@ export default {
       if (this.item.op_type !== OperationType.CREATE_PASSIVE_OFFER && this.item.op_type !== OperationType.MANAGE_OFFER) return '';
       if (this.item.op_details.offer_id) return this.item.op_details.offer_id;
       if (!this.transactionDataXDR) return '';
-      const parsedXDR = StellarSdk.xdr.TransactionResult.fromXDR(this.transactionDataXDR, 'base64');
-      const resultArray = parsedXDR._attributes.result._value;
-      if (resultArray.length !== 1) return ''; // TODO - handle the case when multiple operations are in one transaction
-      const operations = resultArray.map(r => ({ type: r._value._arm, offerId: r._value._value._value._attributes.offer._value._attributes.offerId.toString() }));
-      return operations[0].offerId;
+      try {
+        const parsedXDR = StellarSdk.xdr.TransactionResult.fromXDR(this.transactionDataXDR, 'base64').result();
+        const resultArray = parsedXDR._value;
+        const operations = resultArray.map(r => ({ type: r._value._arm, offerId: r._value._value._value._attributes.offer._value._attributes.offerId.toString() }));
+        return operations[this.item.op_application_order - 1].offerId;
+      } catch (err) {
+        return 'Error';
+      }
     },
 
     paymentPath () {
@@ -158,17 +161,14 @@ export default {
     },
   },
 
-  async created () {
+  created () {
     this.Amount = Amount;
     this.OperationType = OperationType;
-    if (this.item.op_type === OperationType.CREATE_PASSIVE_OFFER || this.item.op_type === OperationType.MANAGE_OFFER) {
-      if (!this.item.op_details.offer_id) {
-        const tx = await StellarAPI.transactions()
-          .transaction(this.item.tx_transaction_hash)
-          .call();
-        this.transactionDataXDR = tx.result_xdr;
-      }
-    }
+    this.loadTransactionData();
+  },
+
+  updated () {
+    this.loadTransactionData();
   },
 
   methods: {
@@ -177,6 +177,17 @@ export default {
       this.operationDetails = await StellarAPI.operations()
         .operation(this.item.op_id + '')
         .call();
+    },
+
+    async loadTransactionData () {
+      if (this.item.op_type === OperationType.CREATE_PASSIVE_OFFER || this.item.op_type === OperationType.MANAGE_OFFER) {
+        if (!this.offerId) {
+          const tx = await StellarAPI.transactions()
+            .transaction(this.item.tx_transaction_hash)
+            .call();
+          this.transactionDataXDR = tx.result_xdr;
+        }
+      }
     },
 
     tryDecodeData (data) {
