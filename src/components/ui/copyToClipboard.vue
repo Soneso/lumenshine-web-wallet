@@ -29,21 +29,25 @@ export default {
       required: false
     }
   },
+
   computed: {
     tooltipId () {
-      let id = `tooltip-${new Date().getTime()}`;
+      let id = `tooltip-${this._uid}`;
       if (this.tuneWith) {
         id += `-${this.tuneWith}`;
       }
       return id;
     }
   },
+
   mounted () {
     this.disableTooltips();
   },
+
   destroyed () {
     this.disableTooltips();
   },
+
   methods: {
     showTooltip (id) {
       this.disableTooltips();
