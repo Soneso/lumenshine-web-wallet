@@ -1,5 +1,5 @@
 <template>
-  <div id="offcanvas-menu">
+  <div id="offcanvas-menu" :class="[{'expanded': offCanvasMenuOpen, 'collapsed': !offCanvasMenuOpen}]">
     <slot/>
     <div v-if="offCanvasMenuOpen" class="offcanvas-close-btn" @click.stop="closeMenu">
       <i class="icon-arrow-left text-white"/>
