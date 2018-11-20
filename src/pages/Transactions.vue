@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col cols="4" xl="4" md="12" class="my-2">
+    <b-col cols="12" lg="4" class="my-2">
       <b-card class="p-4">
         <b-form-group label-for="transaction-wallet" label="Wallet">
           <spinner v-if="walletOptions.length === 0 || wallets.loading || selectedWallet === null" :size="26" class="mx-2" message="loading..." width="90"/>
@@ -190,7 +190,7 @@
         </template>
       </b-card>
     </b-col>
-    <b-col cols="8" xl="8" md="12" class="my-2">
+    <b-col cols="12" lg="8" class="my-2">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <div v-if="inProgress" style="min-height: 208px" class="mb-3 d-flex justify-content-center align-items-center">
