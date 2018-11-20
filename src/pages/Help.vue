@@ -17,49 +17,39 @@
             </a>
 
             <hr class="divider light">
-            <h5 class="font-weight-600 text-info">FAQ</h5>
-            <div role="tablist">
-              <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn v-b-toggle.q1 block href="#" variant="outline-info" class="font-weight-500">Q 1</b-btn>
-              </b-card-header>
-              <b-collapse id="q1" accordion="my-accordion" role="tabpanel">
-                <b-card-body>
-                  <p class="card-text">
-                    I start opened because <code>visible</code> is <code>true</code>
-                  </p>
-                  <p class="card-text">
-                    {{ text }}
-                  </p>
-                </b-card-body>
-              </b-collapse>
-              <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn v-b-toggle.q2 block href="#" variant="outline-info" class="font-weight-500">Q 2</b-btn>
-              </b-card-header>
-              <b-collapse id="q2" accordion="my-accordion" role="tabpanel">
-                <b-card-body>
-                  <p class="card-text">
-                    {{ text }}
-                  </p>
-                </b-card-body>
-              </b-collapse>
-              <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn v-b-toggle.q3 block href="#" variant="outline-info" class="font-weight-500">Q 3</b-btn>
-              </b-card-header>
-              <b-collapse id="q3" accordion="my-accordion" role="tabpanel">
-                <b-card-body>
-                  <p class="card-text">
-                    {{ text }}
-                  </p>
-                </b-card-body>
-              </b-collapse>
-            </div>
+            <h5 class="font-weight-600 text-info py-3">FAQ</h5>
+            <ul role="tablist">
+              <li>
+                <hr class="divider light">
+                <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">Q 1</a>
+                <b-collapse id="q1" accordion="accordion1" role="tabpanel">
+                  <p> I start opened because <code>visible</code> is <code>true</code></p>
+                  <p> {{ text }}</p>
+                </b-collapse>
+              </li>
+              <li>
+                <hr class="divider light">
+                <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">Q 2</a>
+                <b-collapse id="q2" accordion="accordion1" role="tabpanel">
+                  <p> {{ text }} </p>
+                </b-collapse>
+              </li>
+              <li>
+                <hr class="divider light">
+                <a v-b-toggle.q3 href="#" class="d-block font-weight-500 mt-1 text-info">Q 3</a>
+                <b-collapse id="q3" accordion="accordion1" role="tabpanel">
+                  <p> {{ text }} </p>
+                </b-collapse>
+              </li>
+            </ul>
 
             <hr class="divider light">
-            <h5 class="font-weight-600 text-info">Topics</h5>
+            <h5 class="font-weight-600 text-info py-3">Topics</h5>
 
             <ul>
               <li>
-                <ul class="inline-list pt-4">
+                <hr class="divider light">
+                <ul v-b-toggle.basics class="inline-list py-3">
                   <li class="pr-3">
                     <i class="icon-bag large text-info"/>
                   </li>
@@ -68,9 +58,13 @@
                     <span>Guide to getting started with Lumenshine</span>
                   </li>
                 </ul>
+                <b-collapse id="basics" accordion="accordion2" role="tabpanel">
+                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                </b-collapse>
               </li>
               <li>
-                <ul class="inline-list pt-4">
+                <hr class="divider light">
+                <ul v-b-toggle.security class="inline-list py-3">
                   <li class="pr-3">
                     <i class="icon-security large text-info"/>
                   </li>
@@ -79,9 +73,13 @@
                     <span>Learn how to keep your Wallets safe</span>
                   </li>
                 </ul>
+                <b-collapse id="security" accordion="accordion2" role="tabpanel">
+                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                </b-collapse>
               </li>
               <li>
-                <ul class="inline-list pt-4">
+                <hr class="divider light">
+                <ul v-b-toggle.wallets class="inline-list py-3">
                   <li class="pr-3">
                     <i class="icon-wallet large text-info"/>
                   </li>
@@ -90,9 +88,13 @@
                     <span>Learn how to master all Wallet features</span>
                   </li>
                 </ul>
+                <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
+                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                </b-collapse>
               </li>
               <li>
-                <ul class="inline-list pt-4">
+                <hr class="divider light">
+                <ul v-b-toggle.stellar class="inline-list py-3">
                   <li class="pr-3">
                     <i class="icon-learn-ico large text-info"/>
                   </li>
@@ -101,6 +103,9 @@
                     <span>Learn more about Stellar</span>
                   </li>
                 </ul>
+                <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
+                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                </b-collapse>
               </li>
             </ul>
           </b-col>
