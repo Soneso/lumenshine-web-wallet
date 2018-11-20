@@ -3,14 +3,15 @@
     Operation ID: <a href="#" @click.prevent="openModal">{{ item.op_id }}</a><br>
     <b-modal v-model="modalVisible" hide-footer title="Operation details" size="md">
       <spinner v-if="operationDetails === null" message="Loading operation..." width="200"/>
-      <pre v-else style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">
-        {{ operationDetails }}
-      </pre>
+      <pre v-else style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">{{ operationDetails }}</pre>
     </b-modal>
     <template v-if="item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
     <template v-if="item.op_type === OperationType.CREATE_ACCOUNT">
       <template v-if="item.op_details.funder === selectedWallet">
-        Account: <public-key :public-key="item.op_details.account"/><br>
+        Created account: <public-key :public-key="item.op_details.account"/><br>
+      </template>
+      <template v-else>
+        Account created by: <public-key :public-key="item.op_details.funder"/><br>
       </template>
     </template>
 

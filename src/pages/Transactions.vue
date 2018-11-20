@@ -514,7 +514,7 @@ export default {
     getOperationName (item) {
       switch (item.op_type) {
         case OperationType.CREATE_ACCOUNT:
-          return 'create account';
+          return item.op_details.funder === this.selectedWallet ? 'payment sent' : 'payment received';
         case OperationType.PAYMENT:
         case OperationType.PATH_PAYMENT:
           return item.op_details.from === this.selectedWallet ? 'payment sent' : 'payment received';
