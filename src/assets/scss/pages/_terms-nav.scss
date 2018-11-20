@@ -1,4 +1,10 @@
 .terms-nav {
+  li {
+    @include media-breakpoint-only(xs) {
+      margin-left: 5px !important;
+    }
+  }
+
   a {
     @extend .text-uppercase, .font-weight-500, .p-1;
 

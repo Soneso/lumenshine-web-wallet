@@ -53,11 +53,11 @@
     color: $gray-500;
 
     .narrow & {
-      width: 13rem;
+      width: 12rem;
     }
 
     .wide & {
-      width: calc(100% - 17rem);
+      width: calc(100% - 18rem);
     }
 
     .currency-ticker {
