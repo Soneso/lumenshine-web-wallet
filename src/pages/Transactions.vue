@@ -46,9 +46,9 @@
         <template v-if="advancedFiltersOpened">
           <b-form-checkbox v-model="filterPayments" :indeterminate="filterPaymentIndeterminate" class="my-2">Payments</b-form-checkbox>
 
-          <b-row v-if="filterPayments">
+          <b-row v-if="filterPayments" class="mx-1">
             <b-col>
-              <b-form-checkbox v-model="filterPaymentReceived">Received</b-form-checkbox>
+              <b-form-checkbox v-model="filterPaymentReceived" class="my-2">Received</b-form-checkbox>
             </b-col>
             <b-col v-if="filterPaymentReceived">
               <b-form-group label-for="payment-received-from" label="Amount from">
@@ -86,9 +86,9 @@
             </b-col>
           </b-row>
 
-          <b-row v-if="filterPayments">
+          <b-row v-if="filterPayments" class="mx-1">
             <b-col>
-              <b-form-checkbox v-model="filterPaymentSent">Sent</b-form-checkbox>
+              <b-form-checkbox v-model="filterPaymentSent" class="my-2">Sent</b-form-checkbox>
             </b-col>
             <b-col v-if="filterPaymentSent">
               <b-form-group label-for="payment-sent-from" label="Amount from">
@@ -126,8 +126,8 @@
             </b-col>
           </b-row>
 
-          <b-row v-if="filterPayments">
-            <b-col><b-form-checkbox v-model="filterPaymentCurrency">Currency</b-form-checkbox></b-col>
+          <b-row v-if="filterPayments" class="mx-1">
+            <b-col><b-form-checkbox v-model="filterPaymentCurrency" class="my-2">Currency</b-form-checkbox></b-col>
             <b-col v-if="filterPaymentCurrency">
               <b-form-group label-for="payment-currency-from" label="Currency">
                 <b-form-select id="payment-currency-from" v-model="filterPaymentCurrencyType" :options="currencyOptions"/>
@@ -173,15 +173,19 @@
           <hr class="separator">
           <b-form-checkbox v-model="filterOther" :indeterminate="filterOtherTypes.length > 0 && filterOtherTypes.length < 5" class="my-2">Other</b-form-checkbox>
 
-          <b-form-group v-if="filterOther">
-            <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
-              <b-form-checkbox value="SET_OPTIONS" class="my-2">Set options</b-form-checkbox>
-              <b-form-checkbox value="TRUST" class="my-2">Trust</b-form-checkbox>
-              <b-form-checkbox value="ACCOUNT_MERGE" class="my-2">Account merge</b-form-checkbox>
-              <b-form-checkbox value="MANAGE_DATA" class="my-2">Manage data</b-form-checkbox>
-              <b-form-checkbox value="BUMP_SEQUENCE" class="my-2">Bump sequence</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group>
+          <b-row v-if="filterOther" class="mx-1">
+            <b-col>
+              <b-form-group>
+                <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
+                  <b-form-checkbox value="SET_OPTIONS" class="my-2">Set options</b-form-checkbox>
+                  <b-form-checkbox value="TRUST" class="my-2">Trust</b-form-checkbox>
+                  <b-form-checkbox value="ACCOUNT_MERGE" class="my-2">Account merge</b-form-checkbox>
+                  <b-form-checkbox value="MANAGE_DATA" class="my-2">Manage data</b-form-checkbox>
+                  <b-form-checkbox value="BUMP_SEQUENCE" class="my-2">Bump sequence</b-form-checkbox>
+                </b-form-checkbox-group>
+              </b-form-group>
+            </b-col>
+          </b-row>
         </template>
       </b-card>
     </b-col>
