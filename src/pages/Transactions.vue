@@ -3,7 +3,8 @@
     <b-col cols="4" xl="4" md="12" class="my-2">
       <b-card class="p-4">
         <b-form-group label-for="transaction-wallet" label="Wallet">
-          <b-form-select id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
+          <spinner v-if="walletOptions.length === 0 || wallets.loading || selectedWallet === null" :size="26" class="mx-2" message="loading..." width="90"/>
+          <b-form-select v-else id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
         </b-form-group>
 
         <b-row>
