@@ -1,6 +1,33 @@
+
+body.help {
+
+}
+$topics-icon-space: 4rem;
+
 #help-faq,
 #help-topics {
   [role='button'] {
     cursor: pointer;
+  }
+}
+#help-topics {
+  > li {
+    > ul {
+      @extend .d-flex;
+      cursor: pointer;
+
+      li {
+        &:first-child {
+          width: $topics-icon-space;
+        }
+        &:last-child {
+          width: calc(100% - #{$topics-icon-space});
+        }
+      }
+    }
+
+    [role="tabpanel"] {
+      padding-left: $topics-icon-space;
+    }
   }
 }
