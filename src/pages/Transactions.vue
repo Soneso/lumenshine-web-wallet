@@ -192,7 +192,7 @@
           <br><spinner align="center"/><br>
         </div>
         <br>
-        <b-table v-if="selectedWallet && tableItems.length > 0" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare">
+        <b-table v-if="selectedWallet && tableItems.length > 0" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="tableItems" :fields="fields" :sort-compare="sortCompare" class="transaction-table">
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">

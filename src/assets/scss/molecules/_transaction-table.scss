@@ -1,0 +1,18 @@
+.transaction-table {
+  &.b-table > thead > tr > th.sorting::before,
+  &.b-table > tfoot > tr > th.sorting::before {
+    left: 0.80em;
+    right: auto;
+  }
+  &.b-table > thead > tr > th.sorting::after,
+  &.b-table > tfoot > tr > th.sorting::after {
+    left: 0.25em;
+    right: auto;
+  }
+
+  &.b-table > thead > tr > th.sorting,
+  &.b-table > tfoot > tr > th.sorting {
+    padding-right: 0;
+    padding-right: 1.6em;
+  }
+}
