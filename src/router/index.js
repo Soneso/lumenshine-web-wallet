@@ -41,7 +41,23 @@ const router = new Router({
       path: '/guidelines',
       name: 'WalletGuidelines',
       component: require('@/pages/WalletGuidelines').default
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: require('@/pages/About').default
+    },
+    {
+      path: '/impressum',
+      name: 'Impressum',
+      component: require('@/pages/Impressum').default
+    },
+    {
+      path: '/help',
+      name: 'Help',
+      component: require('@/pages/Help').default
     }
+
   ]
 });
 
