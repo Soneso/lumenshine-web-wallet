@@ -1,0 +1,7 @@
+.anonymous-page {
+  .card {
+    p {
+      @extend .text-justify;
+    }
+  }
+}

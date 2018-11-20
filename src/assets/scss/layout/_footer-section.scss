@@ -17,7 +17,7 @@
   @extend .py-4;
 
   a {
-    @extend .p-2;
+    @extend .p-2, .mb-1, .d-inline-block;
     background: rgba($body-bg, .75);
     border-radius: $border-radius-lg;
   }
