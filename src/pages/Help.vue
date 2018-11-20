@@ -1,6 +1,6 @@
 <template>
   <b-row align-h="center" align-v="center">
-    <b-col sm="10" md="8">
+    <b-col sm="10" md="7">
       <b-card class="p-4 text-justify">
         <b-row>
           <b-col cols="12">
@@ -18,27 +18,27 @@
 
             <hr class="divider light">
             <h5 class="font-weight-600 text-info py-3">FAQ</h5>
-            <ul role="tablist">
+            <ul id="help-faq" role="tablist">
               <li>
                 <hr class="divider light">
                 <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">Q 1</a>
                 <b-collapse id="q1" accordion="accordion1" role="tabpanel">
-                  <p> I start opened because <code>visible</code> is <code>true</code></p>
-                  <p> {{ text }}</p>
+                  <p class="mt-3"> I start opened because <code>visible</code> is <code>true</code></p>
+                  <p class="mb-0"> {{ text }}</p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
                 <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">Q 2</a>
                 <b-collapse id="q2" accordion="accordion1" role="tabpanel">
-                  <p> {{ text }} </p>
+                  <p class="mt-3 mb-0"> {{ text }} </p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
                 <a v-b-toggle.q3 href="#" class="d-block font-weight-500 mt-1 text-info">Q 3</a>
                 <b-collapse id="q3" accordion="accordion1" role="tabpanel">
-                  <p> {{ text }} </p>
+                  <p class="mt-3 mb-0"> {{ text }} </p>
                 </b-collapse>
               </li>
             </ul>
@@ -46,7 +46,7 @@
             <hr class="divider light">
             <h5 class="font-weight-600 text-info py-3">Topics</h5>
 
-            <ul>
+            <ul id="help-topics">
               <li>
                 <hr class="divider light">
                 <ul v-b-toggle.basics class="inline-list py-3">
@@ -59,7 +59,7 @@
                   </li>
                 </ul>
                 <b-collapse id="basics" accordion="accordion2" role="tabpanel">
-                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
@@ -74,7 +74,7 @@
                   </li>
                 </ul>
                 <b-collapse id="security" accordion="accordion2" role="tabpanel">
-                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
@@ -89,7 +89,7 @@
                   </li>
                 </ul>
                 <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
-                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
@@ -104,7 +104,7 @@
                   </li>
                 </ul>
                 <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
-                  <p class="pt-3 lead" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</p>
+                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
             </ul>
