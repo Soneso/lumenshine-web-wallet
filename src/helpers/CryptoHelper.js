@@ -106,10 +106,9 @@ const cryptoHelper = {
       mnemonic = await workerCaller('generateMnemonic');
     }
 
-    const [ publicKey0, publicKey188, secretSeed, kdfPass, encryptedWordlist, mnemonicIndices ] =
+    const [ publicKey0, secretSeed, kdfPass, encryptedWordlist, mnemonicIndices ] =
       await Promise.all([
         workerCaller('getPublicKey', mnemonic, 0),
-        workerCaller('getPublicKey', mnemonic, 188),
         workerCaller('getSecretSeed', mnemonic, 0),
         workerCaller('derivePassword', password, kdfSalt),
         workerCaller('cryptWordlist', wordlistMasterKey, wordlistIV, wordlist),
@@ -134,7 +133,6 @@ const cryptoHelper = {
       encrypted_wordlist: encryptedWordlist,
       encryption_wordlist_iv: wordlistIV,
       public_key: publicKey0,
-      public_key188: publicKey188, // TODO: remove
 
       secretSeed,
       mnemonic,

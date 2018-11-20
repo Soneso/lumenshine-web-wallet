@@ -184,7 +184,6 @@ export default {
         wordlist: securityData.encrypted_wordlist,
         wordlist_iv: securityData.encryption_wordlist_iv,
         public_key_0: securityData.public_key,
-        public_key_188: securityData.public_key188, // TODO remove
 
         tfa_code: twoFactorCode,
       });
@@ -227,7 +226,6 @@ export default {
         wordlist_master_iv: securityData.wordlist_master_iv,
         wordlist_master_key: securityData.wordlist_master_key,
 
-        public_key_188: securityData.public_key188, // TODO remove
         sep10_transaction: signedTransaction,
       });
 

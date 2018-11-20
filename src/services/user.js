@@ -124,7 +124,7 @@ export default {
   },
 
   async getNewTfaSecret (challenge, isPartialAuth = true) {
-    const response = await apiBase.post(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/new_2fa_secret`, { sep10_transaction: challenge, public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase() }); // TODO remove
+    const response = await apiBase.post(`/portal/user/${isPartialAuth ? 'auth' : 'dashboard'}/new_2fa_secret`, { sep10_transaction: challenge }); // TODO remove
     return response;
   },
 

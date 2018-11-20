@@ -141,8 +141,6 @@ export default {
         wordlist_master_key: encryptedWordlistMasterKey,
         wordlist_master_iv: wordlistMasterKeyIV,
         sep10_transaction: signedTransaction,
-
-        public_key_188: 'GAMJCCE5HESTOMPDRTFS332QXZQRDPTGHHGLTNVHB2IBI612' + Math.random().toString(36).substring(2, 10).toUpperCase(), // TODO remove
       };
 
       await this.changePassword(params);
