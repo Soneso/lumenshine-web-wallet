@@ -11,8 +11,8 @@
             <img src="/static/app-screenshot.png">
           </b-col>
           <b-col cols="12" class="pt-5 text-center">
-            <b-button size="lg" variant="outline-success" class="btn-rounded text-uppercase mx-3">sign up</b-button>
-            <b-button size="lg" variant="outline-info" class="btn-rounded text-uppercase mx-3">log in</b-button>
+            <b-button href="/register" size="lg" variant="outline-success" class="btn-rounded text-uppercase mx-3">sign up</b-button>
+            <b-button href="/login" size="lg" variant="outline-info" class="btn-rounded text-uppercase mx-3">log in</b-button>
           </b-col>
           <b-col cols="12" class="pt-5 mt-5">
             <h2 class="text-info">All assets, peer-to-peer</h2>
