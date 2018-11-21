@@ -1,0 +1,67 @@
+$border-style: 1px solid $gray-100;
+
+.transactions-history-table {
+  font-size: .85rem;
+
+  thead th {
+    background-color: $gray-300;
+    color: $white;
+    border-top: 0;
+    border-bottom-width: 0 !important; // reseting a funky glitch
+    border-bottom: $border-style;
+    outline: none;
+
+    &:first-child {
+      border-top-left-radius: .75rem;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid $gray-200;
+    }
+  }
+
+  td {
+    border-top: $border-style;
+
+    &:not(:last-child) {
+      border-right: $border-style;
+    }
+  }
+
+  // sorting arrows overrides:
+  table.b-table > thead > tr > th,
+  table.b-table > tfoot > tr > th {
+    // switch default arrow direction
+    &.sorting:before {
+      content: '\2193'
+    }
+
+    &.sorting:after {
+      content: '\2191'
+    }
+
+    // reposition
+    &.sorting:before,
+    &.sorting:after {
+      top: .5rem;
+      right: .5rem;
+      padding: 0;
+      display: none;
+      font-size: 1.1rem;
+    }
+
+    // show active arrow only
+    &.sorting_asc:after,
+    &.sorting_desc:before,
+    &.sorting_asc:after,
+    &.sorting_desc:before {
+      display: block
+    }
+  }
+
+  // control over details column width
+  .details-column {
+    @extend .d-inline-block;
+    width: 23rem;
+  }
+}

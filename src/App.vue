@@ -54,6 +54,7 @@ export default {
     isSingleCard () {
       const nakedRoute = this.$route.path.split('/')[1];
       const routes = ['',
+        'contacts',
         'settings',
         'change-password',
         'change-tfa',
