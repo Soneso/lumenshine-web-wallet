@@ -9,7 +9,7 @@
       <span>
         {{ secretSeed || '***********************' }}
         <template v-if="secretSeed">
-          <copy-to-clipboard :text="secretSeed" color="text-info"/>
+          <public-key :text="secretSeed" color="text-info"/>
         </template>
       </span>
     </div>
@@ -56,12 +56,12 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import spinner from '@/components/ui/spinner';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: { passwordAssets, spinner, copyToClipboard },
+  components: { passwordAssets, spinner, publicKey },
   mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     loading: {

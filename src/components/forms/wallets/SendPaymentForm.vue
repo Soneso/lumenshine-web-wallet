@@ -210,8 +210,7 @@
             <strong>Recipient: </strong>
             <span v-if="recipient.match(/\*/g)"><strong>{{ recipient }}</strong></span> <!-- federation address -->
             <strong v-else>
-              <truncate-in-the-middle :text="recipient" :size="40" inline/>
-              <copy-to-clipboard :text="recipient" color="text-info"/>
+              <public-key :text="recipient" color="text-info" size="40"/>
             </strong>
           </p>
           <p v-if="memo" class="small">
@@ -230,7 +229,6 @@
             </b-button-group>
           </div>
         </div>
-
       </b-col>
     </b-row>
   </form>
@@ -249,11 +247,11 @@ import validators from '@/validators';
 import spinner from '@/components/ui/spinner';
 import truncateInTheMiddle from '@/components/ui/truncateInTheMiddle';
 import passwordAssets from '@/components/ui/passwordAssets';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 
 export default {
   name: 'SendPaymentForm',
-  components: { spinner, truncateInTheMiddle, passwordAssets, copyToClipboard },
+  components: { spinner, truncateInTheMiddle, passwordAssets, publicKey },
   mixins: [ formMixin, balanceMixin, updatePasswordVisibilityState ],
 
   props: {

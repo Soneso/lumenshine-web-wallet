@@ -1,5 +1,5 @@
 export default {
   offCanvasMenuOpen: state => state.offCanvasMenuOpen,
-  mq: state => state.isMobile,
+  isMobile: state => window.matchMedia('only screen and (max-width: 575px)').matches,
   viewportWidth: state => state.viewportWidth
 };

@@ -76,9 +76,7 @@
         <div v-else class="font-weight-600">Stellar test net public key</div>
         <br>
         <div class="break-word with-hyphens">
-          {{ data.public_key }}
-          <copy-to-clipboard :text="data.public_key"/>
-          <small v-if="accountIDCopied" class="text-info">Copied to clipboard<br></small>
+          <public-key :text="data.public_key"/>
         </div>
 
       </div>
@@ -128,7 +126,7 @@ import WalletCardDetails from '@/components/cards/WalletCardDetails';
 import WalletCardBalances from '@/components/cards/WalletCardBalances';
 
 import spinner from '@/components/ui/spinner';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 
 export default {
   components: {
@@ -138,7 +136,7 @@ export default {
     WalletCardDetails,
     WalletCardBalances,
     spinner,
-    copyToClipboard
+    publicKey
   },
   mixins: [ balanceMixin ],
   props: {

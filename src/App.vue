@@ -105,7 +105,6 @@ export default {
       deep: true,
     });
 
-    this.mutateMq();
     window.addEventListener('resize', () => {
       const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
       this.mutateViewportWidth(newScreenWidth);

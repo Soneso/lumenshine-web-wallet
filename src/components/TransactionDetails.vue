@@ -100,19 +100,17 @@
 <script>
 import Amount from '@/util/Amount';
 import OperationType from '@/util/OperationType';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 
 import StellarSdk from 'stellar-sdk';
 
 import config from '@/config';
 import spinner from '@/components/ui/spinner';
 
-import PublicKey from '@/components/ui/PublicKey';
-
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { copyToClipboard, spinner, PublicKey },
+  components: { publicKey, spinner },
 
   props: {
     item: {

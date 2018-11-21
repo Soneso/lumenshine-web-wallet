@@ -65,7 +65,7 @@
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
-        <div class="submenu">
+        <div v-if="!isMobile" class="submenu">
           <ul>
             <li>
               <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
@@ -97,15 +97,44 @@
       </router-link>
     </li>
 
+    <li v-if="isMobile" style="padding-left: 1.8rem; opacity: .75;">
+      <ul>
+        <li>
+          <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
+             @click.stop.prevent="switchToChangePasswordView">
+            <div>Change Password</div>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
+             @click.stop.prevent="switchToChange2faView">
+            <div>Change 2FA Secret</div>
+          </a>
+        </li>
+
+        <li>
+          <router-link to="/backup-mnemonic">
+            <div>Backup Secret/Mnemonic</div>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link to="/personal-data">
+            <div>Personal data</div>
+          </router-link>
+        </li>
+      </ul>
+    </li>
     <li>
       <div class="separator"/>
     </li>
 
     <li>
-      <a href="#">
+      <router-link to="/help">
         <i class="icon-help"/>
         <div :style="toggleText">Help</div>
-      </a>
+      </router-link>
     </li>
 
     <li>
@@ -130,7 +159,7 @@ export default {
   mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
-    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken']),
+    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken', 'isMobile']),
     toggleText () {
       return {
         opacity: this.offCanvasMenuOpen ? 1 : 0

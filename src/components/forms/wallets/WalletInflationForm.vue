@@ -9,8 +9,7 @@
       <small>Hint: Vote or earn free lumens by setting the inflation destination</small>
     </div>
     <div v-else class="break-word with-hyphens">
-      {{ data.stellar_data.inflation_destination }}
-      <copy-to-clipboard :text="data.stellar_data.inflation_destination" color="text-info"/>
+      <public-key :text="data.stellar_data.inflation_destination" color="text-info"/>
       <br>
     </div>
 
@@ -114,15 +113,15 @@
         <b-list-group class="flat-card">
           <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
             <b-row align-h="between">
-              <b-col cols="10">
+              <b-col cols="9" sm="10">
                 <h6>{{ destination.name }}</h6>
                 <small class="d-block">
                   {{ destination.short_description }}
                   <!--<a href="#" class="pull-right" @click.prevent>details</a>-->
                 </small>
-                <small class="d-block break-word with-hyphens">Public key: {{ destination.issuer_public_key }}</small>
+                <small class="d-block">Public key: <public-key :text="destination.issuer_public_key" :chars="isMobile ? 16 : 22" color="text-secondary"/></small>
               </b-col>
-              <b-col cols="2" class="text-right">
+              <b-col cols="3" sm="2" class="text-right">
                 <input
                   :id="`currencyCheckbox${destination.issuer_public_key}`"
                   :checked="destination.issuer_public_key === data.stellar_data.inflation_destination"
@@ -205,17 +204,17 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
-
+import { mapGetters } from 'vuex';
 import formMixin from '@/mixins/form';
 import validators from '@/validators';
 import spinner from '@/components/ui/spinner';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
   name: 'WalletInflationForm',
-  components: { passwordAssets, spinner, copyToClipboard },
+  components: { passwordAssets, spinner, publicKey },
   mixins: [ formMixin, updatePasswordVisibilityState ],
 
   props: {
@@ -255,6 +254,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['isMobile']),
     signers () {
       if (!this.data.stellar_data) return [];
       const stellarData = this.data.stellar_data;

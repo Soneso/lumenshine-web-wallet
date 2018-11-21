@@ -33,8 +33,7 @@
         <template v-if="nextPublicKey !== null">
           <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
           <b-row align-h="center">
-            <span class="col-10 font-weight-600 d-inline-block break-word with-hyphens">{{ nextPublicKey }}</span>
-            <copy-to-clipboard :text="nextPublicKey"/>
+            <public-key :text="nextPublicKey"/>
           </b-row>
         </template>
         <spinner v-else class="my-3" inline/>
@@ -59,12 +58,12 @@ import formMixin from '@/mixins/form';
 
 import { required, maxLength } from 'vuelidate/lib/validators';
 
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 import spinner from '@/components/ui/spinner';
 
 export default {
   name: 'AddWalletForm',
-  components: { copyToClipboard, spinner },
+  components: { publicKey, spinner },
   mixins: [ formMixin ],
 
   props: {

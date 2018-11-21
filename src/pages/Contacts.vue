@@ -1,6 +1,6 @@
 <template>
   <b-row align-h="center" align-v="center">
-    <b-col cols="11" sm="9" md="7" lg="6" xl="5">
+    <b-col cols="12" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
 
         <h4 class="page-headline text-uppercase">Contacts <a href="#" class="h3 float-right" @click.prevent="addModalVisible = true">+</a></h4>
@@ -20,7 +20,9 @@
         <b-row v-for="contact in filteredContacts" :key="contact.id">
           <b-col>
             <h6>{{ contact.contact_name }}</h6>
-            <p>{{ contact.stellar_address || contact.public_key }}</p>
+            <p>
+              <public-key :text="contact.stellar_address || contact.public_key" :chars="isMobile ? 20 : 30"/>
+            </p>
             <b-row>
               <b-col class="text-right">
                 <b-button variant="outline-info" size="sm" class="btn-rounded" @click="() => onEditClick(contact.id)">Edit</b-button>
@@ -28,7 +30,7 @@
               </b-col>
             </b-row>
 
-            <hr class="divider">
+            <hr class="divider light">
           </b-col>
         </b-row>
         <p v-if="filteredContacts.length === 0">No results</p>
@@ -78,10 +80,11 @@ import { mapActions, mapGetters } from 'vuex';
 import EditContactForm from '@/components/forms/contacts/EditContactForm';
 import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
 import validators from '@/validators';
+import publicKey from '@/components/ui/publicKey';
 
 export default {
   name: 'Contacts',
-  components: { EditContactForm, SendPaymentForm },
+  components: { EditContactForm, SendPaymentForm, publicKey },
   data () {
     return {
       addModalVisible: false,
@@ -95,7 +98,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['contacts', 'addContactStatus', 'editContactStatus', 'removeContactStatus', 'wallets', 'exchanges', 'sendPaymentStatus', 'decryptedWallet', 'finishedTransactions']),
+    ...mapGetters([
+      'contacts',
+      'addContactStatus',
+      'editContactStatus',
+      'removeContactStatus',
+      'wallets',
+      'exchanges',
+      'sendPaymentStatus',
+      'decryptedWallet',
+      'finishedTransactions',
+      'isMobile'
+    ]),
 
     filteredContacts () {
       if (this.searchField === '') {

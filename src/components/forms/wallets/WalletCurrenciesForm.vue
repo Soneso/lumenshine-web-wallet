@@ -22,9 +22,7 @@
           <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="text-danger small pull-right" @click.prevent="openRemoveCurrency(balance)">remove</a>
         </h6>
         <small v-if="balance.issuer && !removeFieldBalance" class="break-word with-hyphens">
-          Issuer public key:
-          <span>{{ balance.issuer }}</span>
-          <copy-to-clipboard :text="balance.issuer" :tune-with="balance.type" color="text-secondary"/>
+          Issuer public key: <public-key :text="balance.issuer" :tune-with="balance.type" color="text-secondary"/>
         </small>
       </b-list-group-item>
     </b-list-group>
@@ -246,9 +244,7 @@
             <h6>{{ currency.name }} ({{ currency.asset_code }})</h6>
             <span v-if="currency.needsAuth" class="text-danger">needs issuer athorization</span>
             <small class="break-word with-hyphens">
-              Issuer public key:
-              {{ currency.issuer_public_key }}
-              <copy-to-clipboard :text="currency.issuer_public_key" :tune-with="currency.asset_code + currency.issuer_public_key" color="text-secondary"/>
+              Issuer public key: <public-key :text="currency.issuer_public_key" :tune-with="currency.asset_code + currency.issuer_public_key" :chars="isMobile ? 22 : 36" color="text-secondary"/>
             </small>
             <div v-if="openedKnownCurrency === null" class="pt-3">
               <a href="#" @click.prevent="onOpenKnownCurrency(currency)">add</a>
@@ -263,6 +259,7 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapGetters } from 'vuex';
 
 import Amount from '@/util/Amount';
 
@@ -270,12 +267,12 @@ import validators from '@/validators';
 
 import formMixin from '@/mixins/form';
 import spinner from '@/components/ui/spinner';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 import passwordAssets from '@/components/ui/passwordAssets';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
 export default {
-  components: { passwordAssets, spinner, copyToClipboard },
+  components: { passwordAssets, spinner, publicKey },
   mixins: [ formMixin, updatePasswordVisibilityState ],
 
   props: {
@@ -316,6 +313,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['isMobile']),
     balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
