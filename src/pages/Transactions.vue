@@ -1,15 +1,19 @@
 <template>
   <b-row>
-    <b-col cols="12" lg="4" class="my-2">
-      <b-card class="p-4">
-        <b-form-group label-for="transaction-wallet" label="Wallet">
-          <spinner v-if="walletOptions.length === 0 || wallets.loading || selectedWallet === null" :size="26" class="mx-2" message="loading..." width="90"/>
-          <b-form-select v-else id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
-        </b-form-group>
-
+    <b-col cols="12" md="5" lg="4" xl="3" class="my-2">
+      <b-card class="p-2 p-lg-3">
+        <!-- Basic filters-->
         <b-row>
           <b-col>
-            <b-form-group label-for="transaction-date-start" class="mx-2">
+            <b-form-group label-for="transaction-wallet" label="Wallet">
+              <spinner v-if="walletOptions.length === 0 || wallets.loading || selectedWallet === null" :size="26" class="mx-2" message="loading..." width="90"/>
+              <b-form-select v-else id="transaction-wallet" v-model="selectedWallet" :options="walletOptions"/>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row class="small-gutter">
+          <b-col>
+            <b-form-group label-for="transaction-date-start">
               <div class="datepicker-wrapper p-0">
                 <datepicker id="transaction-date-start" v-model="dateFrom" :disabled-dates="dateStartDisabled" format="yyyy.MM.dd" placeholder="Date from" class="py-1"/>
                 <i class="icon-calendar"/>
@@ -18,7 +22,7 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group label-for="transaction-date-end" class="mx-2">
+            <b-form-group label-for="transaction-date-end">
               <div class="datepicker-wrapper p-0">
                 <datepicker id="transaction-date-end" v-model="dateTo" :disabled-dates="dateEndDisabled" format="yyyy.MM.dd" placeholder="Date to" class="py-1"/>
                 <i class="icon-calendar"/>
@@ -27,7 +31,6 @@
             </b-form-group>
           </b-col>
         </b-row>
-
         <b-row>
           <b-col>
             <b-form-group label-for="transaction-memo">
@@ -38,17 +41,18 @@
                 placeholder="MEMO"/>
             </b-form-group>
           </b-col>
-          <b-col class="text-right text-uppercase">
-            <a v-if="!advancedFiltersOpened" href="#" @click.prevent="advancedFiltersOpened = true">More filters</a>
-            <a v-else href="#" @click.prevent="advancedFiltersOpened = false">Less filters</a>
+          <b-col class="text-right text-uppercase pt-3 pr-3 pr-sm-4">
+            <a v-if="!advancedFiltersOpened" href="#" @click.prevent="advancedFiltersOpened = true"><small class="font-weight-600">More filters</small></a>
+            <a v-else href="#" @click.prevent="advancedFiltersOpened = false"><small class="font-weight-600">Less filters</small></a>
           </b-col>
         </b-row>
 
+        <!-- Advanced filters-->
         <template v-if="advancedFiltersOpened">
           <b-form-checkbox v-model="filterPayments" :indeterminate="filterPaymentIndeterminate" class="my-2">Payments</b-form-checkbox>
 
-          <b-row v-if="filterPayments" class="mx-1">
-            <b-col>
+          <b-row v-if="filterPayments" class="small-gutter pl-3">
+            <b-col cols="12" sm="3" md="12">
               <b-form-checkbox v-model="filterPaymentReceived" class="my-2">Received</b-form-checkbox>
             </b-col>
             <b-col v-if="filterPaymentReceived">
@@ -87,8 +91,8 @@
             </b-col>
           </b-row>
 
-          <b-row v-if="filterPayments" class="mx-1">
-            <b-col>
+          <b-row v-if="filterPayments" class="small-gutter pl-3">
+            <b-col cols="12" sm="3" md="12">
               <b-form-checkbox v-model="filterPaymentSent" class="my-2">Sent</b-form-checkbox>
             </b-col>
             <b-col v-if="filterPaymentSent">
@@ -127,8 +131,8 @@
             </b-col>
           </b-row>
 
-          <b-row v-if="filterPayments" class="mx-1">
-            <b-col><b-form-checkbox v-model="filterPaymentCurrency" class="my-2">Currency</b-form-checkbox></b-col>
+          <b-row v-if="filterPayments" class="small-gutter pl-3">
+            <b-col cols="12" sm="3" md="12"><b-form-checkbox v-model="filterPaymentCurrency" class="my-2">Currency</b-form-checkbox></b-col>
             <b-col v-if="filterPaymentCurrency">
               <b-form-group label-for="payment-currency-from" label="Currency">
                 <b-form-select id="payment-currency-from" v-model="filterPaymentCurrencyType" :options="currencyOptions"/>
@@ -136,32 +140,36 @@
             </b-col>
           </b-row>
 
-          <hr class="separator">
+          <hr class="divider light">
 
-          <b-form-checkbox v-model="filterOffers" class="my-2">Offers</b-form-checkbox>
-          <b-row v-if="filterOffers">
-            <b-col>
-              <b-form-group label-for="offer-selling-currency-from" label="Selling currency">
-                <b-form-select id="offer-selling-currency-from" v-model="filterSellingCurrencyType" :options="offerCurrencyOptions"/>
-              </b-form-group>
+          <b-row class="pl-3">
+            <b-col cols="12">
+              <b-form-checkbox v-model="filterOffers" class="my-2 px-2">Offers</b-form-checkbox>
             </b-col>
-            <b-col v-if="filterSellingCurrencyType === 'OTHER'">
-              <b-form-group label-for="offer-selling-currency-asset" label="Asset code">
-                <b-form-input
-                  id="offer-selling-currency-asset"
-                  v-model="filterSellingCurrencyAsset"
-                  type="text"/>
-              </b-form-group>
-            </b-col>
+            <template v-if="filterOffers">
+              <b-col :cols="filterSellingCurrencyType === 'OTHER' ? 6 : 12">
+                <b-form-group label-for="offer-selling-currency-from" label="Selling currency">
+                  <b-form-select id="offer-selling-currency-from" v-model="filterSellingCurrencyType" :options="offerCurrencyOptions"/>
+                </b-form-group>
+              </b-col>
+              <b-col v-if="filterSellingCurrencyType === 'OTHER'" cols="6">
+                <b-form-group label-for="offer-selling-currency-asset" label="Asset code">
+                  <b-form-input
+                    id="offer-selling-currency-asset"
+                    v-model="filterSellingCurrencyAsset"
+                    type="text"/>
+                </b-form-group>
+              </b-col>
+            </template>
           </b-row>
 
-          <b-row v-if="filterOffers">
-            <b-col>
+          <b-row v-if="filterOffers" class="pl-3">
+            <b-col :cols="filterBuyingCurrencyType === 'OTHER' ? 6 : 12">
               <b-form-group label-for="offer-buying-currency-from" label="Buying currency">
                 <b-form-select id="offer-buying-currency-from" v-model="filterBuyingCurrencyType" :options="offerCurrencyOptions"/>
               </b-form-group>
             </b-col>
-            <b-col v-if="filterBuyingCurrencyType === 'OTHER'">
+            <b-col v-if="filterBuyingCurrencyType === 'OTHER'" cols="6">
               <b-form-group label-for="offer-buying-currency-asset" label="Asset code">
                 <b-form-input
                   id="offer-buying-currency-asset"
@@ -171,10 +179,10 @@
             </b-col>
           </b-row>
 
-          <hr class="separator">
+          <hr class="divider light">
           <b-form-checkbox v-model="filterOther" :indeterminate="filterOtherTypes.length > 0 && filterOtherTypes.length < 5" class="my-2">Other</b-form-checkbox>
 
-          <b-row v-if="filterOther" class="mx-1">
+          <b-row v-if="filterOther" class="small-gutter pl-3">
             <b-col>
               <b-form-group>
                 <b-form-checkbox-group id="filter-other-types" v-model="filterOtherTypes">
@@ -190,7 +198,7 @@
         </template>
       </b-card>
     </b-col>
-    <b-col cols="12" lg="8" class="my-2">
+    <b-col cols="12" md="7" lg="8" xl="9" class="my-2">
       <b-card class="p-4">
         <h4 class="form-headline text-uppercase text-center">Transactions history</h4>
         <div v-if="inProgress" style="min-height: 208px" class="mb-3 d-flex justify-content-center align-items-center">

@@ -108,7 +108,6 @@ export default {
     window.addEventListener('resize', () => {
       const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
       this.mutateViewportWidth(newScreenWidth);
-      this.mutateMq();
     }, true);
 
     const initialRoute = this.$route.path.substr(1, this.$route.path.length);
@@ -132,7 +131,6 @@ export default {
       'clearInteraction'
     ]),
     ...mapMutations([
-      'mutateMq',
       'mutateViewportWidth'
     ]),
     async interactionHandler () {
