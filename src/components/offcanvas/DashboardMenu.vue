@@ -96,36 +96,6 @@
         </div>
       </router-link>
     </li>
-
-    <li v-if="isMobile" style="padding-left: 1.8rem; opacity: .75;">
-      <ul>
-        <li>
-          <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
-             @click.stop.prevent="switchToChangePasswordView">
-            <div>Change Password</div>
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
-             @click.stop.prevent="switchToChange2faView">
-            <div>Change 2FA Secret</div>
-          </a>
-        </li>
-
-        <li>
-          <router-link to="/backup-mnemonic">
-            <div>Backup Secret/Mnemonic</div>
-          </router-link>
-        </li>
-
-        <li>
-          <router-link to="/personal-data">
-            <div>Personal data</div>
-          </router-link>
-        </li>
-      </ul>
-    </li>
     <li>
       <div class="separator"/>
     </li>
