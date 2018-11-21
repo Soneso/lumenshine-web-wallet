@@ -1,7 +1,14 @@
-.anonymous-page {
-  .card {
-    p {
-      @extend .text-justify;
+body {
+  &.about,
+  &.help,
+  &.terms,
+  &.privacy,
+  &.guidelines,
+  &.impressum {
+    .card {
+      p {
+        @extend .text-justify;
+      }
     }
   }
 }
