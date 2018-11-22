@@ -5,9 +5,9 @@
         <swiper-slide v-for="pair in pairs" :key="pair.type + pair.issuer" class="div-amounts">
           {{ pair.amount.format() }} {{ pair.source }} ≈ {{ pair.value.format(2) }} {{ pair.destination }}
         </swiper-slide>
-        <swiper-slide class="div-amounts">
-          Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD
-        </swiper-slide>
+        <!--<swiper-slide class="div-amounts">-->
+          <!--Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD-->
+        <!--</swiper-slide>-->
       </swiper>
     </div>
   </div>

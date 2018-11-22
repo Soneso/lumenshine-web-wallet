@@ -9,7 +9,7 @@
 
     <b-container fluid class="px-4">
       <b-row>
-        <b-col :class="['', {'wide': registrationComplete, 'narrow': !registrationComplete || singleCardPage}]">
+        <b-col :class="[{'wide': registrationComplete, 'narrow': !registrationComplete || singleCardPage}]">
           <div id="logo-group">
             <div class="logo">
               <router-link to="/">
@@ -20,7 +20,7 @@
               <h1 class="title">{{ config.APP_TITLE }}</h1>
               <h2 class="subtitle">{{ config.APP_SUBTITLE }}</h2>
               <div v-if="registrationComplete">
-                <currency-ticker/>
+                <currency-ticker v-if="currentRoute === 'dashboard' || currentRoute === 'wallets'"/>
               </div>
             </div>
             <div v-if="$route.name === 'Wallets'" class="add-wallet">
@@ -53,14 +53,20 @@ export default {
       required: true
     }
   },
-  data: () => ({ config }),
+  data: () => ({
+    config,
+    currentRoute: ''
+  }),
   computed: {
     ...mapGetters([
       'offCanvasMenuOpen',
       'userStatus',
       'authToken',
       'registrationComplete'
-    ]),
+    ])
+  },
+  mounted () {
+    this.currentRoute = this.$route.path.split('/')[1];
   },
   methods: {
     ...mapActions(['logout']),
