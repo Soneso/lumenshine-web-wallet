@@ -125,12 +125,20 @@ export default {
   },
   computed: {
     emailBody () {
-      return `Public key: ${this.data.public_key}\n
-      Currency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\n
-      Issuer: ${this.issuer}\n
-      Amount: ${this.amount}\n
-      Memo type: ${this.memoType}\n
-      Memo: ${this.memo}`;
+      let emailBody = `Public key: ${this.data.public_key}\nCurrency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\n`;
+      if (this.issuer) {
+        emailBody += `Issuer: ${this.issuer}\n`;
+      }
+      if (this.amount) {
+        emailBody += `Amount: ${this.amount}\n`;
+      }
+      if (this.memoType) {
+        emailBody += `Memo type: ${this.memoType}\n`;
+      }
+      if (this.memo) {
+        emailBody += `Memo: ${this.memo}`;
+      }
+      return emailBody;
     },
     uniqueCurrencies () {
       if (!this.data.stellar_data) return [];
@@ -203,12 +211,12 @@ export default {
     onDoneClick () {
       this.$emit('cancel');
     },
-    onSendEmailClick (e) {
+    onSendEmailClick () {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      const win = window.open(`mailto:?subject=${encodeURIComponent('Payment data')}&body=${encodeURIComponent(this.emailBody)}`, '_blank');
+      const win = window.open(`mailto:?subject=${encodeURIComponent('Payment data')}&body=${encodeURIComponent(this.emailBody)}`, '_self');
       win.focus();
     },
     onPrintClick () {
