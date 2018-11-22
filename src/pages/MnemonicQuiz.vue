@@ -8,7 +8,6 @@
         <p>To prove the noting of your mnemonic, please complete following quiz.</p>
         <hr class="divider light">
         <p>Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</p>
-        <p>The first word starts at position one.</p>
 
         <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" :class="['m-auto', isMobile ? 'w-100' : 'w-50']">
           <b-col cols="6" class="text-right px-2">
