@@ -14,7 +14,8 @@
               <div v-if="alreadyConfirmedFailed" class="text-danger pt-2">Please confirm your email address first.</div>
             </div>
             <br>
-            <b-button type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onResendEmail">RESEND VERIFICATION LINK</b-button>
+            <b-button v-if="!isMobile" type="submit" variant="warning" class="btn-rounded text-uppercase" @click="onResendEmail">RESEND VERIFICATION LINK</b-button>
+            <div v-else="" class="text-white bg-warning p-2 btn-rounded" @click="onResendEmail">RESEND VERIFICATION LINK</div>
             <div v-if="emailResent && resendEmailStatus.err.length > 0" class="text-danger pt-2">An error happened during email resend</div>
             <div v-else-if="emailResent" class="text-success pt-2">Resent confirmation mail</div>
           </template>
@@ -83,6 +84,7 @@ export default {
 
   computed: {
     ...mapGetters([
+      'isMobile',
       'confirmEmailStatus',
       'resendEmailStatus',
       'userStatus',
