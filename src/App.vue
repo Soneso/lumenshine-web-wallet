@@ -111,7 +111,7 @@ export default {
       this.mutateViewportWidth(newScreenWidth);
     }, true);
 
-    const initialRoute = this.$route.path.substr(1, this.$route.path.length);
+    const initialRoute = this.$route.path.substr(1, this.$route.path.length).split('/')[0];
     document.body.classList.add(initialRoute === '' ? 'home' : initialRoute, `${this.authClass}-page`);
   },
 
