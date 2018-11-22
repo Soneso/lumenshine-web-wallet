@@ -18,7 +18,7 @@ export default {
     message: {
       type: String,
       required: false,
-      default: 'Copied to clipboad'
+      default: 'Copied to clipboard'
     },
     color: {
       type: String,
