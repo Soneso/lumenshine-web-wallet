@@ -115,7 +115,7 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     }
 
     > a {
-      &.router-link-active {
+      &.active {
         position: relative;
 
         &:before {

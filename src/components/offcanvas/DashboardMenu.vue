@@ -19,21 +19,21 @@
     </li>
 
     <li>
-      <a href="#" @click.prevent.stop="goto('dashboard')">
+      <a ref="dashboard" href="#" @click.prevent.stop="goto('dashboard')">
         <i class="icon-home"/>
         <div :style="toggleText">Home</div>
       </a>
     </li>
 
     <li>
-      <a href="#" @click.prevent.stop="goto('wallets')">
+      <a ref="wallets" href="#" @click.prevent.stop="goto('wallets')">
         <i class="icon-card"/>
         <div :style="toggleText">Wallets</div>
       </a>
     </li>
 
     <li>
-      <a href="#" @click.prevent.stop="goto('transactions')">
+      <a ref="transactions" href="#" @click.prevent.stop="goto('transactions')">
         <i class="icon-transaction"/>
         <div :style="toggleText">Transactions</div>
       </a>
@@ -47,7 +47,7 @@
     <!--</li>-->
 
     <li>
-      <a href="#" @click.prevent.stop="goto('contacts')">
+      <a ref="contacts" href="#" @click.prevent.stop="goto('contacts')">
         <i class="icon-user"/>
         <div :style="toggleText">Contacts</div>
       </a>
@@ -61,7 +61,7 @@
     <!--</li>-->
 
     <li class="has-submenu">
-      <a href="#" @click.prevent.stop="goto('settings')">
+      <a ref="settings" href="#" @click.prevent.stop="goto('settings')">
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
@@ -82,13 +82,13 @@
             </li>
 
             <li>
-              <a href="#" @click.prevent.stop="goto('backup-mnemonic')">
+              <a ref="backup-mnemonic" href="#" @click.prevent.stop="goto('backup-mnemonic')">
                 <div>Backup Secret/Mnemonic</div>
               </a>
             </li>
 
             <li>
-              <a href="#" @click.prevent.stop="goto('personal-data')">
+              <a ref="personal-data" href="#" @click.prevent.stop="goto('personal-data')">
                 <div>Personal data</div>
               </a>
             </li>
@@ -101,7 +101,7 @@
     </li>
 
     <li>
-      <a href="#" @click.prevent.stop="goto('help')">
+      <a ref="help" href="#" @click.prevent.stop="goto('help')">
         <i class="icon-help"/>
         <div :style="toggleText">Help</div>
       </a>
@@ -151,19 +151,21 @@ export default {
       if (this.changePasswordStep !== 'password') {
         this.mutateChangePasswordStep('password');
       }
-      this.$router.push({ name: 'ChangePassword' });
-      this.closeMenu();
+      this.goto('change-password');
     },
 
     switchToChange2faView () {
       if (this.change2faStep !== 'password') {
         this.mutateChange2faStep('password');
       }
-      this.$router.push({ name: 'ChangeTfa' });
-      this.closeMenu();
+      this.goto('change-tfa');
     },
 
     goto (url) {
+      document.querySelectorAll('.menu-container a').forEach(i => {
+        i.classList.remove('active');
+      });
+      this.$refs[url].classList.add('active');
       this.$router.push(url);
       this.closeMenu();
     },
