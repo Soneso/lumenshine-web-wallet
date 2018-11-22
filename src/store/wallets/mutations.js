@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import config from '@/config';
+import WebSocketService from '@/services/websocket';
 
 export default {
   RESET_DECRYPTED_WALLET (state) {
@@ -208,5 +209,50 @@ export default {
       tx.data = data;
     }
     state.transactionQueue = queue;
-  }
+  },
+
+  SET_WEBSOCKET (state, ws) {
+    if (state.websocket) {
+      state.websocket.close();
+      WebSocketService.close();
+    }
+    state.websocket = ws;
+  },
+
+  TRY_DESTROYING_WEBSOCKET (state, tryDestroy = true) {
+    if (state.websocket === null) return;
+    if (tryDestroy) {
+      if (state.closingWebsocketTimer === null) {
+        state.closingWebsocketTimer = setTimeout(() => {
+          state.websocket.close();
+          WebSocketService.close();
+          state.websocket = null;
+        }, 3000);
+      }
+    } else { // stop destroying it
+      if (state.closingWebsocketTimer !== null) {
+        clearTimeout(state.closingWebsocketTimer);
+        state.closingWebsocketTimer = null;
+      }
+    }
+  },
+
+  SET_WATCHED_WALLETS (state, wallets) {
+    if (wallets.length === 0) return; // in this case the websocket connection will be closed by a timer
+    // remove disappeared accounts
+    state.watchedWallets.forEach(w => {
+      if (!wallets.includes(w)) {
+        WebSocketService.removeAccount(w);
+      }
+    });
+
+    // add new accounts
+    wallets.forEach(w => {
+      if (!state.watchedWallets.includes(w)) {
+        WebSocketService.addAccount(w);
+      }
+    });
+
+    state.watchedWallets = [...wallets];
+  },
 };
