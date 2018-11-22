@@ -134,10 +134,8 @@ export default {
       if (this.amount) {
         emailBody += `Amount: ${this.amount}\n`;
       }
-      if (this.memoType) {
-        emailBody += `Memo type: ${this.memoType}\n`;
-      }
       if (this.memo) {
+        emailBody += `Memo type: ${this.memoType}\n`;
         emailBody += `Memo: ${this.memo}`;
       }
       return emailBody;
