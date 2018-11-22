@@ -57,7 +57,7 @@
         </template>
       </b-form-invalid-feedback>
       <b-form-text id="inputLivePasswordHelp">
-        <a href="#" @click.prevent="onLostPasswordClick">Lost password?</a>
+        <a :target="currentRoute === 'confirm-email' ? '_blank' : null" :rel="currentRoute === 'confirm-email' ? 'noreferrer' : null" href="#" @click.prevent="onLostPasswordClick">Lost password?</a>
       </b-form-text>
     </b-form-group>
 
@@ -84,7 +84,7 @@
         </template>
       </b-form-invalid-feedback>
       <b-form-text id="inputLive2faHelp">
-        <a href="#" @click.prevent="onLostTfaClick">Lost 2FA Secret?</a>
+        <a :target="currentRoute === 'confirm-email' ? '_blank' : null" :rel="currentRoute === 'confirm-email' ? 'noreferrer' : null" href="#" @click.prevent="onLostTfaClick">Lost 2FA Secret?</a>
       </b-form-text>
     </b-form-group>
 
@@ -131,6 +131,7 @@ export default {
       password: '',
       passwordIsHidden: true,
       twoFactorCode: '',
+      currentRoute: ''
     };
   },
   computed: {
@@ -142,6 +143,10 @@ export default {
     twoFactorCode () {
       this.twoFactorCode = this.twoFactorCode.split(' ').join('');
     }
+  },
+  mounted () {
+    this.currentRoute = this.$route.path.split('/')[1];
+    console.log(this.currentRoute);
   },
   methods: {
     onLoginClick () {
