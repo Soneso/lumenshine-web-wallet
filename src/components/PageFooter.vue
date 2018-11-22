@@ -25,7 +25,6 @@
           <template v-if="authToken && authTokenType === 'partial'" class="menu">
             <router-link to="/about">About</router-link>
             <router-link to="/help">Help</router-link>
-            <router-link to="/">&nbsp;</router-link>
             <a href="/terms" target="_new">Terms</a>
             <a href="/login" @click="onLogoutClick">Sign out</a>
             <router-link to="/impressum">Impressum</router-link>
