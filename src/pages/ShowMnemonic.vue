@@ -19,7 +19,8 @@
             <b-col cols="7" class="text-left px-1">{{ word }}</b-col>
           </b-row>
         </div>
-        <b-button type="submit" variant="danger" size="lg" class="btn-rounded" @click="onNext">Confirm noting of your mnemonic</b-button>
+        <b-button v-if="!isMobile" type="submit" variant="danger" size="lg" class="btn-rounded" @click="onNext">Confirm noting of your mnemonic</b-button>
+        <div v-else="" class="text-white bg-danger p-2 btn-rounded" @click="onNext">Confirm noting of your mnemonic</div>
       </b-card>
     </b-col>
   </b-row>
@@ -30,7 +31,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['mnemonic']),
+    ...mapGetters(['mnemonic', 'isMobile']),
     mnemonicWords () {
       return this.mnemonic.split(' ');
     }

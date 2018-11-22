@@ -65,7 +65,7 @@
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
-        <div class="submenu">
+        <div v-if="!isMobile" class="submenu">
           <ul>
             <li>
               <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
@@ -96,16 +96,15 @@
         </div>
       </router-link>
     </li>
-
     <li>
       <div class="separator"/>
     </li>
 
     <li>
-      <a href="#">
+      <router-link to="/help">
         <i class="icon-help"/>
         <div :style="toggleText">Help</div>
-      </a>
+      </router-link>
     </li>
 
     <li>
@@ -130,7 +129,7 @@ export default {
   mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
-    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken']),
+    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken', 'isMobile']),
     toggleText () {
       return {
         opacity: this.offCanvasMenuOpen ? 1 : 0

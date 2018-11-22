@@ -8,7 +8,7 @@
         <strong>
           <div v-if="showCopiedText" class="copiedtext info">2FA secret copied to clipboard</div>
           Your 2FA Secret: {{ tfaData.tfa_secret }}
-          <i v-clipboard:copy="tfaData.tfa_secret" v-b-tooltip="'2FA secret copied to clipboard!'" class="icon-copy clipboard"/>
+          <copy-to-clipboard :text="tfaData.tfa_secret" :chars="30" color="text-info"/>
         </strong>
       </p>
       <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img"></p>
@@ -50,8 +50,11 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import tfaValidator from '@/validators/twoFactorCode';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
+  name: 'LostTfaForm',
+  components: { copyToClipboard },
   mixins: [ formMixin ],
   props: {
     tfaData: {

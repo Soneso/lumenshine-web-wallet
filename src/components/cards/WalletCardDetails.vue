@@ -2,7 +2,7 @@
   <div class="px-2">
     <!-- change name + show wallet on dashboard-->
     <b-row align-v="center" align-h="between" class="pb-2">
-      <b-col cols="12" sm="auto">
+      <b-col cols="12" sm="auto" class="pb-3 pb-sm-0">
         <wallet-name-form
           :loading="saveWalletLoading"
           :errors="editWalletStatus.err"
@@ -22,8 +22,7 @@
     <b-row class="pb-2">
       <b-col>
         <div class="font-weight-600">Stellar public key</div>
-        <span class="break-word with-hyphens">{{ data.public_key }}</span>
-        <copy-to-clipboard :text="data.public_key" color="text-info"/>
+        <public-key :text="data.public_key" color="text-info"/>
       </b-col>
     </b-row>
     <hr class="divider">
@@ -139,7 +138,7 @@ import WalletInflationForm from '@/components/forms/wallets/WalletInflationForm'
 import WalletCurrenciesForm from '@/components/forms/wallets/WalletCurrenciesForm';
 import WalletCardTransactions from '@/components/cards/WalletCardTransactions';
 
-import CopyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 
 export default {
   components: {
@@ -149,7 +148,7 @@ export default {
     WalletCurrenciesForm,
     WalletAddressForm,
     WalletInflationForm,
-    CopyToClipboard
+    publicKey
   },
 
   props: {

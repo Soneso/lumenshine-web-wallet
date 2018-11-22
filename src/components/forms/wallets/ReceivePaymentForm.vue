@@ -10,11 +10,7 @@
           <div class="pt-3">
             <span class="font-weight-600">Receive public key</span>
             <br>
-            <small class="break-word with-hyphens font-weight-bold">{{ data.public_key.slice(0, 20) }}...</small>
-            <a v-clipboard:copy="data.public_key" v-clipboard:success="onCopy" class="wallet-link">
-              <i class="icon-copy text-info"/>
-            </a>
-            <small v-if="showCopiedText" class="text-info"><br>Copied to clipboard<br></small>
+            <public-key :text="data.public_key" color="text-info"/>
           </div>
 
           <div v-if="data.federation_address" class="pt-4">
@@ -100,7 +96,11 @@ import config from '@/config';
 
 import { decimal, maxLength } from 'vuelidate/lib/validators';
 
+import publicKey from '@/components/ui/publicKey';
+
 export default {
+  name: 'ReceivePaymentForm',
+  components: { publicKey },
   mixins: [formMixin],
   props: {
     data: {

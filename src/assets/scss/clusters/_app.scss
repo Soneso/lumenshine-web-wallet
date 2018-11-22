@@ -4,6 +4,11 @@
   .authenticated & {
     @extend .ml-5;
     width: calc(100% - #{map-get($spacers, 5)});
+
+    @include media-breakpoint-only(xs) {
+      width: 100%;
+      margin-left: 0 !important;
+    }
   }
 
   .anonymous & {

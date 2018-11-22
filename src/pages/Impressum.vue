@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col sm="10" md="8">
-      <b-card class="p-4 text-justify">
+      <b-card class="p-4">
         <h3 class="form-headline text-uppercase pb-4">Impressum</h3>
         <h6>German legal information</h6>
         <div>Information according to § 5 TMG:</div>

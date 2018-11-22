@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="center" align-v="center">
     <b-col sm="10" md="7">
-      <b-card class="p-4 text-justify">
+      <b-card class="p-4">
         <b-row>
           <b-col cols="12">
             <h3 class="form-headline text-uppercase pb-4">Help</h3>
@@ -17,7 +17,7 @@
             </a>
 
             <hr class="divider light">
-            <h5 class="font-weight-600 text-info py-3">FAQ</h5>
+            <h5 class="font-weight-600 text-info mt-4 py-3">FAQ</h5>
             <ul id="help-faq" role="tablist">
               <li>
                 <hr class="divider light">
@@ -44,13 +44,13 @@
             </ul>
 
             <hr class="divider light">
-            <h5 class="font-weight-600 text-info py-3">Topics</h5>
+            <h5 class="font-weight-600 text-info mt-4 py-3">Topics</h5>
 
             <ul id="help-topics">
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.basics class="inline-list py-3">
-                  <li class="pr-3">
+                <ul v-b-toggle.basics class="py-3">
+                  <li>
                     <i class="icon-bag large text-info"/>
                   </li>
                   <li>
@@ -59,13 +59,13 @@
                   </li>
                 </ul>
                 <b-collapse id="basics" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.security class="inline-list py-3">
-                  <li class="pr-3">
+                <ul v-b-toggle.security class="py-3">
+                  <li>
                     <i class="icon-security large text-info"/>
                   </li>
                   <li>
@@ -74,13 +74,13 @@
                   </li>
                 </ul>
                 <b-collapse id="security" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.wallets class="inline-list py-3">
-                  <li class="pr-3">
+                <ul v-b-toggle.wallets class="py-3">
+                  <li>
                     <i class="icon-wallet large text-info"/>
                   </li>
                   <li>
@@ -89,13 +89,13 @@
                   </li>
                 </ul>
                 <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.stellar class="inline-list py-3">
-                  <li class="pr-3">
+                <ul v-b-toggle.stellar class="py-3">
+                  <li>
                     <i class="icon-learn-ico large text-info"/>
                   </li>
                   <li>
@@ -104,7 +104,7 @@
                   </li>
                 </ul>
                 <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block" style="padding-left: 3.65rem">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
                 </b-collapse>
               </li>
             </ul>

@@ -3,35 +3,35 @@
     Operation ID: <a href="#" @click.prevent="openModal">{{ item.op_id }}</a><br>
     <b-modal v-model="modalVisible" hide-footer title="Operation details" size="md">
       <spinner v-if="operationDetails === null" message="Loading operation..." width="200"/>
-      <pre v-else style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">{{ operationDetails }}</pre>
+      <pre v-else="" class="p-2 mt-3 text-success bg-dark">{{ operationDetails }}</pre>
     </b-modal>
     <template v-if="item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
     <template v-if="item.op_type === OperationType.CREATE_ACCOUNT">
       <template v-if="item.op_details.funder === selectedWallet">
-        Created account: <public-key :public-key="item.op_details.account"/><br>
+        Created account: <public-key :text="item.op_details.account"/><br>
       </template>
       <template v-else>
-        Account created by: <public-key :public-key="item.op_details.funder"/><br>
+        Account created by: <public-key :text="item.op_details.funder"/><br>
       </template>
     </template>
 
     <template v-if="item.op_type === OperationType.PAYMENT">
       <template v-if="item.op_details.from === selectedWallet">
-        Recipient: <public-key :public-key="item.op_details.to"/><br>
+        Recipient: <public-key :text="item.op_details.to"/><br>
       </template>
       <template v-else>
-        Sender: <public-key :public-key="item.op_details.from"/><br>
+        Sender: <public-key :text="item.op_details.from"/><br>
       </template>
     </template>
 
     <template v-if="item.op_type === OperationType.PATH_PAYMENT">
       <template v-if="item.op_details.from === selectedWallet"> <!-- sending -->
         Maximum send amount: {{ new Amount(item.op_details.source_max).format() }}<br>
-        Recipient: <public-key :public-key="item.op_details.to"/><br>
+        Recipient: <public-key :text="item.op_details.to"/><br>
         Received amount: {{ new Amount(item.op_details.amount).format() }} {{ item.op_details.asset_code }}<br>
       </template>
       <template v-else> <!-- receiving -->
-        Sender: <public-key :public-key="item.op_details.from"/><br>
+        Sender: <public-key :text="item.op_details.from"/><br>
       </template>
       Payment path: {{ paymentPath }}<br>
     </template>
@@ -39,12 +39,12 @@
     <template v-else-if="item.op_type === OperationType.CHANGE_TRUST">
       Type: {{ item.op_details.limit === '0.0000000' ? 'remove' : 'add' }}<br>
       Asset: {{ item.op_details.asset_code }}<br>
-      Issuer: <public-key :public-key="item.op_details.asset_issuer"/><br>
+      Issuer: <public-key :text="item.op_details.asset_issuer"/><br>
       Trust limit: {{ new Amount(item.op_details.limit).format() }}<br>
     </template>
 
     <template v-else-if="item.op_type === OperationType.ALLOW_TRUST">
-      Trustor: <public-key :public-key="item.op_details.trustor"/><br>
+      Trustor: <public-key :text="item.op_details.trustor"/><br>
       Asset code: {{ item.op_details.asset_code || 'XLM' }}<br>
       Authorize: {{ item.op_details.authorize ? 'true' : 'false' }}<br>
     </template>
@@ -64,22 +64,22 @@
     </template>
 
     <template v-else-if="item.op_type === OperationType.SET_OPTIONS">
-      <template v-if="item.op_details.inflation_dest">Inflation destination: <public-key :public-key="item.op_details.inflation_dest"/><br></template>
+      <template v-if="item.op_details.inflation_dest">Inflation destination: <public-key :text="item.op_details.inflation_dest"/><br></template>
       <template v-if="item.op_details.set_flags_s">Set flags: {{ item.op_details.set_flags_s.map(f => formatFlagName(f)).join(', ') }}<br></template>
       <template v-if="item.op_details.clear_flags_s">Clear flags: {{ item.op_details.clear_flags_s.map(f => formatFlagName(f)).join(', ') }}<br></template>
       <template v-if="item.op_details.master_key_weight">Master weight: {{ item.op_details.master_key_weight }}<br></template>
       <template v-if="item.op_details.low_threshold">Low threshold: {{ item.op_details.low_threshold }}<br></template>
       <template v-if="item.op_details.med_threshold">Medium threshold: {{ item.op_details.med_threshold }}<br></template>
       <template v-if="item.op_details.high_threshold">High threshold: {{ item.op_details.high_threshold }}<br></template>
-      <template v-if="item.op_details.signer_weight === 0">Signer removed: <public-key :public-key="item.op_details.signer_key"/><br></template>
-      <template v-if="item.op_details.signer_weight > 0">Signer added: <public-key :public-key="item.op_details.signer_key"/><br></template>
+      <template v-if="item.op_details.signer_weight === 0">Signer removed: <public-key :text="item.op_details.signer_key"/><br></template>
+      <template v-if="item.op_details.signer_weight > 0">Signer added: <public-key :text="item.op_details.signer_key"/><br></template>
       <template v-if="item.op_details.signer_weight !== undefined">Signer type: {{ getSignerType(item.op_details.signer_key) }}<br></template>
       <template v-if="item.op_details.signer_weight > 0">Signer weight: {{ item.op_details.signer_weight }}<br></template>
       <template v-if="item.op_details.home_domain">Home domain: {{ item.op_details.home_domain }}<br></template>
     </template>
 
     <template v-else-if="item.op_type === OperationType.ACCOUNT_MERGE">
-      Merged account: <public-key :public-key="item.op_details.account"/><br>
+      Merged account: <public-key :text="item.op_details.account"/><br>
     </template>
 
     <template v-else-if="item.op_type === OperationType.MANAGE_DATA">
@@ -92,7 +92,7 @@
     </template>
 
     <template v-if="item.tx_source_account !== selectedWallet">
-      Source account: <public-key :public-key="item.tx_source_account"/>
+      Source account: <public-key :text="item.tx_source_account"/>
     </template>
   </span>
 </template>
@@ -100,19 +100,17 @@
 <script>
 import Amount from '@/util/Amount';
 import OperationType from '@/util/OperationType';
-import copyToClipboard from '@/components/ui/copyToClipboard';
+import publicKey from '@/components/ui/publicKey';
 
 import StellarSdk from 'stellar-sdk';
 
 import config from '@/config';
 import spinner from '@/components/ui/spinner';
 
-import PublicKey from '@/components/ui/PublicKey';
-
 const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
 
 export default {
-  components: { copyToClipboard, spinner, PublicKey },
+  components: { publicKey, spinner },
 
   props: {
     item: {

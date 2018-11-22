@@ -10,7 +10,7 @@
         <p>Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</p>
         <p>The first word starts at position one.</p>
 
-        <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" class="w-50 m-auto">
+        <b-row v-for="(word, index) in mnemonicRandomWords" :key="word" :class="['m-auto', isMobile ? 'w-100' : 'w-50']">
           <b-col cols="6" class="text-right px-2">
             <div class="pt-2">{{ word }}</div>
           </b-col>
@@ -26,7 +26,12 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-button type="submit" variant="warning" size="lg" class="btn-rounded mb-4" @click="onBack"><i class="icon-options-left text-white"/> Go back and show mnemonic</b-button>
+        <b-button v-if="!isMobile" type="submit" variant="warning" size="lg" class="btn-rounded mb-4" @click="onBack">
+          <i class="icon-options-left text-white"/> Go back and show mnemonic
+        </b-button>
+        <div v-else="" class="btn-rounded mb-4 text-white bg-warning p-2" @click="onBack">
+          <i class="icon-options-left text-white"/> Go back and show mnemonic
+        </div>
         <br>
         <b-button type="submit" variant="info" size="lg" class="btn-rounded" @click="onVerify">Finish</b-button>
         <div v-if="hasErrors" class="text-danger py-2">Invalid input!<br></div>
@@ -52,7 +57,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['confirmMnemonicStatus', 'userStatus', 'mnemonic']),
+    ...mapGetters(['confirmMnemonicStatus', 'userStatus', 'mnemonic', 'isMobile']),
     mnemonicRandomWords () {
       if (!this.mnemonic) {
         return [];

@@ -1,5 +1,5 @@
 export default {
   offCanvasMenuOpen: false,
-  mq: {},
+  isMobile: false,
   viewportWidth: window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
 };

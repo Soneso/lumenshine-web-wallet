@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="[registrationComplete && authTokenType !== 'partial' ? 'authenticated' : 'anonymous']">
+  <div id="app" :class="[authClass]">
     <div :class="['offcanvas-overlay', {'open': offCanvasMenuOpen}]"/>
     <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
@@ -54,6 +54,7 @@ export default {
     isSingleCard () {
       const nakedRoute = this.$route.path.split('/')[1];
       const routes = ['',
+        'contacts',
         'settings',
         'change-password',
         'change-tfa',
@@ -67,12 +68,19 @@ export default {
         'guidelines'
       ];
       return routes.includes(nakedRoute);
+    },
+    authClass () {
+      return this.registrationComplete && this.authTokenType !== 'partial' ? 'authenticated' : 'anonymous';
     }
   },
 
   watch: {
-    $route () {
+    $route (to, from) {
       this.interactionHandler();
+
+      const fromRoute = from.path.substr(1, from.path.length);
+      const toRoute = to.path.substr(1, to.path.length);
+      document.body.classList.replace(fromRoute, toRoute === '' ? 'home' : toRoute);
     },
   },
 
@@ -98,12 +106,13 @@ export default {
       deep: true,
     });
 
-    this.mutateMq();
     window.addEventListener('resize', () => {
       const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
       this.mutateViewportWidth(newScreenWidth);
-      this.mutateMq();
     }, true);
+
+    const initialRoute = this.$route.path.substr(1, this.$route.path.length);
+    document.body.classList.add(initialRoute === '' ? 'home' : initialRoute, `${this.authClass}-page`);
   },
 
   beforeDestroy () {
@@ -123,7 +132,6 @@ export default {
       'clearInteraction'
     ]),
     ...mapMutations([
-      'mutateMq',
       'mutateViewportWidth'
     ]),
     async interactionHandler () {
