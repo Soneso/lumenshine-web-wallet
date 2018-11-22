@@ -41,7 +41,7 @@
 
         <template v-if="step === 'finish'">
           <p class="text-success">Your 2FA Secret has been reset successfully.</p>
-          <b-button variant="info" class="btn-rounded text-uppercase" @click="$router.push({ name: 'Login' })">Login</b-button>
+          <b-button variant="info" class="btn-rounded text-uppercase mt-4" @click="$router.push({ name: 'Login' })">Login</b-button>
         </template>
 
         <div v-if="step == 'error'">
