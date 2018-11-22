@@ -20,7 +20,7 @@
           </b-row>
         </div>
         <div v-else>***********************</div>
-        <small v-if="hasUnknownError" class="text-danger">Unknown backend error!</small>
+        <small v-if="hasUnknownError" class="text-danger">An error occured, please try again</small>
       </b-col>
       <b-col v-if="fieldOpen && !loading && !mnemonic" cols="10" md="8">
         <b-form-group>

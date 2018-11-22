@@ -13,7 +13,7 @@
       <br>
     </div>
 
-    <h6 v-if="hasUnknownError" class="text-danger">Unknown backend error!</h6>
+    <h6 v-if="hasUnknownError" class="text-danger">An error occured, please try again</h6>
 
     <div v-if="fieldOpen">
       <b-button-group size="sm" class="my-3">

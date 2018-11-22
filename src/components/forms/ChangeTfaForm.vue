@@ -12,7 +12,7 @@
         </h6>
 
         <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
-        <small v-if="hasUnknownError" class="text-danger d-block">Unknown backend error!</small>
+        <small v-if="hasUnknownError" class="text-danger d-block">An error occured, please try again</small>
       </b-col>
 
       <b-col cols="10" sm="8" md="6">

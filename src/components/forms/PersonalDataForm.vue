@@ -2,7 +2,7 @@
   <b-form class="form" @submit.prevent="onSaveClick">
     <b-row v-if="!loading">
       <b-col cols="12 pb-4 mb-3">
-        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+        <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
       </b-col>
 
       <b-col cols="12" role="tablist">

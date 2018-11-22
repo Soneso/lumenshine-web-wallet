@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.prevent>
-    <div v-if="hasUnknownError" class="error">Unknown backend error!</div>
+    <div v-if="hasUnknownError" class="error">An error occured, please try again</div>
 
     <b-form-group :label-for="`contactNameInput_${uuid}`">
       <b-form-input

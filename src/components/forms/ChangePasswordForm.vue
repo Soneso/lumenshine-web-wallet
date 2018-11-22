@@ -3,7 +3,7 @@
     <b-row v-if="!loading">
       <b-col cols="12 pb-4 mb-3">
         <div class="mt-2">To change your password please provide current and new password.</div>
-        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+        <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
       </b-col>
 
       <b-col cols="12">

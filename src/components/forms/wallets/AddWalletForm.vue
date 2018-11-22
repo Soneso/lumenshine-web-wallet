@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.prevent="onSubmitClick">
     <div class="text-center pb-3">
-      <small v-if="hasUnknownError" class="text-danger">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="text-danger">An error occured, please try again</small>
 
       <b-form-group :label-for="`nameInput_${uuid}`" class="normal-input pt-3 col-9 mx-auto">
         <b-form-input

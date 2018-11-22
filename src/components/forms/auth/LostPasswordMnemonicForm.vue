@@ -2,7 +2,7 @@
   <b-form class="form" @submit.prevent="onSaveClick">
     <template v-if="!loading">
       <p>To reset your password please insert your backup secret (24 words mnemonic) and press "Next".</p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
 
       <div v-for="(item, index) in $v.mnemonic.$each.$iter" :key="index" class="field">
         <b-row align-h="center">

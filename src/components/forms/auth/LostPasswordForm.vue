@@ -2,7 +2,7 @@
   <form class="form" @submit.prevent="onSaveClick">
     <div v-if="!loading">
       <p class="text-gray-600 pb-3">Reset password: Please insert your new password below. </p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
       <b-row>
         <b-col v-if="askForTfa" cols="12">
           <!--TFA field (used when mnemonic_confirmed = false)-->

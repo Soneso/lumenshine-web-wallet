@@ -2,7 +2,7 @@
   <form class="form" @submit.prevent="onRecoverClick">
     <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your password and press "Next".</p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
 
       <b-form-group class="my-4">
         <b-form-input

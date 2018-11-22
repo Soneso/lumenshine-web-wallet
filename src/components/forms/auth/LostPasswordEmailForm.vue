@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.prevent="onRecoverClick">
     <template v-if="!loading">
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
       <div v-if="!$v.email.backendEmailConfirmed" class="text-danger text-center py-2">Verify your email address.</div>
       <template v-else>
 

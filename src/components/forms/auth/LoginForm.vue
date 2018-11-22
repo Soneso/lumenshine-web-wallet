@@ -2,7 +2,7 @@
 
   <b-form v-if="!loading" id="login-form" @submit.prevent="onLoginClick">
     <!--Email field-->
-    <template v-if="hasUnknownError" class="error">Unknown backend error!</template>
+    <template v-if="hasUnknownError" class="error">An error occured, please try again</template>
     <b-form-group v-if="showEmailField">
       <b-form-input
         id="login-email"

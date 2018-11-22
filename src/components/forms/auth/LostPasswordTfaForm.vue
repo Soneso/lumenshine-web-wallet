@@ -2,7 +2,7 @@
   <b-form class="form" @submit.prevent="onSaveClick">
     <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your current 2FA code from the authenticator app and press "Next"</p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">Unknown backend error!</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
 
       <b-form-group class="py-4">
         <b-form-input

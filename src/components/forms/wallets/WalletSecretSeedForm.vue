@@ -14,7 +14,7 @@
       </span>
     </div>
 
-    <small v-if="hasUnknownError" class="d-block text-danger">Unknown backend error!</small>
+    <small v-if="hasUnknownError" class="d-block text-danger">An error occured, please try again</small>
 
     <b-card v-if="fieldOpen && !loading && !secretSeed" class="flat-card">
       <b-form-group>

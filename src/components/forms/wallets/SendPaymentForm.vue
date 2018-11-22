@@ -186,7 +186,7 @@
               <span class="text-danger">Could not send payment. Wrong sequence number.</span>
             </div>
             <div v-else-if="hasUnknownError">
-              <span class="text-danger">Unknown backend error.</span>
+              <span class="text-danger">An error occured, please try again</span>
             </div>
 
             <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">

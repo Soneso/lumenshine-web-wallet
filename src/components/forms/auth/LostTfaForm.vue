@@ -13,7 +13,7 @@
       </p>
       <p><img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img"></p>
       <p>3. Enter the generated 2FA code from the authenticator app and press "Next"</p>
-      <div v-if="hasUnknownError" class="error">Unknown backend error!<br></div>
+      <div v-if="hasUnknownError" class="error">An error occured, please try again<br></div>
       <p class="w-50 pt-4 m-auto">
         <!--tfaCode field-->
         <b-form-group>

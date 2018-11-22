@@ -56,7 +56,7 @@
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
-        <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+        <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
         <div class="form-buttons">
           <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
             <spinner v-if="loading" :size="21" message="removing..." width="100"/>
@@ -168,7 +168,7 @@
               Your secret seed for selected signer.
             </b-form-text>
           </b-form-group>
-          <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+          <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
           <div class="py-3">
             <a href="#" class="text-warning mr-2 d-inline-block" @click.prevent="addCurrency = false">cancel</a>
             <a href="#" class="d-inline-block" @click.prevent="onAddClick">
@@ -227,7 +227,7 @@
               Your secret seed for selected signer.
             </b-form-text>
           </b-form-group>
-          <div v-if="hasUnknownError" class="text-danger">Unknown backend error!</div>
+          <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
           <div class="mt-3 mb-2">
             <div>
               <a href="#" class="text-warning mr-2 d-inline-block" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
