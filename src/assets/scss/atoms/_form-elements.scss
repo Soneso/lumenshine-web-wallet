@@ -203,10 +203,8 @@ input {
   border: 1px solid $gray-200;
 }
 %checkbox-disabled-bg {
-  background-image: none;
   box-shadow: none;
   background-color: $gray-200;
-  border: 1px solid $gray-200;
 }
 
 .custom-checkbox {
