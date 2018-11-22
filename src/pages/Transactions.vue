@@ -1,6 +1,6 @@
 <template>
-  <b-row class="small-gutter">
-    <b-col :class="isMobile ? 'mb-3' : 'mb-1'" cols="12" md="5" lg="4" xl="3">
+  <b-row>
+    <b-col :class="[isMobile ? 'mb-3' : 'mb-1', 'px-1']" cols="12" md="5" lg="4" xl="3">
       <b-card class="p-2 p-lg-3">
         <!-- Basic filters-->
         <b-row>
@@ -200,7 +200,7 @@
         </template>
       </b-card>
     </b-col>
-    <b-col cols="12" md="7" lg="8" xl="9">
+    <b-col cols="12" md="7" lg="8" xl="9" class="px-1">
       <b-card class="px-2 px-lg-3 py-3">
         <h5 class="mb-0 text-info text-uppercase">Transactions history</h5>
         <div v-if="inProgress" style="min-height: 208px" class="mb-3 d-flex justify-content-center align-items-center">
