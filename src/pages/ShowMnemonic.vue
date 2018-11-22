@@ -8,7 +8,6 @@
         <hr class="divider light">
         <h6 class="text-danger py-3">This step is very important</h6>
         <p>Please write down your backup secret (mnemonic). You can use it if you lose your password to recover your wallet. It can be also used in other apps / wallets that support import from mnemonic. If you lose your password and the mnemonic you will not be able to access your funds any more. We cannot recover your account if you lose both (password and mnemonic). We do not store password and mnemonic.</p>
-        <p>Read more about mnemonics <a href="#">here</a></p>
         <hr class="divider light">
         <strong>Your Secret (24 words mnemonic):</strong>
         <div class="words">
