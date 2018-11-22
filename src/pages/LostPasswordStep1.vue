@@ -6,9 +6,9 @@
         <spinner v-if="inProgress" align="center"/>
 
         <template v-if="emailSuccess">
-          <div class="text-success py-3">Password lost email sent</div>
+          <div class="text-success py-3">Email sent</div>
           <p>For resetting your password, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your password.</p>
-          <b-button variant="warning" class="text-uppercase btn-rounded" @click="onEmailLostPasswordResendClick">Resend email</b-button>
+          <b-button variant="warning" class="text-uppercase btn-rounded mt-4" @click="onEmailLostPasswordResendClick">Resend email</b-button>
           <br>
           <small v-if="emailLostPasswordResent" class="d-block pt-2 text-success">Resent email</small>
           <b-button variant="info" class="mt-4 text-uppercase btn-rounded" @click="onDoneClick">Done</b-button>
