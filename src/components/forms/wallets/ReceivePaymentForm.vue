@@ -74,14 +74,8 @@
           </b-form-invalid-feedback>
         </b-form-group>
 
-        <hr class="divider">
-
         <div class="text-center py-4">
-          <b-button-group :size="isMobile ? 'sm' : null">
-            <b-button :disabled="$v.$invalid" variant="success" class="text-uppercase" @click="onSendEmailClick">Send by email</b-button>
-            <b-button :disabled="$v.$invalid" variant="warning" class="text-uppercase" @click="onPrintClick">Print</b-button>
-            <b-button variant="info" class="text-uppercase" @click="onDoneClick">Done</b-button>
-          </b-button-group>
+          <b-button :disabled="$v.$invalid" variant="info" class="text-uppercase btn-rounded" @click="onSendEmailClick">Send by email</b-button>
         </div>
       </b-col>
     </b-row>
