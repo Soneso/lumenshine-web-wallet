@@ -21,24 +21,31 @@
             <ul id="help-faq" role="tablist">
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">Q 1</a>
+                <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">How can I fund my wallet?</a>
                 <b-collapse id="q1" accordion="accordion1" role="tabpanel">
-                  <p class="mt-3"> I start opened because <code>visible</code> is <code>true</code></p>
-                  <p class="mb-0"> {{ text }}</p>
+                  <!--<p class="mt-3"> I start opened because <code>visible</code> is <code>true</code></p>-->
+                  <p class="mb-0"><br>In order to prevent people from making a huge number of unnecessary accounts, each account in the Stellar Network must have a minimum balance of 1 XLM (Stellar Lumen). Press the "Fund Wallet" button of your wallet and send Lumens to the displayed Account ID/Public key. At least 1 XLM is needed to fund your wallet in the Stellar Network. We recommend a minimum of 2 XLM.<br><br>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?<br><br>A: You can pay an exchange that sells Stellar Lumens in order to fund your wallet. CoinMarketCap maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens, withdraw them from the exchange to your wallet by sending them to the displayed Account ID/Public key in order to fund your wallet.<br></p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">Q 2</a>
+                <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">How can I setup the inflation destination to receive airdrops?</a>
                 <b-collapse id="q2" accordion="accordion1" role="tabpanel">
-                  <p class="mt-3 mb-0"> {{ text }} </p>
+                  <p class="mt-3 mb-0"><br>You can set the inflation destination in the details section of your wallet. Press the "Details" button and scroll to "Set inflation destination". Then press the set button and choose from the list of known inflation destinations or provide your own data. If you provide your own data, you must insert the Account ID/Public key of the inflation destination account you want to vote for.</p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q3 href="#" class="d-block font-weight-500 mt-1 text-info">Q 3</a>
+                <a v-b-toggle.q3 href="#" class="d-block font-weight-500 mt-1 text-info">How can I receive other assets and currencies than Stellar Lumens?</a>
                 <b-collapse id="q3" accordion="accordion1" role="tabpanel">
-                  <p class="mt-3 mb-0"> {{ text }} </p>
+                  <p class="mt-3 mb-0"><br>You can accept other assets and currencies than Stellar Lumens in the details section of your wallet. Press the "Details" button and scroll to "Currencies". Next, press the "add currency" button and provide the AccountID/Public key of the issuer and the asset code of the currency you would like to accept. Only assets and currencies from the Stellar Network can be added. This will create a trustline to the inserted issuer account and asset code so that you can now accept that asset or currency.<br><br>After adding the trustline, go back to your wallet and press the "Receive" button. You can now select the new currency from the provided dropdown. Insert the data and send it to the person you want to obtain the assets from.<br></p>
+                </b-collapse>
+              </li>
+              <li>
+                <hr class="divider light">
+                <a v-b-toggle.q4 href="#" class="d-block font-weight-500 mt-1 text-info">How can I send Stellar Lumens and other currencies?</a>
+                <b-collapse id="q4" accordion="accordion1" role="tabpanel">
+                  <p class="mt-3 mb-0"><br>You can send Stellar Lumens and other assets or currencies by pressing the "Send" button of your wallet. Fill the form, enter your password and submit. You can only send assets that you have in your wallet.<br><br>The recepient must also trust and be able to receive the asset (other then Stellar Lumens) you would like to send. If she did not yet accept the asset you want to send, an error message will be dispayed.<br></p>
                 </b-collapse>
               </li>
             </ul>
@@ -59,7 +66,7 @@
                   </li>
                 </ul>
                 <b-collapse id="basics" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
                 </b-collapse>
               </li>
               <li>
@@ -74,7 +81,7 @@
                   </li>
                 </ul>
                 <b-collapse id="security" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
                 </b-collapse>
               </li>
               <li>
@@ -89,7 +96,7 @@
                   </li>
                 </ul>
                 <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">coming soon</span>
                 </b-collapse>
               </li>
               <li>
@@ -104,7 +111,7 @@
                   </li>
                 </ul>
                 <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Maecenas velit purus, volutpat ut convallis ac, fermentum porttitor eros. Fusce tortor elit, rutrum id quam vitae, luctus ultricies leo.</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
                 </b-collapse>
               </li>
             </ul>
