@@ -24,7 +24,7 @@ export default {
   ],
 
   SUPPORT_MAIL: 'support@lumenshine.com',
-  FEDERATION_DOMAIN: 'demo.lumenshine.com',
+  FEDERATION_DOMAIN: 'lsdev.ponytest.de',
 
   API_BASE: nodeScript === 'dev-local' ? 'http://localhost:9001' : 'https://lsdevapi.ponytest.de',
   // API_BASE: 'http://192.168.1.56:9001',
