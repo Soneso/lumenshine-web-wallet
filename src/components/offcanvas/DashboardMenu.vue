@@ -1,5 +1,5 @@
 <template>
-  <ul :class="['menu-container', 'pt-5', {'expanded': offCanvasMenuOpen, 'collapsed': !offCanvasMenuOpen}]">
+  <ul :class="['menu-container', {'pt-5': !isMobile, 'pt-0': isMobile, 'expanded': offCanvasMenuOpen, 'collapsed': !offCanvasMenuOpen}]">
     <li class="user-section text-center">
       <div class="user-avatar">
         <template v-if="userStatus.avatar">
@@ -19,24 +19,24 @@
     </li>
 
     <li>
-      <router-link to="/dashboard">
+      <a href="#" @click.prevent.stop="goto('dashboard')">
         <i class="icon-home"/>
         <div :style="toggleText">Home</div>
-      </router-link>
+      </a>
     </li>
 
     <li>
-      <router-link to="/wallets">
+      <a href="#" @click.prevent.stop="goto('wallets')">
         <i class="icon-card"/>
         <div :style="toggleText">Wallets</div>
-      </router-link>
+      </a>
     </li>
 
     <li>
-      <router-link to="/transactions">
+      <a href="#" @click.prevent.stop="goto('transactions')">
         <i class="icon-transaction"/>
         <div :style="toggleText">Transactions</div>
-      </router-link>
+      </a>
     </li>
 
     <!--<li>-->
@@ -47,10 +47,10 @@
     <!--</li>-->
 
     <li>
-      <router-link to="/contacts">
+      <a href="#" @click.prevent.stop="goto('contacts')">
         <i class="icon-user"/>
         <div :style="toggleText">Contacts</div>
-      </router-link>
+      </a>
     </li>
 
     <!--<li>-->
@@ -61,7 +61,7 @@
     <!--</li>-->
 
     <li class="has-submenu">
-      <router-link to="/settings">
+      <a href="#" @click.prevent.stop="goto('settings')">
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
@@ -82,29 +82,29 @@
             </li>
 
             <li>
-              <router-link to="/backup-mnemonic">
+              <a href="#" @click.prevent.stop="goto('backup-mnemonic')">
                 <div>Backup Secret/Mnemonic</div>
-              </router-link>
+              </a>
             </li>
 
             <li>
-              <router-link to="/personal-data">
+              <a href="#" @click.prevent.stop="goto('personal-data')">
                 <div>Personal data</div>
-              </router-link>
+              </a>
             </li>
           </ul>
         </div>
-      </router-link>
+      </a>
     </li>
     <li>
       <div class="separator"/>
     </li>
 
     <li>
-      <router-link to="/help">
+      <a href="#" @click.prevent.stop="goto('help')">
         <i class="icon-help"/>
         <div :style="toggleText">Help</div>
-      </router-link>
+      </a>
     </li>
 
     <li>
@@ -129,7 +129,14 @@ export default {
   mixins: [offcanvasNavigation],
   data: () => ({ config }),
   computed: {
-    ...mapGetters(['changePasswordStep', 'change2faStep', 'offCanvasMenuOpen', 'userStatus', 'authToken', 'isMobile']),
+    ...mapGetters([
+      'changePasswordStep',
+      'change2faStep',
+      'offCanvasMenuOpen',
+      'userStatus',
+      'authToken',
+      'isMobile'
+    ]),
     toggleText () {
       return {
         opacity: this.offCanvasMenuOpen ? 1 : 0
@@ -145,6 +152,7 @@ export default {
         this.mutateChangePasswordStep('password');
       }
       this.$router.push({ name: 'ChangePassword' });
+      this.closeMenu();
     },
 
     switchToChange2faView () {
@@ -152,11 +160,19 @@ export default {
         this.mutateChange2faStep('password');
       }
       this.$router.push({ name: 'ChangeTfa' });
+      this.closeMenu();
     },
 
-    async onLogoutClick () {
+    goto (url) {
+      this.$router.push(url);
+      this.closeMenu();
+    },
+    closeMenu () {
       this.$store.commit('mutateOffCanvasMenuOpen', false);
       this.closeMenuAnimation();
+    },
+    async onLogoutClick () {
+      this.closeMenu();
       await this.logout();
       this.$router.push({ name: 'Login' });
     }

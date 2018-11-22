@@ -146,7 +146,6 @@ export default {
   },
   mounted () {
     this.currentRoute = this.$route.path.split('/')[1];
-    console.log(this.currentRoute);
   },
   methods: {
     onLoginClick () {
