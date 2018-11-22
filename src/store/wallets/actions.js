@@ -6,6 +6,7 @@ import workerCaller from '@/util/workerCaller';
 import validators from '@/validators';
 
 import WalletService from '@/services/wallet';
+import WebSocketService from '@/services/websocket';
 
 import StellarErrorParser from '@/util/StellarErrorParser';
 
@@ -30,33 +31,60 @@ export default {
         const stellarData = stellarRes.find(acc => acc.id === account.public_key);
         return { ...account, stellar_data: stellarData };
       });
+
       extended.forEach(async acc => {
         if (acc.stellar_data) {
-          const lastTransaction = await StellarAPI.transactions()
-            .forAccount(acc.public_key)
-            .order('desc')
-            .limit(1)
-            .call();
-          StellarAPI.transactions()
-            .forAccount(acc.public_key)
-            .cursor(lastTransaction.records[0].paging_token)
-            .stream({
-              onmessage: async tx => {
-                commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
-                if (getters.pendingTransactions.find(t => t === tx.id)) {
-                  const operations = await tx.operations();
-                  tx.operation = operations.records[0];
-                  commit('RESOLVE_TRANSACTION', tx);
-                }
-                dispatch('updateWallets', [acc.public_key]);
-              }
-            });
+          // const lastTransaction = await StellarAPI.transactions()
+          //   .forAccount(acc.public_key)
+          //   .order('desc')
+          //   .limit(1)
+          //   .call();
+          // StellarAPI.transactions()
+          //   .forAccount(acc.public_key)
+          //   .cursor(lastTransaction.records[0].paging_token)
+          //   .stream({
+          //     onmessage: async tx => {
+          //       commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
+          //       if (getters.pendingTransactions.find(t => t === tx.id)) {
+          //         const operations = await tx.operations();
+          //         tx.operation = operations.records[0];
+          //         commit('RESOLVE_TRANSACTION', tx);
+          //       }
+          //       dispatch('updateWallets', [acc.public_key]);
+          //     }
+          //   });
         }
       });
       commit('SET_WALLETS', extended);
       commit('SET_WALLETS_LOADING', { id: extended.map(acc => acc.id), loading: false });
     } catch (err) {
       commit('SET_WALLETS_ERROR', err.data);
+    }
+  },
+
+  async watchWallets ({ commit, state }, wallets) {
+    if (wallets.length === 0 && state.websocket !== null) {
+      commit('TRY_DESTROYING_WEBSOCKET', true);
+    } else {
+      commit('TRY_DESTROYING_WEBSOCKET', false);
+      if (state.websocket === null) {
+        const ws = await WebSocketService.getWebSocket();
+        console.log('ws', ws);
+        ws.addEventListener('open', function (event) {
+          console.log('wsopen', event);
+        });
+        ws.addEventListener('message', function (event) {
+          console.log('wsmessage', event.data);
+        });
+        ws.addEventListener('error', function (event) {
+          console.log('wserror', event);
+        });
+        ws.addEventListener('close', function (event) {
+          console.log('wsclose', event);
+        });
+        commit('SET_WEBSOCKET', ws);
+      }
+      commit('SET_WATCHED_WALLETS', wallets);
     }
   },
 

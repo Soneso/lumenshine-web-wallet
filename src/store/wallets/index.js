@@ -73,6 +73,10 @@ function getInitialState (clearAuthToken = false) {
       : null,
 
     exchanges,
+
+    websocket: null,
+    watchedWallets: [],
+    closingWebsocketTimer: null,
   };
 }
 
