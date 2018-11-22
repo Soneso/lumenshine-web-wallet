@@ -182,9 +182,57 @@ input {
 
 
 // Form checkbox
+%checkbox-common {
+  background-image: none;
+  background-color: $info;
+  width: 8px;
+}
+%checkbox-active {
+  @extend %checkbox-common;
+  height: 8px;
+  margin: 4px 0 0 4px;
+}
+%checkbox-indeterminate {
+  @extend %checkbox-common;
+  height: 4px;
+  margin: 6px 0 0 4px;
+}
+%checkbox-bg {
+  background-image: none;
+  background-color: $white;
+  border: 1px solid $gray-200;
+}
+%checkbox-disabled-bg {
+  background-image: none;
+  box-shadow: none;
+  background-color: $gray-200;
+  border: 1px solid $gray-200;
+}
 
+.custom-checkbox {
+  .custom-control-label::before {
+    @extend %checkbox-disabled-bg;
+    border-radius: 0;
+  }
 
+  .custom-control-input:checked ~ .custom-control-label {
+    &::before {
+      @extend %checkbox-bg
+    }
+    &::after {
+      @extend %checkbox-active
+    }
+  }
 
+  .custom-control-input:indeterminate ~ .custom-control-label {
+    &::before {
+      @extend %checkbox-bg
+    }
+    &::after {
+      @extend %checkbox-indeterminate
+    }
+  }
+}
 // Form radio
 
 

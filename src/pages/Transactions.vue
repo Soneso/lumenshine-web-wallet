@@ -132,7 +132,9 @@
           </b-row>
 
           <b-row v-if="filterPayments" class="small-gutter pl-3">
-            <b-col cols="12" sm="3" md="12"><b-form-checkbox v-model="filterPaymentCurrency" class="my-2">Currency</b-form-checkbox></b-col>
+            <b-col cols="12" sm="3" md="12">
+              <b-form-checkbox v-model="filterPaymentCurrency" class="my-2">Currency</b-form-checkbox>
+            </b-col>
             <b-col v-if="filterPaymentCurrency">
               <b-form-group label-for="payment-currency-from" label="Currency">
                 <b-form-select id="payment-currency-from" v-model="filterPaymentCurrencyType" :options="currencyOptions"/>
