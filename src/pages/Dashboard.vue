@@ -19,6 +19,7 @@ export default {
       walletIds: [], // needed for the case when details view is open, and user unchecks the "Show wallet on home screen" checkbox. In this case the wallets cannot be filtered using the boolean show_on_homescreen flag. Old card should remain there.
     };
   },
+
   computed: {
     ...mapGetters(['wallets']),
     dashboardWallets () {
@@ -26,12 +27,19 @@ export default {
       return this.walletIds.map(wId => this.wallets.res.find(w => w.id === wId));
     }
   },
+
   async created () {
     await this.getWallets();
     this.recheckWallets();
+    await this.watchWallets(this.dashboardWallets.map(w => w.public_key));
   },
+
+  async beforeDestroy () {
+    await this.watchWallets([]);
+  },
+
   methods: {
-    ...mapActions(['getWallets']),
+    ...mapActions(['getWallets', 'watchWallets']),
     recheckWallets () {
       if (!this.wallets.res) {
         this.walletIds = [];
