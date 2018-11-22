@@ -9,7 +9,7 @@
           <spinner v-if="inProgress" align="center"/>
 
           <template v-else>
-            <div class="py-3">
+            <div class="pt-4 pb-3">
               <b-button type="submit" variant="info" class="btn-rounded text-uppercase" @click="onCheckConfirmation">Continue</b-button>
               <div v-if="alreadyConfirmedFailed" class="text-danger pt-2">Please confirm your email address first.</div>
             </div>
@@ -32,7 +32,7 @@
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1008)" class="pb-2">Email already confirmed!</div>
             </div>
             <div v-else>
-              <div class="text-success pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
+              <div class="pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
               <div v-if="hasUnknownError" class="text-danger text-center pb-2">Unknown error, please try again later!</div>
               <login-form
                 v-show="decryptError || (!loading && !loginStatus.res)"
@@ -42,6 +42,7 @@
                 :show-email-field="showFullLoginForm"
                 :show-tfa-field="showFullLoginForm"
                 :should-continue="true"
+                class="text-left"
                 @submit="onLoginSubmit"/>
             </div>
           </div>
