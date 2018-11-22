@@ -139,8 +139,8 @@ export default {
     }
   },
   watch: {
-    tfaCode () {
-      this.tfaCode = this.tfaCode.split(' ').join('');
+    twoFactorCode () {
+      this.twoFactorCode = this.twoFactorCode.split(' ').join('');
     }
   },
   methods: {
