@@ -77,7 +77,7 @@
         <hr class="divider">
 
         <div class="text-center py-4">
-          <b-button-group size="sm">
+          <b-button-group :size="isMobile ? 'sm' : null">
             <b-button :disabled="$v.$invalid" variant="success" class="text-uppercase" @click="onSendEmailClick">Send by email</b-button>
             <b-button :disabled="$v.$invalid" variant="warning" class="text-uppercase" @click="onPrintClick">Print</b-button>
             <b-button variant="info" class="text-uppercase" @click="onDoneClick">Done</b-button>
@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import StellarSdk from 'stellar-sdk';
 import formMixin from '@/mixins/form';
 
@@ -124,6 +125,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['isMobile']),
     emailBody () {
       let emailBody = `Public key: ${this.data.public_key}\nCurrency: ${this.assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : this.assetCode}\n`;
       if (this.issuer) {
