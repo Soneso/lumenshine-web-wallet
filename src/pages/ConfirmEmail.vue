@@ -32,18 +32,22 @@
               <div v-if="confirmEmailStatus.err.find(err => err.error_code === 1008)" class="pb-2">Email already confirmed!</div>
             </div>
             <div v-else>
-              <div class="pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
-              <div v-if="hasUnknownError" class="text-danger text-center pb-2">Unknown error, please try again later!</div>
-              <login-form
-                v-show="decryptError || (!loading && !loginStatus.res)"
-                :loading="loading"
-                :errors="loginStatus.err"
-                :decrypt-error="decryptError"
-                :show-email-field="showFullLoginForm"
-                :show-tfa-field="showFullLoginForm"
-                :should-continue="true"
-                class="text-left"
-                @submit="onLoginSubmit"/>
+              <spinner v-if="inProgress" align="center" message="Logging you in..." width="150"/>
+              <template v-else="">
+                <div class="pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
+                <div v-if="hasUnknownError" class="text-danger text-center pb-2">Unknown error, please try again later!</div>
+
+                <login-form
+                  v-show="decryptError || (!loading && !loginStatus.res)"
+                  :loading="loading"
+                  :errors="loginStatus.err"
+                  :decrypt-error="decryptError"
+                  :show-email-field="showFullLoginForm"
+                  :show-tfa-field="showFullLoginForm"
+                  :should-continue="true"
+                  class="text-left"
+                  @submit="onLoginSubmit"/>
+              </template>
             </div>
           </div>
         </template>
@@ -78,7 +82,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['confirmEmailStatus', 'resendEmailStatus', 'userStatus', 'loginStatus', 'encryptedServerData', 'userAuthData', 'sep10Challenge']),
+    ...mapGetters([
+      'confirmEmailStatus',
+      'resendEmailStatus',
+      'userStatus',
+      'loginStatus',
+      'encryptedServerData',
+      'userAuthData',
+      'sep10Challenge'
+    ]),
     hasToken () {
       return this.$route.params.token;
     },
@@ -99,7 +111,19 @@ export default {
   },
 
   methods: {
-    ...mapActions(['confirmEmail', 'resendConfirmationEmail', 'getUserStatus', 'loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'getUserAuthData', 'setEmail', 'clearAuthToken', 'updateSep10']),
+    ...mapActions([
+      'confirmEmail',
+      'resendConfirmationEmail',
+      'getUserStatus',
+      'loginStep1',
+      'loginStep2',
+      'setMnemonic',
+      'setPublicKeys',
+      'getUserAuthData',
+      'setEmail',
+      'clearAuthToken',
+      'updateSep10'
+    ]),
 
     async onResendEmail () {
       this.inProgress = true;
