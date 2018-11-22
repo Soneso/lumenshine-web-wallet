@@ -1,6 +1,6 @@
 <template>
   <b-row class="small-gutter">
-    <b-col cols="12" md="5" lg="4" xl="3">
+    <b-col :class="isMobile ? 'mb-3' : 'mb-1'" cols="12" md="5" lg="4" xl="3">
       <b-card class="p-2 p-lg-3">
         <!-- Basic filters-->
         <b-row>
@@ -289,7 +289,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['transactions', 'wallets']),
+    ...mapGetters(['transactions', 'wallets', 'isMobile']),
     loading () {
       return this.inProgress;
     },
