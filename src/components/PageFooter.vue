@@ -12,30 +12,30 @@
         <div class="menu">
           <!-- No user was logged in -->
           <template v-if="!authToken" class="menu">
-            <router-link to="/about">About</router-link>
-            <router-link to="/help">Help</router-link>
+            <router-link to="/about" target="_blank" rel="noreferrer">About</router-link>
+            <router-link to="/help" target="_blank" rel="noreferrer">Help</router-link>
             <router-link to="/login">Log in</router-link>
-            <a href="/terms" target="_new">Terms</a>
+            <a href="/terms" target="_blank" rel="noreferrer">Terms</a>
             <router-link to="/register">Sign up</router-link>
-            <router-link to="/impressum">Impressum</router-link>
-            <a href="https://soneso.com" target="_blank">Soneso</a>
+            <router-link to="/impressum" target="_blank" rel="noreferrer">Impressum</router-link>
+            <a href="https://soneso.com" target="_blank" rel="noreferrer">Soneso</a>
           </template>
 
           <!-- Partial user was logged in (without all registration steps completed) -->
           <template v-if="authToken && authTokenType === 'partial'" class="menu">
-            <router-link to="/about">About</router-link>
-            <router-link to="/help">Help</router-link>
-            <a href="/terms" target="_new">Terms</a>
+            <router-link to="/about" target="_blank" rel="noreferrer">About</router-link>
+            <router-link to="/help" target="_blank" rel="noreferrer">Help</router-link>
+            <a href="/terms" target="_blank" rel="noreferrer">Terms</a>
             <a href="/login" @click="onLogoutClick">Sign out</a>
-            <router-link to="/impressum">Impressum</router-link>
-            <a href="https://soneso.com" target="_blank">Soneso</a>
+            <router-link to="/impressum" target="_blank" rel="noreferrer">Impressum</router-link>
+            <a href="https://soneso.com" target="_blank" rel="noreferrer">Soneso</a>
           </template>
 
           <!-- Logged in user -->
           <template v-if="authToken && authTokenType !== 'partial'" class="menu menu--short">
-            <a href="https://soneso.com" target="_blank">Developed by Soneso</a>
-            <a href="/terms" target="_new">Terms</a>
-            <router-link to="/impressum">Impressum</router-link>
+            <a href="https://soneso.com" target="_blank" rel="noreferrer">Developed by Soneso</a>
+            <a href="/terms" target="_blank" rel="noreferrer">Terms</a>
+            <router-link to="/impressum" target="_blank" rel="noreferrer">Impressum</router-link>
           </template>
         </div>
       </b-col>
@@ -44,7 +44,7 @@
     <b-row class="py-2 soneso-logo">
       <b-col class="text-uppercase">
         <p>Powered by</p>
-        <a href="https://soneso.com" target="_blank">
+        <a href="https://soneso.com" target="_blank" rel="noreferrer">
           <img class="not-stretching" src="../assets/images/ui/soneso-logo.svg">
         </a>
       </b-col>

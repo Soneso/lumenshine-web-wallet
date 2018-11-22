@@ -442,7 +442,7 @@
     <div class="text-center">
       <b-form-checkbox id="signup-agreement" v-model="agreed" value="accepted" unchecked-value="not_accepted" class="py-3">
         <small>
-          You agree to abide by Lumenshine's <a href="/terms" target="_new">terms of service</a>
+          You agree to abide by Lumenshine's <a href="/terms" target="_blank" rel="noreferrer">terms of service</a>
         </small>
       </b-form-checkbox>
       <b-button :disabled="agreed !== 'accepted'" :variant="agreed !== 'accepted' ? 'secondary' : 'success'" type="submit" class="btn-rounded text-uppercase my-3" size="lg" @click.prevent="onRegisterClick">Sign Up</b-button>
