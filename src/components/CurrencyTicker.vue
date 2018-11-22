@@ -6,7 +6,7 @@
           {{ pair.amount.format() }} {{ pair.source }} ≈ {{ pair.value.format(2) }} {{ pair.destination }}
         </swiper-slide>
         <!--<swiper-slide class="div-amounts">-->
-          <!--Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD-->
+        <!--Value in your wallets ≈ {{ totalUSDAmount.format(2) }} USD-->
         <!--</swiper-slide>-->
       </swiper>
     </div>
