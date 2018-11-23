@@ -2,7 +2,7 @@
 const nodeScript = __NODE_SCRIPT__;
 
 export default {
-  APP_TITLE: 'Lumenshine',
+  APP_TITLE: 'Lumenshine (Beta)',
   APP_SUBTITLE: 'A Wallet for the Stellar Network by Soneso',
 
   REGISTRATION_OPTIONAL_FIELDS: [
