@@ -46,6 +46,9 @@ export default {
         this.onModalClose();
       }
     },
+    wallets (val) {
+      this.watchWallets(this.wallets.res.map(w => w.public_key));
+    },
     $route () {
       this.addWalletModalShown = this.$route.params.add === 'add';
     }
