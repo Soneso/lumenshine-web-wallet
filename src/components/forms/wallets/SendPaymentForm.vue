@@ -222,11 +222,7 @@
             <strong>Transaction fee: {{ transactionFee.format() }} XLM</strong>
           </p>
           <div class="text-center py-4">
-            <b-button-group>
-              <b-button variant="success" class="text-uppercase" @click.prevent="reset">Send other</b-button>
-              <b-button variant="info" class="text-uppercase" @click.prevent="window.print()">Print</b-button>
-              <b-button variant="warning" class="text-uppercase" @click.prevent="$emit('close')">Done</b-button>
-            </b-button-group>
+            <b-button variant="success" class="text-uppercase btn-rounded" @click.prevent="reset">Send other</b-button>
           </div>
         </div>
       </b-col>
