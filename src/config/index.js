@@ -10,4 +10,5 @@ export default {
   ...((__BUILD_CONFIG__ === 'alpha') ? require('./alpha').default : {}),
   ...((__BUILD_CONFIG__ === 'lsdev') ? require('./lsdev').default : {}),
   ...((__BUILD_CONFIG__ === 'lsstage') ? require('./lsstage').default : {}),
+  ...((__BUILD_CONFIG__ === 'prod') ? require('./prod').default : {}),
 };
