@@ -27,6 +27,10 @@ import pageFooter from '@/components/PageFooter';
 import dashboardMenu from '@/components/offcanvas/DashboardMenu';
 import offCanvasMenu from '@/components/offcanvas/OffCanvasMenu';
 
+import WebSocketService from '@/services/websocket';
+
+import config from '@/config';
+
 export default {
   name: 'App',
 
@@ -47,6 +51,7 @@ export default {
     ...mapGetters([
       'userStatus',
       'authTokenType',
+      'authToken',
       'registrationComplete',
       'viewportWidth',
       'offCanvasMenuOpen'
@@ -102,6 +107,8 @@ export default {
   },
 
   mounted () {
+    window.addEventListener('beforeunload', this.unloadHandler);
+
     this.$store.watch(state => state, () => this.interactionHandler(), {
       deep: true,
     });
@@ -131,9 +138,25 @@ export default {
       'catchInteraction',
       'clearInteraction'
     ]),
+
     ...mapMutations([
-      'mutateViewportWidth'
+      'mutateViewportWidth',
     ]),
+
+    unloadHandler () {
+      // remove websocket on page unload
+      if (this.authToken) {
+        try {
+          const client = new XMLHttpRequest();
+          client.open('POST', `${config.API_BASE}/portal/sse/remove_ws`, false); // third parameter indicates sync xhr
+          client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          client.setRequestHeader('Authorization', this.authToken);
+          const data = { key: WebSocketService.getKey() };
+          client.send(JSON.stringify(data));
+        } catch (err) {}
+      }
+    },
+
     async interactionHandler () {
       const lastInteraction = this.$store.state.lastInteraction;
       if (lastInteraction === null) {
