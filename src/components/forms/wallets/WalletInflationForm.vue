@@ -17,11 +17,99 @@
 
     <div v-if="fieldOpen">
       <b-button-group size="sm" class="my-3">
-        <b-button :class="formType === 'known' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Destinations</b-button>
         <b-button :class="formType === 'fields' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Destination Data</b-button>
+        <b-button :class="formType === 'known' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Recommended</b-button>
       </b-button-group>
 
-      <div v-if="formType === 'fields'" class="tab-page"> <!-- new destination -->
+      <div v-if="formType !== 'fields'"> <!-- Known destinations -->
+        <b-list-group class="flat-card">
+          <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
+            <b-row align-h="between">
+              <b-col cols="9" sm="10">
+                <h6>{{ destination.name }}</h6>
+                <small class="d-block">
+                  {{ destination.short_description }}
+                  <!--<a href="#" class="pull-right" @click.prevent>details</a>-->
+                </small>
+                <small class="d-block">Public key: <public-key :text="destination.issuer_public_key" :chars="isMobile ? 16 : 22" color="text-secondary"/></small>
+              </b-col>
+              <b-col cols="3" sm="2" class="text-right">
+                <input
+                  :id="`currencyCheckbox${destination.issuer_public_key}`"
+                  :checked="destination.issuer_public_key === data.stellar_data.inflation_destination"
+                  type="checkbox"
+                  class="switch"
+                  @input.prevent="e => onToggleCurrency(e, destination)">
+                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
+              </b-col>
+            </b-row>
+
+            <div v-if="openedKnownDestination === destination || removingDestination" class="pt-4 pb-1">
+              <b-form-group v-if="canSignWithPassword">
+                <b-form-input
+                  :id="`passwordInput_${uuid}`"
+                  :class="{ error: $v.password.$error }"
+                  :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
+                  :state="!$v.password.$error"
+                  v-model="password"
+                  :type="password2IsHidden ? 'password' : 'text'"
+                  placeholder="Your password"
+                  required
+                  @blur.native="$v.password.$touch()"/>
+
+                <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
+                <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
+                  <template v-if="$v.password.$error" class="field__errors">
+                    <template v-if="!$v.password.required">Password is required! <br></template>
+                    <template v-if="!$v.password.decryptValid">Wrong password!</template>
+                  </template>
+                </b-form-invalid-feedback>
+                <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
+                  Your password.
+                </b-form-text>
+              </b-form-group>
+
+              <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
+                <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+                <b-form-input
+                  :class="{ error: $v.signerSeed.$error }"
+                  :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
+                  :state="!$v.signerSeed.$error"
+                  v-model="signerSeed"
+                  type="text"
+                  placeholder="Seed for selected signer"
+                  required
+                  @blur.native="$v.signerSeed.$touch()"/>
+                <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
+                  <template v-if="$v.signerSeed.$error" class="field__errors">
+                    <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
+                    <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                  </template>
+                </b-form-invalid-feedback>
+                <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
+                  Your secret seed for selected signer.
+                </b-form-text>
+              </b-form-group>
+
+              <small class="d-block mb-3 font-italic">Password required to {{ removingDestination ? 'remove' : 'add' }} destination</small>
+              <div>
+                <a v-if="!loading" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="openKnownDestination(null)">cancel</a>
+                <a v-if="removingDestination" href="#" class="text-danger d-inline-block" @click.prevent="onSubmitClick">
+                  <spinner v-if="loading" message="removing..." width="110" size="24"/>
+                  <template v-else>remove</template>
+                </a>
+                <a v-else href="#" class="text-info d-inline-block" @click.prevent="onSubmitClick">
+                  <spinner v-if="loading" message="adding..." width="90" size="24"/>
+                  <template v-else>add</template>
+                </a>
+              </div>
+            </div>
+          </b-list-group-item>
+        </b-list-group>
+      </div>
+
+      <div v-else class="tab-page"> <!-- new destination -->
         <b-card class="flat-card">
           <b-form-group :label-for="`destinationInput_${uuid}`">
             <b-form-input
@@ -95,110 +183,28 @@
           <div>
             <a v-if="!fieldOpen" href="#" class="px-2" @click.prevent="onSetDestinationClick">set inflation destination</a>
             <template v-else>
-              <a href="#" class="text-warning px-2 d-inline-block" @click.prevent="onCancelClick">cancel</a>
-              <a v-if="removingExistingDestination" href="#" class="text-danger px-2 d-inline-block" @click.prevent="onSubmitClick">
-                <spinner v-if="loading" width="150" size="21" message="setting inflation..."/>
-                <span v-else>remove</span>
-              </a>
-              <a href="#" class="text-info px-2 d-inline-block" @click.prevent="onSubmitClick">
-                <spinner v-if="loading" width="150" size="21" message="setting inflation..."/>
-                <span v-else>submit</span>
-              </a>
+              <b-row>
+                <b-col>
+                  <a v-if="!loading" href="#" class="text-warning px-2 d-inline-block" @click.prevent="onCancelClick">cancel</a>
+                  <a v-if="!loading" href="#" class="text-info px-2 d-inline-block" @click.prevent="onSubmitClick">
+                    <span>submit</span>
+                  </a>
+                </b-col>
+                <b-col class="text-center">
+                  <spinner v-if="loading" width="110" size="21" message="processing..."/>
+                </b-col>
+                <b-col>
+                  <a v-if="removingExistingDestination && !loading" href="#" class="text-danger px-2 d-inline-block pull-right" @click.prevent="onSubmitClick">
+                    <span>remove</span>
+                  </a>
+                </b-col>
+              </b-row>
             </template>
           </div>
         </b-card>
       </div>
 
-      <div v-else> <!-- Known destinations -->
-        <b-list-group class="flat-card">
-          <b-list-group-item v-for="destination in knownDestinations" :key="destination.asset_code + destination.issuer_public_key">
-            <b-row align-h="between">
-              <b-col cols="9" sm="10">
-                <h6>{{ destination.name }}</h6>
-                <small class="d-block">
-                  {{ destination.short_description }}
-                  <!--<a href="#" class="pull-right" @click.prevent>details</a>-->
-                </small>
-                <small class="d-block">Public key: <public-key :text="destination.issuer_public_key" :chars="isMobile ? 16 : 22" color="text-secondary"/></small>
-              </b-col>
-              <b-col cols="3" sm="2" class="text-right">
-                <input
-                  :id="`currencyCheckbox${destination.issuer_public_key}`"
-                  :checked="destination.issuer_public_key === data.stellar_data.inflation_destination"
-                  type="checkbox"
-                  class="switch"
-                  @input.prevent="e => onToggleCurrency(e, destination)">
-                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
-              </b-col>
-            </b-row>
-
-            <div v-if="openedKnownDestination === destination || removingDestination" class="pt-4 pb-1">
-              <b-form-group v-if="canSignWithPassword">
-                <b-form-input
-                  :id="`passwordInput_${uuid}`"
-                  :class="{ error: $v.password.$error }"
-                  :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
-                  :state="!$v.password.$error"
-                  v-model="password"
-                  :type="password2IsHidden ? 'password' : 'text'"
-                  placeholder="Your password"
-                  required
-                  @blur.native="$v.password.$touch()"/>
-
-                <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
-
-                <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
-                  <template v-if="$v.password.$error" class="field__errors">
-                    <template v-if="!$v.password.required">Password is required! <br></template>
-                    <template v-if="!$v.password.decryptValid">Wrong password!</template>
-                  </template>
-                </b-form-invalid-feedback>
-                <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
-                  Your password.
-                </b-form-text>
-              </b-form-group>
-
-              <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
-                <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
-                <b-form-input
-                  :class="{ error: $v.signerSeed.$error }"
-                  :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
-                  :state="!$v.signerSeed.$error"
-                  v-model="signerSeed"
-                  type="text"
-                  placeholder="Seed for selected signer"
-                  required
-                  @blur.native="$v.signerSeed.$touch()"/>
-                <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
-                  <template v-if="$v.signerSeed.$error" class="field__errors">
-                    <template v-if="!$v.signerSeed.required">Secret seed is required! <br></template>
-                    <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
-                  </template>
-                </b-form-invalid-feedback>
-                <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
-                  Your secret seed for selected signer.
-                </b-form-text>
-              </b-form-group>
-
-              <small class="d-block mb-3 font-italic">Password required to {{ removingDestination ? 'remove' : 'add' }} destination</small>
-              <div>
-                <a href="#" class="text-warning mr-3 d-inline-block" @click.prevent="openKnownDestination(null)">cancel</a>
-                <a v-if="removingDestination" href="#" class="text-danger d-inline-block" @click.prevent="onSubmitClick">
-                  <spinner v-if="loading" message="removing..." width="90" size="21"/>
-                  <template v-else>remove</template>
-                </a>
-                <a v-else href="#" class="text-info d-inline-block" @click.prevent="onSubmitClick">
-                  <spinner v-if="loading" message="adding..." width="90" size="21"/>
-                  <template v-else>add</template>
-                </a>
-              </div>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
-      </div>
     </div>
-    <spinner v-if="loading" size="21" class="my-2 mx-3"/>
-    <br>
   </b-form>
 </template>
 
@@ -242,7 +248,7 @@ export default {
       fieldOpen: false,
       destination: currentDestination === this.data.public_key ? '' : currentDestination,
       password: '',
-      formType: 'known',
+      formType: 'fields',
       openedKnownDestination: null,
       removingDestination: false,
 
