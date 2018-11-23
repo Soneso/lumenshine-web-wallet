@@ -31,7 +31,7 @@
                 <hr class="divider light">
                 <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">How can I setup the inflation destination to receive airdrops?</a>
                 <b-collapse id="q2" accordion="accordion1" role="tabpanel">
-                  <p class="mt-3 mb-0"><br>You can set the inflation destination in the details section of your wallet. Press the "Details" button and scroll to "Set inflation destination". Then press the set button and choose from the list of known inflation destinations or provide your own data. If you provide your own data, you must insert the Account ID/Public key of the inflation destination account you want to vote for.</p>
+                  <p class="mt-3 mb-0"><br>You can set the inflation destination in the details section of your wallet. Press the "Details" button and scroll to "Set inflation destination". Then press the set button and choose from the list of recommended inflation destinations or provide your own data. If you provide your own data, you must insert the Account ID/Public key of the inflation destination account you want to vote for.</p>
                 </b-collapse>
               </li>
               <li>
