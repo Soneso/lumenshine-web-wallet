@@ -212,6 +212,9 @@ export default {
   },
 
   SET_WEBSOCKET (state, ws) {
+    if (ws === null) {
+      state.watchedWallets = [];
+    }
     if (state.websocket) {
       state.websocket.close();
       WebSocketService.close();
@@ -224,6 +227,7 @@ export default {
     if (tryDestroy) {
       if (state.closingWebsocketTimer === null) {
         state.closingWebsocketTimer = setTimeout(() => {
+          state.watchedWallets = [];
           state.websocket.close();
           WebSocketService.close();
           state.websocket = null;

@@ -17,6 +17,43 @@ if (config.IS_TEST_NETWORK) {
   StellarSdk.Network.usePublicNetwork();
 }
 
+function createWebsocket ({ commit, dispatch }, retryCount = 0) {
+  return new Promise(async (resolve, reject) => {
+    if (retryCount > 5) {
+      return reject(new Error('Cannot connect to websocket'));
+    }
+    const ws = await WebSocketService.getWebSocket();
+    if (!ws) return reject(new Error('Not logged in'));
+
+    ws.addEventListener('open', event => {
+      commit('SET_WEBSOCKET', ws);
+      resolve(ws);
+    });
+
+    ws.addEventListener('message', event => {
+      try {
+        const changes = event.data.split('\n');
+        const publicKeys = changes.map(change => JSON.parse(change).account);
+        dispatch('updateWallets', publicKeys);
+      } catch (err) {
+        console.error('Error updating wallet', err);
+      }
+    });
+
+    ws.addEventListener('error', event => {
+      console.error('Websocket connection error', event);
+      commit('SET_WEBSOCKET', null);
+      setTimeout(() => {
+        createWebsocket({ commit, dispatch }, retryCount + 1).then(() => resolve()).catch(err => reject(err));
+      }, 3000);
+    });
+
+    ws.addEventListener('close', event => {
+      commit('SET_WEBSOCKET', null);
+    });
+  });
+}
+
 export default {
   async getWallets ({ commit, getters, dispatch }) {
     try {
@@ -32,29 +69,6 @@ export default {
         return { ...account, stellar_data: stellarData };
       });
 
-      extended.forEach(async acc => {
-        if (acc.stellar_data) {
-          // const lastTransaction = await StellarAPI.transactions()
-          //   .forAccount(acc.public_key)
-          //   .order('desc')
-          //   .limit(1)
-          //   .call();
-          // StellarAPI.transactions()
-          //   .forAccount(acc.public_key)
-          //   .cursor(lastTransaction.records[0].paging_token)
-          //   .stream({
-          //     onmessage: async tx => {
-          //       commit('SET_WALLETS_LOADING', { id: acc.id, loading: true });
-          //       if (getters.pendingTransactions.find(t => t === tx.id)) {
-          //         const operations = await tx.operations();
-          //         tx.operation = operations.records[0];
-          //         commit('RESOLVE_TRANSACTION', tx);
-          //       }
-          //       dispatch('updateWallets', [acc.public_key]);
-          //     }
-          //   });
-        }
-      });
       commit('SET_WALLETS', extended);
       commit('SET_WALLETS_LOADING', { id: extended.map(acc => acc.id), loading: false });
     } catch (err) {
@@ -62,27 +76,13 @@ export default {
     }
   },
 
-  async watchWallets ({ commit, state }, wallets) {
+  async watchWallets ({ commit, state, dispatch }, wallets) {
     if (wallets.length === 0 && state.websocket !== null) {
       commit('TRY_DESTROYING_WEBSOCKET', true);
     } else {
       commit('TRY_DESTROYING_WEBSOCKET', false);
-      if (state.websocket === null) {
-        const ws = await WebSocketService.getWebSocket();
-        console.log('ws', ws);
-        ws.addEventListener('open', function (event) {
-          console.log('wsopen', event);
-        });
-        ws.addEventListener('message', function (event) {
-          console.log('wsmessage', event.data);
-        });
-        ws.addEventListener('error', function (event) {
-          console.log('wserror', event);
-        });
-        ws.addEventListener('close', function (event) {
-          console.log('wsclose', event);
-        });
-        commit('SET_WEBSOCKET', ws);
+      if (state.websocket === null || state.websocket.readyState !== 1) { // WebSocket is not open
+        await createWebsocket({ commit, state, dispatch });
       }
       commit('SET_WATCHED_WALLETS', wallets);
     }
@@ -506,6 +506,14 @@ export default {
       res.transactionId = transactionId;
       commit('ADD_PENDING_TRANSACTION', transactionId);
       commit('SET_SEND_PAYMENT_RESULT', res);
+      const txData = await StellarAPI.transactions()
+        .transaction(transactionId)
+        .limit(1)
+        .call();
+      const operations = await txData.operations();
+      txData.operation = operations.records[0];
+      commit('RESOLVE_TRANSACTION', txData);
+
       // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
       console.error(err);
