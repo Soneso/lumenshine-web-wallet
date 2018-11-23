@@ -146,7 +146,7 @@
 
           <b-row class="pl-3">
             <b-col cols="12">
-              <b-form-checkbox v-model="filterOffers" class="my-2 px-3">Offers</b-form-checkbox>
+              <b-form-checkbox v-model="filterOffers" class="my-2 px-2">Offers</b-form-checkbox>
             </b-col>
             <template v-if="filterOffers">
               <b-col :cols="filterSellingCurrencyType === 'OTHER' ? 6 : 12">
