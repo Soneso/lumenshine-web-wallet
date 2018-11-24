@@ -1,5 +1,5 @@
 <template>
-  <footer class="py-4 text-center">
+  <footer ref="footer" :class="['py-4', 'text-center', ...stickyClasses]">
     <b-row class="py-2">
       <b-col>
         <router-link to="/" class="language-button">
@@ -40,7 +40,6 @@
         </div>
       </b-col>
     </b-row>
-
     <b-row class="py-2 soneso-logo">
       <b-col class="text-uppercase">
         <p>Powered by</p>
@@ -58,20 +57,26 @@ import { mapActions, mapGetters } from 'vuex';
 import config from '@/config';
 
 export default {
+  name: 'Footer',
   props: {
+    stickyClasses: {
+      type: Array,
+      required: false
+    },
     isLoggedIn: {
       type: Boolean,
       required: true,
     }
   },
-  data () {
-    return {
-      config
-    };
-  },
+  data: () => ({ config }),
   computed: {
-    ...mapGetters(['userStatus', 'authToken', 'authTokenType']),
+    ...mapGetters([
+      'userStatus',
+      'authToken',
+      'authTokenType'
+    ])
   },
+
   methods: {
     ...mapActions(['logout']),
     async onLogoutClick () {

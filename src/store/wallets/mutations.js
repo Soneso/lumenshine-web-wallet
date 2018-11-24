@@ -211,6 +211,10 @@ export default {
     state.transactionQueue = queue;
   },
 
+  SET_TRANSACTIONS_LOADED (state, msg) {
+    state.transactionsLoaded = msg;
+  },
+
   SET_WEBSOCKET (state, ws) {
     if (ws === null) {
       state.watchedWallets = [];

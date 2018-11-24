@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row ref="transactions">
     <b-col :class="[isMobile ? 'mb-3' : 'mb-1', 'px-1']" cols="12" md="5" lg="4" xl="3">
       <b-card class="p-2 p-lg-3">
         <!-- Basic filters-->
@@ -445,6 +445,14 @@ export default {
     filterPaymentIndeterminate () {
       const sum = this.filterPaymentReceived ? 1 : 0 + this.filterPaymentSent ? 1 : 0 + this.filterPaymentCurrency ? 1 : 0;
       return sum > 0 && sum < 3;
+    },
+
+    transactionsActivityIndicator () {
+      this.walletOptions;
+      this.wallets.loading;
+      this.selectedWallet;
+      this.inProgress;
+      return Date.now();
     }
   },
 
@@ -464,7 +472,6 @@ export default {
     dateTo () {
       this.reloadTransactions();
     },
-
     filterPayments (value) {
       if (!value) {
         this.filterPaymentReceived = false;
@@ -502,6 +509,11 @@ export default {
         this.filterOtherTypes = [];
       }
     },
+    transactionsActivityIndicator () {
+      if (this.walletOptions.length !== 0 || !this.wallets.loading || this.selectedWallet !== null || !this.inProgress) {
+        this.$store.commit('SET_TRANSACTIONS_LOADED', this.$refs.transactions.getBoundingClientRect().height);
+      }
+    }
   },
 
   async created () {

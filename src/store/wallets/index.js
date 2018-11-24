@@ -68,6 +68,8 @@ function getInitialState (clearAuthToken = false) {
 
     transactionQueue: [],
 
+    transactionsLoaded: 0,
+
     publicKeys: config.KEEP_LOGGED_IN && !clearAuthToken
       ? parsePublicKeys(replaceNull(Vue.localStorage.get('publicKeys', null)))
       : null,

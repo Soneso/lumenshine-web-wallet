@@ -1,6 +1,7 @@
 export default {
   decryptedWallet: state => ({ err: state.decryptionError, publicKey: state.decryptedPublicKey, secretSeed: state.decryptedSecret, loading: state.decryptionLoading }),
   wallets: state => ({ err: state.walletsErrors, res: state.walletsResult }),
+  walletsLoading: state => state.walletsLoading,
   walletLoading: state => id => state.walletsLoading[id] !== undefined ? state.walletsLoading[id] : true,
   addWalletStatus: state => ({ err: state.addWalletErrors, loading: state.addWalletLoading, res: state.addWalletResult }),
   editWalletStatus: state => ({ err: state.editWalletErrors, loading: state.editWalletLoading }),
@@ -28,4 +29,5 @@ export default {
   }),
   pendingTransactions: state => state.transactionQueue.filter(tr => !tr.data).map(tr => tr.id),
   finishedTransactions: state => state.transactionQueue.filter(tr => tr.data).map(tr => tr.data),
+  transactionsLoaded: state => state.transactionsLoaded
 };

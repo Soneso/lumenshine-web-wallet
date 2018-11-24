@@ -1,7 +1,7 @@
 <template>
   <section>
     <b-row align-h="start" class="equal-heights">
-      <card-spinner :loading="wallets.loading"/>
+      <!--<card-spinner :loading="wallets.loading"/>-->
       <wallet-card v-for="wallet in dashboardWallets" :key="wallet.public_key" :data="wallet" @recheck="recheckWallets"/>
     </b-row>
   </section>

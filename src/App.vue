@@ -5,12 +5,16 @@
       <dashboard-menu/>
     </off-canvas-menu>
 
-    <b-container v-if="userStatus.res || userStatus.err" id="page-wrapper" fluid>
+    <b-container v-if="userStatus.res || userStatus.err" id="page-wrapper" ref="pageWrapper" fluid>
       <b-row>
         <b-col>
-          <page-header :single-card-page="isSingleCard"/>
-          <router-view/>
-          <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')"/>
+          <div ref="header">
+            <page-header :single-card-page="isSingleCard"/>
+          </div>
+          <div ref="content">
+            <router-view/>
+          </div>
+          <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')" :sticky-classes="stickyClasses" ref="footerWrapper"/>
         </b-col>
       </b-row>
     </b-container>
@@ -43,7 +47,10 @@ export default {
 
   data () {
     return {
-      refreshInterval: null
+      refreshInterval: null,
+      debounceWindowResizeId: null,
+      appReady: false,
+      stickyFooter: false
     };
   },
 
@@ -53,9 +60,29 @@ export default {
       'authTokenType',
       'authToken',
       'registrationComplete',
+      'offCanvasMenuOpen',
       'viewportWidth',
-      'offCanvasMenuOpen'
+      'viewportHeight',
+      'walletsLoading',
+      'addWalletLoading',
+      'transactions',
+      'transactionsLoaded'
     ]),
+
+    stickyClasses () {
+      let sc = [];
+      if (this.stickyFooter) {
+        sc.push('sticky');
+      }
+      if (this.isMobile) {
+        sc.push('mobile');
+      }
+      if (this.offCanvasMenuOpen) {
+        sc.push('off-canvas-menu-open');
+      }
+      return sc;
+    },
+
     isSingleCard () {
       const nakedRoute = this.$route.path.split('/')[1];
       const routes = ['',
@@ -74,8 +101,18 @@ export default {
       ];
       return routes.includes(nakedRoute);
     },
+
     authClass () {
       return this.registrationComplete && this.authTokenType !== 'partial' ? 'authenticated' : 'anonymous';
+    },
+
+    pageDimensionsAndCurrentPage () {
+      this.viewportWidth;
+      this.viewportHeight;
+      this.transactions;
+      this.walletsLoading;
+      this.transactionsLoaded;
+      return Date.now();
     }
   },
 
@@ -83,10 +120,13 @@ export default {
     $route (to, from) {
       this.interactionHandler();
 
-      const fromRoute = from.path.substr(1, from.path.length);
-      const toRoute = to.path.substr(1, to.path.length);
+      const fromRoute = this.baseRoute(from);
+      const toRoute = this.baseRoute(to);
       document.body.classList.replace(fromRoute, toRoute === '' ? 'home' : toRoute);
     },
+    pageDimensionsAndCurrentPage () {
+      this.setFooterPosition();
+    }
   },
 
   async created () {
@@ -108,17 +148,13 @@ export default {
 
   mounted () {
     window.addEventListener('beforeunload', this.unloadHandler);
+    window.addEventListener('resize', this.onResize);
 
-    this.$store.watch(state => state, () => this.interactionHandler(), {
-      deep: true,
-    });
+    this.setFooterPosition();
 
-    window.addEventListener('resize', () => {
-      const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-      this.mutateViewportWidth(newScreenWidth);
-    }, true);
+    this.$store.watch(state => state, () => this.interactionHandler(), { deep: true });
 
-    const initialRoute = this.$route.path.substr(1, this.$route.path.length).split('/')[0];
+    const initialRoute = this.baseRoute(this.$route);
     document.body.classList.add(initialRoute === '' ? 'home' : initialRoute, `${this.authClass}-page`);
   },
 
@@ -141,7 +177,48 @@ export default {
 
     ...mapMutations([
       'mutateViewportWidth',
+      'mutateViewportHeight'
     ]),
+
+    baseRoute (str) {
+      return str.path.split('/')[1];
+    },
+
+    onResize () {
+      clearTimeout(this.debounceWindowResizeId);
+
+      this.debounceWindowResizeId = setTimeout(() => {
+        const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+        this.mutateViewportWidth(newScreenWidth);
+
+        const newScreenHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+        this.mutateViewportHeight(newScreenHeight);
+      }, 300);
+    },
+
+    setFooterPosition () {
+      const baseRoute = this.baseRoute(this.$route);
+      const setFooterClass = () => {
+        const headerRect = this.$refs.header.getBoundingClientRect();
+        const contentRect = this.$refs.content.getBoundingClientRect();
+        const footerRect = this.$refs.footerWrapper.$refs.footer.getBoundingClientRect();
+        this.stickyFooter = (headerRect.height + contentRect.height + footerRect.height) < this.viewportHeight;
+      };
+
+      if (baseRoute === 'wallets' || baseRoute === 'dashboard') {
+        let loading;
+        for (let w in this.walletsLoading) {
+          loading = this.walletsLoading[w];
+        }
+        if (!loading) {
+          setFooterClass();
+        }
+      }
+
+      if (baseRoute === 'transactions' && !this.transactions.loading) {
+        setFooterClass();
+      }
+    },
 
     unloadHandler () {
       // remove websocket on page unload
