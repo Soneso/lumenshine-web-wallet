@@ -606,8 +606,8 @@ export default {
       this.inProgress = true;
       await this.loadTransactions({
         stellar_account_pk: this.selectedWallet,
-        start_timestamp: dayjs(this.dateFrom).format('YYYY-MM-DD HH:mm:ss'),
-        end_timestamp: dayjs(this.dateTo).format('YYYY-MM-DD HH:mm:ss'),
+        start_timestamp: dayjs(this.dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+        end_timestamp: dayjs(this.dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
       });
       this.inProgress = false;
     },
