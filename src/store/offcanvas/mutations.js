@@ -4,5 +4,8 @@ export default {
   },
   mutateViewportWidth (state, viewportWidth) {
     state.viewportWidth = viewportWidth;
+  },
+  mutateViewportHeight (state, viewportHeight) {
+    state.viewportHeight = viewportHeight;
   }
 };
