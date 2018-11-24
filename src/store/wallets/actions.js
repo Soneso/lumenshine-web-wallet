@@ -54,6 +54,23 @@ function createWebsocket ({ commit, dispatch }, retryCount = 0) {
   });
 }
 
+function waitAndResolveTx ({ commit }, transactionId) {
+  setTimeout(async () => {
+    try {
+      const txData = await StellarAPI.transactions()
+        .transaction(transactionId)
+        .limit(1)
+        .call();
+      const operations = await txData.operations();
+      txData.operation = operations.records[0];
+      commit('RESOLVE_TRANSACTION', txData);
+    } catch (err) {
+      console.error('Cannot fetch tx info, retrying...');
+      waitAndResolveTx({ commit }, transactionId);
+    }
+  }, 1500);
+}
+
 export default {
   async getWallets ({ commit, getters, dispatch }) {
     try {
@@ -506,13 +523,7 @@ export default {
       res.transactionId = transactionId;
       commit('ADD_PENDING_TRANSACTION', transactionId);
       commit('SET_SEND_PAYMENT_RESULT', res);
-      const txData = await StellarAPI.transactions()
-        .transaction(transactionId)
-        .limit(1)
-        .call();
-      const operations = await txData.operations();
-      txData.operation = operations.records[0];
-      commit('RESOLVE_TRANSACTION', txData);
+      waitAndResolveTx({ commit }, transactionId);
 
       // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {
