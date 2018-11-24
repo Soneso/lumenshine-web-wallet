@@ -1,5 +1,6 @@
 #page-wrapper {
   @extend %hidden-scroll;
+  overflow-x: hidden !important;
 
   .authenticated & {
     @extend .ml-5;
