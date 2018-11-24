@@ -14,7 +14,7 @@
           <div ref="content">
             <router-view/>
           </div>
-          <page-footer :is-logged-in="!(!userStatus.res || authTokenType === 'partial')" :sticky-classes="stickyClasses" ref="footerWrapper"/>
+          <page-footer ref="footerWrapper" :is-logged-in="!(!userStatus.res || authTokenType === 'partial')" :sticky-classes="stickyClasses"/>
         </b-col>
       </b-row>
     </b-container>
@@ -107,12 +107,7 @@ export default {
     },
 
     pageDimensionsAndCurrentPage () {
-      this.viewportWidth;
-      this.viewportHeight;
-      this.transactions;
-      this.walletsLoading;
-      this.transactionsLoaded;
-      return Date.now();
+      return [this.viewportWidth, this.viewportHeight, this.transactions, this.walletsLoading, this.transactionsLoaded, Date.now()];
     }
   },
 

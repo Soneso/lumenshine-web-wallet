@@ -448,11 +448,7 @@ export default {
     },
 
     transactionsActivityIndicator () {
-      this.walletOptions;
-      this.wallets.loading;
-      this.selectedWallet;
-      this.inProgress;
-      return Date.now();
+      return [this.walletOptions, this.wallets.loading, this.selectedWallet, this.inProgress, Date.now()];
     }
   },
 
