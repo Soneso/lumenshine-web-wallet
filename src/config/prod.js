@@ -2,7 +2,7 @@
 const nodeScript = __NODE_SCRIPT__;
 
 export default {
-  APP_TITLE: 'Lumenshine',
+  APP_TITLE: 'Lumenshine (Beta)',
   APP_SUBTITLE: 'A Wallet for the Stellar Network by Soneso',
 
   REGISTRATION_OPTIONAL_FIELDS: [
@@ -28,7 +28,7 @@ export default {
 
   API_BASE: nodeScript === 'dev-local' ? 'http://localhost:9001' : 'https://api.lumenshine.com',
 
-  HORIZON_URL: 'https://alphahorizon.lumenshine.com',
+  HORIZON_URL: 'https://horizon.stellar.org',
   IS_TEST_NETWORK: false,
 
   SERVER_PUBLIC_KEY: 'GDNHKZED65H2RY2LAA5TK7W5PWM5TPWIJ3H3QZQEJPPELUWYSC4SUHAF',
