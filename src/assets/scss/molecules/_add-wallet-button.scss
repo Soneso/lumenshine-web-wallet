@@ -1,20 +1,37 @@
 .add-wallet {
-  @extend .px-3, .pb-2, .mt-3, .text-center;
   position: absolute;
+  text-align: center;
   top: 2.25rem;
-  right: 0;
+  right: -2.5rem;
   background: rgba($white, .5);
   border-radius: $border-radius-lg;
+  height: 4.5rem;
+  margin-top: 0.5rem !important;
+  @include media-breakpoint-up(sm) {
+    margin-top: 1rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    right: 0;
+    height: auto;
+  }
 
   i {
     @extend .text-primary, .d-block;
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: 700;
+    @include media-breakpoint-up(sm) {
+      font-size: 3rem;
+    }
   }
 
   span {
     @extend .text-uppercase, .text-secondary;
     font-size: .75rem;
     font-weight: 500;
+    padding: 0.3rem;
+    @include media-breakpoint-up(sm) {
+      padding: 0;
+    }
   }
 }
