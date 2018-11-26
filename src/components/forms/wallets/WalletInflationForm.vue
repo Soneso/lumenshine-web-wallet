@@ -16,10 +16,11 @@
     <h6 v-if="hasUnknownError" class="text-danger">An error occured, please try again</h6>
 
     <div v-if="fieldOpen">
-      <b-button-group size="sm" class="my-3">
+      <b-button-group v-if="knownDestinations.length > 0" size="sm" class="my-3">
         <b-button :class="formType === 'fields' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Destination Data</b-button>
         <b-button :class="formType === 'known' ? 'text-info': 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Recommended</b-button>
       </b-button-group>
+      <div v-else class="my-3"/>
 
       <div v-if="formType !== 'fields'"> <!-- Known destinations -->
         <b-list-group class="flat-card">

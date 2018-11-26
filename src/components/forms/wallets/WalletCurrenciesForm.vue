@@ -68,10 +68,11 @@
     </template>
 
     <div v-if="addCurrency">
-      <b-button-group size="sm" class="my-2">
-        <!--<b-button :class="addCurrencyFormType === 'fields' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Currency Data</b-button>-->
-        <!--<b-button :class="addCurrencyFormType === 'known' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Currencies</b-button>-->
+      <b-button-group v-if="knownCurrencies.length > 0" size="sm" class="my-2">
+        <b-button :class="addCurrencyFormType === 'fields' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('fields')">Provide Currency Data</b-button>
+        <b-button :class="addCurrencyFormType === 'known' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="onTabChange('known')">Known Currencies</b-button>
       </b-button-group>
+      <div v-else class="my-3"/>
 
       <div v-if="addCurrencyFormType === 'known'"> <!-- Known currencies -->
         <b-card v-if="openedKnownCurrency" class="flat-card">
