@@ -35,12 +35,12 @@
               </b-col>
               <b-col cols="3" sm="2" class="text-right">
                 <input
-                  :id="`currencyCheckbox${destination.issuer_public_key}`"
+                  :id="`destinationCheckbox${destination.issuer_public_key}`"
                   :checked="destination.issuer_public_key === data.stellar_data.inflation_destination"
                   type="checkbox"
                   class="switch"
-                  @input.prevent="e => onToggleCurrency(e, destination)">
-                <label :for="`currencyCheckbox${destination.issuer_public_key}`"/>
+                  @input.prevent="e => onToggleDestination(e, destination)">
+                <label :for="`destinationCheckbox${destination.issuer_public_key}`"/>
               </b-col>
             </b-row>
 
@@ -272,7 +272,7 @@ export default {
     },
     removingExistingDestination () {
       const existing = this.data.stellar_data ? this.data.stellar_data.inflation_destination || '' : '';
-      return this.destination === existing;
+      return this.destination === existing && this.destination !== '';
     }
   },
 
@@ -319,7 +319,7 @@ export default {
       this.openedKnownDestination = val;
       this.resetForms();
     },
-    onToggleCurrency (e, destination) {
+    onToggleDestination (e, destination) {
       if (e.target.checked) {
         this.openedKnownDestination = destination;
         this.removingDestination = false;
