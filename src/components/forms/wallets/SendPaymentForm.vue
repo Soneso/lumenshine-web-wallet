@@ -141,6 +141,7 @@
               :type="passwordIsHidden ? 'password' : 'text'"
               v-model="password"
               placeholder="Your password"
+              autocomplete="new-password"
               required
               @blur.native="$v.password.$touch()"/>
 

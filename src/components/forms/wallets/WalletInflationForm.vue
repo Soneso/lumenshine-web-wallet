@@ -53,6 +53,7 @@
                   :state="!$v.password.$error"
                   v-model="password"
                   :type="password2IsHidden ? 'password' : 'text'"
+                  autocomplete="new-password"
                   placeholder="Your password"
                   required
                   @blur.native="$v.password.$touch()"/>
@@ -143,6 +144,7 @@
               v-model="password"
               :type="password1IsHidden ? 'password' : 'text'"
               placeholder="Your password"
+              autocomplete="new-password"
               required
               @blur.native="$v.password.$touch()"/>
             <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
