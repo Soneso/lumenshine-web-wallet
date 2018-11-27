@@ -6,7 +6,7 @@
         <p>Lumenshine accepts USD fiat deposits and all types of crypto. Choose what funds you’d like to add to your account.</p>
         <!-- <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'usd'">USD</b-button> -->
         <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'xlm'">XLM</b-button>
-        <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'other'">Other crypto</b-button>
+        <b-button variant="outline-info" class="btn-rounded my-3" @click.prevent="step = 'other'">Other crypto</b-button>
       </div>
 
       <!-- <div v-else-if="step === 'usd'">
