@@ -30,7 +30,7 @@ export default {
     document.addEventListener('keyup', this.closeMenuOnEsc);
     document.addEventListener('click', this.closeMenuOnDocumentClick);
   },
-  destroyed () {
+  beforeDestroy () {
     document.removeEventListener('keyup', this.closeMenuOnEsc);
     document.removeEventListener('click', this.closeMenuOnDocumentClick);
   },
