@@ -1,5 +1,5 @@
 <template>
-  <footer ref="footer" :class="['py-4', 'text-center', ...stickyClasses]">
+  <footer class="py-4 text-center">
     <b-row class="py-2">
       <b-col>
         <router-link to="/" class="language-button">
@@ -59,10 +59,6 @@ import config from '@/config';
 export default {
   name: 'Footer',
   props: {
-    stickyClasses: {
-      type: Array,
-      required: false
-    },
     isLoggedIn: {
       type: Boolean,
       required: true,
