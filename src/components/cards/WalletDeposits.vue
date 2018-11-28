@@ -3,10 +3,10 @@
     <div v-if="!config.IS_TEST_NETWORK"> <!-- Live net -->
       <div v-if="step === 'main'">
         <h4 class="font-weight-700 mb-3">WHAT WOULD YOU LIKE TO DEPOSIT?</h4>
-        <p>Lumenshine accepts USD fiat deposits and all types of crypto. Choose what funds you’d like to add to your account.</p>
-        <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'usd'">USD</b-button>
-        <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'xlm'">XLM</b-button>
-        <b-button variant="outline-info" class="btn-rounded my-3" @click.prevent="step = 'other'">Other crypto</b-button>
+        <p>Lumenshine accepts Stellar Lumens (XLM) and all types of crypto. Choose what funds you’d like to add to your account.</p>
+        <!-- <b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'usd'">USD</b-button> -->
+        <b-button variant="info" class="btn-rounded my-3 mx-1" @click.prevent="step = 'xlm'">XLM</b-button>
+        <b-button variant="outline-info" class="btn-rounded my-3 mx-1" @click.prevent="step = 'other'">Other crypto</b-button>
       </div>
 
       <div v-else-if="step === 'usd'">
@@ -33,13 +33,13 @@
             </b-col>
           </b-row>
         </b-card>
+        <span class="mx-1"><b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'main'">Back</b-button></span>
         <span class="mx-1"><b-button variant="success" class="btn-rounded my-3" @click.prevent="$emit('close')">OK, done</b-button></span>
-        <span class="mx-1"><b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'main'">Make another deposit</b-button></span>
       </div>
       <div v-else-if="step === 'other'">
         <h4 class="font-weight-700 mb-3">Other Crypto</h4>
         <p>Lumenshine uses Changelly as our cross-chain exchange provider. They convert your funds to XLM at the best rates by bidding out your order worldwide. They charge 0.5% for the conversion.</p>
-
+        <span class="mx-1"><b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'main'">Back</b-button></span>
         <a href="#" target="_blank" class="changelly-button" @click.prevent="$emit('changelly', 'BTC')">
           <img src="@/assets/images/ui/pay-with-changelly.png">
         </a>

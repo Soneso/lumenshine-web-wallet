@@ -1,5 +1,5 @@
 .changelly-button {
-  @extend .my-3;
+  @extend .my-3, .mx-2;
   width: 40%;
-  display: block;
+  display: inline-block;
 }
