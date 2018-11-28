@@ -5,16 +5,16 @@
         <h4 class="page-headline text-uppercase">Settings</h4>
         <ul class="pt-4">
           <li>
-            <b-button href="/change-password" variant="outline-info" class="mb-3 btn-rounded">Change Password</b-button>
+            <b-button to="/change-password" variant="outline-info" class="mb-3 btn-rounded">Change Password</b-button>
           </li>
           <li>
-            <b-button href="/change-tfa" variant="outline-info" class="mb-3 btn-rounded">Change 2FA Secret</b-button>
+            <b-button to="/change-tfa" variant="outline-info" class="mb-3 btn-rounded">Change 2FA Secret</b-button>
           </li>
           <li>
-            <b-button href="/backup-mnemonic" variant="outline-info" class="mb-3 btn-rounded">Backup Secret/Mnemonic</b-button>
+            <b-button to="/backup-mnemonic" variant="outline-info" class="mb-3 btn-rounded">Backup Secret/Mnemonic</b-button>
           </li>
           <li>
-            <b-button href="/personal-data" variant="outline-info" class="mb-3 btn-rounded">Personal data</b-button>
+            <b-button to="/personal-data" variant="outline-info" class="mb-3 btn-rounded">Personal data</b-button>
           </li>
         </ul>
       </b-card>

@@ -57,12 +57,6 @@ export default {
       'authToken',
       'registrationComplete',
       'offCanvasMenuOpen',
-      'viewportWidth',
-      'viewportHeight',
-      'walletsLoading',
-      'addWalletLoading',
-      'transactions',
-      'transactionsLoaded'
     ]),
 
     isSingleCard () {
