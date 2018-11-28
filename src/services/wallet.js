@@ -42,6 +42,11 @@ export default {
     return response.data;
   },
 
+  async getCurrencyRateHistory (params) {
+    const response = await apiBase.post('/portal/chart/chart_exchange_rates', params);
+    return response.data;
+  },
+
   async fundAccountWithFriendbot (account) {
     const response = await axios.get('https://friendbot.stellar.org', { params: { addr: account } });
     return response;

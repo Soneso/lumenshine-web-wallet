@@ -338,6 +338,18 @@ export default {
     commit('SET_CURRENCY_RATES_LOADING', false);
   },
 
+  async getCurrencyRateHistory ({ commit }, params) {
+    commit('SET_CURRENCY_RATE_HISTORY_LOADING', true);
+    try {
+      const data = await WalletService.getCurrencyRateHistory(params);
+      data.rates.reverse();
+      commit('SET_CURRENCY_RATE_HISTORY', data);
+    } catch (err) {
+      commit('SET_CURRENCY_RATE_HISTORY_ERROR', err.data);
+    }
+    commit('SET_CURRENCY_RATE_HISTORY_LOADING', false);
+  },
+
   async getKnownDestinations ({ commit }, params) {
     commit('SET_KNOWN_DESTINATIONS_LOADING', true);
     try {

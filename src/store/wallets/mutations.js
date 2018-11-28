@@ -140,6 +140,18 @@ export default {
     state.currencyRatesResult = null;
   },
 
+  SET_CURRENCY_RATE_HISTORY (state, msg) {
+    state.currencyRateHistoryResult = msg;
+    state.currencyRateHistoryErrors = [];
+  },
+  SET_CURRENCY_RATE_HISTORY_LOADING (state, msg) {
+    state.currencyRateHistoryLoading = msg;
+  },
+  SET_CURRENCY_RATE_HISTORY_ERROR (state, msg) {
+    state.currencyRateHistoryErrors = msg;
+    state.currencyRateHistoryResult = null;
+  },
+
   SET_KNOWN_DESTINATIONS (state, msg) {
     if (Array.isArray(msg)) {
       msg.sort((a, b) => a.order_index - b.order_index);
