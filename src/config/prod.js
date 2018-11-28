@@ -28,7 +28,7 @@ export default {
 
   API_BASE: nodeScript === 'dev-local' ? 'http://localhost:9001' : 'https://api.lumenshine.com',
 
-  HORIZON_URL: 'https://horizon.stellar.org',
+  HORIZON_URL: 'https://horizon.lumenshine.com',
   IS_TEST_NETWORK: false,
 
   SERVER_PUBLIC_KEY: 'GDNHKZED65H2RY2LAA5TK7W5PWM5TPWIJ3H3QZQEJPPELUWYSC4SUHAF',
