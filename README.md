@@ -1,8 +1,7 @@
 # lumenshine-web-wallet
 
 
-A Vue.js project representing the Lumenshine Wallet by Soneso. It is a wallet for the Stellar network. 
-It operates on the Stellar test net and uses our Lumenshine test server.
+A Vue.js project representing the Lumenshine Wallet by Soneso. It is a multi-platform, user-freindly, fully-featured wallet for the Stellar network. 
 
 Beta version available here: https://lumenshine.com
 
