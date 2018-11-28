@@ -127,7 +127,7 @@ export default {
   mixins: [offcanvasNavigation],
   data () {
     return {
-      activeMenu: '',
+      activeMenu: 'dashboard',
       config
     };
   },
