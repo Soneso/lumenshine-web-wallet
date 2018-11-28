@@ -334,13 +334,13 @@ export default {
             if (!this.filterPayments) return false;
             if (this.filterPaymentCurrency && this.filterPaymentCurrencyType !== null && this.filterPaymentCurrencyType !== 'XLM') return false;
             if (!this.filterPaymentReceived && !this.filterPaymentSent) return true;
-            if (!this.filterPaymentReceived && op.op_details.account === this.selectedWallet) return false;
-            if (this.filterPaymentReceived) {
+            if (op.op_details.account === this.selectedWallet) {
+              if (!this.filterPaymentReceived) return false;
               if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && parseFloat(op.op_details.starting_balance) < this.filterPaymentReceivedAmountFrom) return false;
               if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && parseFloat(op.op_details.starting_balance) > this.filterPaymentReceivedAmountTo) return false;
             }
-            if (!this.filterPaymentSent && op.op_details.funder === this.selectedWallet) return false;
-            if (this.filterPaymentSent) {
+            if (op.op_details.funder === this.selectedWallet) {
+              if (!this.filterPaymentSent) return false;
               if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && parseFloat(op.op_details.starting_balance) < this.filterPaymentSentAmountFrom) return false;
               if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && parseFloat(op.op_details.starting_balance) > this.filterPaymentSentAmountTo) return false;
             }
@@ -350,14 +350,14 @@ export default {
             if (!this.filterPayments) return false;
             if (this.filterPaymentCurrency && this.filterPaymentCurrencyType !== null && this.getCurrency(op) !== this.filterPaymentCurrencyType) return false;
             if (!this.filterPaymentReceived && !this.filterPaymentSent) return true;
-            if (!this.filterPaymentReceived && op.op_details.to === this.selectedWallet) return false;
             const amount = parseFloat(op.op_type === OperationType.PATH_PAYMENT && op.op_details.from === this.selectedWallet ? op.op_details.source_amount : op.op_details.amount);
-            if (this.filterPaymentReceived) {
+            if (op.op_details.to === this.selectedWallet) {
+              if (!this.filterPaymentReceived) return false;
               if (this.filterPaymentReceivedAmountFrom !== '' && !this.$v.filterPaymentReceivedAmountFrom.$error && amount < this.filterPaymentReceivedAmountFrom) return false;
               if (this.filterPaymentReceivedAmountTo !== '' && !this.$v.filterPaymentReceivedAmountTo.$error && amount > this.filterPaymentReceivedAmountTo) return false;
             }
-            if (!this.filterPaymentSent && op.op_details.from === this.selectedWallet) return false;
-            if (this.filterPaymentSent) {
+            if (op.op_details.from === this.selectedWallet) {
+              if (!this.filterPaymentSent) return false;
               if (this.filterPaymentSentAmountFrom !== '' && !this.$v.filterPaymentSentAmountFrom.$error && amount < this.filterPaymentSentAmountFrom) return false;
               if (this.filterPaymentSentAmountTo !== '' && !this.$v.filterPaymentSentAmountTo.$error && amount > this.filterPaymentSentAmountTo) return false;
             }
