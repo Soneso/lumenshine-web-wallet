@@ -19,21 +19,21 @@
     </li>
 
     <li>
-      <a ref="dashboard" href="#" @click.prevent.stop="goto('dashboard')">
+      <a :class="{ active: activeMenu === 'dashboard'}" href="#" @click.prevent.stop="goto('dashboard')">
         <i class="icon-home"/>
         <div :style="toggleText">Home</div>
       </a>
     </li>
 
     <li>
-      <a ref="wallets" href="#" @click.prevent.stop="goto('wallets')">
+      <a :class="{ active: activeMenu === 'wallets'}" href="#" @click.prevent.stop="goto('wallets')">
         <i class="icon-card"/>
         <div :style="toggleText">Wallets</div>
       </a>
     </li>
 
     <li>
-      <a ref="transactions" href="#" @click.prevent.stop="goto('transactions')">
+      <a :class="{ active: activeMenu === 'transactions'}" href="#" @click.prevent.stop="goto('transactions')">
         <i class="icon-transaction"/>
         <div :style="toggleText">Transactions</div>
       </a>
@@ -47,7 +47,7 @@
     <!--</li>-->
 
     <li>
-      <a ref="contacts" href="#" @click.prevent.stop="goto('contacts')">
+      <a :class="{ active: activeMenu === 'contacts'}" href="#" @click.prevent.stop="goto('contacts')">
         <i class="icon-user"/>
         <div :style="toggleText">Contacts</div>
       </a>
@@ -61,34 +61,32 @@
     <!--</li>-->
 
     <li class="has-submenu">
-      <a ref="settings" href="#" @click.prevent.stop="goto('settings')">
+      <a :class="{ active: activeMenu === 'settings'}" href="#" @click.prevent.stop="goto('settings')">
 
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
         <div v-if="!isMobile" class="submenu">
           <ul>
             <li>
-              <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
-                 @click.stop.prevent="switchToChangePasswordView">
+              <a href="#" class="py-1 d-block text-gray-500 font-weight-500" @click.stop.prevent="switchToChangePasswordView">
                 <div>Change Password</div>
               </a>
             </li>
 
             <li>
-              <a href="#" class="py-1 d-block text-gray-500 font-weight-500"
-                 @click.stop.prevent="switchToChange2faView">
+              <a href="#" class="py-1 d-block text-gray-500 font-weight-500" @click.stop.prevent="switchToChange2faView">
                 <div>Change 2FA Secret</div>
               </a>
             </li>
 
             <li>
-              <a ref="backup-mnemonic" href="#" @click.prevent.stop="goto('backup-mnemonic')">
+              <a :class="{ active: activeMenu === 'backup-mnemonic'}" href="#" @click.prevent.stop="goto('backup-mnemonic')">
                 <div>Backup Secret/Mnemonic</div>
               </a>
             </li>
 
             <li>
-              <a ref="personal-data" href="#" @click.prevent.stop="goto('personal-data')">
+              <a :class="{ active: activeMenu === 'personal-data'}" href="#" @click.prevent.stop="goto('personal-data')">
                 <div>Personal data</div>
               </a>
             </li>
@@ -127,7 +125,12 @@ import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 export default {
   name: 'DashboardMenu',
   mixins: [offcanvasNavigation],
-  data: () => ({ config }),
+  data () {
+    return {
+      activeMenu: 'dashboard',
+      config
+    };
+  },
   computed: {
     ...mapGetters([
       'changePasswordStep',
@@ -162,17 +165,16 @@ export default {
     },
 
     goto (url) {
-      document.querySelectorAll('.menu-container a').forEach(i => {
-        i.classList.remove('active');
-      });
-      this.$refs[url].classList.add('active');
+      this.activeMenu = url;
       this.$router.push(url);
       this.closeMenu();
     },
+
     closeMenu () {
       this.$store.commit('mutateOffCanvasMenuOpen', false);
       this.closeMenuAnimation();
     },
+
     async onLogoutClick () {
       this.closeMenu();
       await this.logout();

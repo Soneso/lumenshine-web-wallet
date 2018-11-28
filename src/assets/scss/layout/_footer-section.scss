@@ -1,19 +1,8 @@
 footer {
-  &.sticky {
-    @extend %fast-transitions;
-    position: fixed;
-    bottom: 0;
-
-    &.mobile {
-      left: 0;
-      width: 100%;
-    }
-
-    &:not(.mobile) {
-      left: 4rem;
-      width: calc(100% - 4rem);
-    }
-  }
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
 }
 
 .language-button {

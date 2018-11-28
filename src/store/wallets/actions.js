@@ -54,7 +54,7 @@ function createWebsocket ({ commit, dispatch }, retryCount = 0) {
   });
 }
 
-function waitAndResolveTx ({ commit }, transactionId) {
+function waitAndResolveTx ({ commit, dispatch }, { publicKeys, transactionId }) {
   setTimeout(async () => {
     try {
       const txData = await StellarAPI.transactions()
@@ -64,6 +64,7 @@ function waitAndResolveTx ({ commit }, transactionId) {
       const operations = await txData.operations();
       txData.operation = operations.records[0];
       commit('RESOLVE_TRANSACTION', txData);
+      dispatch('updateWallets', publicKeys);
     } catch (err) {
       console.error('Cannot fetch tx info, retrying...');
       waitAndResolveTx({ commit }, transactionId);
@@ -72,7 +73,7 @@ function waitAndResolveTx ({ commit }, transactionId) {
 }
 
 export default {
-  async getWallets ({ commit, getters, dispatch }) {
+  async getWallets ({ commit }) {
     try {
       commit('SET_WALLETS_LOADING', { loading: true }); // set all to loading
       const backendRes = await WalletService.getWallets();
@@ -523,7 +524,7 @@ export default {
       res.transactionId = transactionId;
       commit('ADD_PENDING_TRANSACTION', transactionId);
       commit('SET_SEND_PAYMENT_RESULT', res);
-      waitAndResolveTx({ commit }, transactionId);
+      waitAndResolveTx({ commit, dispatch }, { publicKeys: [sourcePublicKey, data.recipient], transactionId });
 
       // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
     } catch (err) {

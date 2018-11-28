@@ -42,11 +42,11 @@
     <b-row class="pb-2">
       <b-col>
         <wallet-inflation-form
-          v-if="knownDestinations && data && data.stellar_data"
+          v-if="data && data.stellar_data"
           :errors="addInflationDestinationStatus.err"
           :loading="inflationDestinationLoading"
           :decryption-error="decryptedWallet.err"
-          :known-destinations="knownDestinations"
+          :known-destinations="knownDestinations || []"
           :data="data"
           @submit="onSetInflationDestination"
           @reset="resetInflationDestination"/>
@@ -57,11 +57,11 @@
     <b-row class="pb-2">
       <b-col>
         <wallet-currencies-form
-          v-if="knownCurrencies && data && data.stellar_data"
+          v-if="data && data.stellar_data"
           :loading="walletDetailsLoading"
           :errors="[...addCurrencyStatus.err, ...removeCurrencyStatus.err]"
           :decryption-error="decryptedWallet.err"
-          :known-currencies="knownCurrencies"
+          :known-currencies="knownCurrencies || []"
           :data="data"
           @remove="onRemoveCurrency"
           @add="onAddCurrency"

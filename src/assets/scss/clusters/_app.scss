@@ -1,6 +1,7 @@
 #page-wrapper {
   @extend %hidden-scroll;
   overflow-x: hidden !important;
+  position: relative;
 
   .authenticated & {
     @extend .ml-5;
@@ -14,5 +15,13 @@
 
   .anonymous & {
     @extend .w-100;
+  }
+
+  #main-column {
+    min-height: 100vh;
+    padding-bottom: 22rem;
+    @include media-breakpoint-only(xs) {
+      padding-bottom: 25rem;
+    }
   }
 }
