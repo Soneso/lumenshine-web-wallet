@@ -5,7 +5,7 @@
         <b-row>
           <b-col cols="12" lg="4" xlg="3">
             <h1><small class="text-info">Introducing</small> <span class="font-weight-800 text-primary">Lumenshine <small>(beta)</small></span></h1>
-            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured Wallet for the decentralized Stellar Network. It is developed and maintained by Soneso GmbH, Germany.</p>
+            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured Wallet for the decentralized Stellar Network.</p>
           </b-col>
           <b-col>
             <img src="/static/app-screenshot.png">

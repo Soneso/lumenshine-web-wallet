@@ -66,22 +66,16 @@
                   </li>
                 </ul>
                 <b-collapse id="basics" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
-                </b-collapse>
-              </li>
-              <li>
-                <hr class="divider light">
-                <ul v-b-toggle.security class="py-3">
-                  <li>
-                    <i class="icon-security large text-info"/>
-                  </li>
-                  <li>
-                    <h6 class="mb-0">Security</h6>
-                    <span>Learn how to keep your Wallets safe</span>
-                  </li>
-                </ul>
-                <b-collapse id="security" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Lumenshine is a wallet for Stellar. Stellar is a decentralized blockchain network developed by the Stellar Development Foundation.
+                    <br><br>To be able to use Lumenshine, you need to Sign-up first and complete the setup process.
+                    <br><br>After completing the setup process or on login, Lumenshine displays your home view. The home view shows the wallets that you want to have there, charts, promos and more.
+                    <br><br>In the menu on the left side you can switch between different views: home, wallets, transaction, contacts, settings, etc.
+                    <br><br>The wallets view shows all wallets that you added to Lumenshine. You can add new wallets in the wallets view by pressing the "Add Wallet" button in the upper rigt corner. Every wallet represents a stellar account in the Stellar Network.
+                    <br><br>Unlike physical wallets, stellar wallets don't store your assets. Instead your assets are associated with your stellar account in the global stellar ledger. Lumenshine gives you a way to view your accounts, the assets and data associated with them. It also helps you to compose transactions (such as payments), to sign them and to submit them to the Stellar Network. 
+                    <br><br>Each stellar account must be funded before it exists in the Stellar Network. To fund your wallet (stellar account), you have to send at least 1.0 Stellar Lumen (XLM) to your undunded wallet. Press the "Fund Wallet" button, and then choose "XLM". The popup will show you the address of stellar account referenced by that wallet. Copy the displayed public key (stellar account id) by pressing the copy button right to it and send XLM to it the to fund your wallet.
+                    <br><br>After funding your wallet, you can send payments, view and edit the details of your wallet.
+                    <br><br>To better understand how stellar accounts and transactions work please watch this video by Lumenauts: <a href="https://www.youtube.com/watch?v=g5FHjOKV1-E&t=14s" target="_blank" rel="noopener">Stellar Accounts and Transactions</a>
+                  </span>
                 </b-collapse>
               </li>
               <li>
@@ -101,13 +95,40 @@
               </li>
               <li>
                 <hr class="divider light">
+                <ul v-b-toggle.security class="py-3">
+                  <li>
+                    <i class="icon-security large text-info"/>
+                  </li>
+                  <li>
+                    <h6 class="mb-0">Security</h6>
+                    <span>Learn how to keep your Wallets safe</span>
+                  </li>
+                </ul>
+                <b-collapse id="security" accordion="accordion2" role="tabpanel">
+                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
+                </b-collapse>
+              </li>
+              <li>
+                <hr class="divider light">
                 <ul v-b-toggle.stellar class="py-3">
                   <li>
                     <i class="icon-learn-ico large text-info"/>
                   </li>
                   <li>
                     <h6 class="mb-0">Stellar</h6>
-                    <span>Learn more about Stellar</span>
+                    <span>
+                    <br><br>Stellar is a decentralized financial platform that is designed to be open and accessible to everyone. It aims to connect banks, payment systems, companies and people.
+                    <br><br>Stellar is operated and maintained by the <a href="https://www.stellar.org/" target="_blank" rel="noopener">Stellar Development Foundation</a> which is a non-stock, non-profit organization from the US. It's mission is to connect people to low cost financial services to fight poverty and maximize individual potential.
+                    <br><br>The Stellar Development Foundation received an initial funding infusion from the payment startup Stripe. Today Stellar partners with big companies like IBM and its native currency, the Stellar Lumens are listed in the top 10 crypto currencies list with a market capitalization of more than 3 billion USD.
+                    <br><br>With Stellar, money and any kind of assets can be moved quickly, reliably and almost with no costs. Transactions on the decentralized network resolve in 2-5 seconds and cost a fraction of a fraction of a cent.
+                    <br><br><code>Stellar Accounts</code>
+                    <br><br>Related video by Lumenauts: <a href="https://www.youtube.com/watch?v=g5FHjOKV1-E&t=14s" target="_blank" rel="noopener">Stellar Accounts and Transactions</a>
+                    <br><br>As a user, you interact with the Stellar Network through accounts. Accounts are saved in the global ledger. Anything else in the ledger: assets, trades, trustlines, etc. are owned by a particular account.
+                    <br><br>Account access is controlled by public- private key cryptography. Every stellar account has a public key which always starts with "G" and a secret seed which always start with "S". The public key is save to share, other people need it to identify your account and verify that you authorized a transaction. Your secret seed however is private information that proves that you own your account. It is kind like a combination to a lock, anybody who knows the combination can open the lock.
+                    <br><br><code>Stellar Transactions</code>
+                    <br><br>Related video by Lumenauts: <a href="https://www.youtube.com/watch?v=g5FHjOKV1-E&t=14s" target="_blank" rel="noopener">Stellar Accounts and Transactions</a>
+                    
+                    </span>
                   </li>
                 </ul>
                 <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
@@ -129,14 +150,7 @@ export default {
   data () {
     return {
       text: `
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
-        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-        tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-        assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-        wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-        vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic
-        synth nesciunt you probably haven't heard of them accusamus labore VHS.
+        Help placeholder.
       `
     };
   }
