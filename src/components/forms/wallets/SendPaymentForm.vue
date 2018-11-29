@@ -1,7 +1,7 @@
 <template>
   <form class="form">
     <b-row align-h="center">
-      <b-col cols="9">
+      <b-col v-if="!showOwnAssetsDescription" cols="9">
         <div v-if="!result">
           <template v-if="availableWallets.length > 1">
             <b-form-group :label-for="`walletInput_${uuid}`" label="Wallet:">
@@ -23,7 +23,7 @@
               :class="{ error: $v.ownAssetAccepted.$error }"
               :state="$v.ownAssetAccepted.$error ? 'invalid' : null"
               class="mr-0">
-              I understand what own assets are and <br>I take full responsibility for my own assets. Lumenshine is not responsible for any asset on the Stellar Network
+              I understand what <a href="" @click.prevent="showOwnAssetsDescription = true">own assets</a> are and <br>I take full responsibility for my own assets. Lumenshine is not responsible for any asset on the Stellar Network
             </b-form-checkbox>
             <b-form-invalid-feedback :id="`inputOwnAssetAcceptedFeedback_${uuid}`">
               <template v-if="$v.ownAssetAccepted.$error" class="field__errors">
@@ -247,6 +247,47 @@
           </div>
         </div>
       </b-col>
+      <b-col v-if="showOwnAssetsDescription" cols="11">
+        <div>
+          <p>
+            In the Stellar Network you can send any type of asset. This is a native feature of the decentralized Stellar Network.<br>
+            If you want to send own assets with Lumenshine you agree to take full responsibility for your own assets.<br>
+            Lumenshine has no control of any asset in the Stellar Network and is not responsible for any asset in the decentralized Stellar Network.
+          </p>
+
+          <p>
+            Read more about assets <a href="https://www.stellar.org/developers/guides/concepts/assets.html" target="_blank" rel="noopener">here</a><br>
+            Read more about issuing assets <a href="https://www.stellar.org/developers/guides/issuing-assets.html" target="_blank" rel="noopener">here</a>
+          </p>
+
+          <p>
+            Each wallet in the Lumenshine app represents a stellar account. For the receivers of your own asset, to be able to receive your asset,
+            they must add a trustline from their stellar account to the stellar account that you use to issue your own token (issuer account).
+          </p>
+
+          <p>
+            They can do this in the details section of their wallet by adding a "new currency". They need the
+            asset code and the (issuer) public key of the stellar account you are using to issue your asset.
+          </p>
+
+          <p>
+            Because an asset represents a credit, it disappears when it is sent back to the account that issued it.<br>
+            To better track and control the amount of your asset in circulation, you can pay a fixed amount
+            of the asset from the issuing account to the working account that you use for normal transactions.
+          </p>
+
+          <p>
+            Read more about best practices <a href="https://www.stellar.org/developers/guides/issuing-assets.html#best-practices" target="_blank" rel="noopener">here</a>
+          </p>
+
+          <p>
+            Lumenshine currently does not provide functionality to set the flags of a stellar account. This feature may be added later.<br>
+            In the meantime you can use <a href="https://www.stellar.org/laboratory/" target="_blank" rel="noopener">Stellar Laboratory</a> to do that if needed.<br>
+            Use the stellar public network to do that for accounts shown in Lumenshine.
+          </p>
+          <b-button variant="info" class="btn-rounded my-3" @click.prevent="showOwnAssetsDescription = false">Back</b-button>
+        </div>
+      </b-col>
     </b-row>
   </form>
 </template>
@@ -304,6 +345,7 @@ export default {
 
   data () {
     return {
+      showOwnAssetsDescription: false,
       showCopiedText: false,
       ownAssetAccepted: false,
       assetCode: 'XLM',
@@ -454,6 +496,7 @@ export default {
       this.$v.$reset();
       this.$emit('reset');
       const data = {
+        showOwnAssetsDescription: false,
         showCopiedText: false,
         assetCode: 'XLM',
         customAssetCode: '',
