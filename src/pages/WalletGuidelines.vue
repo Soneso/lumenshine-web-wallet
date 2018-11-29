@@ -16,7 +16,7 @@
             <p>If you follow these guidelines, you will enjoy everything Lumenshine has to offer. If you don't, you may take on more risk than you intend or get locked out of your account.</p>
 
             <h2 class="pt-4">Understand the risks involved</h2>
-            <p>Making transactions in a blockchain like the Stellar network is inherently risky: transactions are irreversible, and there is no backstop to protect you from loss. If you lack experience or have low risk tolerance, we advise against using Lumenshine and against submitting transactions (such as payments) to the Stellar network.</p>
+            <p>Making transactions in a blockchain like the Stellar Network is inherently risky: transactions are irreversible, and there is no backstop to protect you from loss. If you lack experience or have low risk tolerance, we advise against using Lumenshine and against submitting transactions (such as payments) to the Stellar Network.</p>
 
             <h2 class="pt-4">Be careful with your keys</h2>
             <p>Lumenshine doesn't hold your assets or keep any of your stellar secret keys or mnemonic. If you don't know your mnemonic (backup secret), and you forget your password, you will be permanently locked out of your account. If that happens, there's nothing we can do to help you regain access.</p>
@@ -25,9 +25,9 @@
             <p>The Lumenshine Site and apps never send your password to our server. The app uses cryptographic methods to verify to the server that you have provided the correct password to be able to log you in. You can read more about this kind of authentication method here: <a href="https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md">https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md</a>. </p>
 
             <h2 class="pt-4">Do your research</h2>
-            <p>Lumenshine doesn't vet or vouch for assets. We are an interface for the publicly accessible Stellar network, where anyone can issue a token. All the information we may display about an asset is provided by the issuer, so it may be incomplete, or even inaccurate.</p>
+            <p>Lumenshine doesn't vet or vouch for assets. We are an interface for the publicly accessible Stellar Network, where anyone can issue a token. All the information we may display about an asset is provided by the issuer, so it may be incomplete, or even inaccurate.</p>
             <p>Before you buy or transfer an asset to your wallet, make sure you understand what you're buying or transfering. Read up on a token on the issuer's website, look at the issuer's Stellar account, and study the relevant white paper. If you're interested in an anchored token, verify the reserves of the underlying asset and check the issuer's site for specific conditions, fees, and minimums for deposit and withdrawal.</p>
-            <p>Lumenshine gives you access to all assets provided in the public Stellar network, but it's up to you to ensure that you have sufficient knowledge and experience to use them.</p>
+            <p>Lumenshine gives you access to all assets provided in the Stellar Network, but it's up to you to ensure that you have sufficient knowledge and experience to use them.</p>
 
             <h2 class="pt-4">If you have questions or need help, contact us</h2>
             <p>You can search for answers to common questions 24/7 on our help center. If you don't find what you're looking for there, feel free to email us. We want to make sure you have the best experience possible, and if something comes up, we're happy to help.</p>
