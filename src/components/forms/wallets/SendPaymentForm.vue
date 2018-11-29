@@ -16,6 +16,22 @@
             <small v-if="availableAmountToSend !== null">You have {{ availableAmountToSend }} {{ assetCode }} available</small>
           </b-form-group>
 
+          <b-form-group v-if="assetCode === '_other'">
+            <b-form-checkbox
+              v-model="ownAssetAccepted"
+              :aria-describedby="`inputOwnAssetAcceptedFeedback_${uuid}`"
+              :class="{ error: $v.ownAssetAccepted.$error }"
+              :state="$v.ownAssetAccepted.$error ? 'invalid' : null"
+              class="mr-0">
+              I understand what own assets are and <br>I take full responsibility for my own assets. Lumenshine is not responsible for any asset on the Stellar Network
+            </b-form-checkbox>
+            <b-form-invalid-feedback :id="`inputOwnAssetAcceptedFeedback_${uuid}`">
+              <template v-if="$v.ownAssetAccepted.$error" class="field__errors">
+                <template v-if="!$v.ownAssetAccepted.accepted">This message should be accepted.</template>
+              </template>
+            </b-form-invalid-feedback>
+          </b-form-group>
+
           <hr class="divider">
 
           <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
@@ -36,6 +52,10 @@
                 <template v-if="!$v.customAssetCode.validAssetCode">Not valid asset code!</template>
               </template>
             </b-form-invalid-feedback>
+          </b-form-group>
+
+          <b-form-group v-if="assetCode === '_other'" label="Issuer public key (this stellar account)">
+            <public-key :text="data.public_key" color="text-info"/>
           </b-form-group>
 
           <b-form-group v-if="currentAssetCodeBalances.length > 1" :label-for="`issuerInput_${uuid}`" label="Issuer:">
@@ -285,6 +305,7 @@ export default {
   data () {
     return {
       showCopiedText: false,
+      ownAssetAccepted: false,
       assetCode: 'XLM',
       customAssetCode: '',
       recipient: this.contact ? this.contact.stellar_address || this.contact.public_key : '',
@@ -356,7 +377,7 @@ export default {
     assetCodeOptions () {
       return [
         ...this.uniqueCurrencies.map(assetCode => ({ text: assetCode === 'XLM' ? 'Stellar Lumens (XLM)' : assetCode, value: assetCode })),
-        { text: 'Own token', value: '_other' },
+        { text: 'Own asset', value: '_other' },
       ];
     },
     issuerOptions () {
@@ -436,6 +457,7 @@ export default {
         showCopiedText: false,
         assetCode: 'XLM',
         customAssetCode: '',
+        ownAssetAccepted: false,
         recipient: '',
         memo: '',
         memoType: 'MEMO_TEXT',
@@ -525,6 +547,9 @@ export default {
       },
       memo: {
         ...memoValidators
+      },
+      ownAssetAccepted: {
+        ...(this.assetCode === '_other' ? { accepted: val => !!val } : {}),
       },
       ...signerValidators,
       amount: {
