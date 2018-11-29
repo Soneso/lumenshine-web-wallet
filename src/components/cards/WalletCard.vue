@@ -79,7 +79,7 @@
     <div v-if="!config.IS_TEST_NETWORK" id="changellyModal" :style="{display: changellyModalVisible ? 'block' : 'none'}">
       <div class="changellyModal-content">
         <span class="changellyModal-close" @click="changellyModalVisible = false">x</span>
-        <iframe :src="`https://changelly.com/widget/v1?auth=email&from=${changellyCurrency}&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key}&amount=0.1&ref_id=dcaa3ae0e64f&color=00cf70`" width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none">
+        <iframe :src="`https://old.changelly.com/widget/v1?auth=email&from=${changellyCurrency}&to=XLM&merchant_id=dcaa3ae0e64f&address=${data.public_key}&amount=0.1&ref_id=dcaa3ae0e64f&color=00cf70`" width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none">
           Can't load widget
         </iframe>
       </div>
