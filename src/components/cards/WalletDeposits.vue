@@ -20,7 +20,8 @@
 
       <div v-else-if="step === 'xlm'">
         <h4 class="font-weight-700 mb-3">XLM</h4>
-        <p>Funding with XLM is free and only takes a few seconds to confirm.</p>
+        <p class="my-1">Funding with XLM is free and only takes a few seconds to confirm.</p>
+        <p class="mb-3">Send XLM to the below displayed public key of your wallet.</p>
         <b-card class="flat-card">
           <b-row>
             <b-col>
