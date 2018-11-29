@@ -1,5 +1,5 @@
 <template>
-  <b-col :md="wideCard ? 12 : 6" cols="12" class="px-1 mb-2">
+  <b-col :md="wideCard ? 12 : 6" :style="{ order }" cols="12" class="px-1 mb-2" >
     <b-card :class="wideCard ? 'card-wide' : 'card-normal'">
       <b-row class="card-header">
         <b-col>
@@ -125,6 +125,10 @@ export default {
     showActions: {
       type: Boolean,
       default: true,
+    },
+    order: {
+      type: Number,
+      default: undefined,
     },
   },
   data () {
