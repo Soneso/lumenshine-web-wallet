@@ -7,9 +7,11 @@
       <a v-if="secretSeed && !loading" href="#" class="text-warning" @click.prevent="onHideClick">hide</a>
       <br>
       <span>
-        {{ secretSeed || '***********************' }}
         <template v-if="secretSeed">
           <public-key :text="secretSeed" color="text-info"/>
+        </template>
+        <template v-else>
+          '***********************'
         </template>
       </span>
     </div>

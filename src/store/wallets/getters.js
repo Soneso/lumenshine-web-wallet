@@ -13,6 +13,7 @@ export default {
   transactions: state => ({ err: state.transactionErrors, loading: state.transactionLoading, res: state.transactionResult }),
   currencyPairs: state => ({ err: state.currencyPairsErrors, loading: state.currencyPairsLoading, res: state.currencyPairsResult }),
   currencyRates: state => ({ err: state.currencyRatesErrors, loading: state.currencyRatesLoading, res: state.currencyRatesResult }),
+  currencyRateHistory: state => ({ err: state.currencyRateHistoryErrors, loading: state.currencyRateHistoryLoading, res: state.currencyRateHistoryResult }),
   sendPaymentStatus: state => ({ err: state.sendPaymentErrors, loading: state.sendPaymentLoading, res: state.sendPaymentResult }),
   exchanges: state => state.exchanges,
   knownCurrencies: state => state.knownCurrenciesResult,

@@ -90,7 +90,6 @@ export default {
       const fromRoute = this.baseRoute(from);
       const toRoute = this.baseRoute(to);
       document.body.classList.replace(fromRoute, toRoute === '' ? 'home' : toRoute);
-      this.setFooterPosition();
     },
   },
 

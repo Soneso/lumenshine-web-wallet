@@ -2,7 +2,8 @@
   <section>
     <b-row align-h="start" class="equal-heights">
       <!--<card-spinner :loading="wallets.loading"/>-->
-      <wallet-card v-for="wallet in dashboardWallets" :key="wallet.public_key" :data="wallet" @recheck="recheckWallets"/>
+      <chart-card />
+      <wallet-card v-for="(wallet, key) in dashboardWallets" :key="wallet.public_key" :order="key > 0 ? key + 2 : 1" :data="wallet" @recheck="recheckWallets"/>
     </b-row>
   </section>
 </template>
@@ -10,10 +11,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import WalletCard from '@/components/cards/WalletCard';
+import ChartCard from '@/components/cards/ChartCard';
 import cardSpinner from '@/components/ui/cardSpinner.vue';
 
 export default {
-  components: { WalletCard, cardSpinner },
+  components: { WalletCard, ChartCard, cardSpinner },
   data () {
     return {
       walletIds: [], // needed for the case when details view is open, and user unchecks the "Show wallet on home screen" checkbox. In this case the wallets cannot be filtered using the boolean show_on_homescreen flag. Old card should remain there.
