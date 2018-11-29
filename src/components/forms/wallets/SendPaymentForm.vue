@@ -230,7 +230,7 @@
           <p class="small">
             <strong>Recipient: </strong>
             <span v-if="recipient.match(/\*/g)"><strong>{{ recipient }}</strong></span> <!-- federation address -->
-            <strong v-else>
+            <strong v-else> <!-- public key -->
               <public-key :text="recipient" color="text-info" size="40"/>
             </strong>
           </p>

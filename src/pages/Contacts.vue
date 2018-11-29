@@ -21,7 +21,8 @@
           <b-col>
             <h6>{{ contact.contact_name }}</h6>
             <p>
-              <public-key :text="contact.stellar_address || contact.public_key" :chars="isMobile ? 20 : 30"/>
+              <span v-if="contact.stellar_address">{{ contact.stellar_address }}</span>
+              <public-key v-else :text="contact.public_key" :chars="isMobile ? 20 : 30"/>
             </p>
             <b-row>
               <b-col class="text-right">

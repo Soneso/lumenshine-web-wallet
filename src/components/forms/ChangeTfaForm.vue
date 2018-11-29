@@ -7,7 +7,9 @@
         <p>2. Scan QR code or input following 2FA secret into your authenticator app:</p>
 
         <h6 v-if="tfaData" class="text-center pt-2">
-          Your 2FA Secret: <public-key :text="tfaData.tfa_secret" message="2FA secret copied to clipboard" color="text-info"/><br>
+          Your 2FA Secret: {{ tfaData.tfa_secret }}
+          <copy-to-clipboard :text="tfaData.tfa_secret" message="2FA secret copied to clipboard" color="text-info"/>
+          <br>
           <img :src="`data:image/png;base64,${tfaData && tfaData.tfa_qr_image}`" class="bar-code-img">
         </h6>
 
@@ -56,11 +58,11 @@ import formMixin from '@/mixins/form';
 import { required } from 'vuelidate/lib/validators';
 
 import tfaValidator from '@/validators/twoFactorCode';
-import publicKey from '@/components/ui/publicKey';
+import copyToClipboard from '@/components/ui/copyToClipboard';
 
 export default {
   name: 'ChangeTfaForm',
-  components: { publicKey },
+  components: { copyToClipboard },
   mixins: [ formMixin ],
   props: {
     tfaData: {
