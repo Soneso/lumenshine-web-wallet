@@ -3,7 +3,7 @@
     <b-row align-h="start" class="equal-heights">
       <!--<card-spinner :loading="wallets.loading"/>-->
       <chart-card />
-      <wallet-card v-for="(wallet, key) in dashboardWallets" :key="wallet.public_key" :order="isMobile ? undefined : (key > 0 ? key + 2 : 1)" :data="wallet" @recheck="recheckWallets"/>
+      <wallet-card v-for="(wallet, key) in dashboardWallets" :key="wallet.public_key" :order="key > 0 ? key + 2 : 1" :data="wallet" @recheck="recheckWallets"/>
     </b-row>
   </section>
 </template>
@@ -23,7 +23,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['wallets', 'isMobile']),
+    ...mapGetters(['wallets']),
     dashboardWallets () {
       if (!this.wallets.res) return [];
       return this.walletIds.map(wId => this.wallets.res.find(w => w.id === wId));

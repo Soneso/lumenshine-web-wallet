@@ -1,5 +1,5 @@
 <template>
-  <b-col :style="{ order: isMobile ? undefined: 2 }" md="6" cols="12" class="px-1 mb-2">
+  <b-col style="order:2" md="6" cols="12" class="px-1 mb-2">
     <b-card class="card-normal">
       <b-row class="card-header">
         <b-col>
@@ -129,7 +129,6 @@ export default {
   computed: {
     ...mapGetters([
       'currencyRateHistory',
-      'isMobile',
     ]),
     timeSinceUpdate () {
       if (!this.lastUpdate) return '';
