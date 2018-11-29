@@ -89,6 +89,7 @@ export default {
             gridLines: {
               color: 'rgba(0, 0, 0, 0.05)',
               zeroLineWidth: 0,
+              zeroLineColor: 'rgba(0, 0, 0, 0.05)',
               drawBorder: false,
             },
           }],
@@ -103,6 +104,7 @@ export default {
             gridLines: {
               color: 'rgba(0, 0, 0, 0.05)',
               zeroLineWidth: 0,
+              zeroLineColor: 'rgba(0, 0, 0, 0.05)',
               drawBorder: false,
             },
           }]
