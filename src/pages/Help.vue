@@ -67,7 +67,7 @@
                 </ul>
                 <b-collapse id="basics" accordion="accordion2" role="tabpanel">
                   <span class="pt-3 text-gray-600 pb-2 d-block">Lumenshine is a wallet for Stellar. Stellar is a decentralized blockchain network developed by the Stellar Development Foundation.
-                    <br><br>To be able to use Lumenshine, you need to Sign-up first and complete the setup process.
+                    <br><br>To be able to use Lumenshine, you need to sign-up first and complete the setup process.
                     <br><br>After completing the setup process or on login, Lumenshine displays your home view. The home view shows the wallets that you want to have there, charts, promos and more.
                     <br><br>In the menu on the left side you can switch between different views: home, wallets, transaction, contacts, settings, etc.
                     <br><br>The wallets view shows all wallets that you added to Lumenshine. You can add new wallets in the wallets view by pressing the "Add Wallet" button in the upper rigt corner. Every wallet represents a stellar account in the Stellar Network.
@@ -90,7 +90,14 @@
                   </li>
                 </ul>
                 <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">coming soon</span>
+                  <span class="pt-3 text-gray-600 pb-2 d-block">
+                  <br><br>With Lumenshine you can have multiple wallets. You can add new wallets in the wallets view. Each wallet represents a stellar account.
+                  <br><br><code>Public key and secret seed</code>
+                  <br><br>Access to a stellar account is controlled by public-, private key cryptography. Each stellar account has a public key and a secret seed. The public key is allso called account id and always starts with "G" and the secret seed always starts with "S". You can see the public key and secret seed of your stellar account in the details view of your wallet. To be able to see the secret seed, you have to insert your password so that the app can decrept it and display it to you.
+                  <br><br><code>Adding stellar assets</code>
+                  <br><br>Each stellar account can have different kinds of assets associated with it. There are lumens, the native currency of the Stellar Network, non anchored and anchored assets.
+                  <br><br>Each funded account has lumens by default. To associate another asset with your account, you must issue a trustline from your account to the issuer account of that specific asset. You can do this in the details view of your wallet by pressing "Add currency".
+                  </span>
                 </b-collapse>
               </li>
               <li>
@@ -116,7 +123,11 @@
                   </li>
                   <li>
                     <h6 class="mb-0">Stellar</h6>
-                    <span>
+                    <span>Learn more about Stellar</span>
+                  </li>
+                </ul>
+                <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
+                  <span class="pt-3 text-gray-600 pb-2 d-block">
                     <br><br>Stellar is a decentralized financial platform that is designed to be open and accessible to everyone. It aims to connect banks, payment systems, companies and people.
                     <br><br>Stellar is operated and maintained by the <a href="https://www.stellar.org/" target="_blank" rel="noopener">Stellar Development Foundation</a> which is a non-stock, non-profit organization from the U.S. It's mission is to connect people to low cost financial services to fight poverty and maximize individual potential.
                     <br><br>With Stellar, money and any kind of assets can be moved quickly, reliably and almost with no costs. Transactions on the decentralized network resolve in 2-5 seconds and cost a fraction of a fraction of a cent.
@@ -137,12 +148,7 @@
                     <br><br>Anchors act as a bridge between outside currencies and the Stellar Network. An anchor can be thought up as a bank. Banks take your deposit, issue the corresponding IOU in form of a balance on your account with that bank. You can see your balance in their database on a website or an app. They honor withdraws by giving you cash. Interacting with anchors is similar. Anchors take your deposit, issue the corresponding credit to your address on the Stellar ledger, which you can see in your wallet app. They honor withdraws by receiving the credit they issued you and giving you your asset. The primary difference between assets hold in banks versus anchors is where you can access and move your assets, a centralized database versus the Stellar ledger.
                     <br><br>When you want to hold assets with a bank in the real word, you must open an account with that bank. In the Stellar Network, when you want to hold assets with an anchor, you must issue a trustline from your Stellar account to that anchors Stellar account. Trustlines also protect you from having random, unsolicited assets sent to you.
                     <br><br>Anchored Assets can be any asset: there are fiat assets of government issued currencies like us dollar or euro, crypto-currency assets that originate from other networks like Bitcoin or Ethereum, stocks that originate from a company as a unit of ownership in that company, bonds that also originate from entities and represent dept, commodities that originate in the physical world like gold and real estate or ownership stake in physical world property.
-
                     </span>
-                  </li>
-                </ul>
-                <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
-                  <span class="pt-3 text-gray-600 pb-2 d-block">Coming soon</span>
                 </b-collapse>
               </li>
             </ul>
