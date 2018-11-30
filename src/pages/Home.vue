@@ -20,11 +20,11 @@
             <hr class="divider light">
           </b-col>
           <b-col cols="12" class="pt-3">
-            <h2 class="text-info">Fully-featured and beautiful</h2>
+            <h2 class="text-info">Fully-featured</h2>
             <ul class="has-bullets pl-3 py-3">
-              <li>you can manage your Stellar accounts</li>
+              <li>manage your Stellar accounts</li>
               <li>send and receive payments</li>
-              <li>add an manage your assets from the Stellar Network</li>
+              <li>add and manage your assets from the Stellar Network</li>
               <li>add short Stellar federation addresses to your accounts</li>
               <li>set inflation destination for airdrops</li>
               <li>send own assets</li>
@@ -43,8 +43,8 @@
             <p>Lumenshine is currently available for web and we will soon release our mobile apps for iOS and Android.</p>
           </b-col>
           <b-col cols="12" class="py-3">
-            <h3 class="text-info">Beta version</h3>
-            <p>Lumenshine is currently in beta version.</p>
+            <h3 class="text-info">Open source</h3>
+            <p>Lumenshine is open source software developed by Soneso. You can find it in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Stellar Network</h3>
