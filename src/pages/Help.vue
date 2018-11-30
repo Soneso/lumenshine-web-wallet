@@ -95,9 +95,22 @@
                     With Lumenshine you can have multiple wallets. You can add new wallets in the wallets view. Each wallet represents a stellar account.
                     <br><br><code>Public key and secret seed</code>
                     <br><br>Access to a stellar account is controlled by public-, private key cryptography. Each stellar account has a public key and a secret seed. The public key is also called account id and always starts with "G" and the secret seed always starts with "S". You can see the public key and secret seed of your stellar account in the details view of your wallet. To be able to see the secret seed, you have to insert your password so that the app can decrypt it and display it to you.
+                    <br><br><code>Adding a stellar address</code>
+                    <br><br>To make sending and receiving easier, the stellar federation protocol resolves short stellar addresses such as <code>name*lumenshine.com</code> into stellar public keys like: GCCVPYFOHY7ZB7557JKENAX62LUAPLMGIWNZJAFV2MITK6T32V37KEJU
+                    <br><br>Stellar addresses are email-like, human readable addresses, that are much easier to type out and share that the public key. They have two parts, username + domain, split by an asterix. When someone else sends assets to your account instead of typing in long, error prone string of random characters as a public key, the assets can be sent to your simple stellar address.
+                    <br><br>Lumenshine runs a federation server to implement the stellar federation protocol. You can request a stellar address like "mike*lumenshine.com" in the details view of your wallet. This address will be stored in the Lumenshine database and mapped to the public key of your wallet/account.
                     <br><br><code>Adding stellar assets</code>
                     <br><br>Each stellar account can have different kinds of assets associated with it. There are lumens, the native currency of the Stellar Network, non anchored and anchored assets.
                     <br><br>Each funded account has lumens by default. To associate another asset with your account, you must issue a trustline from your account to the issuer account of that specific asset. You can do this in the details view of your wallet by pressing "Add currency".
+                    <br><br><code>Set the inflation destination</code>
+                    <br><br>The Stellar distributed network has a built-in, fixed, nominal inflation mechanism. New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.
+                    <br><br>To vote for another account you can set the inflation destination to that account in the details of your wallet. To receive "airdrops" you can vote for accounts that return the received Lumens to their voters. Such as for example the <a href="https://pool.lumenaut.net/" target="_blank" rel="noopener">Lumenaut inflation pool</a>
+                    <br><br><code>Send payments</code>
+                    <br><br>To send payments press the "Send" button of your wallet. You can choose to send Stellar Lumens, other stellar assets that you have associated with your account or own assets. If you want to send other assets than Stellar Lumens, the recipients stellar account must also trust the issuers stellar account of that asset.
+                    <br><br><code>Receive payments</code>
+                    <br><br>In the receive payment form you can type in what kind of payment you want to receive. You can send the composed data including your account data to the sender of the payment.
+                    <br><br><code>View, filter, search transactions</code>
+                    <br><br>You can view, filter and search for transactions of your wallets. Use the side menu of Lumenshine to open the transactions view.
                   </span>
                 </b-collapse>
               </li>
