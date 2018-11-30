@@ -304,7 +304,7 @@ export default {
 
     dateEndDisabled () {
       return {
-        from: new Date(Math.min(dayjs(this.dateFrom).add(2, 'weeks').toDate(), new Date())),
+        from: new Date(),
         to: dayjs(this.dateFrom).toDate(),
       };
     },
@@ -458,9 +458,9 @@ export default {
     },
     dateFrom (val) {
       const fromDate = dayjs(val);
-      if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
+      /* if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
         this.dateTo = fromDate.add(2, 'weeks').format('YYYY-MM-DD HH:mm:ss');
-      } else if (dayjs(this.dateTo).isBefore(fromDate)) {
+      } else */if (dayjs(this.dateTo).isBefore(fromDate)) {
         this.dateTo = fromDate.format('YYYY-MM-DD HH:mm:ss');
       }
       this.reloadTransactions();
