@@ -4,8 +4,8 @@
       <b-card class="p-4">
         <b-row>
           <b-col cols="12" lg="4" xlg="3">
-            <h1><small class="text-info">Introducing</small> <span class="font-weight-800 text-primary">Lumenshine <small>(beta)</small></span></h1>
-            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured Wallet for the public Stellar Network. It is developed and maintained by Soneso GmbH, Germany.</p>
+            <h1><small class="text-info">Introducing</small> <span class="font-weight-800 text-primary">Lumenshine</span></h1>
+            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured Wallet for the decentralized Stellar Network.</p>
           </b-col>
           <b-col>
             <img src="/static/app-screenshot.png">
@@ -27,6 +27,7 @@
               <li>add an manage your assets from the Stellar Network</li>
               <li>add short Stellar federation addresses to your accounts</li>
               <li>set inflation destination for airdrops</li>
+              <li>send own assets</li>
               <li>mange contacts</li>
               <li>search, filter and view your transactions</li>
               <li>receive push notifications on your mobile device</li>
@@ -34,7 +35,7 @@
             <div>...and much more; Lumenshine is beautiful, user-friendly and security-driven.<br><br></div>
           </b-col>
           <b-col cols="12" class="py-3">
-            <h3 class="text-info">Fast and cheap</h3>
+            <h3 class="text-info">Fast and free</h3>
             <p>Transactions settle in seconds and you only need to pay the Stellar Network transaction fee. No transaction fee has to be payed to Lumenshine.</p>
           </b-col>
           <b-col cols="12" class="py-3">
