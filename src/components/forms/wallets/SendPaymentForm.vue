@@ -3,6 +3,17 @@
     <b-row align-h="center">
       <b-col v-if="!showOwnAssetsDescription" cols="9">
         <div v-if="!result">
+          <b-form-group v-if="creatingTemplate" :label-for="`templateNameInput_${uuid}`" label="Template name">
+            <b-form-input
+              :id="`templateNameInput_${uuid}`"
+              v-model="templateName"
+              type="text"
+              placeholder="Template name"
+              required/>
+          </b-form-group>
+
+          <hr v-if="creatingTemplate" class="divider">
+
           <template v-if="availableWallets.length > 1">
             <b-form-group :label-for="`walletInput_${uuid}`" label="Wallet:">
               <b-form-select :id="`walletInput_${uuid}`" v-model="selectedWallet" :options="walletOptions" required/>
@@ -32,7 +43,8 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <hr class="divider">
+          <a v-if="!creatingTemplate && !contact" href="#" class="text-right d-block my-0 py-0" @click.prevent="$emit('template')">use template</a>
+          <hr class="divider mt-1">
 
           <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
             <b-form-input
@@ -152,69 +164,76 @@
 
           <hr class="divider">
 
-          <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
-            <b-form-input
-              :id="`passwordInput_${uuid}`"
-              :class="{ error: $v.password.$error }"
-              :aria-describedby="`inputLivePasswordFeedback_${uuid}`"
-              :state="!$v.password.$error"
-              :type="passwordIsHidden ? 'password' : 'text'"
-              v-model="password"
-              placeholder="Your password"
-              autocomplete="new-password"
-              required
-              @blur.native="$v.password.$touch()"/>
+          <template v-if="!creatingTemplate">
+            <b-form-group v-if="canSignWithPassword" :label-for="`passwordInput_${uuid}`" label="Password">
+              <b-form-input
+                :id="`passwordInput_${uuid}`"
+                :class="{ error: $v.password.$error }"
+                :aria-describedby="`inputLivePasswordFeedback_${uuid}`"
+                :state="!$v.password.$error"
+                :type="passwordIsHidden ? 'password' : 'text'"
+                v-model="password"
+                placeholder="Your password"
+                autocomplete="new-password"
+                required
+                @blur.native="$v.password.$touch()"/>
 
-            <password-assets :password="['passwordIsHidden', passwordIsHidden]" class="has-label" @passwordUpdated="updatePasswordState($event)"/>
+              <password-assets :password="['passwordIsHidden', passwordIsHidden]" class="has-label" @passwordUpdated="updatePasswordState($event)"/>
 
-            <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
-              <template v-if="$v.password.$error" class="field__errors">
-                <template v-if="!$v.password.required">Password is required!</template>
-                <template v-if="!$v.password.decryptValid">Wrong password!</template>
-              </template>
-            </b-form-invalid-feedback>
-          </b-form-group>
+              <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
+                <template v-if="$v.password.$error" class="field__errors">
+                  <template v-if="!$v.password.required">Password is required!</template>
+                  <template v-if="!$v.password.decryptValid">Wrong password!</template>
+                </template>
+              </b-form-invalid-feedback>
+            </b-form-group>
 
-          <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
-            <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
-            <b-form-input
-              :class="{ error: $v.signerSeed.$error }"
-              :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
-              v-model="signerSeed"
-              :state="!$v.signerSeed.$error"
-              type="text"
-              placeholder="Seed for selected signer"
-              required
-              @blur.native="$v.signerSeed.$touch()"/>
-            <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
-              <template v-if="$v.signerSeed.$error" class="field__errors">
-                <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
-                <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
-              </template>
-            </b-form-invalid-feedback>
-            <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
-              Your secret seed for selected signer.
-            </b-form-text>
-          </b-form-group>
+            <b-form-group v-if="!canSignWithPassword" :label-for="`signerInput_${uuid}`" label="Select signer for payment">
+              <b-form-select :id="`signerInput_${uuid}`" v-model="signer" :options="signers.map(signer => signer.public_key)" placeholder="Signers"/>
+              <b-form-input
+                :class="{ error: $v.signerSeed.$error }"
+                :aria-describedby="`inputLiveSignerSeedHelp_${uuid} inputLiveSignerSeedFeedback_${uuid}`"
+                v-model="signerSeed"
+                :state="!$v.signerSeed.$error"
+                type="text"
+                placeholder="Seed for selected signer"
+                required
+                @blur.native="$v.signerSeed.$touch()"/>
+              <b-form-invalid-feedback :id="`inputLiveSignerSeedFeedback_${uuid}`">
+                <template v-if="$v.signerSeed.$error" class="field__errors">
+                  <template v-if="!$v.signerSeed.required">Secret seed is required!</template>
+                  <template v-if="!$v.signerSeed.secretSeed">Invalid secret seed!</template>
+                </template>
+              </b-form-invalid-feedback>
+              <b-form-text :id="`inputLiveSignerSeedHelp_${uuid}`">
+                Your secret seed for selected signer.
+              </b-form-text>
+            </b-form-group>
 
-          <hr class="divider">
+            <hr class="divider">
 
-          <div class="text-center">
-            <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
-              <small class="text-danger mb-3 d-inline-block">Warning: Recipient account does not exist or is not funded. Send Anyway?</small>
+            <div class="text-center">
+              <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
+                <small class="text-danger mb-3 d-inline-block">Warning: Recipient account does not exist or is not funded. Send Anyway?</small>
+              </div>
+              <div v-else-if="errors.find(err => err.error_code === 'BAD_SEQUENCE')">
+                <small class="text-danger mb-3 d-inline-block">Could not send payment. Wrong sequence number.</small>
+              </div>
+              <div v-else-if="hasUnknownError">
+                <small class="text-danger mb-3 d-inline-block">An error occured, please try again</small>
+              </div>
+
+              <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
+                <spinner v-if="loading" :message="`Sending ${currentAssetCode }...`" variant="white" size="21" width="130"/>
+                <span v-else>Send {{ currentAssetCode }}</span>
+              </b-button>
             </div>
-            <div v-else-if="errors.find(err => err.error_code === 'BAD_SEQUENCE')">
-              <small class="text-danger mb-3 d-inline-block">Could not send payment. Wrong sequence number.</small>
+          </template>
+          <template v-else> <!-- when creating payment template -->
+            <div class="text-center">
+              <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">Save</b-button>
             </div>
-            <div v-else-if="hasUnknownError">
-              <small class="text-danger mb-3 d-inline-block">An error occured, please try again</small>
-            </div>
-
-            <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
-              <spinner v-if="loading" :message="`Sending ${currentAssetCode }...`" variant="white" size="21" width="130"/>
-              <span v-else>Send {{ currentAssetCode }}</span>
-            </b-button>
-          </div>
+          </template>
         </div>
 
         <div v-else-if="result">
@@ -340,33 +359,51 @@ export default {
     contact: { // used to prefill forms with contact data
       type: Object,
       default: null,
-    }
+    },
+    creatingTemplate: {
+      type: Boolean,
+      default: false,
+    },
+    defaultValues: {
+      type: Object,
+      default: null,
+    },
   },
 
   data () {
+    let recipient = '';
+    if (this.defaultValues) {
+      recipient = this.defaultValues.recipient_stellar_address || this.defaultValues.recipient_pk;
+    } else if (this.contact) {
+      recipient = this.contact.stellar_address || this.contact.public_key;
+    }
+
+    let assetCode = this.defaultValues ? this.defaultValues.asset_code : 'XLM';
+    let customAssetCode = '';
+    if (this.defaultValues && this.defaultValues.issuer_pk === this.data.public_key) {
+      assetCode = '_other';
+      customAssetCode = this.defaultValues.asset_code;
+    }
+
     return {
+      templateName: '',
       showOwnAssetsDescription: false,
-      showCopiedText: false,
       ownAssetAccepted: false,
-      assetCode: 'XLM',
-      customAssetCode: '',
-      recipient: this.contact ? this.contact.stellar_address || this.contact.public_key : '',
-      memo: '',
-      memoType: 'MEMO_TEXT',
-      amount: '',
+      assetCode,
+      customAssetCode,
+      recipient: recipient,
+      memo: this.defaultValues ? this.defaultValues.memo : '',
+      memoType: this.defaultValues ? this.defaultValues.memo_type : 'MEMO_TEXT',
+      amount: this.defaultValues ? this.defaultValues.amount : '',
 
       signer: null,
       signerSeed: '',
 
-      issuer: '',
+      issuer: this.defaultValues ? this.defaultValues.issuer_pk : '',
       password: '',
       passwordIsHidden: true,
 
       sendItAll: false,
-
-      memoTypeOptions: [
-        'MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN'
-      ],
 
       selectedWallet: 0, // used for contacts, where wallet should be selected on this form
     };
@@ -486,6 +523,9 @@ export default {
   },
 
   created () {
+    this.memoTypeOptions = [
+      'MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN'
+    ];
     if (!this.canSignWithPassword) {
       this.signer = this.signers[0] ? this.signers[0].public_key : null;
     }
@@ -496,8 +536,8 @@ export default {
       this.$v.$reset();
       this.$emit('reset');
       const data = {
+        templateName: '',
         showOwnAssetsDescription: false,
-        showCopiedText: false,
         assetCode: 'XLM',
         customAssetCode: '',
         ownAssetAccepted: false,
@@ -519,10 +559,11 @@ export default {
         return;
       }
       const data = {
+        templateName: this.templateName,
         recipient: this.recipient,
         assetCode: this.assetCode,
         customAssetCode: this.customAssetCode,
-        issuer: this.issuer,
+        issuer: this.assetCode === '_other' ? this.data.public_key : this.issuer,
         memo: this.memo,
         memoType: this.memoType,
         amount: this.sendItAll ? this.sendItAllAmount : this.amount,
@@ -594,7 +635,7 @@ export default {
       ownAssetAccepted: {
         ...(this.assetCode === '_other' ? { accepted: val => !!val } : {}),
       },
-      ...signerValidators,
+      ...(this.creatingTemplate ? {} : signerValidators),
       amount: {
         required,
         decimal,

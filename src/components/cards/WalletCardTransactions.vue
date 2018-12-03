@@ -1,33 +1,29 @@
 <template>
   <b-form class="form">
-    <div v-for="transaction in transactions" :key="transaction.id" class="transaction">
-      <div v-for="operation in transaction.operations" :key="operation.id">
-        <b-row>
-          <b-col>
-            Date: {{ dayjs(transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
-            <span v-if="transaction.memo_type !== 'none'">Memo type: {{ transaction.memo_type }}<br></span>
-            <span v-if="transaction.memo_type !== 'none'">Memo: {{ transaction.memo }}</span>
-          </b-col>
-          <b-col>
-            <div>Operation - Type: {{ operation.type }}<br></div>
-            <div>Operation - ID:  <a href="#" @click.prevent="onDetailsClick(operation)">{{ operation.id }}</a><br></div>
-            <div v-if="operation.amount">
-              Amount:
-              <span :class="data.public_key === operation.to ? 'text-success' : 'text-danger'">
-                {{ data.public_key === operation.to ? '' : '-' }}{{ operation.amount }}
-                {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
-              </span>
-              <br>
-            </div>
-            <div :id="`operation-${operation.id}-details`" class="d-none btn-rounded-lg">
-              <pre style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">
-                {{ operation }}
-              </pre>
-            </div>
-          </b-col>
-        </b-row>
-        <hr class="divider">
-      </div>
+    <div v-for="operation in operations" :key="operation.id" class="transaction"> <!-- App transaction = Stellar operation != Stellar transaction -->
+      <b-row>
+        <b-col>
+          Date: {{ dayjs(operation.transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
+          <span v-if="operation.transaction.memo_type !== 'none'">Memo type: {{ operation.transaction.memo_type }}<br></span>
+          <span v-if="operation.transaction.memo_type !== 'none'">Memo: {{ operation.transaction.memo }}</span>
+        </b-col>
+        <b-col>
+          <div>Operation - Type: {{ operation.type }}<br></div>
+          <div>Operation - ID:  <a href="#" @click.prevent="openedDetails = (openedDetails === operation.id ? null : operation.id)">{{ operation.id }}</a><br></div>
+          <div v-if="operation.amount">
+            Amount:
+            <span :class="data.public_key === operation.to ? 'text-success' : 'text-danger'">
+              {{ data.public_key === operation.to ? '' : '-' }}{{ operation.amount }}
+              {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
+            </span>
+            <br>
+          </div>
+          <div :id="`operation-${operation.id}-details`" :class="['btn-rounded-lg', openedDetails === operation.id ? 'd-block' : 'd-none']">
+            <pre style="font-size: 11px" class="p-2 mt-3 text-success bg-dark">{{ operation }}</pre>
+          </div>
+        </b-col>
+      </b-row>
+      <hr class="divider">
     </div>
     <b-row align-h="center">
       <b-col cols="6" md="4" class="text-center">
@@ -59,42 +55,42 @@ export default {
 
   data () {
     return {
-      transactions: [],
+      operations: [],
       loading: false,
+      openedDetails: null,
     };
   },
 
   async created () {
     this.loading = true;
-    this.transactionQuery = await StellarAPI.transactions()
+    this.transactions = {};
+    this.operationQuery = await StellarAPI.operations()
       .forAccount(this.data.public_key)
       .order('desc')
       .limit(20)
       .call();
-    await this.processTransactionQuery();
+    await this.processOperationQuery();
     this.loading = false;
   },
 
   methods: {
-    async processTransactionQuery () {
-      const transactions = this.transactionQuery.records;
-      const operationQueries = await Promise.all(transactions.map(t => t.operations()));
-      const operations = operationQueries.map(q => q.records).reduce((acc, c) => acc.concat(c), []);
-      transactions.forEach(t => {
-        t.operations = operations.filter(o => o.transaction_hash === t.hash);
+    async processOperationQuery () {
+      const operations = this.operationQuery.records;
+      const requiredTransactions = operations.map(op => op.transaction_hash).filter(tx => this.transactions[tx] === undefined);
+      const transactionQueries = await Promise.all(requiredTransactions.map(tx => StellarAPI.transactions().transaction(tx).call()));
+      transactionQueries.forEach(tx => {
+        this.transactions[tx.hash] = tx;
       });
-      this.transactions = [...this.transactions, ...transactions];
+      operations.forEach(op => {
+        op.transaction = this.transactions[op.transaction_hash];
+      });
+      this.operations = [...this.operations, ...operations];
     },
     async onLoadMore () {
       this.loading = true;
-      this.transactionQuery = await this.transactionQuery.next();
-      await this.processTransactionQuery();
+      this.operationQuery = await this.operationQuery.next();
+      await this.processOperationQuery();
       this.loading = false;
-    },
-    onDetailsClick (operation) {
-      const el = document.getElementById(`operation-${operation.id}-details`);
-      el.classList[el.classList.contains('d-none') ? 'remove' : 'add']('d-none');
-      el.classList[el.classList.contains('d-block') ? 'remove' : 'add']('d-block');
     },
     dayjs
   },

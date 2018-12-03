@@ -55,7 +55,7 @@
         </b-modal>
 
         <b-modal v-model="sendModalVisible" hide-footer size="sm" title="Send">
-          <send-payment-form
+          <send-payment-with-templates
             v-if="sendModalVisible && availableWallets.length > 0"
             :result="sendPaymentStatus.res"
             :loading="sendPaymentStatus.loading || decryptedWallet.loading"
@@ -65,7 +65,6 @@
             :available-wallets="availableWallets"
             :contact="contacts.res.find(c => c.id === selectedContact)"
             @reset="resetSendPayment"
-            @close="sendModalVisible = false"
             @submit="onSendPaymentClick"/>
           <span v-else-if="sendModalVisible && availableWallets.length === 0">Can not send payment, please fund your wallet first.</span>
         </b-modal>
@@ -79,13 +78,14 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import EditContactForm from '@/components/forms/contacts/EditContactForm';
-import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
+import SendPaymentWithTemplates from '@/components/SendPaymentWithTemplates';
+
 import validators from '@/validators';
 import publicKey from '@/components/ui/publicKey';
 
 export default {
   name: 'Contacts',
-  components: { EditContactForm, SendPaymentForm, publicKey },
+  components: { EditContactForm, SendPaymentWithTemplates, publicKey },
   data () {
     return {
       addModalVisible: false,
