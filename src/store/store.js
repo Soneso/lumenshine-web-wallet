@@ -12,6 +12,7 @@ export default new Vuex.Store({
     settings: require('./settings').default,
     contacts: require('./contacts').default,
     offcanvas: require('./offcanvas').default,
+    paymentTemplates: require('./paymentTemplates').default,
     users: require('./users').default,
     wallets: require('./wallets').default
   },

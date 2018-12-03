@@ -44,7 +44,7 @@
     </b-modal>
 
     <b-modal v-model="sendModalVisible" hide-footer size="sm" title="Send">
-      <send-payment-form
+      <send-payment-with-templates
         v-if="sendModalVisible && data && balances"
         :result="sendPaymentStatus.res"
         :loading="sendPaymentStatus.loading || decryptedWallet.loading"
@@ -53,7 +53,6 @@
         :exchanges="exchanges"
         :transaction="sendPaymentTransaction"
         @reset="resetSendPayment"
-        @close="sendModalVisible = false"
         @submit="onSendPaymentClick"/>
     </b-modal>
 
@@ -95,7 +94,7 @@ import config from '@/config';
 import Amount from '@/util/Amount';
 import balanceMixin from '@/mixins/balance';
 import ReceivePaymentForm from '@/components/forms/wallets/ReceivePaymentForm';
-import SendPaymentForm from '@/components/forms/wallets/SendPaymentForm';
+import SendPaymentWithTemplates from '@/components/SendPaymentWithTemplates';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
 
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
@@ -108,7 +107,7 @@ import publicKey from '@/components/ui/publicKey';
 export default {
   components: {
     ReceivePaymentForm,
-    SendPaymentForm,
+    SendPaymentWithTemplates,
     WalletSecretSeedForm,
     WalletCardDetails,
     WalletCardBalances,
