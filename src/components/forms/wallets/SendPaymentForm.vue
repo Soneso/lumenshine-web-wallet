@@ -43,7 +43,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <a v-if="!creatingTemplate" href="#" class="text-right d-block my-0 py-0" @click.prevent="$emit('template')">use template</a>
+          <a v-if="!creatingTemplate && !contact" href="#" class="text-right d-block my-0 py-0" @click.prevent="$emit('template')">use template</a>
           <hr class="divider mt-1">
 
           <b-form-group v-if="assetCode === '_other'" :label-for="`customAssetCodeInput_${uuid}`" label="Asset code">
