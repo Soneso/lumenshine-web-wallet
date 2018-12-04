@@ -1,5 +1,7 @@
 <template>
   <div id="app" :class="[authClass]">
+    <inactivity-modal v-if="authToken && showInactivityModal" @continue="() => { catchInteraction(), showInactivityModal = false }" @logout="showInactivityModal = false"/>
+
     <div :class="['offcanvas-overlay', {'open': offCanvasMenuOpen}]"/>
     <off-canvas-menu v-if="registrationComplete && authTokenType !== 'partial'">
       <dashboard-menu/>
@@ -27,9 +29,12 @@ import pageFooter from '@/components/PageFooter';
 import dashboardMenu from '@/components/offcanvas/DashboardMenu';
 import offCanvasMenu from '@/components/offcanvas/OffCanvasMenu';
 
+import inactivityModal from '@/components/InactivityModal';
+
 import WebSocketService from '@/services/websocket';
 
 import config from '@/config';
+import { setTimeout } from 'timers';
 
 export default {
   name: 'App',
@@ -38,15 +43,16 @@ export default {
     pageHeader,
     pageFooter,
     dashboardMenu,
-    offCanvasMenu
+    offCanvasMenu,
+    inactivityModal,
   },
 
   data () {
     return {
-      refreshInterval: null,
       debounceWindowResizeId: null,
       appReady: false,
-      stickyFooter: false
+      stickyFooter: false,
+      showInactivityModal: false,
     };
   },
 
@@ -85,11 +91,22 @@ export default {
 
   watch: {
     $route (to, from) {
-      this.interactionHandler();
+      if (!this.authToken && to && to.meta && to.meta.authNeeded === true) {
+        return this.$router.push({ name: 'Login' });
+      }
+      setTimeout(this.interactionHandler, 0);
 
       const fromRoute = this.baseRoute(from);
       const toRoute = this.baseRoute(to);
       document.body.classList.replace(fromRoute, toRoute === '' ? 'home' : toRoute);
+    },
+    authToken (token) {
+      if (token) {
+        this.refreshAuthTokenHandler();
+      } else if (this.jwtRefreshTimer) {
+        clearTimeout(this.jwtRefreshTimer);
+        this.jwtRefreshTimer = null;
+      }
     },
   },
 
@@ -114,16 +131,36 @@ export default {
     window.addEventListener('beforeunload', this.unloadHandler);
     window.addEventListener('resize', this.onResize);
 
-    this.$store.watch(state => state, () => this.interactionHandler(), { deep: true });
+    this.$store.subscribe(mutation => {
+      if (mutation.type === 'SET_INTERACTION' || mutation.type === 'SET_AUTH_TOKEN') return; // avoid infinite loop + no interaction at JWT refresh
+      setTimeout(this.catchInteraction, 0);
+    });
+
+    this.refreshAuthTokenHandler();
 
     const initialRoute = this.baseRoute(this.$route);
     document.body.classList.add(initialRoute === '' ? 'home' : initialRoute, `${this.authClass}-page`);
+
+    this.inactivityTimer = setInterval(() => {
+      if (!this.authToken || !this.registrationComplete || this.showInactivityModal) return;
+      const lastInteraction = this.$store.state.lastInteraction;
+      if (lastInteraction === null) return;
+      const now = new Date().getTime();
+      const diffSeconds = (now - lastInteraction) / 1000;
+      if (diffSeconds >= 10 * 60) {
+        this.showInactivityModal = true;
+      }
+    }, 2000);
   },
 
   beforeDestroy () {
-    if (this.refreshInterval !== null) {
-      clearInterval(this.refreshInterval);
-      this.refreshInterval = null;
+    if (this.inactivityTimer !== null) {
+      clearInterval(this.inactivityTimer);
+      this.inactivityTimer = null;
+    }
+    if (this.jwtRefreshTimer) {
+      clearTimeout(this.jwtRefreshTimer);
+      this.jwtRefreshTimer = null;
     }
   },
 
@@ -172,19 +209,19 @@ export default {
       }
     },
 
-    async interactionHandler () {
-      const lastInteraction = this.$store.state.lastInteraction;
-      if (lastInteraction === null) {
-        await this.catchInteraction();
-        return;
+    refreshAuthTokenHandler () {
+      if (this.authToken) {
+        if (this.jwtRefreshTimer) {
+          clearTimeout(this.jwtRefreshTimer);
+          this.jwtRefreshTimer = null;
+        }
+        this.jwtRefreshTimer = setTimeout(() => {
+          this.refreshAuthToken();
+          this.jwtRefreshTimer = null;
+          this.refreshAuthTokenHandler(); // prepare next refresh
+        }, 5 * 60 * 1000); // refresh JWT token in every 5 minutes
       }
-      const now = new Date().getTime();
-      const diffSeconds = (now - lastInteraction) / 1000;
-      if (diffSeconds > 5 * 60) {
-        this.clearInteraction();
-        await this.refreshAuthToken();
-      }
-    }
+    },
   }
 };
 </script>

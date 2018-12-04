@@ -35,10 +35,8 @@ export default new Vuex.Store({
     resetStore ({ commit }) {
       commit('RESET');
     },
-    catchInteraction ({ commit, state }) {
-      if (state.lastInteraction === null) {
-        commit('SET_INTERACTION', new Date().getTime());
-      }
+    catchInteraction ({ commit }) {
+      commit('SET_INTERACTION', new Date().getTime());
     },
     clearInteraction ({ commit }) {
       commit('SET_INTERACTION', null);
