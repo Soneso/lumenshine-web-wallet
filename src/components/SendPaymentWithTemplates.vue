@@ -21,7 +21,7 @@
           <h6>{{ template.template_name || '(unnamed)' }}</h6>
           <p>
             <span v-if="template.recipient_stellar_address">{{ template.recipient_stellar_address }}</span>
-            <public-key :text="template.recipient_pk" :chars="20"/>
+            <public-key v-else :text="template.recipient_pk" :chars="20"/>
             <br>
             <span v-if="template.amount">{{ template.amount }} {{ template.asset_code }}<br></span>
             <span v-if="template.issuer_pk && template.asset_code && template.asset_code !== 'XLM'">
