@@ -269,8 +269,8 @@
       <b-col v-if="showOwnAssetsDescription" cols="11">
         <div>
           <p>
-            In the Stellar Network you can send any type of asset. This is a native feature of the decentralized Stellar Network.<br>
-            If you want to send own assets with Lumenshine you agree to take full responsibility for your own assets.<br>
+            In the Stellar Network you can send any type of asset. This is a native feature of the decentralized Stellar Network.
+            If you want to send own assets with Lumenshine you agree to take full responsibility for your own assets.
             Lumenshine has no control of any asset in the Stellar Network and is not responsible for any asset in the decentralized Stellar Network.
           </p>
 
@@ -281,7 +281,7 @@
 
           <p>
             Each wallet in the Lumenshine app represents a stellar account. For the receivers of your own asset, to be able to receive your asset,
-            they must add a trustline from their stellar account to the stellar account that you use to issue your own token (issuer account).
+            they must add a trustline from their stellar account to the stellar account that you use to issue your own asset (issuer account).
           </p>
 
           <p>
@@ -300,8 +300,8 @@
           </p>
 
           <p>
-            Lumenshine currently does not provide functionality to set the flags of a stellar account. This feature may be added later.<br>
-            In the meantime you can use <a href="https://www.stellar.org/laboratory/" target="_blank" rel="noopener">Stellar Laboratory</a> to do that if needed.<br>
+            Lumenshine currently does not provide functionality to set the flags of a stellar account. This feature may be added later.
+            In the meantime you can use <a href="https://www.stellar.org/laboratory/" target="_blank" rel="noopener">Stellar Laboratory</a> to do that if needed.
             Use the stellar public network to do that for accounts shown in Lumenshine.
           </p>
           <b-button variant="info" class="btn-rounded my-3" @click.prevent="showOwnAssetsDescription = false">Back</b-button>

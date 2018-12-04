@@ -202,7 +202,7 @@
     </b-col>
     <b-col cols="12" md="7" lg="8" xl="9" class="px-1">
       <b-card class="px-2 px-lg-3 py-3">
-        <h5 class="mb-0 text-info text-uppercase">Transactions history</h5>
+        <h5 class="mb-0 text-info text-uppercase">Transactions</h5>
         <div v-if="inProgress" style="min-height: 208px" class="mb-3 d-flex justify-content-center align-items-center">
           <br><spinner align="center"/><br>
         </div>
@@ -304,7 +304,7 @@ export default {
 
     dateEndDisabled () {
       return {
-        from: new Date(Math.min(dayjs(this.dateFrom).add(2, 'weeks').toDate(), new Date())),
+        from: new Date(),
         to: dayjs(this.dateFrom).toDate(),
       };
     },
@@ -458,9 +458,9 @@ export default {
     },
     dateFrom (val) {
       const fromDate = dayjs(val);
-      if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
+      /* if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
         this.dateTo = fromDate.add(2, 'weeks').format('YYYY-MM-DD HH:mm:ss');
-      } else if (dayjs(this.dateTo).isBefore(fromDate)) {
+      } else */if (dayjs(this.dateTo).isBefore(fromDate)) {
         this.dateTo = fromDate.format('YYYY-MM-DD HH:mm:ss');
       }
       this.reloadTransactions();

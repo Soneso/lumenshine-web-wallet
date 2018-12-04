@@ -115,6 +115,8 @@ $offcanvas-shadow: .125rem .125rem .5rem rgba($black, .25);
     }
 
     > a {
+      outline: none;
+
       &.active {
         position: relative;
 

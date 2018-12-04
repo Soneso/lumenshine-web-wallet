@@ -142,7 +142,8 @@ export default {
     ]),
     toggleText () {
       return {
-        opacity: this.offCanvasMenuOpen ? 1 : 0
+        opacity: this.offCanvasMenuOpen ? 1 : 0,
+        visibility: this.offCanvasMenuOpen ? 'visible' : 'hidden',
       };
     }
   },
