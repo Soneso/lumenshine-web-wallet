@@ -9,7 +9,7 @@ export default {
     if (!getters.authToken) return;
     try {
       const res = await UserService.refreshToken(getters.authTokenType);
-      commit('SET_AUTH_TOKEN', { token: res.token, type: state.authTokenType });
+      commit('REFRESH_AUTH_TOKEN', { token: res.token, type: state.authTokenType });
     } catch (err) {
       console.log('RefreshAuthToken error', err);
     }

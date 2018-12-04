@@ -132,7 +132,10 @@ export default {
     window.addEventListener('resize', this.onResize);
 
     this.$store.subscribe(mutation => {
-      if (mutation.type === 'SET_INTERACTION' || mutation.type === 'SET_AUTH_TOKEN') return; // avoid infinite loop + no interaction at JWT refresh
+      if (mutation.type === 'SET_INTERACTION') return; // avoid infinite loop
+      if (mutation.type === 'REFRESH_AUTH_TOKEN') return; // no interaction at JWT refresh
+      if (mutation.type === 'REFRESH_CURRENCY_RATE_HISTORY') return; // no interaction at chart refresh
+      if (mutation.type === 'SET_WEBSOCKET' || mutation.type === 'TRY_DESTROYING_WEBSOCKET') return; // no interaction at websocket handling
       setTimeout(this.catchInteraction, 0);
     });
 

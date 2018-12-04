@@ -177,7 +177,7 @@ export default {
   async mounted () {
     await this.loadData();
     this.nowTimer = setInterval(() => { this.now = dayjs(); }, 5 * 1000);
-    this.refreshTimer = setInterval(() => { this.loadData(); }, 5 * 60 * 1000);
+    this.refreshTimer = setInterval(() => { this.refreshData(); }, 5 * 60 * 1000);
   },
 
   beforeDestroy () {
@@ -192,10 +192,22 @@ export default {
   methods: {
     ...mapActions([
       'getCurrencyRateHistory',
+      'refreshCurrencyRateHistory',
     ]),
     Amount,
     async loadData () {
       await this.getCurrencyRateHistory({
+        source_currency: {
+          asset_code: 'XLM',
+          issuer_public_key: '',
+        },
+        destination_currency: 'USD',
+        range_hours: this.period,
+      });
+      this.lastUpdate = dayjs();
+    },
+    async refreshData () {
+      await this.refreshCurrencyRateHistory({
         source_currency: {
           asset_code: 'XLM',
           issuer_public_key: '',

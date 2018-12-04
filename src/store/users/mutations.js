@@ -11,6 +11,15 @@ export default {
     }
   },
 
+  REFRESH_AUTH_TOKEN (state, token) {
+    state.authToken = token.token;
+    state.authTokenType = token.type;
+    if (config.KEEP_LOGGED_IN) {
+      Vue.localStorage.set('authToken', token.token);
+      Vue.localStorage.set('authTokenType', token.type);
+    }
+  },
+
   SET_REGISTRATION_LOADING (state, msg) {
     state.registrationLoading = msg;
   },

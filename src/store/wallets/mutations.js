@@ -144,6 +144,10 @@ export default {
     state.currencyRateHistoryResult = msg;
     state.currencyRateHistoryErrors = [];
   },
+  REFRESH_CURRENCY_RATE_HISTORY (state, msg) {
+    state.currencyRateHistoryResult = msg;
+    state.currencyRateHistoryErrors = [];
+  },
   SET_CURRENCY_RATE_HISTORY_LOADING (state, msg) {
     state.currencyRateHistoryLoading = msg;
   },
