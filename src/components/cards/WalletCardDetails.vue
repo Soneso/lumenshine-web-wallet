@@ -119,8 +119,12 @@
     <!-- transactions -->
     <b-row class="pb-2">
       <b-col>
-        <h6 class="mb-3">Transactions</h6>
-        <wallet-card-transactions :data="data"/>
+        <b-button-group size="sm" class="mb-3">
+          <b-button :class="shownTransactionType === 'transaction' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="shownTransactionType = 'transaction'">Transactions</b-button>
+          <b-button :class="shownTransactionType === 'trade' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="shownTransactionType = 'trade'">Trades</b-button>
+        </b-button-group>
+        <wallet-card-transactions v-if="shownTransactionType === 'transaction'" :data="data"/>
+        <wallet-card-trades v-if="shownTransactionType === 'trade'" :data="data"/>
       </b-col>
     </b-row>
   </div>
@@ -137,6 +141,7 @@ import WalletAddressForm from '@/components/forms/wallets/WalletAddressForm';
 import WalletInflationForm from '@/components/forms/wallets/WalletInflationForm';
 import WalletCurrenciesForm from '@/components/forms/wallets/WalletCurrenciesForm';
 import WalletCardTransactions from '@/components/cards/WalletCardTransactions';
+import WalletCardTrades from '@/components/cards/WalletCardTrades';
 
 import publicKey from '@/components/ui/publicKey';
 
@@ -144,6 +149,7 @@ export default {
   components: {
     WalletSecretSeedForm,
     WalletCardTransactions,
+    WalletCardTrades,
     WalletNameForm,
     WalletCurrenciesForm,
     WalletAddressForm,
@@ -179,6 +185,8 @@ export default {
       inflationDest: null,
 
       homescreen: this.data.show_on_homescreen,
+
+      shownTransactionType: 'transaction',
 
       errors: [],
       config

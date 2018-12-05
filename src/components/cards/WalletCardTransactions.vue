@@ -13,7 +13,7 @@
           <div v-if="operation.amount">
             Amount:
             <span :class="data.public_key === operation.to ? 'text-success' : 'text-danger'">
-              {{ data.public_key === operation.to ? '' : '-' }}{{ operation.amount }}
+              {{ data.public_key === operation.to ? '' : '-' }}{{ new Amount(operation.amount).format() }}
               {{ operation.asset_type === 'native' ? 'XLM' : operation.asset_code }}
             </span>
             <br>
@@ -37,6 +37,8 @@
 <script>
 import StellarSdk from 'stellar-sdk';
 import dayjs from 'dayjs';
+
+import Amount from '@/util/Amount';
 
 import config from '@/config';
 
@@ -92,7 +94,8 @@ export default {
       await this.processOperationQuery();
       this.loading = false;
     },
-    dayjs
+    dayjs,
+    Amount,
   },
 };
 </script>
