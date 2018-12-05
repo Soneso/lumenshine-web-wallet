@@ -10,7 +10,12 @@
         <b-col>
           <div>Operation - Type: {{ operation.type }}<br></div>
           <div>Operation - ID:  <a href="#" @click.prevent="openedDetails = (openedDetails === operation.id ? null : operation.id)">{{ operation.id }}</a><br></div>
-          <div v-if="operation.amount">
+          <div v-if="operation.type === 'manage_offer' && operation.amount">
+            Buying: {{ operation.buying_asset_type === 'native' ? 'XLM' : operation.buying_asset_code }}<br>
+            Selling: <span class="text-danger">{{ new Amount(operation.amount).format() }} {{ operation.selling_asset_type === 'native' ? 'XLM' : operation.selling_asset_code }}</span><br>
+            Price for 1 {{ operation.selling_asset_type === 'native' ? 'XLM' : operation.selling_asset_code }} = {{ new Amount(operation.price).format() }} {{ operation.buying_asset_type === 'native' ? 'XLM' : operation.buying_asset_code }}<br>
+          </div>
+          <div v-else-if="operation.amount">
             Amount:
             <span :class="data.public_key === operation.to ? 'text-success' : 'text-danger'">
               {{ data.public_key === operation.to ? '' : '-' }}{{ new Amount(operation.amount).format() }}
