@@ -24,7 +24,13 @@
                 <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">How can I fund my wallet?</a>
                 <b-collapse id="q1" accordion="accordion1" role="tabpanel">
                   <!--<p class="mt-3"> I start opened because <code>visible</code> is <code>true</code></p>-->
-                  <p class="mb-0"><br>In order to prevent people from making a huge number of unnecessary accounts, each account in the Stellar network must have a minimum balance of 1 XLM (Stellar Lumen). Press the "Fund Wallet" button of your wallet and send Lumens to the displayed Account ID/Public key. At least 1 XLM is needed to fund your wallet in the Stellar network. We recommend a minimum of 2 XLM.<br><br>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?<br><br>A: You can pay an exchange that sells Stellar Lumens in order to fund your wallet. <a href="https://coinmarketcap.com/currencies/stellar/#markets" target="_blank" rel="noopener">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens, withdraw them from the exchange to your wallet by sending them to the displayed Account ID/Public key in order to fund your wallet.<br></p>
+                  <p class="mb-0"><br>In order to prevent people from making a huge number of unnecessary accounts, each account in the Stellar network must have a minimum balance of 1.0 XLM (one Stellar Lumen).
+                    <br><br>Press the "Fund Wallet" button of your unfunded wallet and then choose "XLM". The deposit popup will show you the Account ID of your Stellar account. It is referenced by your wallet.
+                    <br><br>Copy the displayed public key (your Stellar Account ID) by pressing the copy button. Next, send XLM (Stellar Lumens) to your Stellar Account ID in order to fund your wallet.
+                    <br><br>At least 1.0 XLM is needed to fund an account in the Stellar network. We recommend a minimum of 2.0 XLM.
+                    <br><br>Q: I don't have Stellar Lumens. Where can I get Stellar Lumens (XLM)?
+                    <br><br>A: Lumenshine uses <a href="https://changelly.com/" target="_blank" rel="noopener">Changelly</a> as a cross-chain exchange provider. Changelly converts your funds to XLM at the best rates by bidding out your order worldwide. They charge 0.5% for the conversion. You can use changelly by pressing the "Other currenecy" button in the deposit popup.
+                  <br><br>Alternatively, you can pay an exchange that sells Stellar Lumens in order to fund your wallet. <a href="https://coinmarketcap.com/currencies/stellar/#markets" target="_blank" rel="noopener">CoinMarketCap</a> maintains a list of exchanges that sell Stellar Lumens (XML). After purchasing the lumens, withdraw them from the exchange to your wallet by sending them to your Stellar Account ID/Public key.<br></p>
                 </b-collapse>
               </li>
               <li>
