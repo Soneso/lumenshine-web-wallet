@@ -48,6 +48,13 @@
             <p>Lumenshine is open source software developed by <a href="https://soneso.com" target="_blank" rel="noopener">Soneso</a>. You can find it source code in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
           </b-col>
           <b-col cols="12" class="py-3">
+            <h3 class="text-info">Own validator node</h3>
+            <p>Lumenshine has its own Stellar validator node, running an instance of Stellar Core, open source software created by the <a href="https://www.stellar.org/" target="_blank" rel="noopener">Stellar Development Foundation</a>.</p>
+            <p>By running a validator node, Lumenshine participates in consensus, adding more security to the decentralized Stellar network. Lumenshine sends transactions to the network without depending on a third party - providing you a trusted node to submit transactions to - and see the state of your Stellar accounts.</p>
+            <p>Running an own node also gives Lumenshine the possibility to set-up customisations for you, that will automatically trigger actions on events that occur in the Stellar network (such as push notifications on payment received).</p>
+            <p>Lumenshine can directly access the history of the network, giving you the possibility to search, filter and view your transactions.</p>
+          </b-col>
+          <b-col cols="12" class="py-3">
             <h3 class="text-info">Stellar Network</h3>
             <p>The Stellar network is hosted by numerous distributed nodes world-wide who are not under the control of any single entity or groups of entities. Lumenshine is only an interface for the Stellar network and does not control the Stellar network.</p>
           </b-col>
