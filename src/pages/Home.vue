@@ -5,7 +5,7 @@
         <b-row>
           <b-col cols="12" lg="4" xlg="3">
             <h1><small class="text-info">Introducing</small> <span class="font-weight-800 text-primary">Lumenshine</span></h1>
-            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured Wallet for the decentralized Stellar Network.</p>
+            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured wallet app for the decentralized Stellar network.</p>
           </b-col>
           <b-col>
             <img src="/static/app-screenshot.png">
@@ -13,7 +13,7 @@
           <b-col cols="12" class="py-3 text-center">
             <hr class="divider light">
             <div class="py-3">
-              <div class="lead pb-4">Sign up and easily interact with the Stellar Network!</div>
+              <div class="lead pb-4">Sign up and easily interact with the Stellar network!</div>
               <b-button href="/register" size="lg" variant="outline-success" class="btn-rounded text-uppercase mx-3 mb-2">sign up</b-button>
               <b-button href="/login" size="lg" variant="outline-info" class="btn-rounded text-uppercase mx-3 mb-2">log in</b-button>
             </div>
@@ -24,11 +24,12 @@
             <ul class="has-bullets pl-3 py-3">
               <li>manage your Stellar accounts</li>
               <li>send and receive payments</li>
-              <li>add and manage your assets from the Stellar Network</li>
-              <li>add short Stellar federation addresses to your accounts</li>
-              <li>set inflation destination for airdrops</li>
+              <li>add and manage your assets from the Stellar network</li>
+              <li>add short Stellar (federation) addresses to your accounts</li>
+              <li>set the inflation destination for airdrops</li>
               <li>send own assets</li>
-              <li>mange contacts</li>
+              <li>manage contacts</li>
+              <li>use payment templates</li>
               <li>search, filter and view your transactions</li>
               <li>receive push notifications on your mobile device</li>
             </ul>
@@ -36,7 +37,7 @@
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Fast and free</h3>
-            <p>Transactions settle in seconds and you only need to pay the Stellar Network transaction fee. No transaction fee has to be payed to Lumenshine.</p>
+            <p>Transactions settle in seconds and you only need to pay the Stellar network transaction fee. No transaction fee has to be payed to Lumenshine.</p>
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Available for web and soon for mobile</h3>
@@ -44,11 +45,11 @@
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Open source</h3>
-            <p>Lumenshine is open source software developed by Soneso. You can find it in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
+            <p>Lumenshine is open source software developed by <a href="https://soneso.com" target="_blank" rel="noopener">Soneso</a>. You can find it source code in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Stellar Network</h3>
-            <p>The Stellar Network is hosted by numerous distributed nodes world-wide who are not under the control of any single entity or groups of entities. Lumenshine is only an interface for the Stellar Network and does not control the Stellar Network.</p>
+            <p>The Stellar network is hosted by numerous distributed nodes world-wide who are not under the control of any single entity or groups of entities. Lumenshine is only an interface for the Stellar network and does not control the Stellar network.</p>
           </b-col>
         </b-row>
       </b-card>
