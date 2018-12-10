@@ -45,7 +45,7 @@
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Open source</h3>
-            <p>Lumenshine is open source software developed by <a href="https://soneso.com" target="_blank" rel="noopener">Soneso</a>. You can find it source code in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
+            <p>Lumenshine is open source software developed by <a href="https://soneso.com" target="_blank" rel="noopener">Soneso</a>, a company from Munich, Germany. You can find the Lumenshine source code in our <a href="https://github.com/soneso" target="_blank" rel="noopener">github repository</a>.</p>
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Own validator node</h3>
