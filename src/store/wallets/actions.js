@@ -446,6 +446,7 @@ export default {
 
   async sendPayment ({ commit, dispatch, getters }, data) {
     commit('SET_SEND_PAYMENT_LOADING', true);
+    commit('SET_SEND_PAYMENT_ERROR', []);
 
     const hasFederationAddress = validators.federationAddress().federationAddress(data.recipient);
     if (hasFederationAddress) {
