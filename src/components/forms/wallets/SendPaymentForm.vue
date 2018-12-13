@@ -213,10 +213,7 @@
             <hr class="divider">
 
             <div class="text-center">
-              <div v-if="errors.find(err => err.error_code === 'SHOULD_FUND')">
-                <small class="text-danger mb-3 d-inline-block">Warning: Recipient account does not exist or is not funded. Send Anyway?</small>
-              </div>
-              <div v-else-if="errors.find(err => err.error_code === 'BAD_SEQUENCE')">
+              <div v-if="errors.find(err => err.error_code === 'BAD_SEQUENCE')">
                 <small class="text-danger mb-3 d-inline-block">Could not send payment. Wrong sequence number.</small>
               </div>
               <div v-else-if="hasUnknownError">
@@ -567,7 +564,6 @@ export default {
         memo: this.memo,
         memoType: this.memoType,
         amount: this.sendItAll ? this.sendItAllAmount : this.amount,
-        shouldFund: !!this.errors.find(err => err.error_code === 'SHOULD_FUND'),
         ...(this.canSignWithPassword ? {
           password: this.password,
         } : {

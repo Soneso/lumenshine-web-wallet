@@ -495,20 +495,16 @@ export default {
         StellarAPI.loadAccount(data.recipient).catch(e => e)
       ]);
 
-    if (!data.shouldFund && (currentAccount instanceof Error || destinationAccount instanceof Error)) {
+    if ((currentAccount instanceof Error || destinationAccount instanceof Error) && data.assetCode !== 'XLM') {
       commit('SET_SEND_PAYMENT_LOADING', false);
-      if (data.assetCode !== 'XLM') {
-        commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'CANNOT_FUND' }]);
-      } else {
-        commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'SHOULD_FUND' }]);
-      }
+      commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'CANNOT_FUND' }]);
       return;
     }
 
     try {
       let transaction;
 
-      if (data.shouldFund) {
+      if (currentAccount instanceof Error || destinationAccount instanceof Error) {
         transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
           .addOperation(StellarSdk.Operation.createAccount({
             destination: data.recipient,
