@@ -144,16 +144,18 @@ export default {
     const initialRoute = this.baseRoute(this.$route);
     document.body.classList.add(initialRoute === '' ? 'home' : initialRoute, `${this.authClass}-page`);
 
-    this.inactivityTimer = setInterval(() => {
-      if (!this.authToken || !this.registrationComplete || this.showInactivityModal) return;
-      const lastInteraction = this.$store.state.lastInteraction;
-      if (lastInteraction === null) return;
-      const now = new Date().getTime();
-      const diffSeconds = (now - lastInteraction) / 1000;
-      if (diffSeconds >= 10 * 60) {
-        this.showInactivityModal = true;
-      }
-    }, 2000);
+    if (process.env.NODE_ENV !== 'development') {
+      this.inactivityTimer = setInterval(() => {
+        if (!this.authToken || !this.registrationComplete || this.showInactivityModal) return;
+        const lastInteraction = this.$store.state.lastInteraction;
+        if (lastInteraction === null) return;
+        const now = new Date().getTime();
+        const diffSeconds = (now - lastInteraction) / 1000;
+        if (diffSeconds >= 10 * 60) {
+          this.showInactivityModal = true;
+        }
+      }, 2000);
+    }
   },
 
   beforeDestroy () {
