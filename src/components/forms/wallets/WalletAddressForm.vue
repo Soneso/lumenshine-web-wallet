@@ -3,7 +3,7 @@
     <div class="mb-3">
       <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger d-inline-block" @click.prevent="onRemoveAddressClick">
-        <spinner v-if="loading && removingWallet" variant="warning" size="18" top="3"/>
+        <spinner v-if="loading && removingWallet" :size="18" variant="warning" top="3"/>
         <template v-else>remove address</template>
       </a>
       <a v-else-if="!fieldOpen && !address" href="#" @click.prevent="onSetAddressClick">set address</a>
@@ -66,7 +66,7 @@
         </li>
         <li v-if="fieldOpen" class="action-btn">
           <a href="#" class="p-0" @click.prevent="onSubmitClick">
-            <spinner v-if="loading" message="saving..." size="21"/>
+            <spinner v-if="loading" :size="21" message="saving..." />
             <span v-else class="text-info">save</span>
           </a>
         </li>

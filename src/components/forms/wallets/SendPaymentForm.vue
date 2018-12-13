@@ -221,7 +221,7 @@
               </div>
 
               <b-button variant="info" class="btn-rounded" @click.prevent="onSendClick">
-                <spinner v-if="loading" :message="`Sending ${currentAssetCode }...`" variant="white" size="21" width="130"/>
+                <spinner v-if="loading" :size="21" :message="`Sending ${currentAssetCode }...`" variant="white" width="130"/>
                 <span v-else>Send {{ currentAssetCode }}</span>
               </b-button>
             </div>

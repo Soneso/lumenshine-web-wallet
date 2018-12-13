@@ -32,7 +32,7 @@
         </li>
         <li>
           <a v-if="fieldOpen" href="#" @click.prevent="onSubmitClick">
-            <spinner v-if="loading" message="saving..." width="90" size="21"/>
+            <spinner v-if="loading" :size="21" message="saving..." width="90"/>
             <span v-else class="text-info px-2">save</span>
           </a>
         </li>

@@ -98,11 +98,11 @@
               <div>
                 <a v-if="!loading" href="#" class="text-warning mr-3 d-inline-block" @click.prevent="openKnownDestination(null)">cancel</a>
                 <a v-if="removingDestination" href="#" class="text-danger d-inline-block" @click.prevent="onSubmitClick">
-                  <spinner v-if="loading" message="removing..." width="110" size="24"/>
+                  <spinner v-if="loading" :size="24" message="removing..." width="110" />
                   <template v-else>remove</template>
                 </a>
                 <a v-else href="#" class="text-info d-inline-block" @click.prevent="onSubmitClick">
-                  <spinner v-if="loading" message="adding..." width="90" size="24"/>
+                  <spinner v-if="loading" :size="24" message="adding..." width="90" />
                   <template v-else>add</template>
                 </a>
               </div>
@@ -194,7 +194,7 @@
                   </a>
                 </b-col>
                 <b-col class="text-center">
-                  <spinner v-if="loading" width="110" size="21" message="processing..."/>
+                  <spinner v-if="loading" :size="21" width="110" message="processing..."/>
                 </b-col>
                 <b-col>
                   <a v-if="removingExistingDestination && !loading" href="#" class="text-danger px-2 d-inline-block pull-right" @click.prevent="onSubmitClick">

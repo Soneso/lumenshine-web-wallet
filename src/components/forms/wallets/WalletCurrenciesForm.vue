@@ -129,7 +129,7 @@
               <a v-if="!loading" href="#" class="text-warning mr-2 d-inline-block" @click.prevent="onOpenKnownCurrency(null)">cancel</a>
               <a href="#" class="text-info d-inline-block" @click.prevent="onAddClick">
                 <template v-if="!loading">add</template>
-                <spinner v-else message="adding..." width="100" size="21"/>
+                <spinner v-else :size="21" message="adding..." width="100" />
               </a>
             </div>
           </div>
@@ -249,7 +249,7 @@
           <div class="py-3">
             <a v-if="!loading" href="#" class="text-warning mr-2 d-inline-block" @click.prevent="addCurrency = false">cancel</a>
             <a href="#" class="d-inline-block" @click.prevent="onAddClick">
-              <spinner v-if="loading" message="adding..." width="100" size="21"/>
+              <spinner v-if="loading" :size="21" message="adding..." width="100"/>
               <template v-else>add</template>
             </a>
           </div>
