@@ -229,7 +229,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { decimal } from 'vuelidate/lib/validators';
 
-import dayjs from 'dayjs';
+import moment from 'moment';
 import Datepicker from 'vuejs-datepicker';
 
 import spinner from '@/components/ui/spinner.vue';
@@ -285,8 +285,8 @@ export default {
       sortBy: 'date',
       sortDesc: false,
 
-      dateFrom: dayjs().subtract(2, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
-      dateTo: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      dateFrom: moment().subtract(2, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+      dateTo: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
   },
 
@@ -305,7 +305,7 @@ export default {
     dateEndDisabled () {
       return {
         from: new Date(),
-        to: dayjs(this.dateFrom).toDate(),
+        to: moment(this.dateFrom).toDate(),
       };
     },
 
@@ -400,7 +400,7 @@ export default {
 
     tableItems () {
       return this.filteredItems.map(item => ({
-        date: dayjs(item.tx_created_at),
+        date: moment(item.tx_created_at),
         type: this.getOperationName(item),
         amount: this.getAmount(item),
         currency: this.getCurrency(item),
@@ -457,10 +457,10 @@ export default {
       this.reloadTransactions();
     },
     dateFrom (val) {
-      const fromDate = dayjs(val);
-      /* if (dayjs(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
+      const fromDate = moment(val);
+      /* if (moment(this.dateTo).isAfter(fromDate.add(2, 'weeks'))) {
         this.dateTo = fromDate.add(2, 'weeks').format('YYYY-MM-DD HH:mm:ss');
-      } else */if (dayjs(this.dateTo).isBefore(fromDate)) {
+      } else */if (moment(this.dateTo).isBefore(fromDate)) {
         this.dateTo = fromDate.format('YYYY-MM-DD HH:mm:ss');
       }
       this.reloadTransactions();
@@ -607,15 +607,15 @@ export default {
     },
 
     formatDate (date) {
-      return dayjs(date).format('DD.MM.YYYY<br>hh:mm:ssA');
+      return moment(date).format('DD.MM.YYYY<br>hh:mm:ssA');
     },
 
     async reloadTransactions () {
       this.inProgress = true;
       await this.loadTransactions({
         stellar_account_pk: this.selectedWallet,
-        start_timestamp: dayjs(this.dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-        end_timestamp: dayjs(this.dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+        start_timestamp: moment(this.dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+        end_timestamp: moment(this.dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
       });
       this.inProgress = false;
     },

@@ -237,6 +237,8 @@ export default {
     }
     if (state.websocket) {
       state.websocket.close();
+    }
+    if (WebSocketService) {
       WebSocketService.close();
     }
     state.websocket = ws;

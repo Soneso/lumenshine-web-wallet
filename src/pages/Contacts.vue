@@ -114,7 +114,7 @@ export default {
 
     filteredContacts () {
       if (this.searchField === '') {
-        return this.contacts.res;
+        return this.contacts.res || [];
       }
       return this.contacts.res.filter(contact => {
         const str = this.searchField.toLowerCase();

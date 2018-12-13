@@ -9,14 +9,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 export default {
   name: 'InactivityModal',
 
   data () {
     return {
-      expirationTime: dayjs().add(1, 'minute'),
+      expirationTime: moment().add(1, 'minute'),
       remainingTime: '1:00',
 
       modalVisible: true,
@@ -38,7 +38,7 @@ export default {
 
   mounted () {
     this.timer = setInterval(() => {
-      this.remainingTime = `0:${('0' + this.expirationTime.diff(dayjs(), 'second')).slice(-2)}`;
+      this.remainingTime = `0:${('0' + this.expirationTime.diff(moment(), 'second')).slice(-2)}`;
       if (this.remainingTime === '0:00') {
         clearInterval(this.timer);
         this.timer = null;

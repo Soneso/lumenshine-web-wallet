@@ -3,7 +3,7 @@
     <div v-for="trade in trades" :key="trade.id" class="transaction"> <!-- App transaction = Stellar operation != Stellar transaction -->
       <b-row>
         <b-col>
-          Date: {{ dayjs(trade.ledger_close_time).format('DD MMM YYYY HH:mm:ss') }}<br>
+          Date: {{ moment(trade.ledger_close_time).format('DD MMM YYYY HH:mm:ss') }}<br>
         </b-col>
         <b-col>
           <div>Trade - ID:  <a href="#" @click.prevent="openedDetails = (openedDetails === trade.id ? null : trade.id)">{{ trade.id }}</a><br></div>
@@ -54,7 +54,7 @@
 
 <script>
 import StellarSdk from 'stellar-sdk';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 import Amount from '@/util/Amount';
 
@@ -103,7 +103,7 @@ export default {
       await this.processTradeQuery();
       this.loading = false;
     },
-    dayjs,
+    moment,
     Amount
   },
 };

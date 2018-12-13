@@ -40,7 +40,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 import config from '@/config';
 
@@ -120,7 +120,7 @@ export default {
         { value: 365 / 2 * 24, text: '6 months' },
         { value: 365 * 24, text: '1 year' },
       ],
-      now: dayjs(),
+      now: moment(),
       nowTimer: null,
       refreshTimer: null,
       lastUpdate: null,
@@ -152,7 +152,7 @@ export default {
     dataCollection () {
       if (!this.currencyRateHistory.res) return {};
       return {
-        labels: this.currencyRateHistory.res.rates.map(x => dayjs(x.date + ' GMT').format('YYYY-MM-DD HH:mm')),
+        labels: this.currencyRateHistory.res.rates.map(x => moment(x.date + 'Z').format('YYYY-MM-DD HH:mm')),
         datasets: [
           {
             label: 'XLM',
@@ -176,7 +176,7 @@ export default {
 
   async mounted () {
     await this.loadData();
-    this.nowTimer = setInterval(() => { this.now = dayjs(); }, 5 * 1000);
+    this.nowTimer = setInterval(() => { this.now = moment(); }, 5 * 1000);
     this.refreshTimer = setInterval(() => { this.refreshData(); }, 5 * 60 * 1000);
   },
 
@@ -204,7 +204,7 @@ export default {
         destination_currency: 'USD',
         range_hours: this.period,
       });
-      this.lastUpdate = dayjs();
+      this.lastUpdate = moment();
     },
     async refreshData () {
       await this.refreshCurrencyRateHistory({
@@ -215,7 +215,7 @@ export default {
         destination_currency: 'USD',
         range_hours: this.period,
       });
-      this.lastUpdate = dayjs();
+      this.lastUpdate = moment();
     },
   }
 };

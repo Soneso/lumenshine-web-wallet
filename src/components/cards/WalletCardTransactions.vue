@@ -3,7 +3,7 @@
     <div v-for="operation in operations" :key="operation.id" class="transaction"> <!-- App transaction = Stellar operation != Stellar transaction -->
       <b-row>
         <b-col>
-          Date: {{ dayjs(operation.transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
+          Date: {{ moment(operation.transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
           <span v-if="operation.transaction.memo_type !== 'none'">Memo type: {{ operation.transaction.memo_type }}<br></span>
           <span v-if="operation.transaction.memo_type !== 'none'">Memo: {{ operation.transaction.memo }}</span>
         </b-col>
@@ -41,7 +41,7 @@
 
 <script>
 import StellarSdk from 'stellar-sdk';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 import Amount from '@/util/Amount';
 
@@ -99,7 +99,7 @@ export default {
       await this.processOperationQuery();
       this.loading = false;
     },
-    dayjs,
+    moment,
     Amount,
   },
 };
