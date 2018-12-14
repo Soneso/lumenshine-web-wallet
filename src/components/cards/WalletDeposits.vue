@@ -21,12 +21,13 @@
       <div v-else-if="step === 'xlm'">
         <h4 class="font-weight-700 mb-3">XLM</h4>
         <p class="my-1">Funding with XLM is free and only takes a few seconds to confirm.</p>
-        <p class="mb-3">Send XLM to the below displayed public key of your wallet.</p>
+        <p class="mb-3">{{ !data.federation_address ? 'Send XLM to the below displayed public key of your wallet.' : 'Send XLM to the below displayed public key or stellar address of your wallet.' }}</p>
         <b-card class="flat-card">
           <b-row>
             <b-col>
-              <div class="break-word with-hyphens my-4">
-                <public-key :text="data.public_key"/>
+              <div :class="['break-word with-hyphens', data.federation_address ? 'my-3' : 'my-4']">
+                <div class="my-2"><strong>Public key: </strong><public-key :text="data.public_key"/></div>
+                <div v-if="data.federation_address" class="my-2"><strong>Stellar address: </strong><span>{{ data.federation_address }}</span></div>
               </div>
             </b-col>
             <b-col cols="3" class="text-right">
