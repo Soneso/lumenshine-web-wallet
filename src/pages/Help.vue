@@ -21,7 +21,7 @@
             <ul id="help-faq" role="tablist">
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q1 href="#" class="d-block font-weight-500 mt-1 text-info">How can I fund my wallet?</a>
+                <a v-b-toggle.q1 class="d-block font-weight-500 mt-1 text-info">How can I fund my wallet?</a>
                 <b-collapse id="q1" accordion="accordion1" role="tabpanel">
                   <!--<p class="mt-3"> I start opened because <code>visible</code> is <code>true</code></p>-->
                   <p class="mb-0"><br>In order to prevent people from making a huge number of unnecessary accounts, each account in the Stellar network must have a minimum balance of 1.0 XLM (one Stellar Lumen).
@@ -35,21 +35,21 @@
               </li>
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q2 href="#" class="d-block font-weight-500 mt-1 text-info">How can I setup the inflation destination to receive airdrops?</a>
+                <a v-b-toggle.q2 class="d-block font-weight-500 mt-1 text-info">How can I setup the inflation destination to receive airdrops?</a>
                 <b-collapse id="q2" accordion="accordion1" role="tabpanel">
                   <p class="mt-3 mb-0"><br>You can set the inflation destination in the details section of your wallet. Press the "Details" button and scroll to "Set inflation destination". Then press the "set" button and choose from the list of recommended inflation destinations or to provide your own data. If you provide your own data, you must insert the Account ID/Public key of the inflation destination account you want to vote for.</p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q3 href="#" class="d-block font-weight-500 mt-1 text-info">How can I receive other assets and currencies than Stellar Lumens?</a>
+                <a v-b-toggle.q3 class="d-block font-weight-500 mt-1 text-info">How can I receive other assets and currencies than Stellar Lumens?</a>
                 <b-collapse id="q3" accordion="accordion1" role="tabpanel">
                   <p class="mt-3 mb-0"><br>You can accept other assets and currencies than Stellar Lumens in the details section of your wallet. Press the "Details" button and scroll to "Currencies". Next, press the "add currency" button and provide the Account ID/Public key of the issuer and the asset code of the currency you would like to accept. Only assets and currencies from the Stellar network can be added. This will create a trustline to the inserted issuer account and asset code, so that you can now accept that asset or currency.<br><br>After adding the trustline, go back to your wallet and press the "Receive" button. You can now select the new currency from the provided dropdown. Insert the data and send it to the person you want to obtain the assets from.<br></p>
                 </b-collapse>
               </li>
               <li>
                 <hr class="divider light">
-                <a v-b-toggle.q4 href="#" class="d-block font-weight-500 mt-1 text-info">How can I send Stellar Lumens and other currencies?</a>
+                <a v-b-toggle.q4 class="d-block font-weight-500 mt-1 text-info">How can I send Stellar Lumens and other currencies?</a>
                 <b-collapse id="q4" accordion="accordion1" role="tabpanel">
                   <p class="mt-3 mb-0"><br>You can send Stellar Lumens and other assets or currencies by pressing the "Send" button of your wallet. Fill the form, enter your password and submit. You can only send assets that you have in your wallet or own assets.<br><br>The recepient must also trust and be able to receive the asset (other then Stellar Lumens) you would like to send. If she did not yet accept the asset you want to send, an error message will be dispayed.<br></p>
                 </b-collapse>
@@ -62,7 +62,7 @@
             <ul id="help-topics">
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.basics class="py-3">
+                <ul v-b-toggle.acc-basics id="acc-basics-button" class="py-3">
                   <li>
                     <i class="icon-bag large text-info"/>
                   </li>
@@ -71,7 +71,7 @@
                     <span>Guide to getting started with Lumenshine</span>
                   </li>
                 </ul>
-                <b-collapse id="basics" accordion="accordion2" role="tabpanel">
+                <b-collapse id="acc-basics" accordion="accordion2" role="tabpanel" @show="() => moveScrollPos('acc-basics-button')">
                   <span class="pt-3 text-gray-600 pb-2 d-block">Lumenshine is a wallet for Stellar. Stellar is a decentralized blockchain network developed by the <a href="https://www.stellar.org/" target="_blank" rel="noopener">Stellar Development Foundation</a>.
                     <br><br>To be able to use Lumenshine, you need to sign-up first and complete the setup process.
                     <br><br>After completing the setup process or on login, Lumenshine displays your home view. The home view shows the wallets that you want to have there, charts, promos and more.
@@ -87,7 +87,7 @@
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.wallets class="py-3">
+                <ul v-b-toggle.acc-wallets id="acc-wallets-button" class="py-3">
                   <li>
                     <i class="icon-wallet large text-info"/>
                   </li>
@@ -96,7 +96,7 @@
                     <span>Learn how to master all Wallet features</span>
                   </li>
                 </ul>
-                <b-collapse id="wallets" accordion="accordion2" role="tabpanel">
+                <b-collapse id="acc-wallets" accordion="accordion2" role="tabpanel" @show="() => moveScrollPos('acc-wallets-button')">
                   <span class="pt-3 text-gray-600 pb-2 d-block">
                     With Lumenshine you can have multiple wallets. You can add new wallets in the wallets view. Each wallet represents a Stellar account.
                     <br><br><code>Public key and secret seed</code>
@@ -122,7 +122,7 @@
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.security class="py-3">
+                <ul v-b-toggle.acc-security id="acc-security-button" class="py-3">
                   <li>
                     <i class="icon-security large text-info"/>
                   </li>
@@ -133,7 +133,7 @@
                     </span>
                   </li>
                 </ul>
-                <b-collapse id="security" accordion="accordion2" role="tabpanel">
+                <b-collapse id="acc-security" accordion="accordion2" role="tabpanel" @show="() => moveScrollPos('acc-security-button')">
                   <span class="pt-3 text-gray-600 pb-2 d-block">
                     <br><code>Password &amp; Mnemonic</code>
                     <br><br>With Lumenshine, when you register and set-up your account, the app generates a backup secret (24 words mnemonic) for you. All the wallets that you create with Lumenshine are associated with your mnemonic.
@@ -158,7 +158,7 @@
               </li>
               <li>
                 <hr class="divider light">
-                <ul v-b-toggle.stellar class="py-3">
+                <ul v-b-toggle.acc-stellar id="acc-stellar-button" class="py-3">
                   <li>
                     <i class="icon-learn-ico large text-info"/>
                   </li>
@@ -167,7 +167,7 @@
                     <span>Learn more about Stellar</span>
                   </li>
                 </ul>
-                <b-collapse id="stellar" accordion="accordion2" role="tabpanel">
+                <b-collapse id="acc-stellar" accordion="accordion2" role="tabpanel" @show="() => moveScrollPos('acc-stellar-button')">
                   <span class="pt-3 text-gray-600 pb-2 d-block">Stellar is a decentralized financial platform that is designed to be open and accessible to everyone. It aims to connect banks, payment systems, companies and people.
                     <br><br>Stellar is operated and maintained by the <a href="https://www.stellar.org/" target="_blank" rel="noopener">Stellar Development Foundation</a> which is a non-stock, non-profit organization from the U.S. Its mission is to connect people to low cost financial services to fight poverty and maximize individual potential.
                     <br><br>With Stellar, money and any kind of assets can be moved quickly, reliably and almost with no costs. Transactions on the decentralized network resolve in 2-5 seconds and cost a fraction of a fraction of a cent.
@@ -212,6 +212,7 @@
 </template>
 
 <script>
+import raf from 'raf';
 export default {
   name: 'Help',
   data () {
@@ -220,6 +221,24 @@ export default {
         Help placeholder.
       `
     };
+  },
+  methods: {
+    animationFrameCallback (timestamp) {
+      if (!this.scrollStart) this.scrollStart = timestamp;
+      const progress = timestamp - this.scrollStart;
+      if (this.scrolledElement.getBoundingClientRect().top < 0) {
+        this.scrolledElement.scrollIntoView();
+      }
+      if (progress < 1000) {
+        raf(this.animationFrameCallback);
+      } else {
+        this.scrollStart = null;
+      }
+    },
+    moveScrollPos (elementId) {
+      this.scrolledElement = document.getElementById(elementId);
+      raf(this.animationFrameCallback);
+    }
   }
 };
 </script>
