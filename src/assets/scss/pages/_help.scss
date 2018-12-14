@@ -28,6 +28,9 @@ $topics-icon-space: 4rem;
 
     [role="tabpanel"] {
       padding-left: $topics-icon-space;
+      @include media-breakpoint-only(xs) {
+        padding-left: 0;
+      }
     }
   }
 }
