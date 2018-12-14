@@ -39,7 +39,7 @@
       </div>
       <div v-else-if="step === 'other'">
         <h4 class="font-weight-700 mb-3">Other Currency</h4>
-        <p>Lumenshine uses Changelly as our cross-chain exchange provider. They convert your funds to XLM at the best rates by bidding out your order worldwide. They charge 0.5% for the conversion.</p>
+        <p>Lumenshine uses Changelly as a cross-chain exchange provider. They convert your funds to XLM at the best rates by bidding out your order worldwide. They charge 0.5% for the conversion.</p>
         <span class="mx-1"><b-button variant="info" class="btn-rounded my-3" @click.prevent="step = 'main'">Back</b-button></span>
         <a href="#" target="_blank" class="changelly-button" @click.prevent="$emit('changelly', 'BTC')">
           <img src="@/assets/images/ui/pay-with-changelly.png">
