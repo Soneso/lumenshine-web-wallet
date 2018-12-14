@@ -13,7 +13,7 @@
         <span class="text-danger">none</span><br>
         <small>Hint: You can set a stellar address to this wallet, so that others can add your wallet to their contacts for payments easily.</small>
       </span>
-      <h5 v-else-if="!fieldOpen">
+      <h5 v-else-if="!fieldOpen" class="mb-4">
         <b-badge id="wallet-domain-name" variant="warning" class="text-white">
           {{ address }}*{{ config.FEDERATION_DOMAIN }}
         </b-badge>
