@@ -173,7 +173,7 @@
             </b-form-text>
           </b-form-group>
 
-          <b-form-group :label-for="`issuerInput_${uuid}`" label="Public key of currency issuer">
+          <b-form-group :label-for="`issuerInput_${uuid}`" label="Currency issuer">
             <b-form-input
               :id="`issuerInput_${uuid}`"
               :class="{ error: $v.issuer.$error }"
@@ -181,19 +181,20 @@
               v-model="issuer"
               :state="!$v.issuer.$error"
               type="text"
-              placeholder="Public key of currency issuer"
+              placeholder="Currency issuer"
               required
               @blur.native="$v.issuer.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveIssuerFeedback_${uuid}`">
               <template v-if="$v.issuer.$error" class="field-errors">
+                <template v-if="!$v.issuer.publicKeyOrAddress">Invalid destination!</template>
+                <template v-if="!$v.issuer.noIssuer">Cannot find this stellar address!<br></template>
                 <template v-if="!$v.issuer.required">Issuer is required <br></template>
-                <template v-if="!$v.issuer.publicKey">Invalid issuer <br></template>
                 <template v-if="!$v.issuer.notThisWallet">Issuer cannot have the same public key as the wallet<br></template>
                 <template v-if="!$v.issuer.validIssuer">Issuer does not exists</template>
               </template>
             </b-form-invalid-feedback>
             <b-form-text :id="`inputLiveIssuerHelp_${uuid}`">
-              Public key of currency issuer
+              Currency issuer
             </b-form-text>
           </b-form-group>
 
@@ -481,8 +482,9 @@ export default {
         },
         issuer: {
           required,
-          ...validators.publicKey.call(this),
-          notThisWallet: value => value !== this.data.public_key,
+          publicKeyOrAddress: value => value === '' || validators.publicKey.call(this).publicKey(value) || validators.federationAddress.call(this).federationAddress(value),
+          noIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'NO_ISSUER'),
+          notThisWallet: value => value !== this.data.public_key && !this.errors.find(err => err.error_code === 'SAME_WALLET'),
           validIssuer: value => this.backendQuery.issuer !== value || !this.errors.find(err => err.error_code === 'INVALID_ISSUER'),
         },
       }),

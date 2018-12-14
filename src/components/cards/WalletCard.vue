@@ -207,9 +207,11 @@ export default {
   methods: {
     ...mapActions([
       'setInflationDestination',
+      'resetInflationDestinationActions',
       'getWallets',
       'addCurrency',
       'removeCurrency',
+      'resetCurrencyActions',
       'fundAccountWithFriendbot',
       'sendPayment',
       'decryptWallet',
@@ -253,6 +255,7 @@ export default {
 
     async onSetInflationDestination (data) {
       this.setInflationDestLoading = true;
+      this.resetInflationDestinationActions();
       let secretSeed;
       if (data.password) {
         await this.decryptWallet({ publicKey: this.data.public_key, password: data.password });
@@ -276,6 +279,7 @@ export default {
 
     async onAddCurrency (data) {
       this.walletDetailsLoading = true;
+      this.resetCurrencyActions();
       let secretSeed;
       if (data.password) {
         await this.decryptWallet({ publicKey: this.data.public_key, password: data.password });

@@ -198,6 +198,18 @@ export default {
   async setInflationDestination ({ commit, dispatch }, { publicKey, secretSeed, destination }) {
     commit('SET_INFLATION_DEST_LOADING', true);
     commit('SET_INFLATION_DEST_ERROR', []);
+
+    const hasFederationAddress = validators.federationAddress().federationAddress(destination);
+    if (hasFederationAddress) {
+      try {
+        const federationRecord = await StellarSdk.FederationServer.resolve(destination);
+        destination = federationRecord.account_id;
+      } catch (err) {
+        commit('SET_INFLATION_DEST_LOADING', false);
+        return commit('SET_INFLATION_DEST_ERROR', [{ error_code: 'NO_DESTINATION' }]);
+      }
+    }
+
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
       const sourcePublicKey = sourceKeypair.publicKey();
@@ -236,9 +248,26 @@ export default {
   async addCurrency ({ commit, dispatch }, { publicKey, secretSeed, assetCode, issuer }) {
     commit('ADD_CURRENCY_LOADING', true);
     commit('ADD_CURRENCY_ERROR', []);
+
+    const hasFederationAddress = validators.federationAddress().federationAddress(issuer);
+    if (hasFederationAddress) {
+      try {
+        const federationRecord = await StellarSdk.FederationServer.resolve(issuer);
+        issuer = federationRecord.account_id;
+      } catch (err) {
+        commit('ADD_CURRENCY_LOADING', false);
+        return commit('ADD_CURRENCY_ERROR', [{ error_code: 'NO_ISSUER' }]);
+      }
+    }
+
     try {
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretSeed);
       const sourcePublicKey = sourceKeypair.publicKey();
+
+      if (issuer === sourcePublicKey) {
+        commit('ADD_CURRENCY_LOADING', false);
+        return commit('ADD_CURRENCY_ERROR', [{ error_code: 'SAME_WALLET' }]);
+      }
 
       const account = await StellarAPI.loadAccount(sourcePublicKey);
 

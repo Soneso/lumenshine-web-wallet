@@ -121,18 +121,19 @@
               :state="!$v.destination.$error"
               v-model="destination"
               type="text"
-              placeholder="Public key of destination account"
+              placeholder="Destination account"
               required
               @blur.native="$v.destination.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveDestinationFeedback_${uuid}`">
               <template v-if="$v.destination.$error" class="field__errors">
+                <template v-if="!$v.destination.publicKeyOrAddress">Invalid destination!</template>
                 <template v-if="!$v.destination.required">Wallet destination is required <br></template>
-                <template v-if="!$v.destination.publicKey">Not valid public key!</template>
+                <template v-if="!$v.destination.noDestination">Cannot find this stellar address!<br></template>
                 <template v-if="!$v.destination.validDestination">Invalid destination!</template>
               </template>
             </b-form-invalid-feedback>
             <b-form-text :id="`inputLiveDestinationHelp_${uuid}`">
-              Public key of destination account
+              Destination account
             </b-form-text>
           </b-form-group>
 
@@ -375,7 +376,8 @@ export default {
       ...(this.formType === 'known' ? {} : {
         destination: {
           required,
-          ...validators.publicKey.call(this),
+          publicKeyOrAddress: value => value === '' || validators.publicKey.call(this).publicKey(value) || validators.federationAddress.call(this).federationAddress(value),
+          noDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'NO_DESTINATION'),
           validDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
         },
       }),
