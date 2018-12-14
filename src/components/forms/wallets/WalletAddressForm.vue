@@ -29,24 +29,21 @@
                 <b-form-input
                   :id="`addressInput_${uuid}`"
                   :class="{ error: $v.address.$error }"
-                  :aria-describedby="`inputLiveAddressHelp_${uuid} inputLiveAddressFeedback_${uuid}`"
+                  :aria-describedby="`inputLiveAddressFeedback_${uuid}`"
                   :state="!$v.address.$error"
                   v-model="address"
                   type="text"
-                  placeholder="Wallet address"
+                  placeholder="Stellar address"
                   required
                   @blur.native="$v.address.$touch()"/>
 
                 <b-form-invalid-feedback :id="`inputLiveAddressFeedback_${uuid}`">
                   <template v-if="$v.address.$error" class="field__errors">
-                    <template v-if="!$v.address.required">Wallet address is required</template>
+                    <template v-if="!$v.address.required">Stellar address is required</template>
                     <template v-if="!$v.address.uniqueAddress">Already in use, please choose a different address</template>
                     <template v-if="!$v.address.noStar">The character '*' is not allowed</template>
                   </template>
                 </b-form-invalid-feedback>
-                <b-form-text :id="`inputLiveAddressHelp_${uuid}`">
-                  Address of the wallet
-                </b-form-text>
               </b-form-group>
             </li>
             <li>

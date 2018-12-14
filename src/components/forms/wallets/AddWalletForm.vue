@@ -3,12 +3,12 @@
     <div class="text-center pb-3">
       <small v-if="hasUnknownError" class="text-danger">An error occured, please try again</small>
 
-      <b-form-group :label-for="`nameInput_${uuid}`" class="normal-input pt-3 col-9 mx-auto">
+      <b-form-group :label-for="`nameInput_${uuid}`" class="normal-input pt-3 col-11 mx-auto">
         <b-form-input
           :id="`nameInput_${uuid}`"
           :class="[{ error: $v.walletName.$error }, 'default-placeholders']"
           :state="!$v.walletName.$error"
-          :aria-describedby="`inputLiveWalletNameHelp_${uuid} inputLiveWalletNameFeedback_${uuid}`"
+          :aria-describedby="`inputLiveWalletNameFeedback_${uuid}`"
           v-model="walletName"
           placeholder="Wallet name"
           type="text"
@@ -21,23 +21,7 @@
             <template v-if="!$v.walletName.uniqueName">This name is already used</template>
           </template>
         </b-form-invalid-feedback>
-        <b-form-text :id="`inputLiveWalletNameHelp_${uuid}`">
-          New wallet name.
-        </b-form-text>
       </b-form-group>
-
-      <p>
-        <span class="text-info font-weight-600">Stellar public key</span><br>
-        <span>Account ID / Public key</span>
-        <br>
-        <template v-if="nextPublicKey !== null">
-          <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
-          <b-row align-h="center">
-            <public-key :text="nextPublicKey"/>
-          </b-row>
-        </template>
-        <spinner v-else class="my-3" inline/>
-      </p>
 
       <ul class="inline-list">
         <li>
@@ -48,7 +32,7 @@
               :state="!$v.walletAddress.$error"
               :aria-describedby="`inputLiveWalletAddressHelp_${uuid} inputLiveWalletAddressFeedback_${uuid}`"
               v-model="walletAddress"
-              placeholder="Wallet address"
+              placeholder="Stellar address"
               type="text"
               @blur.native="$v.walletAddress.$touch()"/>
             <b-form-invalid-feedback :id="`inputLiveWalletAddressFeedback_${uuid}`">
@@ -58,7 +42,7 @@
               </template>
             </b-form-invalid-feedback>
             <b-form-text :id="`inputLiveWalletAddressHelp_${uuid}`">
-              Address of the wallet.
+              Optional
             </b-form-text>
           </b-form-group>
         </li>
@@ -71,9 +55,21 @@
         </li>
       </ul>
 
-      <p class="pb-4">
+      <p class="pb-1">
         <input :id="`homeScreenCheckbox_${uuid}`" v-model="homescreen" type="checkbox" class="switch">
         <label :for="`homeScreenCheckbox_${uuid}`">Show wallet on home screen</label>
+      </p>
+
+      <p class="pb-3">
+        <span class="text-info font-weight-600">Stellar public key / account id</span>
+        <br>
+        <template v-if="nextPublicKey !== null">
+          <span v-if="showCopiedText" class="copiedtext info">Copied to clipboard<br></span>
+          <b-row align-h="center">
+            <public-key :text="nextPublicKey"/>
+          </b-row>
+        </template>
+        <spinner v-else class="my-3" inline/>
       </p>
 
       <template v-if="!loading">
