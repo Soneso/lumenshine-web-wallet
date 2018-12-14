@@ -1,6 +1,6 @@
 <template>
   <b-form id="wallet-address-form" @submit.prevent="onSubmitClick">
-    <div class="mb-3">
+    <div>
       <span class="font-weight-600">Short stellar address</span>
       <a v-if="!fieldOpen && address" href="#" class="text-danger d-inline-block" @click.prevent="onRemoveAddressClick">
         <spinner v-if="loading && removingWallet" :size="18" variant="warning" top="3"/>
@@ -20,7 +20,7 @@
       </h5>
     </div>
 
-    <b-card v-if="fieldOpen && !loading" class="flat-card">
+    <b-card v-if="fieldOpen && !loading" class="flat-card mt-3">
       <ul class="inline-list">
         <li class="pr-4">
           <ul class="inline-list">

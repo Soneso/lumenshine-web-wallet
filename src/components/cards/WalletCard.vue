@@ -7,7 +7,7 @@
             <span class="font-weight-700">{{ data.wallet_name }}</span>
             <span>WALLET</span>
           </h6>
-          <b-badge :variant="data.federation_address ? 'warning' : 'secondary'" class="text-white font-weight-700 mb-2">
+          <b-badge :variant="data.federation_address ? 'warning' : 'secondary'" class="text-white font-weight-700 mb-2 badge-clickable" @click="stellarAddressModalVisible = true">
             {{ data.federation_address || 'no short address' }}
           </b-badge>
           <b-badge v-if="!data.stellar_data" variant="secondary" class="text-white font-weight-700 mb-2 text-uppercase">not funded</b-badge>
@@ -75,6 +75,19 @@
       <wallet-deposits v-if="depositModalVisible" :data="data" @close="depositModalVisible = false" @changelly="onShowChangelly"/>
     </b-modal>
 
+    <b-modal v-model="stellarAddressModalVisible" title="Stellar address" size="md" hide-footer>
+      <b-row v-if="stellarAddressModalVisible">
+        <b-col class="mb-4">
+          <wallet-address-form
+            :loading="saveWalletLoading"
+            :errors="editWalletStatus.err"
+            :wallet-address="data.federation_address"
+            @remove="onRemoveWalletAddress"
+            @submit="onSaveWalletAddress"/>
+        </b-col>
+      </b-row>
+    </b-modal>
+
     <div v-if="!config.IS_TEST_NETWORK" id="changellyModal" :style="{display: changellyModalVisible ? 'block' : 'none'}">
       <div class="changellyModal-content">
         <span class="changellyModal-close" @click="changellyModalVisible = false">x</span>
@@ -104,6 +117,7 @@ import balanceMixin from '@/mixins/balance';
 import ReceivePaymentForm from '@/components/forms/wallets/ReceivePaymentForm';
 import SendPaymentWithTemplates from '@/components/SendPaymentWithTemplates';
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
+import WalletAddressForm from '@/components/forms/wallets/WalletAddressForm';
 
 import WalletCardDetails from '@/components/cards/WalletCardDetails';
 import WalletCardBalances from '@/components/cards/WalletCardBalances';
@@ -117,11 +131,12 @@ export default {
     ReceivePaymentForm,
     SendPaymentWithTemplates,
     WalletSecretSeedForm,
+    WalletAddressForm,
     WalletCardDetails,
     WalletCardBalances,
     WalletDeposits,
     spinner,
-    publicKey
+    publicKey,
   },
   mixins: [ balanceMixin ],
   props: {
@@ -152,6 +167,7 @@ export default {
       receiveModalVisible: false,
       sendModalVisible: false,
       detailsModalVisible: false,
+      stellarAddressModalVisible: false,
 
       changellyCurrency: 'USD',
 
@@ -165,7 +181,8 @@ export default {
       'decryptedWallet',
       'exchanges',
       'finishedTransactions',
-      'walletLoading'
+      'walletLoading',
+      'editWalletStatus',
     ]),
     wideCard () {
       return this.balances.length > 3;
@@ -198,8 +215,26 @@ export default {
       'decryptWallet',
       'resetSendPayment',
       'updateWallets',
-      'resetDecryptedWallet'
+      'resetDecryptedWallet',
+      'editWallet',
+      'removeWalletAddress',
     ]),
+
+    async onSaveWalletAddress (address) {
+      this.saveWalletLoading = true;
+      await this.editWallet({
+        id: this.data.id,
+        federation_address: address,
+        onHomescreen: this.homescreen,
+      });
+      this.saveWalletLoading = false;
+    },
+
+    async onRemoveWalletAddress () {
+      this.saveWalletLoading = true;
+      await this.removeWalletAddress(this.data.id);
+      this.saveWalletLoading = false;
+    },
 
     onShowChangelly (currency) {
       this.changellyCurrency = currency;
