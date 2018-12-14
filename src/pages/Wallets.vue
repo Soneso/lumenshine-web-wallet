@@ -94,13 +94,14 @@ export default {
       this.$router.push({ name: 'Wallets', params: {} });
     },
 
-    async onSubmitNewWallet ({ walletName, onHomescreen }) {
+    async onSubmitNewWallet ({ walletName, walletAddress, onHomescreen }) {
       this.inProgress = true;
       this.resetAddWallet();
       this.resetEditWallet();
       await this.addWallet({
         public_key: this.nextFreePublicKey,
         wallet_name: walletName,
+        ...(walletAddress ? { federation_address: walletAddress + '*' + config.FEDERATION_DOMAIN } : {}),
       });
       if (this.addWalletStatus.err.length > 0) {
         this.inProgress = false;

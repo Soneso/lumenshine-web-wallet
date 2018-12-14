@@ -26,7 +26,7 @@
         </b-form-text>
       </b-form-group>
 
-      <p class="pb-4">
+      <p>
         <span class="text-info font-weight-600">Stellar public key</span><br>
         <span>Account ID / Public key</span>
         <br>
@@ -37,7 +37,41 @@
           </b-row>
         </template>
         <spinner v-else class="my-3" inline/>
-        <br>
+      </p>
+
+      <ul class="inline-list">
+        <li>
+          <b-form-group :label-for="`addressInput_${uuid}`" class="normal-input mr-0 text-left">
+            <b-form-input
+              :id="`addressInput_${uuid}`"
+              :class="[{ error: $v.walletAddress.$error }, 'default-placeholders']"
+              :state="!$v.walletAddress.$error"
+              :aria-describedby="`inputLiveWalletAddressHelp_${uuid} inputLiveWalletAddressFeedback_${uuid}`"
+              v-model="walletAddress"
+              placeholder="Wallet address"
+              type="text"
+              @blur.native="$v.walletAddress.$touch()"/>
+            <b-form-invalid-feedback :id="`inputLiveWalletAddressFeedback_${uuid}`">
+              <template v-if="$v.walletAddress.$error" class="field__errors">
+                <template v-if="!$v.walletAddress.uniqueAddress">Already in use, please choose a different address</template>
+                <template v-if="!$v.walletAddress.noStar">The character '*' is not allowed</template>
+              </template>
+            </b-form-invalid-feedback>
+            <b-form-text :id="`inputLiveWalletAddressHelp_${uuid}`">
+              Address of the wallet.
+            </b-form-text>
+          </b-form-group>
+        </li>
+        <li>
+          <h4>
+            <b-badge id="add-wallet-domain-name" variant="secondary" class="text-white">
+              {{ domain }}
+            </b-badge>
+          </h4>
+        </li>
+      </ul>
+
+      <p class="pb-4">
         <input :id="`homeScreenCheckbox_${uuid}`" v-model="homescreen" type="checkbox" class="switch">
         <label :for="`homeScreenCheckbox_${uuid}`">Show wallet on home screen</label>
       </p>
@@ -60,6 +94,7 @@ import { required, maxLength } from 'vuelidate/lib/validators';
 
 import publicKey from '@/components/ui/publicKey';
 import spinner from '@/components/ui/spinner';
+import config from '@/config';
 
 export default {
   name: 'AddWalletForm',
@@ -82,13 +117,21 @@ export default {
       showCopiedText: false,
       walletName: '',
       homescreen: true,
+      walletAddress: '',
     };
+  },
+
+  computed: {
+    domain () {
+      return '*' + config.FEDERATION_DOMAIN;
+    }
   },
 
   watch: {
     visible (val) {
       if (!val) {
         this.walletName = '';
+        this.walletAddress = '';
         this.homescreen = true;
         this.showCopiedText = false;
         this.backendQuery = {};
@@ -106,7 +149,7 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
-      this.backendQuery = { walletName: this.walletName, onHomescreen: this.homescreen };
+      this.backendQuery = { walletName: this.walletName, walletAddress: this.walletAddress, onHomescreen: this.homescreen };
       this.$emit('submit', this.backendQuery);
     },
     onCopy () {
@@ -120,6 +163,10 @@ export default {
         required,
         maxLength: maxLength(40),
         uniqueName: value => this.backendQuery.walletName !== value || !this.errors.find(err => err.error_code === 1000 && err.parameter_name === 'wallet_name'),
+      },
+      walletAddress: {
+        uniqueAddress: value => this.backendQuery.walletAddress !== value || !this.errors.find(err => err.error_code === 1017),
+        noStar: value => /^[^*]*$/.test(value),
       }
     };
   }
