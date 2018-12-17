@@ -31,10 +31,14 @@
     <template v-if="removeFieldBalance">
       <b-card class="flat-card my-3">
         <h6>{{ getCurrencyName(removeFieldBalance.type) ? `${getCurrencyName(removeFieldBalance.type)} (${ removeFieldBalance.type })`: removeFieldBalance.type }}</h6>
-        <small v-if="removeFieldBalance.issuer" class="d-block">Issuer public key: {{ removeFieldBalance.issuer }}</small>
+        <small v-if="removeFieldBalance.issuer" class="d-block">Issuer public key: <public-key :text="removeFieldBalance.issuer" :chars="isMobile ? 22 : 36" color="text-secondary"/></small>
         <small>Balance: <span class="font-weight-600">{{ removeFieldBalance.balance.format() }} {{ removeFieldBalance.type }}</span><br></small>
-        <small v-if="!removeFieldBalance.liabilities.equal('0')">Liabilities: <span class="font-weight-600">{{ removeFieldBalance.liabilities.format() }} {{ removeFieldBalance.type }}</span></small>
-        <small v-if="!removeFieldBalance.balance.equal('0') || !removeFieldBalance.liabilities.equal('0')" class="text-danger d-block py-3"><br>The currency can only be removed if its balance is zero and if it has no selling liabilities.<br>Hint: you can abandon your credits by sending them to the issuer account (displayed below the currency name).</small>
+        <small v-if="!removeFieldBalance.selling_liabilities.equal('0')">Selling liabilities: <span class="font-weight-600">{{ removeFieldBalance.selling_liabilities.format() }} {{ removeFieldBalance.type }}</span><br></small>
+        <small v-if="!removeFieldBalance.buying_liabilities.equal('0')">Buying liabilities: <span class="font-weight-600">{{ removeFieldBalance.buying_liabilities.format() }} {{ removeFieldBalance.type }}</span><br></small>
+        <small v-if="!removeFieldBalance.balance.equal('0') || !removeFieldBalance.selling_liabilities.equal('0') || !removeFieldBalance.buying_liabilities.equal('0')" class="text-danger d-block py-3">
+          The currency can only be removed if its balance is zero and if it has no liabilities<br>
+          Hint: you can abandon your credits by sending them to the issuer account displayed above.
+        </small>
         <template v-else>
           <b-form-group>
             <b-form-input
@@ -326,7 +330,8 @@ export default {
       const xlmBalance = {
         balance: new Amount(xlm.balance),
         type: 'XLM',
-        liabilities: new Amount(xlm.selling_liabilities || '0').plus(xlm.buying_liabilities || '0'),
+        selling_liabilities: new Amount(xlm.selling_liabilities || '0'),
+        buying_liabilities: new Amount(xlm.buying_liabilities || '0'),
       };
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
@@ -336,7 +341,8 @@ export default {
           balance: new Amount(bal.balance),
           type: bal.asset_code,
           issuer: bal.asset_issuer,
-          liabilities: new Amount(bal.selling_liabilities || '0').plus(bal.buying_liabilities || '0'),
+          selling_liabilities: new Amount(bal.selling_liabilities || '0'),
+          buying_liabilities: new Amount(bal.buying_liabilities || '0'),
         })),
       ];
     },
