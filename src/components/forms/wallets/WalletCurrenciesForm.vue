@@ -32,38 +32,40 @@
       <b-card class="flat-card my-3">
         <h6>{{ getCurrencyName(removeFieldBalance.type) ? `${getCurrencyName(removeFieldBalance.type)} (${ removeFieldBalance.type })`: removeFieldBalance.type }}</h6>
         <small v-if="removeFieldBalance.issuer" class="d-block">Issuer public key: {{ removeFieldBalance.issuer }}</small>
-        <small>Balance: <span class="font-weight-600">{{ removeFieldBalance.balance.format() }} {{ removeFieldBalance.type }}</span></small>
-        <small v-if="!removeFieldBalance.balance.equal('0')" class="text-danger d-block py-3"><br>Balance is not zero. If you remove this currency, your credits will also be removed.</small>
+        <small>Balance: <span class="font-weight-600">{{ removeFieldBalance.balance.format() }} {{ removeFieldBalance.type }}</span><br></small>
+        <small v-if="!removeFieldBalance.liabilities.equal('0')">Liabilities: <span class="font-weight-600">{{ removeFieldBalance.liabilities.format() }} {{ removeFieldBalance.type }}</span></small>
+        <small v-if="!removeFieldBalance.balance.equal('0') || !removeFieldBalance.liabilities.equal('0')" class="text-danger d-block py-3"><br>The currency can only be removed if its balance is zero and if it has no selling liabilities.<br>Hint: you can abandon your credits by sending them to the issuer account (displayed below the currency name).</small>
+        <template v-else>
+          <b-form-group>
+            <b-form-input
+              id="nameInput_1"
+              :class="{ error: $v.password.$error }"
+              :state="!$v.password.$error"
+              :type="password1IsHidden ? 'password' : 'text'"
+              v-model="password"
+              aria-describedby="inputLiveNameFeedback_1"
+              placeholder="Password"
+              required
+              @blur.native="$v.password.$touch()"/>
 
-        <b-form-group>
-          <b-form-input
-            id="nameInput_1"
-            :class="{ error: $v.password.$error }"
-            :state="!$v.password.$error"
-            :type="password1IsHidden ? 'password' : 'text'"
-            v-model="password"
-            aria-describedby="inputLiveNameFeedback_1"
-            placeholder="Password"
-            required
-            @blur.native="$v.password.$touch()"/>
+            <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
 
-          <password-assets :password="['password1IsHidden', password1IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
-
-          <b-form-invalid-feedback id="inputLiveNameFeedback_1">
-            <template v-if="$v.password.$error" class="field-errors">
-              <template v-if="!$v.password.required">Password is required <br></template>
-              <template v-if="!$v.password.decryptValid">Invalid password</template>
-            </template>
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
-        <div class="form-buttons">
-          <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
-            <spinner v-if="loading" :size="21" message="removing..." width="100"/>
-            <span v-else-if="!removeFieldBalance.balance.equal('0')">remove & abandon credits</span>
-            <span v-else>remove</span>
-          </a>
-        </div>
+            <b-form-invalid-feedback id="inputLiveNameFeedback_1">
+              <template v-if="$v.password.$error" class="field-errors">
+                <template v-if="!$v.password.required">Password is required <br></template>
+                <template v-if="!$v.password.decryptValid">Invalid password</template>
+              </template>
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
+          <div class="form-buttons">
+            <a href="#" @click.prevent="onRemoveClick(removeFieldBalance)">
+              <spinner v-if="loading" :size="21" message="removing..." width="100"/>
+              <span v-else-if="!removeFieldBalance.balance.equal('0')">remove & abandon credits</span>
+              <span v-else>remove</span>
+            </a>
+          </div>
+        </template>
       </b-card>
     </template>
 
@@ -320,10 +322,23 @@ export default {
     balances () {
       if (!this.data.stellar_data) return [];
       const balances = this.data.stellar_data.balances;
-      const xlmBalance = { balance: new Amount(balances.find(b => b.asset_type === 'native').balance), type: 'XLM' };
+      const xlm = balances.find(b => b.asset_type === 'native');
+      const xlmBalance = {
+        balance: new Amount(xlm.balance),
+        type: 'XLM',
+        liabilities: new Amount(xlm.selling_liabilities || '0').plus(xlm.buying_liabilities || '0'),
+      };
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
-      return [xlmBalance, ...otherBalances.map(bal => ({ balance: new Amount(bal.balance), type: bal.asset_code, issuer: bal.asset_issuer }))];
+      return [
+        xlmBalance,
+        ...otherBalances.map(bal => ({
+          balance: new Amount(bal.balance),
+          type: bal.asset_code,
+          issuer: bal.asset_issuer,
+          liabilities: new Amount(bal.selling_liabilities || '0').plus(bal.buying_liabilities || '0'),
+        })),
+      ];
     },
     signers () {
       if (!this.data.stellar_data) return [];
