@@ -2,14 +2,14 @@ import Amount from '@/util/Amount';
 
 export default {
   computed: {
-    minXLMBalance () {
+    reservedXLM () {
       if (!this.currentWallet.stellar_data) return new Amount('0');
       const entryCount = this.currentWallet.stellar_data.subentry_count;
       const baseReserve = 0.5;
       const reserved = new Amount(`${(2 + entryCount) * baseReserve}`);
       const xlmBalance = this.currentWallet.stellar_data.balances.find(b => b.asset_type === 'native');
-      const minBalance = xlmBalance.selling_liabilities ? reserved.minus(xlmBalance.selling_liabilities) : reserved;
-      return minBalance;
+      const fullReserve = xlmBalance.selling_liabilities ? reserved.plus(xlmBalance.selling_liabilities) : reserved;
+      return fullReserve;
     },
 
     balances () {
@@ -17,7 +17,7 @@ export default {
       const balances = this.currentWallet.stellar_data.balances;
       const xlmBalanceObject = balances.find(b => b.asset_type === 'native');
       const xlmBalance = new Amount(xlmBalanceObject.balance);
-      const xlmAvailble = new Amount(xlmBalance).minus(this.minXLMBalance);
+      const xlmAvailble = new Amount(xlmBalance).minus(this.reservedXLM);
 
       const otherBalances = balances.filter(b => b.asset_type !== 'native');
       return [
