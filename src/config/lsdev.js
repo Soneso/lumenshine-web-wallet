@@ -34,7 +34,7 @@ export default {
   // HORIZON_URL: 'https://horizon-testnet.stellar.org',
   IS_TEST_NETWORK: true,
 
-  MAINTENANCE_MODE: true,
+  MAINTENANCE_MODE: false,
 
   SERVER_PUBLIC_KEY: 'GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV',
 };
