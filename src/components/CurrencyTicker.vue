@@ -15,15 +15,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import config from '@/config';
 import Amount from '@/util/Amount';
 
 export default {
-  data () {
-    return {
-      config
-    };
-  },
   computed: {
     ...mapGetters(['wallets', 'currencyPairs', 'currencyRates']),
     totalBalances () {

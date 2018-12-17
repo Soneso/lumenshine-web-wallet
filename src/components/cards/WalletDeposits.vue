@@ -85,8 +85,6 @@ export default {
 
   data () {
     return {
-      config,
-
       step: 'main',
 
       fundWalletLoading: false,
@@ -94,8 +92,8 @@ export default {
     };
   },
 
-  computed: {
-
+  created () {
+    this.config = config;
   },
 
   methods: {

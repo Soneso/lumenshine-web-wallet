@@ -119,7 +119,6 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import config from '@/config';
 import offcanvasNavigation from '../../mixins/offcanvasNavigation.js';
 
 export default {
@@ -128,7 +127,6 @@ export default {
   data () {
     return {
       activeMenu: 'dashboard',
-      config
     };
   },
   computed: {

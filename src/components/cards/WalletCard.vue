@@ -170,8 +170,6 @@ export default {
       stellarAddressModalVisible: false,
 
       changellyCurrency: 'USD',
-
-      config
     };
   },
   computed: {
@@ -203,6 +201,9 @@ export default {
         this.$emit('recheck'); // hide wallet from dashboard screen if "Show wallet on home screen" was unchecked
       }
     },
+  },
+  created () {
+    this.config = config;
   },
   methods: {
     ...mapActions([

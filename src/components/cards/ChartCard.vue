@@ -42,8 +42,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
 
-import config from '@/config';
-
 import Amount from '@/util/Amount';
 
 import spinner from '@/components/ui/spinner';
@@ -124,7 +122,6 @@ export default {
       nowTimer: null,
       refreshTimer: null,
       lastUpdate: null,
-      config
     };
   },
 

@@ -494,7 +494,6 @@ export default {
       salutationOptions: [],
       countryOptions: [],
       countries: {},
-      config
     };
   },
   computed: {
@@ -511,6 +510,7 @@ export default {
     }
   },
   async created () {
+    this.config = config;
     this.salutationOptions = await userService.getSalutationList();
     this.countryOptions = await userService.getCountryList();
   },

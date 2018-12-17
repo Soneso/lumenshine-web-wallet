@@ -104,7 +104,6 @@ export default {
       fieldOpen: false,
       address: stripDomain(this.walletAddress), /* not includes domain */
       removingWallet: false,
-      config
     };
   },
   computed: {
@@ -126,6 +125,9 @@ export default {
         }
       }
     }
+  },
+  created () {
+    this.config = config;
   },
   methods: {
     onCancelClick () {

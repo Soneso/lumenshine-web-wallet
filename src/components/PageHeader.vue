@@ -53,10 +53,11 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    config,
-    currentRoute: ''
-  }),
+  data () {
+    return {
+      currentRoute: '',
+    };
+  },
   computed: {
     ...mapGetters([
       'offCanvasMenuOpen',
@@ -64,6 +65,9 @@ export default {
       'authToken',
       'registrationComplete'
     ])
+  },
+  created () {
+    this.config = config;
   },
   mounted () {
     this.currentRoute = this.$route.path.split('/')[1];

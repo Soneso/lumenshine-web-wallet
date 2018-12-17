@@ -87,8 +87,6 @@ import { mapGetters } from 'vuex';
 import StellarSdk from 'stellar-sdk';
 import formMixin from '@/mixins/form';
 
-import config from '@/config';
-
 import { decimal, maxLength } from 'vuelidate/lib/validators';
 
 import publicKey from '@/components/ui/publicKey';
@@ -109,7 +107,6 @@ export default {
       amount: '0',
       assetCode: 'XLM',
       issuer: '',
-      config,
 
       memo: '',
       memoType: 'MEMO_TEXT',

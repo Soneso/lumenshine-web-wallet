@@ -133,8 +133,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import config from '@/config';
-
 import WalletSecretSeedForm from '@/components/forms/wallets/WalletSecretSeedForm';
 import WalletNameForm from '@/components/forms/wallets/WalletNameForm';
 import WalletAddressForm from '@/components/forms/wallets/WalletAddressForm';
@@ -189,7 +187,6 @@ export default {
       shownTransactionType: 'transaction',
 
       errors: [],
-      config
     };
   },
 

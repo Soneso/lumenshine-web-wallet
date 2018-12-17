@@ -14,6 +14,8 @@
 import config from '@/config';
 
 export default {
-  data: () => ({ config })
+  created () {
+    this.config = config;
+  }
 };
 </script>
