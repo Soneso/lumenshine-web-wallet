@@ -3,6 +3,8 @@ import Router from 'vue-router';
 
 import store from '@/store/store';
 
+import config from '@/config';
+
 import authRoutes from './authRoutes';
 import dashboardRoutes from './dashboardRoutes';
 
@@ -56,12 +58,21 @@ const router = new Router({
       path: '/help',
       name: 'Help',
       component: require('@/pages/Help').default
+    },
+    {
+      path: '/maintenance',
+      name: 'Maintenance',
+      component: require('@/pages/Maintenance').default
     }
-
   ]
 });
 
 router.beforeEach((to, from, next) => {
+  if (config.MAINTENANCE_MODE && to.path !== '/maintenance') {
+    return next({
+      path: '/maintenance',
+    });
+  }
   if (to.matched.some(record => record.meta.authNeeded)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.

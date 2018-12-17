@@ -31,5 +31,7 @@ export default {
   HORIZON_URL: 'https://horizon.lumenshine.com',
   IS_TEST_NETWORK: false,
 
+  MAINTENANCE_MODE: false,
+
   SERVER_PUBLIC_KEY: 'GDNHKZED65H2RY2LAA5TK7W5PWM5TPWIJ3H3QZQEJPPELUWYSC4SUHAF',
 };

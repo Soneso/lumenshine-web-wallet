@@ -31,5 +31,7 @@ export default {
   HORIZON_URL: 'https://lsstagehorizon.ponytest.de',
   IS_TEST_NETWORK: false,
 
+  MAINTENANCE_MODE: false,
+
   SERVER_PUBLIC_KEY: 'GBGXAY3HDXMUWAUDATBZ5SVGLFUC5GKJC4BNN5MEPVLWKCOMBXQUIUWM',
 };

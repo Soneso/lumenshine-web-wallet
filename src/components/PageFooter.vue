@@ -1,13 +1,13 @@
 <template>
   <footer class="py-4 text-center">
-    <b-row class="py-2">
+    <b-row v-if="!config.MAINTENANCE_MODE" class="py-2">
       <b-col>
         <router-link to="/" class="language-button">
           <i class="icon-flags"/>
         </router-link>
       </b-col>
     </b-row>
-    <b-row class="py-2 footer-menu">
+    <b-row v-if="!config.MAINTENANCE_MODE" class="py-2 footer-menu">
       <b-col>
         <div class="menu">
           <!-- No user was logged in -->
@@ -64,13 +64,17 @@ export default {
       required: true,
     }
   },
-  data: () => ({ config }),
+
   computed: {
     ...mapGetters([
       'userStatus',
       'authToken',
       'authTokenType'
     ])
+  },
+
+  created () {
+    this.config = config;
   },
 
   methods: {
