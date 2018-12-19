@@ -5,10 +5,11 @@
         <b-row>
           <b-col cols="12" lg="4" xlg="3">
             <h1><small class="text-info">Introducing</small> <span class="font-weight-800 text-primary">Lumenshine</span></h1>
-            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured wallet app for the decentralized Stellar network.</p>
+            <p class="lead">Lumenshine is a multi-platform, user-friendly, fully-featured wallet app for the decentralized Stellar network.<br></p>
+            <p class="lead">It is currently available for web and iOS<br><br><a href="https://itunes.apple.com/us/app/lumenshine/id1441524975" target="_blank" rel="noopener"><img style="width: 140px" src="/static/Download_on_the_App_Store_Badge.svg"></a></p>
           </b-col>
           <b-col>
-            <img src="/static/app-screenshot.png">
+            <a href="/login"><img src="/static/app-screenshot.png"></a>
           </b-col>
           <b-col cols="12" class="py-3 text-center">
             <hr class="divider light">
@@ -40,8 +41,9 @@
             <p>Transactions settle in seconds and you only need to pay the Stellar network transaction fee. No transaction fee has to be payed to Lumenshine.</p>
           </b-col>
           <b-col cols="12" class="py-3">
-            <h3 class="text-info">Available for web and soon for mobile</h3>
-            <p>Lumenshine is currently available for web and we will soon release our mobile apps for iOS and Android.</p>
+            <h3 class="text-info">Available for web and iOS</h3>
+            <p>Lumenshine is currently available for web and iOS. We will soon release our mobile app for Android.</p>
+            <p><a href="https://itunes.apple.com/us/app/lumenshine/id1441524975" target="_blank" rel="noopener"><img src="/static/Download_on_the_App_Store_Badge.svg" style="width: 140px"></a></p>
           </b-col>
           <b-col cols="12" class="py-3">
             <h3 class="text-info">Open source</h3>
