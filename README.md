@@ -3,9 +3,9 @@
 
 A Vue.js project representing the Lumenshine Wallet by Soneso. It is a multi-platform, user-freindly, fully-featured wallet for the decentralized Stellar Network. 
 
-Beta version available here: https://lumenshine.com
+Live version available here: https://lumenshine.com
 
-Currently the project is beta. You can run the project on your local machine or on a test server.
+You can run the project on your local machine or on a test server.
 
 ## Build Setup - for local development
 
