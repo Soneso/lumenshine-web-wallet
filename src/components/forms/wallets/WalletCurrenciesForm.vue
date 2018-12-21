@@ -24,6 +24,20 @@
         <small v-if="balance.issuer && !removeFieldBalance" class="break-word with-hyphens">
           Issuer public key: <public-key :text="balance.issuer" :tune-with="balance.type" color="text-secondary"/>
         </small>
+        <template v-if="!removeFieldBalance && issuerHomeAccount[balance.issuer]">
+          <small class="break-word with-hyphens">
+            <br>Home domain: <a :href="`https://${issuerHomeAccount[balance.issuer]}`" target="_blank" rel="noopener noreferrer">https://{{ issuerHomeAccount[balance.issuer] }}</a>
+          </small>
+          <small v-if="issuerDetails[issuerHomeAccount[balance.issuer]] === null" class="break-word with-hyphens">
+            <br>Issuer details: no information found
+          </small>
+          <small v-else-if="issuerDetails[issuerHomeAccount[balance.issuer]] !== undefined && openedCurrencyDetails !== `${balance.type}-${balance.issuer}`" class="break-word with-hyphens">
+            <br>Issuer details: <a href="#" @click.prevent="openedCurrencyDetails = `${balance.type}-${balance.issuer}`">click here</a>
+          </small>
+          <small v-if="openedCurrencyDetails === `${balance.type}-${balance.issuer}`">
+            <issuer-details :details="issuerDetails[issuerHomeAccount[balance.issuer]]" :asset-code="balance.type" :issuer="balance.issuer" :home-domain="issuerHomeAccount[balance.issuer]"/>
+          </small>
+        </template>
       </b-list-group-item>
     </b-list-group>
 
@@ -269,6 +283,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { mapGetters } from 'vuex';
+import StellarSdk from 'stellar-sdk';
 
 import Amount from '@/util/Amount';
 
@@ -278,10 +293,20 @@ import formMixin from '@/mixins/form';
 import spinner from '@/components/ui/spinner';
 import publicKey from '@/components/ui/publicKey';
 import passwordAssets from '@/components/ui/passwordAssets';
+import IssuerDetails from '@/components/IssuerDetails';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 
+import config from '@/config';
+
+const StellarAPI = new StellarSdk.Server(config.HORIZON_URL);
+if (config.IS_TEST_NETWORK) {
+  StellarSdk.Network.useTestNetwork();
+} else {
+  StellarSdk.Network.usePublicNetwork();
+}
+
 export default {
-  components: { passwordAssets, spinner, publicKey },
+  components: { passwordAssets, spinner, publicKey, IssuerDetails },
   mixins: [ formMixin, updatePasswordVisibilityState ],
 
   props: {
@@ -317,7 +342,11 @@ export default {
       newCurrency: '',
       password1IsHidden: true,
       password2IsHidden: true,
-      password3IsHidden: true
+      password3IsHidden: true,
+
+      issuerHomeAccount: {},
+      issuerDetails: {},
+      openedCurrencyDetails: null,
     };
   },
 
@@ -373,10 +402,14 @@ export default {
         this.openedKnownCurrency = null;
       }
     },
+    issuerHomeAccount () {
+      this.loadIssuerDetails();
+    },
     balances () {
       if (this.newCurrencyId) {
         this.emphasise(this.newCurrencyId);
       }
+      this.loadIssuerHomeAccounts();
     },
     removeFieldBalance (newVal) {
       if (!newVal) {
@@ -390,6 +423,10 @@ export default {
     }
   },
 
+  created () {
+    this.loadIssuerHomeAccounts();
+  },
+
   mounted () {
     this.$on('add', (v) => {
       this.newCurrencyId = v.assetCode + v.issuer;
@@ -397,6 +434,40 @@ export default {
   },
 
   methods: {
+    async loadIssuerHomeAccounts () {
+      const issuers = this.balances.map(bal => bal.issuer).filter(x => x);
+      for (const issuerPub of issuers) {
+        if (this.issuerHomeAccount[issuerPub] === undefined) {
+          try {
+            const data = await StellarAPI.loadAccount(issuerPub);
+            if (data && data.home_domain) {
+              this.$set(this.issuerHomeAccount, issuerPub, data.home_domain);
+            } else {
+              throw new Error('');
+            }
+          } catch (err) {
+            this.$set(this.issuerHomeAccount, issuerPub, null);
+          }
+        }
+      }
+    },
+    async loadIssuerDetails () {
+      const homeDomains = Object.values(this.issuerHomeAccount);
+      for (const homeDomain of homeDomains) {
+        if (this.issuerDetails[homeDomain] === undefined) {
+          try {
+            const toml = await StellarSdk.StellarTomlResolver.resolve(homeDomain);
+            if (toml && toml.DOCUMENTATION) {
+              this.$set(this.issuerDetails, homeDomain, toml);
+            } else {
+              throw new Error('');
+            }
+          } catch (err) {
+            this.$set(this.issuerDetails, homeDomain, null);
+          }
+        }
+      }
+    },
     onTabChange (val) {
       this.addCurrencyFormType = val;
       this.openedKnownCurrency = null;
