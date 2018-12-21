@@ -452,7 +452,7 @@ export default {
       }
     },
     async loadIssuerDetails () {
-      const homeDomains = Object.values(this.issuerHomeAccount);
+      const homeDomains = Object.values(this.issuerHomeAccount).filter(x => x);
       for (const homeDomain of homeDomains) {
         if (this.issuerDetails[homeDomain] === undefined) {
           try {
