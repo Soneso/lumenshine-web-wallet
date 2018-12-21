@@ -206,6 +206,19 @@ export default {
     state.sendPaymentResult = null;
   },
 
+  SET_MERGE_EXTERNAL_ACCOUNT_RESULT (state, msg) {
+    state.mergeExternalAccountResult = msg;
+    state.mergeExternalAccountErrors = [];
+    state.mergeExternalAccountLoading = false;
+  },
+  SET_MERGE_EXTERNAL_ACCOUNT_LOADING (state, msg) {
+    state.mergeExternalAccountLoading = msg;
+  },
+  SET_MERGE_EXTERNAL_ACCOUNT_ERROR (state, msg) {
+    state.mergeExternalAccountErrors = msg;
+    state.mergeExternalAccountResult = null;
+  },
+
   // used for storing the available wallet public keys on login
   SET_PUBLIC_KEYS (state, msg) {
     state.publicKeys = msg;

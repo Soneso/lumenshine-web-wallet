@@ -590,5 +590,99 @@ export default {
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
       }
     }
+  },
+
+  async resetMergeExternalAccount ({ commit, dispatch, getters }, data) {
+    commit('SET_MERGE_EXTERNAL_ACCOUNT_LOADING', false);
+    commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', []);
+    commit('SET_MERGE_EXTERNAL_ACCOUNT_RESULT', null);
+  },
+
+  async mergeExternalAccount ({ commit, dispatch, getters }, data) {
+    commit('SET_MERGE_EXTERNAL_ACCOUNT_LOADING', true);
+    commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', []);
+
+    const sourceKeypair = StellarSdk.Keypair.fromSecret(data.secretSeed);
+    const sourcePublicKey = sourceKeypair.publicKey();
+
+    const sourceAccount = await StellarAPI.loadAccount(sourcePublicKey).catch(err => err);
+
+    if (sourceAccount instanceof Error) {
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_LOADING', false);
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'NO_SOURCE_ACCOUNT' }]);
+      return;
+    }
+
+    const errors = [];
+    console.log('sourceAccount', sourceAccount);
+    if (sourceAccount.data_attr && Object.values(sourceAccount.data_attr).length > 0) {
+      errors.push({ error_code: 'HAS_DATA' });
+    }
+
+    if (sourceAccount.balances.length > 1) {
+      errors.push({ error_code: 'HAS_TRUSTLINES' });
+    }
+
+    if (errors.length > 0) {
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_LOADING', false);
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', errors);
+      return;
+    }
+
+    let memo;
+    if (data.memo !== '') {
+      switch (data.memoType) {
+        case 'MEMO_TEXT':
+          memo = { memo: StellarSdk.Memo.text(data.memo) };
+          break;
+        case 'MEMO_ID':
+          memo = { memo: StellarSdk.Memo.id(data.memo) };
+          break;
+        case 'MEMO_HASH':
+          memo = { memo: StellarSdk.Memo.hash(data.memo) };
+          break;
+        case 'MEMO_RETURN':
+          memo = { memo: StellarSdk.Memo.returnHash(data.memo) };
+          break;
+      }
+    }
+
+    try {
+      let transaction = new StellarSdk.TransactionBuilder(sourceAccount, memo)
+        .addOperation(StellarSdk.Operation.accountMerge({
+          destination: data.destination
+        }))
+        .build();
+
+      transaction.sign(sourceKeypair);
+
+      const res = await StellarAPI.submitTransaction(transaction);
+
+      const transactionIdMatch = res._links.transaction.href.match(/transactions\/([0-9a-f]+)/);
+      if (!transactionIdMatch || !transactionIdMatch[1]) {
+        return commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'UNKNOWN' }]);
+      }
+      const transactionId = transactionIdMatch[1];
+      res.transactionId = transactionId;
+
+      commit('ADD_PENDING_TRANSACTION', transactionId);
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_RESULT', res);
+      waitAndResolveTx({ commit, dispatch }, { publicKeys: [sourcePublicKey, data.recipient], transactionId });
+
+      // await dispatch('updateWallets', [sourcePublicKey, data.recipient]);
+    } catch (err) {
+      console.error(err);
+      commit('SET_MERGE_EXTERNAL_ACCOUNT_LOADING', false);
+      const errorCode = StellarErrorParser(err);
+      if (errorCode === 'op_underfunded') {
+        return commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'UNDERFUNDED', err }]);
+      } else if (errorCode === 'op_no_destination') {
+        return commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'NO_DESTINATION', err }]);
+      } else if (errorCode === 'tx_bad_seq') {
+        return commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'BAD_SEQUENCE', err }]);
+      } else {
+        return commit('SET_MERGE_EXTERNAL_ACCOUNT_ERROR', [{ error_code: 'UNKNOWN_ERROR', err }]);
+      }
+    }
   }
 };

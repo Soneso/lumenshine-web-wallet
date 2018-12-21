@@ -30,5 +30,6 @@ export default {
   }),
   pendingTransactions: state => state.transactionQueue.filter(tr => !tr.data).map(tr => tr.id),
   finishedTransactions: state => state.transactionQueue.filter(tr => tr.data).map(tr => tr.data),
-  transactionsLoaded: state => state.transactionsLoaded
+  transactionsLoaded: state => state.transactionsLoaded,
+  mergeExternalAccountStatus: state => ({ err: state.mergeExternalAccountErrors, loading: state.mergeExternalAccountLoading, res: state.mergeExternalAccountResult }),
 };

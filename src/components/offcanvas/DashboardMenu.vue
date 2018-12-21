@@ -53,16 +53,30 @@
       </a>
     </li>
 
-    <!--<li>-->
-    <!--<a href="#">-->
-    <!--<i class="icon-star"/>-->
-    <!--<div :style="toggleText">Extras</div>-->
-    <!--</a>-->
-    <!--</li>-->
+    <li class="has-submenu">
+      <a :class="{ active: activeMenu === 'extras'}" href="#" @click.prevent.stop="goto('extras')">
+        <i class="icon-star"/>
+        <div :style="toggleText">Extras</div>
+        <div v-if="!isMobile" class="submenu">
+          <ul>
+            <li>
+              <a :class="{ active: activeMenu === 'merge-external-account'}" href="#" @click.prevent.stop="goto('merge-external-account')">
+                <div>Merge external account</div>
+              </a>
+            </li>
+
+            <!-- <li>
+              <a :class="{ active: activeMenu === 'merge-close-wallet'}" href="#" @click.prevent.stop="goto('merge-close-wallet')">
+                <div>Merge / close wallet</div>
+              </a>
+            </li> -->
+          </ul>
+        </div>
+      </a>
+    </li>
 
     <li class="has-submenu">
       <a :class="{ active: activeMenu === 'settings'}" href="#" @click.prevent.stop="goto('settings')">
-
         <i class="icon-settings"/>
         <div :style="toggleText">Settings</div>
         <div v-if="!isMobile" class="submenu">

@@ -63,6 +63,16 @@ const router = new Router({
       path: '/maintenance',
       name: 'Maintenance',
       component: require('@/pages/Maintenance').default
+    },
+    {
+      path: '/extras',
+      name: 'Extras',
+      component: require('@/pages/Extras').default
+    },
+    {
+      path: '/merge-external-account',
+      name: 'MergeExternalAccount',
+      component: require('@/pages/MergeExternalAccount').default
     }
   ]
 });
