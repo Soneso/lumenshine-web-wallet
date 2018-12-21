@@ -5,6 +5,31 @@
     Currency: {{ assetCode }}<br>
     Issuer public key: <public-key :text="issuer" color="text-secondary"/><br>
     Home domain: {{ homeDomain }}<br>
+    <template v-if="currencyDetails">
+      <span v-if="currencyDetails.name">Name: {{ currencyDetails.name }}<br></span>
+      <span v-if="currencyDetails.desc">Description: {{ currencyDetails.desc }}<br></span>
+      <span v-if="currencyDetails.conditions">Conditions: {{ currencyDetails.conditions }}<br></span>
+      <span v-if="currencyDetails.image">Image: <img :src="currencyDetails.image" style="max-width: 60px"><br></span>
+      <span v-if="currencyDetails.code">Code: {{ currencyDetails.code }}<br></span>
+      <span v-if="currencyDetails.code_template">Code template: {{ currencyDetails.code_template }}<br></span>
+      <span v-if="currencyDetails.issuer">Issuer: {{ currencyDetails.issuer }}<br></span>
+      <span v-if="currencyDetails.status">Status: {{ currencyDetails.status }}<br></span>
+      <span v-if="currencyDetails.display_decimals">Number of decimals to show: {{ currencyDetails.display_decimals }}<br></span>
+      <span v-if="currencyDetails.fixed_number">Fixes number of tokens: {{ currencyDetails.fixed_number }}<br></span>
+      <span v-if="currencyDetails.max_number">Max number of tokens: {{ currencyDetails.max_number }}<br></span>
+      <span v-if="currencyDetails.is_unlimited !== undefined">Is unlimited: {{ currencyDetails.is_unlimited ? 'true' : 'false' }}<br></span>
+      <span v-if="currencyDetails.is_asset_anchored !== undefined">Is asset anchored: {{ currencyDetails.is_asset_anchored ? 'true' : 'false' }}<br></span>
+      <span v-if="currencyDetails.anchor_asset_type">Type of asset anchored: {{ currencyDetails.anchor_asset_type }}<br></span>
+      <span v-if="currencyDetails.anchor_asset">Anchor asset: {{ currencyDetails.anchor_asset }}<br></span>
+      <span v-if="currencyDetails.redemption_instructions">Redemption instructions: {{ currencyDetails.redemption_instructions }}<br></span>
+      <span v-if="currencyDetails.collateral_addresses">Collateral addresses: <span v-for="addr in currencyDetails.collateral_addresses" :key="addr">{{ addr }} </span><br></span>
+      <span v-if="currencyDetails.collateral_address_messages">Collateral address messages: <span v-for="msg in currencyDetails.collateral_address_messages" :key="msg">{{ msg }} </span><br></span>
+      <span v-if="currencyDetails.collateral_address_messages">Collateral address signitures: <span v-for="signiture in currencyDetails.collateral_address_messages" :key="signiture">{{ signiture }} </span><br></span>
+      <span v-if="currencyDetails.regulated !== undefined">Regulated: {{ currencyDetails.regulated ? 'true' : 'false' }}<br></span>
+      <span v-if="currencyDetails.approval_server">Approval server: {{ currencyDetails.approval_server }}<br></span>
+      <span v-if="currencyDetails.approval_criteria">Approval criteria: {{ currencyDetails.approval_criteria }}<br></span>
+    </template>
+
     <br>
     <h6>Organisation details</h6>
 
@@ -65,33 +90,6 @@
     <span v-if="details.DOCUMENTATION.ORG_LICENSING_AUTHORITY">Licensing authority: {{ details.DOCUMENTATION.ORG_LICENSING_AUTHORITY }}<br></span>
     <span v-if="details.DOCUMENTATION.ORG_LICENSE_TYPE">Licensing type: {{ details.DOCUMENTATION.ORG_LICENSE_TYPE }}<br></span>
     <span v-if="details.DOCUMENTATION.ORG_LICENSE_NUMBER">Licensing number: {{ details.DOCUMENTATION.ORG_LICENSE_NUMBER }}<br></span>
-
-    <template v-if="currencyDetails">
-      <br>
-      <h6>Currency details</h6>
-      <span v-if="currencyDetails.name">Name: {{ currencyDetails.name }}<br></span>
-      <span v-if="currencyDetails.desc">Description: {{ currencyDetails.desc }}<br></span>
-      <span v-if="currencyDetails.conditions">Conditions: {{ currencyDetails.conditions }}<br></span>
-      <span v-if="currencyDetails.image">Image: <img :src="currencyDetails.image" style="max-width: 60px"><br></span>
-      <span v-if="currencyDetails.code">Code: {{ currencyDetails.code }}<br></span>
-      <span v-if="currencyDetails.code_template">Code template: {{ currencyDetails.code_template }}<br></span>
-      <span v-if="currencyDetails.issuer">Issuer: {{ currencyDetails.issuer }}<br></span>
-      <span v-if="currencyDetails.status">Status: {{ currencyDetails.status }}<br></span>
-      <span v-if="currencyDetails.display_decimals">Number of decimals to show: {{ currencyDetails.display_decimals }}<br></span>
-      <span v-if="currencyDetails.fixed_number">Fixes number of tokens: {{ currencyDetails.fixed_number }}<br></span>
-      <span v-if="currencyDetails.max_number">Max number of tokens: {{ currencyDetails.max_number }}<br></span>
-      <span v-if="currencyDetails.is_unlimited !== undefined">Is unlimited: {{ currencyDetails.is_unlimited ? 'true' : 'false' }}<br></span>
-      <span v-if="currencyDetails.is_asset_anchored !== undefined">Is asset anchored: {{ currencyDetails.is_asset_anchored ? 'true' : 'false' }}<br></span>
-      <span v-if="currencyDetails.anchor_asset_type">Type of asset anchored: {{ currencyDetails.anchor_asset_type }}<br></span>
-      <span v-if="currencyDetails.anchor_asset">Anchor asset: {{ currencyDetails.anchor_asset }}<br></span>
-      <span v-if="currencyDetails.redemption_instructions">Redemption instructions: {{ currencyDetails.redemption_instructions }}<br></span>
-      <span v-if="currencyDetails.collateral_addresses">Collateral addresses: <span v-for="addr in currencyDetails.collateral_addresses" :key="addr">{{ addr }} </span><br></span>
-      <span v-if="currencyDetails.collateral_address_messages">Collateral address messages: <span v-for="msg in currencyDetails.collateral_address_messages" :key="msg">{{ msg }} </span><br></span>
-      <span v-if="currencyDetails.collateral_address_messages">Collateral address signitures: <span v-for="signiture in currencyDetails.collateral_address_messages" :key="signiture">{{ signiture }} </span><br></span>
-      <span v-if="currencyDetails.regulated !== undefined">Regulated: {{ currencyDetails.regulated ? 'true' : 'false' }}<br></span>
-      <span v-if="currencyDetails.approval_server">Approval server: {{ currencyDetails.approval_server }}<br></span>
-      <span v-if="currencyDetails.approval_criteria">Approval criteria: {{ currencyDetails.approval_criteria }}<br></span>
-    </template>
 
     <template v-if="details.PRINCIPALS && details.PRINCIPALS.length > 0">
       <br>

@@ -19,6 +19,9 @@
       <b-list-group-item v-for="balance in balances" :key="balance.type + balance.issuer" :id="balance.type + balance.issuer">
         <h6 class="m-0">
           {{ getCurrencyName(balance.type) ? `${getCurrencyName(balance.type)} (${ balance.type })`: balance.type }}
+          <template v-if="!removeFieldBalance && issuerHomeAccount[balance.issuer] && issuerDetails[issuerHomeAccount[balance.issuer]] !== null">
+            <a v-if="issuerDetails[issuerHomeAccount[balance.issuer]] !== undefined && openedCurrencyDetails !== `${balance.type}-${balance.issuer}`" href="#" @click.prevent="openedCurrencyDetails = `${balance.type}-${balance.issuer}`"><small>details</small></a>
+          </template>
           <a v-if="balance.type !== 'XLM' && removeFieldBalance !== balance" href="#" class="text-danger small pull-right" @click.prevent="openRemoveCurrency(balance)">remove</a>
         </h6>
         <small v-if="balance.issuer && !removeFieldBalance" class="break-word with-hyphens">
@@ -30,9 +33,6 @@
           </small>
           <small v-if="issuerDetails[issuerHomeAccount[balance.issuer]] === null" class="break-word with-hyphens">
             <br>Issuer details: no information found
-          </small>
-          <small v-else-if="issuerDetails[issuerHomeAccount[balance.issuer]] !== undefined && openedCurrencyDetails !== `${balance.type}-${balance.issuer}`" class="break-word with-hyphens">
-            <br>Issuer details: <a href="#" @click.prevent="openedCurrencyDetails = `${balance.type}-${balance.issuer}`">click here</a>
           </small>
           <small v-if="openedCurrencyDetails === `${balance.type}-${balance.issuer}`">
             <issuer-details :details="issuerDetails[issuerHomeAccount[balance.issuer]]" :asset-code="balance.type" :issuer="balance.issuer" :home-domain="issuerHomeAccount[balance.issuer]"/>
