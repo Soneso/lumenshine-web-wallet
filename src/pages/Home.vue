@@ -56,9 +56,9 @@
           <b-col cols="12" class="py-3">
             <hr class="divider light">
             <h3 class="text-info">Focused on security and usability</h3>
-            <p>Lumenshine uses two factor authentication at login. And, on registration, Lumenshine generates a 24 words backup passphrase for you, that is also called "mnemonic". You must write it down to be able to finish the setup process. Your memonic is later used to create new wallets and to sign transactions for you.</p>
+            <p>Lumenshine uses two factor authentication at login. And, on registration, Lumenshine generates a 24 words backup passphrase for you, that is also called "mnemonic". You must write it down to be able to finish the setup process. Your memonic is later used to create new wallets and to sign your transactions.</p>
             <p>Lumenshine stores your encrypted mnemonic in it's backend database. Before sending it to the server, the client encrypts it by using 256-bit master key encryption and advanced encryption standard (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" rel="noopener">AES</a>). The master key is encrypted by a 256-bit <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank" rel="noopener">PKDF2</a> encryption key derived from your password with 65.000 itterations. Your password is never sent to the server, so that only you can decrypt your mnemonic. You can read all the details about the Lumenshine wallet security in our <a href="https://github.com/Soneso/lumenshine-concepts/blob/master/Wallet/Security/white-paper/Lumenshine-Wallet-Security-WP.pdf" target="_blank" rel="noopener">Lumenshine Wallet Security Whitepaper.</a></p>
-            <p>By using Lumenshine you don't have to insert long secret seeds to sign and submit transactions to the Stellar network. You must only insert your password or authenticate via biometric auth to approve your transaction.</p>
+            <p>With Lumenshine you don't have to insert long secret seeds to sign and submit transactions to the Stellar network. You must only insert your password or use biometric auth to approve your transaction.</p>
           </b-col>
           <b-col cols="12" class="py-3 text-center">
             <hr class="divider light">
