@@ -4,12 +4,13 @@
       <b-row class="balance-line">
         <template v-for="balances in balanceLine">
 
-          <b-col :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
-                 :cols="data.stellar_data ? 12 : 10"
-                 :sm="data.stellar_data ? 6 : 5"
-                 :md="data.stellar_data ? (wideCard ? 6 : 12) : 9"
-                 :lg="data.stellar_data ? (wideCard ? 3 : 6) : 5"
-                 class="balance-list current">
+          <b-col
+            :key="balances.map(b => 'b' + b.type + b.issuer).join('')"
+            :cols="data.stellar_data ? 12 : 10"
+            :sm="data.stellar_data ? 6 : 5"
+            :md="data.stellar_data ? (wideCard ? 6 : 12) : 9"
+            :lg="data.stellar_data ? (wideCard ? 3 : 6) : 5"
+            class="balance-list current">
 
             <div :class="data.stellar_data ? 'bg-success' : 'bg-danger'">
               <h6>{{ balances && balances.length > 1 ? 'Balances' : 'Balance' }}</h6>
@@ -24,12 +25,13 @@
 
           </b-col>
 
-          <b-col v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
-                 :md="wideCard ? 6 : 12"
-                 :lg="wideCard ? 3 : 6"
-                 :class="['balance-list', 'available', {'pl-sm-3 pl-md-2 pl-lg-3': !wideCard, 'pl-sm-3': wideCard}]"
-                 cols="12"
-                 sm="6">
+          <b-col
+            v-if="data.stellar_data" :key="balances.map(b => 'a' + b.type + b.issuer).join('')"
+            :md="wideCard ? 6 : 12"
+            :lg="wideCard ? 3 : 6"
+            :class="['balance-list', 'available', {'pl-sm-3 pl-md-2 pl-lg-3': !wideCard, 'pl-sm-3': wideCard}]"
+            cols="12"
+            sm="6">
 
             <div>
               <h6 class="text-info">Available</h6>
@@ -56,6 +58,7 @@
 
 <script>
 import Amount from '@/util/Amount';
+import config from '@/config';
 
 export default {
   props: {
@@ -95,13 +98,13 @@ export default {
   },
   methods: {
     getAvailablePopup (balance) {
-      const baseReserve = 0.5;
+      const baseReserve = parseFloat(config.STELLAR_BASE_RESERVE);
       if (!this.data.stellar_data) return '';
 
       if (balance.type === 'XLM') {
         const header = `
           <strong>Minimum balance</strong>
-          <p>All Stellar accounts/wallets must maintain a minimum balance of lumens that can not be spent. The minimum balance for a basic account is 1.0 XLM. Additional entries such as trustlines for other currencies and additional signers increase the minimum balance.</p>
+          <p>All Stellar accounts/wallets must maintain a minimum balance of lumens that can not be spent. The minimum balance for a basic account is ${(2 * baseReserve).toFixed(1)} XLM. Additional entries such as trustlines for other currencies and additional signers increase the minimum balance.</p>
           <p>The minimum balance for this account is:</p>
         `;
 

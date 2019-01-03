@@ -132,7 +132,7 @@
               </b-col>
             </b-row>
             <b-form-text :id="`inputLiveAmountHelp_${uuid}`">
-              Stellar transaction fee: 0.00001 XLM
+              Stellar transaction fee: {{ config.STELLAR_BASE_FEE }} XLM
             </b-form-text>
           </b-form-group>
 
@@ -313,6 +313,8 @@ import { required, decimal, maxLength } from 'vuelidate/lib/validators';
 
 import Amount from '@/util/Amount';
 
+import config from '@/config';
+
 import formMixin from '@/mixins/form';
 import balanceMixin from '@/mixins/balance';
 import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
@@ -475,7 +477,7 @@ export default {
     sendItAllAmount () {
       let amount = new Amount(this.availableAmountToSend);
       if (this.assetCode === 'XLM') {
-        amount = amount.minus('0.00001');
+        amount = amount.minus(config.STELLAR_BASE_FEE);
       }
       return amount.toStellarAmount();
     }
@@ -523,6 +525,7 @@ export default {
     this.memoTypeOptions = [
       'MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN'
     ];
+    this.config = config;
     if (!this.canSignWithPassword) {
       this.signer = this.signers[0] ? this.signers[0].public_key : null;
     }
