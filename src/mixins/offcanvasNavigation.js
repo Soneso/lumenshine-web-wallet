@@ -2,33 +2,50 @@ export default {
   methods: {
     openMenuAnimation () {
       this.$nextTick(() => {
-        if (document.getElementById('offcanvas-menu')) {
-          document.getElementById('offcanvas-menu').style.width = `${this.width}px`;
+        const offcanvasMenu = document.getElementById('offcanvas-menu');
+        if (offcanvasMenu) {
+          offcanvasMenu.style.width = `${this.width}px`;
         }
       });
 
-      document.querySelector('#app').style.perspective = `${this.viewportWidth}px`;
-      document.querySelector('#app').style.overflow = 'hidden';
+      const appEl = document.getElementById('app');
+      if (appEl) {
+        appEl.style.perspective = `${this.viewportWidth}px`;
+        appEl.style.perspectiveOrigin = 'center 200px';
+        appEl.style.overflow = 'hidden';
+      }
 
-      document.querySelector('#page-wrapper').style.transform = `translate3d(${this.width}px, 0px, -400px ) rotateY(-10deg)`;
-      document.querySelector('#page-wrapper').style.transformStyle = 'preserve-3d';
-      document.querySelector('#page-wrapper').style.overflow = 'hidden';
+      const pageWrapperEl = document.getElementById('page-wrapper');
+      if (pageWrapperEl) {
+        pageWrapperEl.style.transformOrigin = 'center top';
+        pageWrapperEl.style.transformStyle = 'preserve-3d';
+        pageWrapperEl.style.transform = `translate3d(${this.width}px, 0, -400px) rotateY(-10deg)`;
+        pageWrapperEl.style.overflow = 'hidden';
+      }
     },
+
     closeMenuAnimation () {
-      if (document.getElementById('offcanvas-menu')) {
-        document.getElementById('offcanvas-menu').style.width = '';
-        document.getElementById('offcanvas-menu').style.overflowX = 'hidden';
+      const offcanvasMenu = document.getElementById('offcanvas-menu');
+      if (offcanvasMenu) {
+        offcanvasMenu.style.width = '';
+        offcanvasMenu.style.overflowX = 'hidden';
         setTimeout(() => {
-          document.getElementById('offcanvas-menu').style.overflowX = '';
+          const offcanvasMenu = document.getElementById('offcanvas-menu');
+          if (offcanvasMenu) {
+            offcanvasMenu.style.overflowX = '';
+          }
         }, 1e3);
       }
 
-      document.querySelector('#app').style.overflow = '';
+      document.getElementById('app').style.overflow = '';
 
-      document.querySelector('#page-wrapper').style.transform = '';
-      document.querySelector('#page-wrapper').style.transformStyle = '';
-      document.querySelector('#page-wrapper').style.transformOrigin = '';
-      document.querySelector('#page-wrapper').style.overflow = 'auto';
+      const pageWrapperEl = document.getElementById('page-wrapper');
+      if (pageWrapperEl) {
+        pageWrapperEl.style.transform = '';
+        pageWrapperEl.style.transformStyle = '';
+        pageWrapperEl.style.transformOrigin = '';
+        pageWrapperEl.style.overflow = 'auto';
+      }
     }
   }
 };
