@@ -1,11 +1,11 @@
 export default {
-  mutateOffCanvasMenuOpen (state, offCanvasMenuOpen) {
+  SET_OFFCANVAS_MENU_OPEN (state, offCanvasMenuOpen) {
     state.offCanvasMenuOpen = offCanvasMenuOpen;
   },
-  mutateViewportWidth (state, viewportWidth) {
+  SET_VIEWPORT_WIDTH (state, viewportWidth) {
     state.viewportWidth = viewportWidth;
   },
-  mutateViewportHeight (state, viewportHeight) {
+  SET_VIEWPORT_HEIGHT (state, viewportHeight) {
     state.viewportHeight = viewportHeight;
   }
 };

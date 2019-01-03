@@ -10,9 +10,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
+import offcanvasNavigation from '../mixins/offcanvasNavigation';
 
 export default {
   name: 'InactivityModal',
+  mixins: [offcanvasNavigation],
 
   data () {
     return {
@@ -62,6 +64,8 @@ export default {
     onLogout () {
       this.$emit('logout');
       this.logout();
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', false);
+      this.closeMenuAnimation();
       this.$router.push({ name: 'Login' });
     },
 

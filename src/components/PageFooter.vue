@@ -53,11 +53,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import offcanvasNavigation from '../mixins/offcanvasNavigation';
 
 import config from '@/config';
 
 export default {
   name: 'Footer',
+  mixins: [offcanvasNavigation],
   props: {
     isLoggedIn: {
       type: Boolean,
@@ -81,6 +83,8 @@ export default {
     ...mapActions(['logout']),
     async onLogoutClick () {
       await this.logout();
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', false);
+      this.closeMenuAnimation();
       this.$router.push({ name: 'Home' });
     }
   }

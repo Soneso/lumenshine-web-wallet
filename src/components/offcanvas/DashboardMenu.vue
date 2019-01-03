@@ -184,7 +184,7 @@ export default {
     },
 
     closeMenu () {
-      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', false);
       this.closeMenuAnimation();
     },
 

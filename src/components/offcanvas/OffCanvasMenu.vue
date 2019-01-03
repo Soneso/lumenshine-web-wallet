@@ -36,11 +36,11 @@ export default {
   },
   methods: {
     openMenu () {
-      this.$store.commit('mutateOffCanvasMenuOpen', true);
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', true);
       this.openMenuAnimation();
     },
     closeMenu () {
-      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', false);
       this.closeMenuAnimation();
     },
     closeMenuOnEsc (e) {

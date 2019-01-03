@@ -180,8 +180,8 @@ export default {
     ]),
 
     ...mapMutations([
-      'mutateViewportWidth',
-      'mutateViewportHeight'
+      'SET_VIEWPORT_WIDTH',
+      'SET_VIEWPORT_HEIGHT'
     ]),
 
     baseRoute (str) {
@@ -193,10 +193,10 @@ export default {
 
       this.debounceWindowResizeId = setTimeout(() => {
         const newScreenWidth = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-        this.mutateViewportWidth(newScreenWidth);
+        this.SET_VIEWPORT_WIDTH(newScreenWidth);
 
         const newScreenHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-        this.mutateViewportHeight(newScreenHeight);
+        this.SET_VIEWPORT_HEIGHT(newScreenHeight);
       }, 300);
     },
 

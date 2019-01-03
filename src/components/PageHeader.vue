@@ -75,7 +75,7 @@ export default {
   methods: {
     ...mapActions(['logout']),
     async onLogoutClick () {
-      this.$store.commit('mutateOffCanvasMenuOpen', false);
+      this.$store.commit('SET_OFFCANVAS_MENU_OPEN', false);
       this.closeMenuAnimation();
       await this.logout();
       this.$router.push({ name: 'Login' });
