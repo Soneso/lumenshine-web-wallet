@@ -73,6 +73,11 @@ const router = new Router({
       path: '/merge-external-account',
       name: 'MergeExternalAccount',
       component: require('@/pages/MergeExternalAccount').default
+    },
+    {
+      path: '/close-wallet',
+      name: 'CloseWallet',
+      component: require('@/pages/CloseWallet').default
     }
   ]
 });

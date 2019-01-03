@@ -65,11 +65,11 @@
               </a>
             </li>
 
-            <!-- <li>
-              <a :class="{ active: activeMenu === 'merge-close-wallet'}" href="#" @click.prevent.stop="goto('merge-close-wallet')">
+            <li>
+              <a :class="{ active: activeMenu === 'close-wallet'}" href="#" @click.prevent.stop="goto('close-wallet')">
                 <div>Merge / close wallet</div>
               </a>
-            </li> -->
+            </li>
           </ul>
         </div>
       </a>

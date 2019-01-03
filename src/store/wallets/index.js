@@ -66,6 +66,10 @@ function getInitialState (clearAuthToken = false) {
     mergeExternalAccountLoading: false,
     mergeExternalAccountResult: null,
 
+    closeAccountErrors: [],
+    closeAccountLoading: false,
+    closeAccountResult: null,
+
     knownDestinationsErrors: [],
     knownDestinationsLoading: false,
     knownDestinationsResult: null,

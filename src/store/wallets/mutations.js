@@ -219,6 +219,19 @@ export default {
     state.mergeExternalAccountResult = null;
   },
 
+  SET_CLOSE_ACCOUNT_RESULT (state, msg) {
+    state.closeAccountResult = msg;
+    state.closeAccountErrors = [];
+    state.closeAccountLoading = false;
+  },
+  SET_CLOSE_ACCOUNT_LOADING (state, msg) {
+    state.closeAccountLoading = msg;
+  },
+  SET_CLOSE_ACCOUNT_ERROR (state, msg) {
+    state.closeAccountErrors = msg;
+    state.closeAccountResult = null;
+  },
+
   // used for storing the available wallet public keys on login
   SET_PUBLIC_KEYS (state, msg) {
     state.publicKeys = msg;

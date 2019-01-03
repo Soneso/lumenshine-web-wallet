@@ -7,9 +7,9 @@
           <li>
             <b-button to="/merge-external-account" variant="outline-info" class="mb-3 btn-rounded">Merge external account</b-button>
           </li>
-          <!-- <li>
-            <b-button to="/merge-close-wallet" variant="outline-info" class="mb-3 btn-rounded">Merge / close wallet</b-button>
-          </li> -->
+          <li>
+            <b-button to="/close-wallet" variant="outline-info" class="mb-3 btn-rounded">Merge / close wallet</b-button>
+          </li>
         </ul>
       </b-card>
     </b-col>

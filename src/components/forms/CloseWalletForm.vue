@@ -1,50 +1,71 @@
 <template>
   <b-form class="form" @submit.prevent="onMergeClick">
     <b-row v-if="!result">
-      <b-col cols="12 pb-4 mb-3">
+      <b-col cols="12">
         <div v-if="hasUnknownError" class="text-danger">An error occured, please try again</div>
-      </b-col>
-
-      <b-col cols="12">
-        <p>Here you can merge an external Stellar account into a funded Lumenshine wallet. Your external account must not trust other currencies than Stellar Lumens and it must have no data entries.</p>
-      </b-col>
-
-      <b-col cols="12">
-        <!--"Secret seed of the account to merge" field-->
-        <b-form-group>
-          <b-form-input
-            :class="{ error: $v.secretSeed.$error }"
-            v-model="secretSeed"
-            :state="!$v.secretSeed.$error"
-            placeholder="Secret seed of the account to merge"
-            aria-describedby="inputLiveSecretSeedHelp inputLiveSecretSeedFeedback"
-            required
-            @blur.native="$v.secretSeed.$touch()"/>
-
-          <b-form-invalid-feedback id="inputLiveSecretSeedFeedback">
-            <template v-if="$v.secretSeed.$error" class="field-errors">
-              <template v-if="!$v.secretSeed.required">Secret seed is required! <br></template>
-              <template v-else-if="!$v.secretSeed.secretSeed">Invalid secret seed!</template>
-              <template v-else-if="!$v.secretSeed.hasAccount">Account does not exist.</template>
-              <template v-else-if="!$v.secretSeed.hasNoTrustlines && !$v.secretSeed.hasNoData">Account has trustlines and data entries. Remove and try again.</template>
-              <template v-else-if="!$v.secretSeed.hasNoTrustlines">Account has trustlines to other currencies than Stellar Lumens. Remove and try again.</template>
-              <template v-else-if="!$v.secretSeed.hasNoData">Account has data entries. Remove and try again.</template>
-              <template v-else-if="!$v.secretSeed.hasFunds">Account has not enough funds for the transaction.</template>
-            </template>
-          </b-form-invalid-feedback>
-          <b-form-text id="inputLiveSecretSeedHelp">
-            Secret seed of the account to merge
-          </b-form-text>
-        </b-form-group>
       </b-col>
 
       <b-col cols="12">
         <!--"Merge into Lumenshine wallet" field-->
         <template v-if="availableWallets.length > 0">
-          <b-form-group :label-for="`walletInput_${uuid}`" label="Wallet:">
+          <b-form-group :label-for="`walletInput_${uuid}`" label="Merge Lumenshine wallet:">
             <b-form-select :id="`walletInput_${uuid}`" v-model="selectedWallet" :options="walletOptions" required/>
           </b-form-group>
         </template>
+      </b-col>
+
+      <b-col cols="12">
+        <b-form-group>
+          <b-form-input
+            :id="`passwordInput_${uuid}`"
+            :class="{ error: $v.password.$error }"
+            :aria-describedby="`inputLivePasswordHelp_${uuid} inputLivePasswordFeedback_${uuid}`"
+            :state="!$v.password.$error"
+            :type="password2IsHidden ? 'password' : 'text'"
+            v-model="password"
+            placeholder="Password"
+            autocomplete="new-password"
+            required
+            @blur.native="$v.password.$touch()"/>
+
+          <password-assets :password="['password2IsHidden', password2IsHidden]" @passwordUpdated="updatePasswordState($event)"/>
+
+          <b-form-invalid-feedback :id="`inputLivePasswordFeedback_${uuid}`">
+            <template v-if="$v.password.$error" class="field-errors">
+              <template v-if="!$v.password.required">Password is required! <br></template>
+              <template v-if="!$v.password.decryptValid">Invalid password</template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text :id="`inputLivePasswordHelp_${uuid}`">
+            Your password.
+          </b-form-text>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12">
+        <b-form-group :label-for="`destinationInput_${uuid}`">
+          <b-form-input
+            :id="`destinationInput_${uuid}`"
+            :class="{ error: $v.destination.$error }"
+            :aria-describedby="`inputLiveDestinationHelp_${uuid} inputLiveDestinationFeedback_${uuid}`"
+            :state="!$v.destination.$error"
+            v-model="destination"
+            type="text"
+            placeholder="Destination account"
+            required
+            @blur.native="$v.destination.$touch()"/>
+          <b-form-invalid-feedback :id="`inputLiveDestinationFeedback_${uuid}`">
+            <template v-if="$v.destination.$error" class="field__errors">
+              <template v-if="!$v.destination.publicKeyOrAddress">Invalid destination!</template>
+              <template v-if="!$v.destination.required">Wallet destination is required <br></template>
+              <template v-if="!$v.destination.noDestination">Cannot find this stellar address!<br></template>
+              <template v-if="!$v.destination.validDestination">Invalid destination!</template>
+            </template>
+          </b-form-invalid-feedback>
+          <b-form-text :id="`inputLiveDestinationHelp_${uuid}`">
+            Public key or stellar address of the account
+          </b-form-text>
+        </b-form-group>
       </b-col>
 
       <b-col cols="12">
@@ -104,19 +125,20 @@
 
 <script>
 import { maxLength, required } from 'vuelidate/lib/validators';
-import { mapActions } from 'vuex';
 
 import Amount from '@/util/Amount';
 
 import formMixin from '@/mixins/form';
+import passwordAssets from '@/components/ui/passwordAssets';
 import spinner from '@/components/ui/spinner';
 
+import updatePasswordVisibilityState from '@/mixins/updatePasswordVisibilityState';
 import validators from '@/validators';
 
 export default {
-  name: 'MergeExternalAccountForm',
-  components: { spinner },
-  mixins: [ formMixin ],
+  name: 'CloseWalletForm',
+  components: { spinner, passwordAssets },
+  mixins: [ formMixin, updatePasswordVisibilityState ],
   props: {
     result: {
       type: Object,
@@ -134,7 +156,9 @@ export default {
 
   data () {
     return {
-      secretSeed: '',
+      password2IsHidden: true,
+      password: '',
+      destination: '',
       selectedWallet: 0,
       memo: '',
       memoType: 'MEMO_TEXT',
@@ -170,17 +194,16 @@ export default {
   },
 
   methods: {
-    ...mapActions(['resetMergeExternalAccount']),
-    async onMergeClick () {
-      await this.resetMergeExternalAccount();
-      await this.$v.$reset();
-      await this.$v.$touch();
+    onMergeClick () {
+      this.$emit('clear');
+      this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
       this.backendQuery = {
-        secretSeed: this.secretSeed,
-        destination: this.availableWallets[this.selectedWallet] ? this.availableWallets[this.selectedWallet].public_key : null,
+        publicKey: this.availableWallets[this.selectedWallet] ? this.availableWallets[this.selectedWallet].public_key : null,
+        destination: this.destination,
+        password: this.password,
         memo: this.memo,
         memoType: this.memoType,
       };
@@ -209,14 +232,24 @@ export default {
       memo: {
         ...memoValidators,
       },
-      secretSeed: {
+      password: {
         required,
-        ...validators.secretSeed.call(this),
-        hasAccount: value => !this.errors.find(err => err.error_code === 'NO_SOURCE_ACCOUNT'),
-        hasNoTrustlines: value => !this.errors.find(err => err.error_code === 'HAS_TRUSTLINES'),
-        hasNoData: value => !this.errors.find(err => err.error_code === 'HAS_DATA'),
-        hasFunds: value => !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
+        decryptValid: value => this.backendQuery.password !== value || !this.errors.find(err => err.error_code === 'WRONG_PASSWORD'),
       },
+      destination: {
+        required,
+        publicKeyOrAddress: value => value === '' || validators.publicKey.call(this).publicKey(value) || validators.federationAddress.call(this).federationAddress(value),
+        noDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'NO_DESTINATION'),
+        validDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
+      },
+      // secretSeed: {
+      //   required,
+      //   ...validators.secretSeed.call(this),
+      //   hasAccount: value => !this.errors.find(err => err.error_code === 'NO_SOURCE_ACCOUNT'),
+      //   hasNoTrustlines: value => !this.errors.find(err => err.error_code === 'HAS_TRUSTLINES'),
+      //   hasNoData: value => !this.errors.find(err => err.error_code === 'HAS_DATA'),
+      //   hasFunds: value => !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
+      // },
     };
   }
 };

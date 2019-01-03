@@ -11,9 +11,8 @@
           :loading="mergeExternalAccountStatus.loading"
           :available-wallets="availableWallets"
           :errors="mergeExternalAccountStatus.err"
-          @clear="resetMergeExternalAccount"
           @submit="onMergeClick"/>
-        <span v-else-if="availableWallets.length === 0" class="text-danger">You have no funded wallets. Fund a wallet first and try again.</span>
+        <div v-else-if="availableWallets.length === 0" class="text-danger my-3">You have no funded wallets. Fund a wallet first and try again.</div>
 
       </b-card>
     </b-col>
@@ -56,10 +55,12 @@ export default {
   methods: {
     ...mapActions(['getWallets', 'mergeExternalAccount', 'resetMergeExternalAccount']),
 
-    async onMergeClick ({ destination, secretSeed }) {
+    async onMergeClick ({ destination, secretSeed, memo, memoType }) {
       const params = {
         destination,
         secretSeed,
+        memo,
+        memoType,
       };
 
       await this.mergeExternalAccount(params);
