@@ -4,13 +4,11 @@ import store from '@/store/store';
 
 export default {
   async get (path = '', params = null) {
-    if (!store.getters.authToken && axios.defaults.headers.common['Authorization'] !== null) {
-      delete axios.defaults.headers.common['Authorization'];
-    } else if (store.getters.authToken) {
-      axios.defaults.headers.common['Authorization'] = store.getters.authToken;
-    }
     try {
-      var response = await axios.get(`${config.API_BASE}${path}`, { params });
+      var response = await axios.get(`${config.API_BASE}${path}`, {
+        params,
+        headers: store.getters.authToken ? { Authorization: store.getters.authToken } : {},
+      });
     } catch (err) {
       if (store.getters.authToken && err.response.status === 401) { // log out user
         store.dispatch('clearAuthToken');
@@ -31,13 +29,10 @@ export default {
   },
 
   async post (path = '', params = null) {
-    if (!store.getters.authToken && axios.defaults.headers.common['Authorization'] !== null) {
-      delete axios.defaults.headers.common['Authorization'];
-    } else if (store.getters.authToken) {
-      axios.defaults.headers.common['Authorization'] = store.getters.authToken;
-    }
     try {
-      var response = await axios.post(`${config.API_BASE}${path}`, params);
+      var response = await axios.post(`${config.API_BASE}${path}`, params, {
+        headers: store.getters.authToken ? { Authorization: store.getters.authToken } : {},
+      });
     } catch (err) {
       if (store.getters.authToken && err.response.status === 401) { // log out user
         store.dispatch('clearAuthToken');
