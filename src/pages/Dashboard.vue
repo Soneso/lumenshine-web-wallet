@@ -33,7 +33,7 @@ export default {
   async created () {
     await this.getWallets();
     this.recheckWallets();
-    await this.loadMemoVisibility();
+    await this.loadMemoInVisibility();
     await this.watchWallets(this.dashboardWallets.map(w => w.public_key));
   },
 
@@ -42,7 +42,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getWallets', 'watchWallets', 'loadMemoVisibility']),
+    ...mapActions(['getWallets', 'watchWallets', 'loadMemoInVisibility']),
     recheckWallets () {
       if (!this.wallets.res) {
         this.walletIds = [];

@@ -1,11 +1,11 @@
 import Vue from 'vue';
 
 export default {
-  SET_MEMO_VISIBILITY (state, { visible, email }) {
-    state.memoVisible = visible;
-    const storedValues = Vue.localStorage.get('memoVisible', {}, Object);
-    storedValues[email] = visible;
-    Vue.localStorage.set('memoVisible', JSON.stringify(storedValues));
+  SET_MEMO_INVISIBILITY (state, { invisible, email }) {
+    state.memoInVisible = invisible;
+    const storedValues = Vue.localStorage.get('memoInVisible', {}, Object);
+    storedValues[email] = invisible;
+    Vue.localStorage.set('memoInVisible', JSON.stringify(storedValues));
   },
 
   mutateChangePasswordStep (state, changePasswordStep) {

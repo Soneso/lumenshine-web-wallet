@@ -1,5 +1,5 @@
 export default {
-  memoVisible: null,
+  memoInVisible: null,
 
   changePasswordStep: '',
   change2faStep: ''

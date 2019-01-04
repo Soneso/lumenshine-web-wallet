@@ -2,14 +2,14 @@
   <b-row align-h="center" align-v="center">
     <b-col cols="11" sm="9" md="7" lg="6" xl="5">
       <b-card class="p-4 single-card">
-        <h3 :class="['form-headline', 'text-uppercase', 'text-center']">Show memos</h3>
+        <h3 :class="['form-headline', 'text-uppercase', 'text-center']">Hide memos</h3>
 
         <br>
-        <p>Here you can toggle whether memos are visible when showing data about transactions.</p>
+        <p>Here you can toggle whether memos should be hidden when showing data about transactions.</p>
         <br>
-        <div v-if="memoVisibleValue !== null" class="card-checkbox">
-          <input id="memoCheckbox" v-model="memoVisibleValue" type="checkbox" class="switch">
-          <label for="memoCheckbox" style="min-width: 130px">{{ memoVisibleValue ? 'Visible' : 'Invisible' }}</label>
+        <div v-if="memoInVisibleValue !== null" class="card-checkbox">
+          <input id="memoCheckbox" v-model="memoInVisibleValue" type="checkbox" class="switch">
+          <label for="memoCheckbox" style="min-width: 130px">Hidden</label>
         </div>
 
       </b-card>
@@ -20,31 +20,31 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: 'MemoVisibility',
+  name: 'MemoInVisibility',
 
   data () {
     return {
-      memoVisibleValue: null,
+      memoInVisibleValue: null,
     };
   },
 
   computed: {
-    ...mapGetters(['memoVisible']),
+    ...mapGetters(['memoInVisible']),
   },
 
   watch: {
-    memoVisibleValue (visible) {
-      this.setMemoVisibility(visible);
+    memoInVisibleValue (inVisible) {
+      this.setMemoInVisibility(inVisible);
     },
   },
 
   async created () {
-    await this.loadMemoVisibility();
-    this.memoVisibleValue = this.memoVisible;
+    await this.loadMemoInVisibility();
+    this.memoInVisibleValue = this.memoInVisible;
   },
 
   methods: {
-    ...mapActions(['setMemoVisibility', 'loadMemoVisibility']),
+    ...mapActions(['setMemoInVisibility', 'loadMemoInVisibility']),
   }
 };
 </script>

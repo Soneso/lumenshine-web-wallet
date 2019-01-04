@@ -33,7 +33,7 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-form-group v-if="memoVisible" label-for="transaction-memo">
+            <b-form-group v-if="!memoInVisible" label-for="transaction-memo">
               <b-form-input
                 id="transaction-memo"
                 v-model="filterMemo"
@@ -211,7 +211,7 @@
           <template v-for="field in fields" slot-scope="row" :slot="field.key">
             <span v-if="field.key === 'date'" :key="field.key" v-html="formatDate(row.item[field.key])"/>
             <span v-else-if="field.key === 'details'" :key="field.key">
-              <transaction-details :item="row.item['details']" :selected-wallet="selectedWallet" :memo-visible="memoVisible"/>
+              <transaction-details :item="row.item['details']" :selected-wallet="selectedWallet" :memo-in-visible="memoInVisible"/>
             </span>
             <strong v-else-if="['currency', 'amount'].includes(field.key)" :key="field.key" v-html="row.item[field.key]"/>
             <span v-else :key="field.key" v-html="row.item[field.key]"/>
@@ -291,7 +291,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['transactions', 'wallets', 'isMobile', 'memoVisible']),
+    ...mapGetters(['transactions', 'wallets', 'isMobile', 'memoInVisible']),
     loading () {
       return this.inProgress;
     },
@@ -510,8 +510,8 @@ export default {
         this.$store.commit('SET_TRANSACTIONS_LOADED', this.$refs.transactions.getBoundingClientRect().height);
       }
     },
-    memoVisible (visible) {
-      if (!visible) {
+    memoInVisible (inVisible) {
+      if (inVisible) {
         this.filterMemo = '';
       }
     }
@@ -519,7 +519,7 @@ export default {
 
   async created () {
     await this.getWallets();
-    await this.loadMemoVisibility();
+    await this.loadMemoInVisibility();
     if (this.walletOptions.length > 0) {
       this.selectedWallet = this.walletOptions[0].value;
     }
@@ -527,7 +527,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['loadTransactions', 'getWallets', 'loadMemoVisibility']),
+    ...mapActions(['loadTransactions', 'getWallets', 'loadMemoInVisibility']),
     sortCompare (a, b, key) {
       if (key === 'date') {
         if (a.date.isSame(b.date)) return a.order < b.order ? -1 : (a.order > b.order ? 1 : 0); // take into consideration operation order when dates are the same

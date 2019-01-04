@@ -56,7 +56,7 @@ export default {
 
   async created () {
     await this.getWallets();
-    await this.loadMemoVisibility();
+    await this.loadMemoInVisibility();
     this.watchWallets(this.wallets.res.map(w => w.public_key));
     this.getFreePublicKey();
   },
@@ -66,7 +66,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getWallets', 'addWallet', 'editWallet', 'resetAddWallet', 'resetEditWallet', 'watchWallets', 'loadMemoVisibility']),
+    ...mapActions(['getWallets', 'addWallet', 'editWallet', 'resetAddWallet', 'resetEditWallet', 'watchWallets', 'loadMemoInVisibility']),
     async getFreePublicKey () {
       // check if already computed wallet it is still empty
       if (this.nextFreePublicKey) {
