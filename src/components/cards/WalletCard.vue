@@ -336,6 +336,7 @@ export default {
     onDetailsClose (next) {
       this.detailsModalVisible = false;
       if (next === 'send') {
+        this.resetSendPayment();
         this.sendModalVisible = true;
       } else if (next === 'receive') {
         this.receiveModalVisible = true;
