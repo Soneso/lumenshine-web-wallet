@@ -68,8 +68,9 @@
           <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
             <template v-if="$v.memo.$error" class="field__errors">
               <template v-if="$v.memo.required === false">Memo is required when sending payments to exchanges.</template>
-              <template v-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
-              <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
+              <template v-else-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.validMemo === false">Invalid memo.</template>
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
@@ -87,7 +88,8 @@ import { mapGetters } from 'vuex';
 import StellarSdk from 'stellar-sdk';
 import formMixin from '@/mixins/form';
 
-import { decimal, maxLength } from 'vuelidate/lib/validators';
+import { decimal } from 'vuelidate/lib/validators';
+import validators from '@/validators';
 
 import publicKey from '@/components/ui/publicKey';
 
@@ -222,25 +224,12 @@ export default {
     }
   },
   validations () {
-    let memoValidators = {};
-    switch (this.memoType) {
-      case 'MEMO_TEXT':
-        memoValidators = { maxLength: maxLength(28) };
-        break;
-      case 'MEMO_ID':
-        memoValidators = { maxLength: maxLength(28) };
-        break;
-      case 'MEMO_HASH':
-      case 'MEMO_RETURN':
-        memoValidators = { validLength: val => val.length === 64 };
-        break;
-    }
     return {
       amount: {
         decimal,
       },
       memo: {
-        ...memoValidators
+        ...validators.memo.call(this, this.memoType)
       },
     };
   }

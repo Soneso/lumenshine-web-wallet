@@ -66,7 +66,8 @@
           <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
             <template v-if="$v.memo.$error" class="field__errors">
               <template v-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
-              <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.validMemo === false">Invalid memo.</template>
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
@@ -103,7 +104,7 @@
 </template>
 
 <script>
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
 
 import Amount from '@/util/Amount';
@@ -192,22 +193,9 @@ export default {
   },
 
   validations () {
-    let memoValidators = { };
-    switch (this.memoType) {
-      case 'MEMO_TEXT':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_ID':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_HASH':
-      case 'MEMO_RETURN':
-        memoValidators = { ...memoValidators, validLength: val => val.length === 64 };
-        break;
-    }
     return {
       memo: {
-        ...memoValidators,
+        ...validators.memo.call(this, this.memoType),
       },
       secretSeed: {
         required,

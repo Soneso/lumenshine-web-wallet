@@ -12,6 +12,7 @@ export default {
   forename: require('./forename').default,
   lastname: require('./lastname').default,
   federationAddress: require('./federationAddress').default,
+  memo: require('./memo').default,
   mnemonic: require('./mnemonic').default,
   mobilePhone: require('./mobilePhone').default,
   password: require('./password').default,

@@ -156,8 +156,9 @@
             <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
               <template v-if="$v.memo.$error" class="field__errors">
                 <template v-if="$v.memo.required === false">Memo is required when sending payments to exchanges.</template>
-                <template v-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
-                <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+                <template v-else-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
+                <template v-else-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+                <template v-else-if="$v.memo.validMemo === false">Invalid memo.</template>
               </template>
             </b-form-invalid-feedback>
           </b-form-group>
@@ -309,7 +310,7 @@
 </template>
 
 <script>
-import { required, decimal, maxLength } from 'vuelidate/lib/validators';
+import { required, decimal } from 'vuelidate/lib/validators';
 
 import Amount from '@/util/Amount';
 
@@ -589,19 +590,10 @@ export default {
 
   validations () {
     const isExchange = !!this.exchanges[this.recipient];
-    let memoValidators = isExchange ? { required } : {};
-    switch (this.memoType) {
-      case 'MEMO_TEXT':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_ID':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_HASH':
-      case 'MEMO_RETURN':
-        memoValidators = { ...memoValidators, validLength: val => val.length === 64 };
-        break;
-    }
+    const memoValidators = {
+      ...(isExchange ? { required } : {}),
+      ...validators.memo.call(this, this.memoType),
+    };
 
     const customAssetCodeValidators = this.assetCode === '_other' ? { required, ...validators.assetCode.call(this) } : {};
 

@@ -87,7 +87,8 @@
           <b-form-invalid-feedback :id="`inputLiveMemoFeedback_${uuid}`">
             <template v-if="$v.memo.$error" class="field__errors">
               <template v-if="$v.memo.maxLength === false">Max length is 28 characters!</template>
-              <template v-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.validLength === false">Memo should have a length of 64 characters.</template>
+              <template v-else-if="$v.memo.validMemo === false">Invalid memo.</template>
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
@@ -124,7 +125,7 @@
 </template>
 
 <script>
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 
 import Amount from '@/util/Amount';
 
@@ -215,22 +216,9 @@ export default {
   },
 
   validations () {
-    let memoValidators = { };
-    switch (this.memoType) {
-      case 'MEMO_TEXT':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_ID':
-        memoValidators = { ...memoValidators, maxLength: maxLength(28) };
-        break;
-      case 'MEMO_HASH':
-      case 'MEMO_RETURN':
-        memoValidators = { ...memoValidators, validLength: val => val.length === 64 };
-        break;
-    }
     return {
       memo: {
-        ...memoValidators,
+        ...validators.memo.call(this, this.memoType),
       },
       password: {
         required,
@@ -242,14 +230,6 @@ export default {
         noDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'NO_DESTINATION'),
         validDestination: value => this.backendQuery.destination !== value || !this.errors.find(err => err.error_code === 'INVALID_DESTINATION'),
       },
-      // secretSeed: {
-      //   required,
-      //   ...validators.secretSeed.call(this),
-      //   hasAccount: value => !this.errors.find(err => err.error_code === 'NO_SOURCE_ACCOUNT'),
-      //   hasNoTrustlines: value => !this.errors.find(err => err.error_code === 'HAS_TRUSTLINES'),
-      //   hasNoData: value => !this.errors.find(err => err.error_code === 'HAS_DATA'),
-      //   hasFunds: value => !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
-      // },
     };
   }
 };
