@@ -70,6 +70,12 @@
                 <div>Merge / close wallet</div>
               </a>
             </li>
+
+            <li>
+              <a :class="{ active: activeMenu === 'memo-visibility'}" href="#" @click.prevent.stop="goto('memo-visibility')">
+                <div>Memo visibility</div>
+              </a>
+            </li>
           </ul>
         </div>
       </a>

@@ -4,8 +4,8 @@
       <b-row>
         <b-col>
           Date: {{ moment(operation.transaction.created_at).format('DD MMM YYYY HH:mm:ss') }}<br>
-          <span v-if="operation.transaction.memo_type !== 'none'">Memo type: {{ operation.transaction.memo_type }}<br></span>
-          <span v-if="operation.transaction.memo_type !== 'none'">Memo: {{ operation.transaction.memo }}</span>
+          <span v-if="memoVisible && operation.transaction.memo_type !== 'none'">Memo type: {{ operation.transaction.memo_type }}<br></span>
+          <span v-if="memoVisible && operation.transaction.memo_type !== 'none'">Memo: {{ operation.transaction.memo }}</span>
         </b-col>
         <b-col>
           <div>Operation - Type: {{ operation.type }}<br></div>
@@ -56,6 +56,10 @@ export default {
   props: {
     data: {
       type: Object,
+      required: true,
+    },
+    memoVisible: {
+      type: Boolean,
       required: true,
     },
   },

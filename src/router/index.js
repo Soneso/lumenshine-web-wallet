@@ -78,6 +78,11 @@ const router = new Router({
       path: '/close-wallet',
       name: 'CloseWallet',
       component: require('@/pages/CloseWallet').default
+    },
+    {
+      path: '/memo-visibility',
+      name: 'MemoVisibility',
+      component: require('@/pages/MemoVisibility').default
     }
   ]
 });

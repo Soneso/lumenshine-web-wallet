@@ -5,7 +5,7 @@
       <spinner v-if="operationDetails === null" message="Loading operation..." width="200"/>
       <pre v-else="" class="p-2 mt-3 text-success bg-dark">{{ operationDetails }}</pre>
     </b-modal>
-    <template v-if="item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
+    <template v-if="memoVisible && item.tx_memo">Memo: {{ item.tx_memo }}<br></template>
     <template v-if="item.op_type === OperationType.CREATE_ACCOUNT">
       <template v-if="item.op_details.funder === selectedWallet">
         Created account: <public-key :text="item.op_details.account"/><br>
@@ -120,7 +120,11 @@ export default {
     selectedWallet: {
       type: String,
       required: true,
-    }
+    },
+    memoVisible: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data () {

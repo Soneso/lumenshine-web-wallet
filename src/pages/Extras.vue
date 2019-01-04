@@ -10,6 +10,9 @@
           <li>
             <b-button to="/close-wallet" variant="outline-info" class="mb-3 btn-rounded">Merge / close wallet</b-button>
           </li>
+          <li>
+            <b-button to="/memo-visibility" variant="outline-info" class="mb-3 btn-rounded">Memo visibility</b-button>
+          </li>
         </ul>
       </b-card>
     </b-col>
