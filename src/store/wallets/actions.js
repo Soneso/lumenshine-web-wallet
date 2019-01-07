@@ -167,8 +167,10 @@ export default {
       if (oldWallet && oldWallet.wallet_name !== params.wallet_name) {
         await WalletService.updateWallet(params);
       }
-      if (!oldWallet || oldWallet.show_on_homescreen !== params.onHomescreen) {
-        await WalletService.addWalletToHomescreen({ id: params.id, visible: params.onHomescreen });
+      if (params.onHomescreen !== undefined) {
+        if (!oldWallet || oldWallet.show_on_homescreen !== params.onHomescreen) {
+          await WalletService.addWalletToHomescreen({ id: params.id, visible: params.onHomescreen });
+        }
       }
       await dispatch('updateWallets', [params.id]);
       commit('EDIT_WALLET_ERROR', []);

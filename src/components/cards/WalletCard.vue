@@ -228,7 +228,6 @@ export default {
       await this.editWallet({
         id: this.data.id,
         federation_address: address,
-        onHomescreen: this.homescreen,
       });
       this.saveWalletLoading = false;
     },
