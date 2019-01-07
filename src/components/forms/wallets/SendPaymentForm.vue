@@ -650,7 +650,7 @@ export default {
       recipient: {
         required,
         validRecipient: value => validators.publicKey.call(this).publicKey(value) || validators.federationAddress.call(this).federationAddress(value),
-        isTrusted: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'NOT_TRUSTED'),
+        isTrusted: value => this.backendQuery.recipient !== value || this.backendQuery.assetCode !== this.assetCode || !this.errors.find(err => err.error_code === 'NOT_TRUSTED'),
         canFund: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'CANNOT_FUND'),
         noDestination: value => this.backendQuery.recipient !== value || !this.errors.find(err => err.error_code === 'NO_DESTINATION'),
       },
