@@ -122,8 +122,11 @@
                 <b-form-invalid-feedback :id="`inputLiveAmountFeedback_${uuid}`">
                   <template v-if="$v.amount.$error" class="field__errors">
                     <template v-if="!$v.amount.required">Amount is required!</template>
-                    <template v-if="!$v.amount.decimal">Not valid amount!</template>
-                    <template v-if="!$v.amount.hasEnoughFunds">Not enough funds!</template>
+                    <template v-else-if="!$v.amount.decimal">Not valid amount!</template>
+                    <template v-else-if="!$v.amount.isNotTooSmall">Too small!</template>
+                    <template v-else-if="!$v.amount.isNotTooPrecise">Too many digits after the decimal point!</template>
+                    <template v-else-if="!$v.amount.isNotTooLarge">Too large!</template>
+                    <template v-else-if="!$v.amount.hasEnoughFunds">Not enough funds!</template>
                   </template>
                 </b-form-invalid-feedback>
               </b-col>
@@ -313,7 +316,7 @@
 </template>
 
 <script>
-import { required, decimal } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 import _ from 'lodash';
 import StellarSdk from 'stellar-sdk';
 
@@ -663,7 +666,7 @@ export default {
       ...(this.creatingTemplate ? {} : signerValidators),
       amount: {
         required,
-        decimal,
+        ...validators.amount.call(this),
         hasEnoughFunds: value => this.backendQuery.amount !== value || !this.errors.find(err => err.error_code === 'UNDERFUNDED'),
       }
     };

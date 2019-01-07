@@ -1,5 +1,6 @@
 export default {
   additionalName: require('./additionalName').default,
+  amount: require('./amount').default,
   assetCode: require('./assetCode').default,
   birthday: require('./birthday').default,
   birthPlace: require('./birthPlace').default,

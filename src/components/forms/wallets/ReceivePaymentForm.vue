@@ -42,8 +42,10 @@
             @input.native="$v.amount.$touch()"/>
           <b-form-invalid-feedback :id="`inputAmountFeedback_${uuid}`">
             <template v-if="$v.amount.$error" class="field__errors">
-              <template v-if="!$v.amount.required">Amount is required</template>
               <template v-if="!$v.amount.decimal">Amount should be numeric!</template>
+              <template v-else-if="!$v.amount.isNotTooSmall">Too small!</template>
+              <template v-else-if="!$v.amount.isNotTooPrecise">Too many digits after the decimal point!</template>
+              <template v-else-if="!$v.amount.isNotTooLarge">Too large!</template>
             </template>
           </b-form-invalid-feedback>
         </b-form-group>
@@ -88,7 +90,6 @@ import { mapGetters } from 'vuex';
 import StellarSdk from 'stellar-sdk';
 import formMixin from '@/mixins/form';
 
-import { decimal } from 'vuelidate/lib/validators';
 import validators from '@/validators';
 
 import publicKey from '@/components/ui/publicKey';
@@ -226,10 +227,10 @@ export default {
   validations () {
     return {
       amount: {
-        decimal,
+        ...validators.amount.call(this),
       },
       memo: {
-        ...validators.memo.call(this, this.memoType)
+        ...validators.memo.call(this, this.memoType),
       },
     };
   }
