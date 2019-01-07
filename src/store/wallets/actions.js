@@ -482,6 +482,13 @@ export default {
       try {
         const federationRecord = await StellarSdk.FederationServer.resolve(data.recipient);
         data.recipient = federationRecord.account_id;
+        if (federationRecord.memo && federationRecord.memo_type) {
+          const typeMap = { text: 'MEMO_TEXT', id: 'MEMO_ID', hash: 'MEMO_HASH' };
+          if (data.memo !== federationRecord.memo || data.memoType !== typeMap[federationRecord.memo_type]) {
+            commit('SET_SEND_PAYMENT_LOADING', false);
+            return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'MEMO_MISMATCH' }]);
+          }
+        }
       } catch (err) {
         commit('SET_SEND_PAYMENT_LOADING', false);
         return commit('SET_SEND_PAYMENT_ERROR', [{ error_code: 'NO_DESTINATION' }]);

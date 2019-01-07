@@ -139,7 +139,7 @@
           <hr class="divider">
 
           <b-form-group :label-for="`memoTypeInput_${uuid}`" label="Memo (optional)">
-            <b-form-select :id="`memoTypeInput_${uuid}`" v-model="memoType" :options="memoTypeOptions"/>
+            <b-form-select :id="`memoTypeInput_${uuid}`" v-model="memoType" :options="memoTypeOptions" :disabled="memoReadOnly"/>
           </b-form-group>
 
           <b-form-group :label-for="`memoInput_${uuid}`">
@@ -148,6 +148,7 @@
               :class="{ error: $v.memo.$error }"
               :placeholder="memoPlaceholder"
               :state="!$v.memo.$error"
+              :disabled="memoReadOnly"
               :aria-describedby="`inputLiveMemoFeedback_${uuid}`"
               v-model="memo"
               type="text"
@@ -162,6 +163,8 @@
               </template>
             </b-form-invalid-feedback>
           </b-form-group>
+
+          <p v-if="memoReadOnly"><strong>Note: </strong>The specified federation address requires this transaction's memo to be a certain value.</p>
 
           <hr class="divider">
 
@@ -311,6 +314,8 @@
 
 <script>
 import { required, decimal } from 'vuelidate/lib/validators';
+import _ from 'lodash';
+import StellarSdk from 'stellar-sdk';
 
 import Amount from '@/util/Amount';
 
@@ -392,8 +397,11 @@ export default {
       assetCode,
       customAssetCode,
       recipient: recipient,
+
+      memoReadOnly: false,
       memo: this.defaultValues ? this.defaultValues.memo : '',
       memoType: this.defaultValues ? this.defaultValues.memo_type : 'MEMO_TEXT',
+
       amount: this.defaultValues ? this.defaultValues.amount : '',
 
       signer: null,
@@ -494,11 +502,12 @@ export default {
       this.assetCode = 'XLM';
     },
     recipient (recipient) {
-      if (!this.exchanges[recipient] || !this.exchanges[recipient].memo) {
+      if (this.exchanges[recipient] && this.exchanges[recipient].memo) {
+        const memo = this.exchanges[recipient].memo;
+        this.memoType = memo;
         return;
       }
-      const memo = this.exchanges[recipient].memo;
-      this.memoType = memo;
+      this.debouncedMemoFiller();
     },
     memo (val) {
       if (this.memoType === 'MEMO_ID' && val.match(/[a-z]/ig)) {
@@ -530,6 +539,30 @@ export default {
     if (!this.canSignWithPassword) {
       this.signer = this.signers[0] ? this.signers[0].public_key : null;
     }
+    this.debouncedMemoFiller = _.debounce(async () => {
+      const hasValidFederationAddress = validators.federationAddress().federationAddress(this.recipient);
+      if (!hasValidFederationAddress) {
+        this.memoReadOnly = false;
+        return;
+      }
+
+      try {
+        const federationRecord = await StellarSdk.FederationServer.resolve(this.recipient);
+        if (federationRecord.memo && federationRecord.memo_type) {
+          this.memoReadOnly = true;
+          this.memo = federationRecord.memo;
+          const typeMap = { text: 'MEMO_TEXT', id: 'MEMO_ID', hash: 'MEMO_HASH' };
+          if (typeMap[federationRecord.memo_type] === undefined) {
+            throw new Error('');
+          }
+          this.memoType = typeMap[federationRecord.memo_type];
+        } else {
+          this.memoReadOnly = false;
+        }
+      } catch (err) {
+        this.memoReadOnly = false;
+      }
+    }, 250);
   },
 
   methods: {
@@ -543,6 +576,7 @@ export default {
         customAssetCode: '',
         ownAssetAccepted: false,
         recipient: '',
+        memoReadOnly: false,
         memo: '',
         memoType: 'MEMO_TEXT',
         amount: '',
