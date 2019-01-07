@@ -37,7 +37,12 @@ export default {
         }, 1e3);
       }
 
-      document.getElementById('app').style.overflow = '';
+      const appEl = document.getElementById('app');
+      appEl.style.overflow = '';
+      setTimeout(() => {
+        appEl.style.perspective = '';
+        appEl.style.perspectiveOrigin = '';
+      }, 1e3);
 
       const pageWrapperEl = document.getElementById('page-wrapper');
       if (pageWrapperEl) {
