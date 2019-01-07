@@ -1,14 +1,14 @@
 import Vue from 'vue';
 
 export default {
-  async loadMemoInVisibility ({ commit, getters }) {
+  async loadMemoVisibility ({ commit, getters }) {
     const email = getters.userStatus.email;
-    const invisible = Vue.localStorage.get('memoInVisible', {}, Object)[email];
-    commit('SET_MEMO_INVISIBILITY', { invisible, email });
+    const visible = Vue.localStorage.get('memoVisible', {}, Object)[email];
+    commit('SET_MEMO_VISIBILITY', { visible, email });
   },
 
-  async setMemoInVisibility ({ commit, getters }, invisible) {
+  async setMemoVisibility ({ commit, getters }, visible) {
     const email = getters.userStatus.email;
-    commit('SET_MEMO_INVISIBILITY', { invisible, email });
+    commit('SET_MEMO_VISIBILITY', { visible, email });
   },
 };

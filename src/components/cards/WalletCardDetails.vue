@@ -123,7 +123,7 @@
           <b-button :class="shownTransactionType === 'transaction' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="shownTransactionType = 'transaction'">Transactions</b-button>
           <b-button :class="shownTransactionType === 'trade' ? 'text-info' : 'text-gray-500'" variant="outline-secondary" @click="shownTransactionType = 'trade'">Trades</b-button>
         </b-button-group>
-        <wallet-card-transactions v-if="shownTransactionType === 'transaction'" :data="data" :memo-in-visible="memoInVisible"/>
+        <wallet-card-transactions v-if="shownTransactionType === 'transaction'" :data="data" :memo-visible="memoVisible"/>
         <wallet-card-trades v-if="shownTransactionType === 'trade'" :data="data"/>
       </b-col>
     </b-row>
@@ -201,7 +201,7 @@ export default {
       'knownDestinations',
       'knownCurrencies',
       'addInflationDestinationStatus',
-      'memoInVisible',
+      'memoVisible',
     ]),
   },
 
