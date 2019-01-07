@@ -73,7 +73,7 @@
 
             <li>
               <a :class="{ active: activeMenu === 'memo-visibility'}" href="#" @click.prevent.stop="goto('memo-visibility')">
-                <div>Memo visibility</div>
+                <div>Hide memos</div>
               </a>
             </li>
           </ul>
