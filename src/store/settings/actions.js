@@ -3,7 +3,10 @@ import Vue from 'vue';
 export default {
   async loadMemoVisibility ({ commit, getters }) {
     const email = getters.userStatus.email;
-    const visible = Vue.localStorage.get('memoVisible', {}, Object)[email];
+    let visible = Vue.localStorage.get('memoVisible', {}, Object)[email];
+    if (visible === undefined) {
+      visible = true;
+    }
     commit('SET_MEMO_VISIBILITY', { visible, email });
   },
 
