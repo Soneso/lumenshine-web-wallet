@@ -1,12 +1,14 @@
 import axios from 'axios';
+import JSONbig from 'json-bigint';
 import config from '@/config';
 import store from '@/store/store';
 
 export default {
-  async get (path = '', params = null) {
+  async get (path = '', params = null, options = { convertBigIntToString: false }) {
     try {
       var response = await axios.get(`${config.API_BASE}${path}`, {
         params,
+        ...(options.convertBigIntToString ? { transformResponse: [data => JSONbig({ storeAsString: true }).parse(data)] } : {}),
         headers: store.getters.authToken ? { Authorization: store.getters.authToken } : {},
       });
     } catch (err) {
@@ -28,9 +30,10 @@ export default {
     return response;
   },
 
-  async post (path = '', params = null) {
+  async post (path = '', params = null, options = { convertBigIntToString: false }) {
     try {
       var response = await axios.post(`${config.API_BASE}${path}`, params, {
+        ...(options.convertBigIntToString ? { transformResponse: [data => JSONbig.parse(data)] } : {}),
         headers: store.getters.authToken ? { Authorization: store.getters.authToken } : {},
       });
     } catch (err) {

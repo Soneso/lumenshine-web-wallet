@@ -63,7 +63,7 @@ export default {
   },
 
   async getStellarTransactions (params) {
-    const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now(), ...params });
+    const response = await apiBase.get('/portal/user/dashboard/get_stellar_transactions', { timestamp: Date.now(), ...params }, { convertBigIntToString: true });
     return response.data;
   },
 };
