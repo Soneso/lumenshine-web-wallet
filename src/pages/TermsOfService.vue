@@ -7,7 +7,7 @@
 
           <b-col cols="12">
             <h1 class="pt-3">Lumenshine Terms of Service</h1>
-            <small>Last updated: November 15, 2018</small>
+            <small>Last updated: January 10, 2019</small>
             <br>
           </b-col>
 
@@ -31,7 +31,7 @@
 
             <ul class="has-bullets pl-4 pb-4">
               <li>Lumenshine is a user interface for the Stellar network. The Stellar network is hosted by numerous distributed nodes world-wide who are not under the control of any single entity or groups of entities. Lumenshine does not control the Stellar network.</li>
-              <li>Lumenshine is not a custodian of your assets. We do not store any private keys on your behalf.</li>
+              <li>Lumenshine is a custodial wallet because it saves an encrypted version of your mnemonic on the server/backend. But Lumenhine is not a custodian of your assets. We do not have access to your decrypted mnemonic/private keys in the backend. To sign transactions, the frontend client decrypts your encrypted mnemonic by using your password. Your password is never sent to the backend. The Lumenshine backend stores only an encrypted version of your mnemonic data.</li>
               <li>Lumenshine does not manually curate the lists of assets that it displays on its interface. Any asset that is created on the Stellar network may theoretically be displayed, no matter whether it would be considered a currency, commodity, security, utility token, or other type of asset under your local applicable laws and regulations. You are responsible for determining the legality of your transactions.</li>
               <li>From time to time, Lumenshine may receive reports or information that certain assets are fraudulent, deceptive, and/or manipulative, or are spamming the network. Lumenshine may decide to restrict users' ability to display or use these assets through the Lumenshine interface, but users may always use another interface to display or use of these assets.</li>
               <li>Notwithstanding the above, Lumenshine has no obligation to audit, investigate, or restrict any asset that it displays.</li>
@@ -137,12 +137,12 @@
 
             <p>TO THE EXTENT NOT PROHIBITED BY LAW, OUR TOTAL LIABILITY TO YOU FOR ANY BREACH OF ANY TERM IN THE TERMS, NEGLIGENCE, OR OTHER DEFAULT SHALL NOT EXCEED THE AMOUNT OF $10. THIS LIMITATION WILL APPLY EVEN IF ANY REMEDY SPECIFIED IN THESE TERMS IS DEEMED TO HAVE FAILED OF ITS ESSENTIAL PURPOSE.</p>
 
-            <h2 class="pt-4">12. Your Password an mnemonic (backup secret)</h2>
-            <p>You understand that if you activate fingerprint or face recognition on your mobile device for a Lumenshine app, your password will be saved by the app in a secure location on your device (such as for example in the Keychain on iOS devices). After successful fingerprint or face recognition (e.g. on Login), the app will load your password from your device to log you in automatically or to sign transactions for you. If you enable face or fingerprint recognition for your mobile Lumenshine app, we can not guarantee for the security of your password. It is protected by your device, not by us. You do this on your own risk.</p>
+            <h2 class="pt-4">12. Your password and mnemonic (backup secret)</h2>
+            <p>You understand that if you activate fingerprint or face recognition (Touch ID or Face ID) on your mobile device for a Lumenshine app, your password will be saved by the app in a secure location on your device (such as for example in the Keychain on iOS devices). After successful fingerprint or face recognition (e.g. on Login), the app will load your password from your device to log you in automatically or to decrypt your menmonic data to be able to sign transactions for you. If you enable face or fingerprint recognition for your mobile Lumenshine app, we can not guarantee for the security of your password. It is protected by your device, not by us. You do this on your own risk.</p>
 
             <p>The Lumenshine Site and apps never send your password to our server. The app uses cryptographic methods to verify to the server that you have provided the correct password to be able to log you in. You can read more about this kind of authentication method here: <a href="https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md">https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md</a>.</p>
 
-            <p>In the Setup process, the Lumenshine Site or App generates a mnemonic (backup secret) for you. You are responsible for noting the generated mnemonic and for keeping it in a save location. The Site and the app encrypts the mnemonic by using a derivate of your password and sends the encrypted mnemonic to the server. Your password is never sent to the server. Lumenshine's server stores the encrypted mnemonic internally. Lumenshine's server never has access to the decrypted version of the mnemonic. It can only be encrypted with your password wich is never sent to the server. If you don't know your mnemonic, and you forget your password, you will be permanently locked out of your account. We have no access to your assets and stellar accounts. We can not decrypt encrypted mnemonic without your password.</p>
+            <p>In the Setup process, the Lumenshine Site or App generates a mnemonic (backup secret) for you. You are responsible for noting the generated mnemonic and for keeping it in a save location. The Site and the app encrypts the mnemonic by using a derivate of your password and sends the encrypted mnemonic data to the server. Your password is never sent to the server. Lumenshine's server stores the encrypted mnemonic data internally. Lumenshine's server never has access to the decrypted version of the mnemonic data and can not sign any transaction for you. Your encrypted mnemonic data can only be encrypted with your password wich is never sent to the server. If you don't know your mnemonic, and you forget your password, you will be permanently locked out of your account. We have no access to your assets and stellar accounts. We can not decrypt the encrypted mnemonic data without your password.</p>
 
             <h2 class="pt-4">13. Cancellation and Termination</h2>
             <h5 class="pt-3 pb-2">A. Account Cancellation</h5>
