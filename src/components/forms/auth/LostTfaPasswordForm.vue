@@ -2,6 +2,7 @@
   <form class="form" @submit.prevent="onRecoverClick">
     <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your password and press "Next".</p>
+      <small v-if="lockedOutError" class="d-block text-danger text-center py-2">{{ lockedOutError }}</small>
       <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
 
       <b-form-group class="my-4">
@@ -39,11 +40,12 @@
 
 <script>
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 import { required } from 'vuelidate/lib/validators';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
 
   props: {
     decryptError: {

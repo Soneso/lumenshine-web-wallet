@@ -1,8 +1,10 @@
 <template>
   <b-form @submit.prevent="onRecoverClick">
     <template v-if="!loading">
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
+      <small v-if="lockedOutError" class="d-block text-danger text-center py-2">{{ lockedOutError }}</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center py-2">An error occured, please try again</small>
       <div v-if="!$v.email.backendEmailConfirmed" class="text-danger text-center py-2">Verify your email address.</div>
+
       <template v-else>
 
         <b-form-group class="py-4">
@@ -35,11 +37,12 @@
 
 <script>
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 import emailValidator from '@/validators/email';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
 
   data () {
     return {

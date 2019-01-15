@@ -13,7 +13,7 @@
           <small v-if="emailLostTfaResent" class="d-block pt-2 text-success">Resent email</small>
           <b-button variant="info" class="mt-4 text-uppercase btn-rounded" @click="onDoneClick">Done</b-button>
         </template>
-        <lost-tfa-email-form v-else v-show="!loading && !lostTfaStatus.res" :loading="loading" :errors="lostTfaStatus.err" @submit="onEmailSubmitClick"/>
+        <lost-tfa-email-form v-else v-show="lockoutTime || (!loading && !lostTfaStatus.res)" :loading="loading" :errors="lostTfaStatus.err" @submit="onEmailSubmitClick"/>
         <confirm-email-form v-if="emailNotConfirmed" :email-resent="emailResent" :already-confirmed-failed="alreadyConfirmedFailed" @recheck="onEmailRecheckClick" @resend="onEmailResendClick"/>
       </b-card>
     </b-col>
@@ -43,7 +43,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['lostTfaStatus', 'resendEmailStatus']),
+    ...mapGetters(['lostTfaStatus', 'resendEmailStatus', 'lockoutTime']),
     loading () {
       return this.inProgress || this.lostTfaStatus.loading;
     },
@@ -59,7 +59,7 @@ export default {
       this.inProgress = true;
       await this.initLostTfa(email);
       this.lastEmail = email;
-      if (this.lostTfaStatus.err.length === 0) {
+      if (this.lostTfaStatus.err.length === 0 && !this.lockoutTime) {
         this.emailSuccess = true;
       } else if (this.lostTfaStatus.err.find(err => err.error_code === 1010)) {
         await this.resendConfirmationEmail(email);

@@ -2,7 +2,9 @@
 
   <b-form v-if="!loading" id="login-form" @submit.prevent="onLoginClick">
     <!--Email field-->
-    <template v-if="hasUnknownError" class="error">An error occured, please try again</template>
+    <div v-if="hasUnknownError" class="text-center mb-2 small text-danger">An error occured, please try again</div>
+    <div v-if="lockedOutError" class="text-center mb-2 small text-danger">{{ lockedOutError }}</div>
+
     <b-form-group v-if="showEmailField">
       <b-form-input
         id="login-email"
@@ -101,12 +103,13 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 import emailValidator from '@/validators/email';
 import tfaValidator from '@/validators/twoFactorCode';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
   props: {
     decryptError: {
       type: Boolean,

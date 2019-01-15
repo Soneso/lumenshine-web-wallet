@@ -37,9 +37,10 @@ export default {
     commit('SET_REGISTRATION_LOADING', false);
   },
 
-  async confirmTwoFactorAuthToken ({ commit, getters }, params) {
+  async confirmTwoFactorAuthToken ({ commit, getters, dispatch }, params) {
     commit('SET_REGISTRATION_LOADING', true);
     commit('SET_REGISTRATION_2FA_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.confirmTfa(params, getters.authTokenType === 'partial');
       commit('SET_USER_STATUS', res.data);
@@ -47,24 +48,34 @@ export default {
         commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'full' });
       }
     } catch (err) {
-      commit('SET_REGISTRATION_2FA_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_REGISTRATION_2FA_ERROR', err.data);
+      }
     }
     commit('SET_REGISTRATION_LOADING', false);
   },
 
-  async initLostPassword ({ commit, getters }, email) {
+  async initLostPassword ({ commit, dispatch, getters }, email) {
     commit('SET_LOST_PASSWORD_LOADING', true);
     commit('SET_LOST_PASSWORD_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       await UserService.lostPassword(email);
     } catch (err) {
-      commit('SET_LOST_PASSWORD_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOST_PASSWORD_ERROR', err.data);
+      }
     }
     commit('SET_LOST_PASSWORD_LOADING', false);
   },
 
-  async setLostPasswordTfa ({ commit, getters }, tfaCode) {
+  async setLostPasswordTfa ({ commit, dispatch, getters }, tfaCode) {
     commit('SET_LOST_PASSWORD_LOADING', true);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.lostPasswordTfa(tfaCode);
       commit('SET_LOST_PASSWORD_RESULT', res.data);
@@ -72,53 +83,77 @@ export default {
         commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
       }
     } catch (err) {
-      commit('SET_LOST_PASSWORD_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOST_PASSWORD_ERROR', err.data);
+      }
     }
     commit('SET_LOST_PASSWORD_LOADING', false);
   },
 
-  async lostPasswordUpdate ({ commit, getters }, params) {
+  async lostPasswordUpdate ({ commit, dispatch, getters }, params) {
     commit('SET_LOST_PASSWORD_LOADING', true);
     commit('SET_LOST_PASSWORD_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       await UserService.lostPasswordUpdate(params);
     } catch (err) {
-      commit('SET_LOST_PASSWORD_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOST_PASSWORD_ERROR', err.data);
+      }
     }
     commit('SET_LOST_PASSWORD_LOADING', false);
   },
 
-  async initLostTfa ({ commit, getters }, email) {
+  async initLostTfa ({ commit, dispatch, getters }, email) {
     commit('SET_LOST_TFA_LOADING', true);
     commit('SET_LOST_TFA_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       await UserService.lostTfa(email);
     } catch (err) {
-      commit('SET_LOST_TFA_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOST_TFA_ERROR', err.data);
+      }
     }
     commit('SET_LOST_TFA_LOADING', false);
   },
 
-  async resetTfa ({ commit, getters }, signedTransaction) {
+  async resetTfa ({ commit, getters, dispatch }, signedTransaction) {
     commit('SET_RESET_TFA_LOADING', true);
     commit('SET_RESET_TFA_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.getNewTfaSecret(signedTransaction, getters.authTokenType === 'partial');
       commit('SET_TFA_DATA', res.data);
     } catch (err) {
-      commit('SET_RESET_TFA_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_RESET_TFA_ERROR', err.data);
+      }
     }
     commit('SET_RESET_TFA_LOADING', false);
   },
 
-  async confirmNewTfa ({ commit, getters }, tfaCode) {
+  async confirmNewTfa ({ commit, dispatch, getters }, tfaCode) {
     commit('SET_RESET_TFA_LOADING', true);
     commit('SET_RESET_TFA_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.confirmNewTfaSecret(tfaCode);
       commit('SET_TFA_DATA', res.data);
     } catch (err) {
-      commit('SET_RESET_TFA_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_RESET_TFA_ERROR', err.data);
+      }
     }
     commit('SET_RESET_TFA_LOADING', false);
   },
@@ -182,9 +217,10 @@ export default {
     commit('SET_CONFIRM_MNEMONIC_LOADING', false);
   },
 
-  async loginStep1 ({ commit }, params) {
+  async loginStep1 ({ commit, dispatch, getters }, params) {
     commit('SET_LOGIN_LOADING', true);
     commit('SET_LOGIN_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.loginStep1(params);
       commit('SET_ENCRYPTED_SERVER_DATA', res.data);
@@ -192,14 +228,19 @@ export default {
       commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction_challenge);
       commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: 'partial' });
     } catch (err) {
-      commit('SET_LOGIN_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOGIN_ERROR', err.data);
+      }
     }
     commit('SET_LOGIN_LOADING', false);
   },
 
-  async loginStep2 ({ commit }, params) {
+  async loginStep2 ({ commit, dispatch, getters }, params) {
     commit('SET_LOGIN_LOADING', true);
     commit('SET_LOGIN_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.loginStep2(params);
 
@@ -215,7 +256,11 @@ export default {
 
       commit('SET_AUTH_TOKEN', { token: res.headers.authorization, type: res.data.tfa_confirmed ? 'full' : 'partial' });
     } catch (err) {
-      commit('SET_LOGIN_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_LOGIN_ERROR', err.data);
+      }
     }
     commit('SET_LOGIN_LOADING', false);
   },
@@ -257,7 +302,7 @@ export default {
     commit('SET_USER_AUTH_LOADING', false);
   },
 
-  async getUserData ({ commit, getters }) {
+  async getUserData ({ commit }) {
     commit('SET_USER_DATA_LOADING', true);
     try {
       const res = await UserService.getUserData();
@@ -279,36 +324,62 @@ export default {
     commit('SET_UPDATE_USER_DATA_LOADING', false);
   },
 
-  async changePassword ({ commit }, params) {
+  async changePassword ({ commit, dispatch, getters }, params) {
     commit('SET_CHANGE_PASSWORD_LOADING', true);
     commit('SET_CHANGE_PASSWORD_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       await UserService.changePassword(params);
     } catch (err) {
-      commit('SET_CHANGE_PASSWORD_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_CHANGE_PASSWORD_ERROR', err.data);
+      }
     }
     commit('SET_CHANGE_PASSWORD_LOADING', false);
   },
 
-  async checkResetPasswordNeeded ({ commit }) {
+  async checkResetPasswordNeeded ({ commit, dispatch, getters }) {
     commit('SET_CHECK_PASSWORD_LOADING', true);
     commit('SET_CHECK_PASSWORD_ERROR', []);
+    if (getters.lockoutTime) dispatch('unlockUser');
     try {
       const res = await UserService.isResetPasswordNeeded();
       commit('SET_CHECK_PASSWORD_NEEDED', res.data);
     } catch (err) {
-      commit('SET_CHECK_PASSWORD_ERROR', err.data);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        commit('SET_CHECK_PASSWORD_ERROR', err.data);
+      }
     }
     commit('SET_CHECK_PASSWORD_LOADING', false);
   },
 
-  async updateSep10 ({ commit, getters }) {
+  async updateSep10 ({ commit, getters, dispatch }) {
     try {
       const res = await UserService.getSEP10Challenge(getters.authTokenType === 'partial');
       if (!res.data || !res.data.sep10_transaction) throw Error('Invalid response');
       commit('SET_SEP10_CHALLENGE', res.data.sep10_transaction);
     } catch (err) {
-      console.error('Error updating SEP10 challenge', err);
+      if (err.data && err.data.lockout_minutes !== undefined) {
+        dispatch('lockUser', err.data.lockout_minutes);
+      } else {
+        console.error('Error updating SEP10 challenge', err);
+      }
     }
   },
+
+  lockUser ({ commit }, m) {
+    const minutes = parseInt(m, 10);
+    const timer = setTimeout(() => {
+      commit('CLEAR_LOCKOUT_TIME');
+    }, minutes * 60 * 1000);
+    commit('SET_LOCKOUT_TIME', { minutes, timer });
+  },
+
+  unlockUser ({ commit }) {
+    commit('CLEAR_LOCKOUT_TIME');
+  }
 };

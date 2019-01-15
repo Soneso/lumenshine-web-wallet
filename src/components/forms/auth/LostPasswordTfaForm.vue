@@ -2,7 +2,8 @@
   <b-form class="form" @submit.prevent="onSaveClick">
     <template v-if="!loading">
       <p>Thank you for confirming your email address. To continue, please insert your current 2FA code from the authenticator app and press "Next"</p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
+      <small v-if="lockedOutError" class="d-block text-danger text-center py-2">{{ lockedOutError }}</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center py-2">An error occured, please try again</small>
 
       <b-form-group class="py-4">
         <b-form-input
@@ -33,12 +34,13 @@
 
 <script>
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 import { required } from 'vuelidate/lib/validators';
 import tfaValidator from '@/validators/twoFactorCode';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
 
   data () {
     return {

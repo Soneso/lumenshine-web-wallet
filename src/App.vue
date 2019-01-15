@@ -63,6 +63,7 @@ export default {
       'authToken',
       'registrationComplete',
       'offCanvasMenuOpen',
+      'lockoutTime',
     ]),
 
     isSingleCard () {
@@ -99,6 +100,9 @@ export default {
       const fromRoute = this.baseRoute(from);
       const toRoute = this.baseRoute(to);
       document.body.classList.replace(fromRoute, toRoute === '' ? 'home' : toRoute);
+      if (this.lockoutTime) { // clear locked out message on navigation
+        this.unlockUser();
+      }
     },
     authToken (token) {
       if (token) {
@@ -176,12 +180,13 @@ export default {
       'clearAuthToken',
       'refreshAuthToken',
       'catchInteraction',
-      'clearInteraction'
+      'clearInteraction',
+      'unlockUser',
     ]),
 
     ...mapMutations([
       'SET_VIEWPORT_WIDTH',
-      'SET_VIEWPORT_HEIGHT'
+      'SET_VIEWPORT_HEIGHT',
     ]),
 
     baseRoute (str) {

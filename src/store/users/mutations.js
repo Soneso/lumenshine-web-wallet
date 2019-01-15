@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import moment from 'moment';
 import config from '@/config';
 
 export default {
@@ -192,5 +193,19 @@ export default {
   SET_CHECK_PASSWORD_NEEDED (state, msg) {
     state.checkPasswordNeeded = msg.need2fa_reset_pwd;
     state.checkPasswordLoading = false;
-  }
+  },
+  SET_LOCKOUT_TIME (state, { minutes, timer }) {
+    if (state.lockoutTimer) {
+      clearTimeout(state.lockoutTimer);
+    }
+    state.lockoutTimer = timer;
+    state.lockoutTime = moment().add(minutes, 'minutes').valueOf();
+  },
+  CLEAR_LOCKOUT_TIME (state) {
+    state.lockoutTime = null;
+    if (state.lockoutTimer) {
+      clearTimeout(state.lockoutTimer);
+    }
+    state.lockoutTimer = null;
+  },
 };

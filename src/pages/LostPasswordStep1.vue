@@ -14,7 +14,7 @@
           <b-button variant="info" class="mt-4 text-uppercase btn-rounded" @click="onDoneClick">Done</b-button>
         </template>
 
-        <lost-password-email-form v-else v-show="!loading && !lostPasswordStatus.res" :loading="loading" :errors="lostPasswordStatus.err" @submit="onEmailSubmitClick"/>
+        <lost-password-email-form v-else v-show="lockoutTime || (!loading && !lostPasswordStatus.res)" :loading="loading" :errors="lostPasswordStatus.err" @submit="onEmailSubmitClick"/>
         <confirm-email-form v-if="emailNotConfirmed" :email-resent="emailResent" :already-confirmed-failed="alreadyConfirmedFailed" @recheck="onEmailRecheckClick" @resend="onEmailResendClick"/>
       </b-card>
     </b-col>
@@ -41,7 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['lostPasswordStatus', 'resendEmailStatus']),
+    ...mapGetters(['lostPasswordStatus', 'resendEmailStatus', 'lockoutTime']),
     loading () {
       return this.inProgress || this.lostPasswordStatus.loading;
     },
@@ -63,13 +63,14 @@ export default {
       this.inProgress = true;
       await this.initLostPassword(email);
       this.lastEmail = email;
-      if (this.lostPasswordStatus.err.length === 0) {
+      if (this.lostPasswordStatus.err.length === 0 && !this.lockoutTime) {
         this.emailSuccess = true;
       } else if (this.lostPasswordStatus.err.find(err => err.error_code === 1010)) {
         await this.resendConfirmationEmail(email);
       }
       this.inProgress = false;
     },
+
     async onEmailRecheckClick () {
       const email = this.lastEmail;
       this.alreadyConfirmedFailed = false;
@@ -82,6 +83,7 @@ export default {
       }
       this.inProgress = false;
     },
+
     async onEmailResendClick (email) {
       email = email || this.lastEmail;
       this.inProgress = true;
@@ -93,9 +95,11 @@ export default {
       }
       this.inProgress = false;
     },
+
     onDoneClick () {
       this.$router.push({ name: 'Login' });
     },
+
     async onEmailLostPasswordResendClick () {
       await this.onEmailSubmitClick();
       this.emailLostPasswordResent = true;

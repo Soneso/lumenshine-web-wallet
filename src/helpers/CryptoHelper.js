@@ -44,6 +44,11 @@ const cryptoHelper = {
     };
   },
 
+  getUnsignedSep10Challenge (challenge) { // used when user should be locked out when password is invalid
+    const transaction = new StellarSdk.Transaction(challenge);
+    return transaction.toEnvelope().toXDR().toString('base64');
+  },
+
   async signSep10Challenge (localSecret, challenge) {
     const transaction = new StellarSdk.Transaction(challenge);
 

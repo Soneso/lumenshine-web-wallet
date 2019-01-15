@@ -2,7 +2,9 @@
   <form class="form" @submit.prevent="onSaveClick">
     <div v-if="!loading">
       <p class="text-gray-600 pb-3">Reset password: Please insert your new password below. </p>
-      <small v-if="hasUnknownError" class="d-block text-danger text-center pb-2">An error occured, please try again</small>
+      <small v-if="lockedOutError" class="d-block text-danger text-center py-2">{{ lockedOutError }}</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center py-2">An error occured, please try again</small>
+
       <b-row>
         <b-col v-if="askForTfa" cols="12">
           <!--TFA field (used when mnemonic_confirmed = false)-->
@@ -113,12 +115,13 @@
 import { sameAs, required } from 'vuelidate/lib/validators';
 
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 import passwordValidator from '@/validators/password';
 import tfaValidator from '@/validators/twoFactorCode';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
   props: {
     askForTfa: {
       type: Boolean,

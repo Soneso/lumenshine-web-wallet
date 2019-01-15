@@ -78,6 +78,9 @@ function getInitialState (clearAuthToken = false) {
 
     updateUserDataLoading: false,
     updateUserDataErrors: [],
+
+    lockoutTime: null,
+    lockoutTimer: null,
   };
 }
 

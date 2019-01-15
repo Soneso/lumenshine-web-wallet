@@ -1,6 +1,9 @@
 <template>
   <b-form @submit.prevent="onCheckConfirmation">
     <template v-if="!loading">
+      <small v-if="lockedOutError" class="d-block text-danger text-center py-2">{{ lockedOutError }}</small>
+      <small v-if="hasUnknownError" class="d-block text-danger text-center py-2">An error occured, please try again</small>
+
       <p>Your email address is not verified. We sent a verification message to your email account. Click the link to verify your email address. After doing so, please come back and press the "Already confirmed" button to finish resetting your password.</p>
       <div v-if="inProgress" class="py-4 px-2">Loading...</div>
       <template v-else>
@@ -15,9 +18,10 @@
 
 <script>
 import formMixin from '@/mixins/form';
+import lockedOutMixin from '@/mixins/lockedOut';
 
 export default {
-  mixins: [ formMixin ],
+  mixins: [ formMixin, lockedOutMixin ],
   props: {
     emailResent: {
       type: Boolean,
