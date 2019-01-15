@@ -51,7 +51,7 @@ export default {
       const minutesLeft = lockOutTime.diff(now, 'minutes');
       const intervalText = minutesLeft > 1 ? `${minutesLeft} minutes` : `${lockOutTime.diff(now, 'seconds')} seconds`;
 
-      this.lockedOutError = `Invalid input. Account is locked. Try again in ${intervalText}.`;
+      this.lockedOutError = `Your account is locked. Try again in ${intervalText}.`;
     },
   },
 };
