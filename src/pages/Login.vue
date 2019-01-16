@@ -49,7 +49,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'clearAuthToken']),
+    ...mapActions(['loginStep1', 'loginStep2', 'setMnemonic', 'setPublicKeys', 'clearAuthToken', 'clearLoginError']),
     async onLoginSubmit (email, pass, tfaCode) {
       this.hasUnknownError = false;
       this.inProgress = true;
@@ -69,6 +69,7 @@ export default {
         // send unsigned transaction to trigger user lock out after some invalid retries
         const transaction = CryptoHelper.getUnsignedSep10Challenge(this.sep10Challenge);
         try { await this.loginStep2({ sep10_transaction: transaction }); } catch (err) {}
+        this.clearLoginError(); // invalid transaction error from loginStep2 should be cleared
         await this.clearAuthToken();
         this.decryptError = true;
         this.inProgress = false;

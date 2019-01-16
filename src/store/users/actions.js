@@ -265,6 +265,10 @@ export default {
     commit('SET_LOGIN_LOADING', false);
   },
 
+  clearLoginError ({ commit }) {
+    commit('SET_LOGIN_ERROR', []);
+  },
+
   logout ({ dispatch, commit }) {
     commit('SET_LOGIN_LOADING', false);
     commit('SET_AUTH_TOKEN', { token: null, type: null });
