@@ -34,7 +34,7 @@
             </div>
             <div v-else>
               <spinner v-if="inProgress" align="center" message="Logging you in..." width="150"/>
-              <template v-else="">
+              <div v-show="!inProgress">
                 <div class="pb-5">Thank you for confirming your email address. Let's continue with the account setup so you can access your wallet.</div>
                 <div v-if="hasUnknownError" class="text-danger text-center pb-2">Unknown error, please try again later!</div>
 
@@ -48,7 +48,7 @@
                   :should-continue="true"
                   class="text-left"
                   @submit="onLoginSubmit"/>
-              </template>
+              </div>
             </div>
           </div>
         </template>
@@ -182,7 +182,6 @@ export default {
       if (!decryptedServerData) {
         this.decryptError = true;
         this.inProgress = false;
-        await this.clearAuthToken();
         return;
       }
 
