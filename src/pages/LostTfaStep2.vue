@@ -77,7 +77,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['lostTfaStatus', 'confirmEmailStatus', 'userAuthData', 'resetTfaStatus', 'tfaData', 'registration2FAStatus', 'userStatus', 'checkPasswordNeeded', 'sep10Challenge']),
+    ...mapGetters([
+      'lostTfaStatus',
+      'confirmEmailStatus',
+      'userAuthData',
+      'resetTfaStatus',
+      'tfaData',
+      'registration2FAStatus',
+      'userStatus',
+      'checkPasswordNeeded',
+      'sep10Challenge',
+      'lockoutTime',
+    ]),
     loading () {
       return this.inProgress || this.lostTfaStatus.loading;
     },
@@ -109,6 +120,10 @@ export default {
       }
       await this.getUserStatus();
       await this.checkResetPasswordNeeded();
+      if (!this.lockoutTime) {
+        this.inProgress = false;
+        return;
+      }
       if (!this.checkPasswordNeeded) {
         await this.resetTfa();
         this.step = 'tfa';
@@ -118,7 +133,22 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'getUserAuthData', 'resetTfa', 'confirmTwoFactorAuthToken', 'logout', 'setMnemonic', 'setPublicKeys', 'loginStep2', 'checkResetPasswordNeeded', 'clearAuthToken', 'updateSep10']),
+    ...mapActions([
+      'getUserStatus',
+      'confirmEmail',
+      'getUserAuthData',
+      'resetTfa',
+      'confirmTwoFactorAuthToken',
+      'logout',
+      'setMnemonic',
+      'setPublicKeys',
+      'loginStep2',
+      'checkResetPasswordNeeded',
+      'clearAuthToken',
+      'updateSep10',
+      'clearLoginError',
+    ]),
+
     async onPasswordSubmitClick (password) {
       this.inProgress = true;
       if (!this.userAuthData) {
@@ -132,15 +162,23 @@ export default {
 
       const authData = this.userAuthData.res;
 
+      await this.updateSep10();
+      if (this.lockoutTime) {
+        this.inProgress = false;
+        return;
+      }
+
       const decryptedServerData = await CryptoHelper.decryptServerData(password, authData);
 
-      if (!decryptedServerData) {
+      if (!decryptedServerData) { // invalid password
+        // send unsigned transaction to trigger user lock out after some invalid retries
+        const transaction = CryptoHelper.getUnsignedSep10Challenge(this.sep10Challenge);
+        try { await this.resetTfa(transaction); } catch (err) {}
         this.decryptError = true;
         this.inProgress = false;
         return;
       }
 
-      await this.updateSep10();
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;
@@ -160,21 +198,31 @@ export default {
 
       this.step = 'tfa';
     },
+
     async onLoginToSetup (password) {
       this.inProgress = true;
 
       const encryptedData = this.userAuthData.res;
 
-      const decryptedServerData = await CryptoHelper.decryptServerData(password, encryptedData);
-
-      if (!decryptedServerData) {
-        this.decryptError = true;
+      await this.updateSep10();
+      if (this.lockoutTime) {
         this.inProgress = false;
-        await this.clearAuthToken();
         return;
       }
 
-      await this.updateSep10();
+      const decryptedServerData = await CryptoHelper.decryptServerData(password, encryptedData);
+
+      if (!decryptedServerData) { // invalid password
+        // send unsigned transaction to trigger user lock out after some invalid retries
+        const transaction = CryptoHelper.getUnsignedSep10Challenge(this.sep10Challenge);
+        try { await this.loginStep2({ sep10_transaction: transaction }); } catch (err) {}
+        this.clearLoginError(); // invalid transaction error from loginStep2 should be cleared
+        await this.clearAuthToken();
+        this.decryptError = true;
+        this.inProgress = false;
+        return;
+      }
+
       const signedTransaction = await CryptoHelper.signSep10Challenge(decryptedServerData.secretSeed, this.sep10Challenge);
       if (!signedTransaction) {
         this.hasUnknownError = true;
@@ -198,11 +246,12 @@ export default {
       this.inProgress = false;
       this.$router.push({ name: 'ConfirmTfa' });
     },
+
     async onTfaSubmitClick (tfaCode) {
       this.inProgress = true;
       await this.confirmTwoFactorAuthToken(tfaCode);
       this.inProgress = false;
-      if (this.registration2FAStatus.err.length > 0) {
+      if (this.registration2FAStatus.err.length > 0 || this.lockoutTime) {
         return;
       }
       await this.logout();

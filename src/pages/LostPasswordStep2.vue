@@ -87,7 +87,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['lostPasswordStatus', 'confirmEmailStatus', 'userStatus', 'sep10Challenge']),
+    ...mapGetters(['lostPasswordStatus', 'confirmEmailStatus', 'userStatus', 'sep10Challenge', 'lockoutTime']),
     loading () {
       return this.inProgress || this.lostPasswordStatus.loading || this.userStatus.loading;
     },
@@ -122,13 +122,34 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getUserStatus', 'confirmEmail', 'setLostPasswordTfa', 'lostPasswordUpdate', 'updateSecurityData', 'setMnemonic', 'setPublicKeys', 'resetTfa', 'logout', 'loginStep2', 'updateSep10']),
+    ...mapActions([
+      'getUserStatus',
+      'confirmEmail',
+      'setLostPasswordTfa',
+      'lostPasswordUpdate',
+      'updateSecurityData',
+      'setMnemonic',
+      'setPublicKeys',
+      'resetTfa',
+      'logout',
+      'loginStep2',
+      'updateSep10'
+    ]),
+
     async onTfaSubmitClick (tfaCode) {
       this.inProgress = true;
       // need to update SEP10 here, because setLostPasswordTfa will give another JWT which does not works with SEP10 endpoint
       await this.updateSep10();
+      if (this.lockoutTime) {
+        this.inProgress = false;
+        return;
+      }
 
       await this.setLostPasswordTfa(tfaCode);
+      if (this.lockoutTime) {
+        this.inProgress = false;
+        return;
+      }
 
       if (this.lostPasswordStatus.err.length === 0) {
         if (this.userStatus.res.mnemonic_confirmed === false) {
