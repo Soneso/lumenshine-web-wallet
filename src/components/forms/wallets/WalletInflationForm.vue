@@ -272,7 +272,8 @@ export default {
       return stellarData.signers.filter(signer => signer.weight >= threshold);
     },
     canSignWithPassword () {
-      return !!this.signers.find(signer => signer.public_key === this.data.public_key);
+      return true;
+      // !!this.signers.find(signer => signer.public_key === this.data.public_key);
     },
     removingExistingDestination () {
       const existing = this.data.stellar_data ? this.data.stellar_data.inflation_destination || '' : '';
