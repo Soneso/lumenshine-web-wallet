@@ -31,7 +31,7 @@ export default {
   HORIZON_URL: 'https://horizon.lumenshine.com',
   IS_TEST_NETWORK: false,
 
-  MAINTENANCE_MODE: false,
+  MAINTENANCE_MODE: true,
 
   STELLAR_BASE_FEE: '0.00001',
   STELLAR_BASE_RESERVE: '0.5',
