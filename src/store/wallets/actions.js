@@ -223,6 +223,7 @@ export default {
         .addOperation(StellarSdk.Operation.setOptions({
           inflationDest: destination
         }))
+        .setTimeout(30)
         .build();
 
       transaction.sign(sourceKeypair);
@@ -279,6 +280,7 @@ export default {
         .addOperation(StellarSdk.Operation.changeTrust({
           asset: new StellarSdk.Asset(assetCode, issuer),
         }))
+        .setTimeout(30)
         .build();
 
       transaction.sign(sourceKeypair);
@@ -314,6 +316,7 @@ export default {
           asset: new StellarSdk.Asset(assetCode, issuer),
           limit: '0'
         }))
+        .setTimeout(30)
         .build();
 
       transaction.sign(sourceKeypair);
@@ -553,6 +556,7 @@ export default {
             destination: data.recipient,
             startingBalance: data.amount
           }))
+          .setTimeout(30)
           .build();
       } else { // wallet already funded
         let asset;
@@ -571,6 +575,7 @@ export default {
             asset,
             amount: data.amount
           }))
+          .setTimeout(30)
           .build();
       }
 
@@ -666,6 +671,7 @@ export default {
         .addOperation(StellarSdk.Operation.accountMerge({
           destination: data.destination
         }))
+        .setTimeout(30)
         .build();
 
       transaction.sign(sourceKeypair);
@@ -782,6 +788,7 @@ export default {
         .addOperation(StellarSdk.Operation.accountMerge({
           destination: data.destination
         }))
+        .setTimeout(30)
         .build();
 
       transaction.sign(sourceKeypair);
