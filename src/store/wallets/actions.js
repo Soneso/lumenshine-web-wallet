@@ -218,7 +218,8 @@ export default {
 
       const account = await StellarAPI.loadAccount(sourcePublicKey);
 
-      const transaction = new StellarSdk.TransactionBuilder(account)
+      let fee = 100;
+      const transaction = new StellarSdk.TransactionBuilder(account, { fee })
         .addOperation(StellarSdk.Operation.setOptions({
           inflationDest: destination
         }))
@@ -273,7 +274,8 @@ export default {
 
       const account = await StellarAPI.loadAccount(sourcePublicKey);
 
-      const transaction = new StellarSdk.TransactionBuilder(account)
+      let fee = 100;
+      const transaction = new StellarSdk.TransactionBuilder(account, { fee })
         .addOperation(StellarSdk.Operation.changeTrust({
           asset: new StellarSdk.Asset(assetCode, issuer),
         }))
@@ -306,7 +308,8 @@ export default {
 
       const account = await StellarAPI.loadAccount(sourcePublicKey);
 
-      const transaction = new StellarSdk.TransactionBuilder(account)
+      let fee = 100;
+      const transaction = new StellarSdk.TransactionBuilder(account, { fee })
         .addOperation(StellarSdk.Operation.changeTrust({
           asset: new StellarSdk.Asset(assetCode, issuer),
           limit: '0'
@@ -544,7 +547,8 @@ export default {
       let transaction;
 
       if (currentAccount instanceof Error || destinationAccount instanceof Error) {
-        transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
+        let fee = 100;
+        transaction = new StellarSdk.TransactionBuilder(currentAccount, { fee }, memo)
           .addOperation(StellarSdk.Operation.createAccount({
             destination: data.recipient,
             startingBalance: data.amount
@@ -560,7 +564,8 @@ export default {
           asset = new StellarSdk.Asset(data.assetCode, data.issuer);
         }
 
-        transaction = new StellarSdk.TransactionBuilder(currentAccount, memo)
+        let fee = 100;
+        transaction = new StellarSdk.TransactionBuilder(currentAccount, { fee }, memo)
           .addOperation(StellarSdk.Operation.payment({
             destination: data.recipient,
             asset,
@@ -656,7 +661,8 @@ export default {
     }
 
     try {
-      let transaction = new StellarSdk.TransactionBuilder(sourceAccount, memo)
+      let fee = 100;
+      let transaction = new StellarSdk.TransactionBuilder(sourceAccount, { fee }, memo)
         .addOperation(StellarSdk.Operation.accountMerge({
           destination: data.destination
         }))
@@ -771,7 +777,8 @@ export default {
     }
 
     try {
-      let transaction = new StellarSdk.TransactionBuilder(sourceAccount, memo)
+      let fee = 100;
+      let transaction = new StellarSdk.TransactionBuilder(sourceAccount, { fee }, memo)
         .addOperation(StellarSdk.Operation.accountMerge({
           destination: data.destination
         }))
